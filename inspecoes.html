@@ -6,35 +6,24 @@
   <title>SafeNR — Inspeções</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #0f1923;
-      color: #fff;
-      display: flex;
-      min-height: 100vh;
+      background: #0f1923; color: #fff;
+      display: flex; min-height: 100vh;
     }
-
-    /* ── SIDEBAR ── */
     .sidebar {
-      width: 240px;
-      background: #0a1520;
+      width: 240px; background: #0a1520;
       border-right: 1px solid rgba(255,255,255,0.07);
-      display: flex;
-      flex-direction: column;
-      padding: 24px 0;
-      position: fixed;
-      height: 100vh;
+      display: flex; flex-direction: column;
+      padding: 24px 0; position: fixed; height: 100vh;
     }
     .sidebar-logo {
-      text-align: center;
-      padding: 0 24px 28px;
+      text-align: center; padding: 0 24px 28px;
       border-bottom: 1px solid rgba(255,255,255,0.07);
     }
     .sidebar-logo h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: 2px; }
     .sidebar-logo h1 span { color: #00d4ff; }
     .sidebar-logo p { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-top: 2px; }
-
     .nav { flex: 1; padding: 20px 0; }
     .nav-item {
       display: flex; align-items: center; gap: 12px;
@@ -46,18 +35,15 @@
     .nav-item:hover { color: #fff; background: rgba(255,255,255,0.04); }
     .nav-item.active { color: #00d4ff; border-left-color: #00d4ff; background: rgba(0,212,255,0.06); }
     .nav-item .icon { font-size: 1.1rem; width: 20px; text-align: center; }
-
     .sidebar-user {
-      padding: 16px 24px;
-      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.07);
       display: flex; align-items: center; gap: 12px;
     }
     .avatar {
       width: 36px; height: 36px;
       background: linear-gradient(135deg, #00d4ff, #0099cc);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 0.85rem;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-weight: 700; font-size: 0.85rem;
     }
     .user-info p { font-size: 0.82rem; font-weight: 600; }
     .user-info span { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
@@ -66,177 +52,107 @@
       cursor: pointer; font-size: 0.8rem; margin-left: auto;
     }
     .btn-sair:hover { color: #ff6b6b; }
-
-    /* ── MAIN ── */
     .main { margin-left: 240px; flex: 1; padding: 32px; }
-
     .topbar {
       display: flex; align-items: center;
       justify-content: space-between; margin-bottom: 28px;
     }
     .topbar h2 { font-size: 1.4rem; font-weight: 700; }
     .topbar span { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
-
     .btn-novo {
       background: linear-gradient(135deg, #00d4ff, #0099cc);
-      border: none; border-radius: 10px;
-      color: #fff; font-size: 0.9rem; font-weight: 700;
-      padding: 12px 24px; cursor: pointer;
-      transition: opacity 0.2s, transform 0.2s;
+      border: none; border-radius: 10px; color: #fff;
+      font-size: 0.9rem; font-weight: 700; padding: 12px 24px;
+      cursor: pointer; transition: opacity 0.2s, transform 0.2s;
     }
     .btn-novo:hover { opacity: 0.85; transform: translateY(-1px); }
-
-    /* ── FILTROS ── */
-    .filtros {
-      display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;
-    }
+    .filtros { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
     .filtro-btn {
-      padding: 8px 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15);
+      padding: 8px 18px; border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.15);
       background: transparent; color: rgba(255,255,255,0.5);
-      cursor: pointer; font-size: 0.82rem; font-weight: 500;
-      transition: all 0.2s;
+      cursor: pointer; font-size: 0.82rem; font-weight: 500; transition: all 0.2s;
     }
     .filtro-btn:hover { border-color: #00d4ff; color: #00d4ff; }
-    .filtro-btn.active {
-      background: rgba(0,212,255,0.12);
-      border-color: #00d4ff; color: #00d4ff;
-    }
-
-    /* ── TABELA ── */
+    .filtro-btn.active { background: rgba(0,212,255,0.12); border-color: #00d4ff; color: #00d4ff; }
     .tabela-wrap {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      overflow: hidden;
+      border-radius: 16px; overflow: hidden;
     }
-
     table { width: 100%; border-collapse: collapse; }
-
-    thead tr {
-      background: rgba(255,255,255,0.05);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
+    thead tr { background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08); }
     th {
       padding: 14px 18px; text-align: left;
       font-size: 0.78rem; font-weight: 600;
-      color: rgba(255,255,255,0.45); text-transform: uppercase;
-      letter-spacing: 0.5px;
+      color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.5px;
     }
     td {
       padding: 14px 18px; font-size: 0.87rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      vertical-align: middle;
+      border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle;
     }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: rgba(255,255,255,0.02); }
-
-    .badge {
-      padding: 4px 12px; border-radius: 20px;
-      font-size: 0.72rem; font-weight: 600;
-    }
-    .badge.conforme    { background: rgba(74,222,128,0.15); color: #4ade80; }
-    .badge.pendente    { background: rgba(251,191,36,0.15);  color: #fbbf24; }
-    .badge.critico     { background: rgba(248,113,113,0.15); color: #f87171; }
-    .badge.em-andamento{ background: rgba(96,165,250,0.15);  color: #60a5fa; }
-
+    .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+    .badge.conforme     { background: rgba(74,222,128,0.15); color: #4ade80; }
+    .badge.pendente     { background: rgba(251,191,36,0.15);  color: #fbbf24; }
+    .badge.critico      { background: rgba(248,113,113,0.15); color: #f87171; }
+    .badge.em-andamento { background: rgba(96,165,250,0.15);  color: #60a5fa; }
     .btn-acao {
       background: none; border: none; cursor: pointer;
-      padding: 6px 10px; border-radius: 8px;
-      font-size: 0.85rem; transition: background 0.2s;
+      padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; transition: background 0.2s;
     }
     .btn-acao:hover { background: rgba(255,255,255,0.08); }
-
-    .empty-state {
-      text-align: center; padding: 60px 20px;
-      color: rgba(255,255,255,0.3);
-    }
+    .empty-state { text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.3); }
     .empty-state div { font-size: 3rem; margin-bottom: 12px; }
     .empty-state p { font-size: 0.9rem; }
-
-    /* ── MODAL ── */
     .modal-overlay {
       display: none; position: fixed; inset: 0;
       background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
       z-index: 1000; align-items: center; justify-content: center;
     }
     .modal-overlay.open { display: flex; }
-
     .modal {
-      background: #0f1923;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 20px; padding: 36px;
-      width: 100%; max-width: 560px;
-      max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      background: #0f1923; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 36px; width: 100%; max-width: 560px;
+      max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.6);
     }
-
-    .modal h3 {
-      font-size: 1.2rem; font-weight: 700;
-      margin-bottom: 24px; color: #fff;
-    }
-
-    .form-row {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 16px; margin-bottom: 16px;
-    }
+    .modal h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 24px; color: #fff; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
     .form-row.full { grid-template-columns: 1fr; }
-
     .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group label {
-      font-size: 0.8rem; font-weight: 600;
-      color: rgba(255,255,255,0.55);
+    .form-group label { font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.55); }
+    .form-group input, .form-group select, .form-group textarea {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px; padding: 12px 14px; color: #fff; font-size: 0.9rem;
+      outline: none; transition: border 0.2s;
     }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 10px; padding: 12px 14px;
-      color: #fff; font-size: 0.9rem; outline: none;
-      transition: border 0.2s;
-    }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus { border-color: #00d4ff; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #00d4ff; }
     .form-group textarea { resize: vertical; min-height: 80px; }
     .form-group select option { background: #1a2535; }
-
-    .modal-footer {
-      display: flex; gap: 12px; justify-content: flex-end;
-      margin-top: 24px;
-    }
+    .modal-footer { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
     .btn-cancelar {
       padding: 12px 24px; border-radius: 10px;
       border: 1px solid rgba(255,255,255,0.15);
-      background: transparent; color: rgba(255,255,255,0.6);
-      cursor: pointer; font-size: 0.9rem;
+      background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 0.9rem;
     }
-    .btn-cancelar:hover { background: rgba(255,255,255,0.05); }
     .btn-salvar {
       padding: 12px 28px; border-radius: 10px;
       background: linear-gradient(135deg, #00d4ff, #0099cc);
-      border: none; color: #fff;
-      font-size: 0.9rem; font-weight: 700; cursor: pointer;
+      border: none; color: #fff; font-size: 0.9rem; font-weight: 700; cursor: pointer;
     }
     .btn-salvar:hover { opacity: 0.85; }
-
-    /* MODAL VER */
     .detalhe-row {
       display: flex; gap: 8px; margin-bottom: 12px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
     }
     .detalhe-row:last-child { border-bottom: none; }
-    .detalhe-label {
-      font-size: 0.78rem; color: rgba(255,255,255,0.4);
-      min-width: 130px; font-weight: 600;
-    }
+    .detalhe-label { font-size: 0.78rem; color: rgba(255,255,255,0.4); min-width: 130px; font-weight: 600; }
     .detalhe-valor { font-size: 0.88rem; color: #fff; }
   </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
@@ -245,7 +161,7 @@
   <nav class="nav">
     <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
     <a class="nav-item active" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
-    <a class="nav-item" href="#"><span class="icon">⚠️</span> Riscos</a>
+    <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="#"><span class="icon">📋</span> Checklists</a>
     <a class="nav-item" href="#"><span class="icon">👷</span> Funcionários</a>
     <a class="nav-item" href="#"><span class="icon">📄</span> Relatórios</a>
@@ -261,7 +177,6 @@
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div>
@@ -271,7 +186,6 @@
     <button class="btn-novo" onclick="abrirModal()">＋ Nova Inspeção</button>
   </div>
 
-  <!-- FILTROS -->
   <div class="filtros">
     <button class="filtro-btn active" onclick="filtrar('todos', this)">Todos</button>
     <button class="filtro-btn" onclick="filtrar('conforme', this)">✅ Conforme</button>
@@ -280,7 +194,6 @@
     <button class="filtro-btn" onclick="filtrar('critico', this)">🚨 Crítico</button>
   </div>
 
-  <!-- TABELA -->
   <div class="tabela-wrap">
     <table>
       <thead>
@@ -294,9 +207,7 @@
           <th>Ações</th>
         </tr>
       </thead>
-      <tbody id="tabelaBody">
-        <!-- preenchido por JS -->
-      </tbody>
+      <tbody id="tabelaBody"></tbody>
     </table>
     <div class="empty-state" id="emptyState" style="display:none">
       <div>🔍</div>
@@ -305,11 +216,10 @@
   </div>
 </div>
 
-<!-- MODAL NOVA / EDITAR -->
+<!-- MODAL FORM -->
 <div class="modal-overlay" id="modalForm">
   <div class="modal">
     <h3 id="modalTitulo">📝 Nova Inspeção</h3>
-
     <div class="form-row">
       <div class="form-group">
         <label>Setor / Local *</label>
@@ -320,7 +230,6 @@
         <input type="text" id="f_responsavel" placeholder="Nome do inspetor"/>
       </div>
     </div>
-
     <div class="form-row">
       <div class="form-group">
         <label>Norma Regulamentadora *</label>
@@ -351,7 +260,6 @@
         </select>
       </div>
     </div>
-
     <div class="form-row">
       <div class="form-group">
         <label>Data da Inspeção *</label>
@@ -362,14 +270,12 @@
         <input type="date" id="f_proxima"/>
       </div>
     </div>
-
     <div class="form-row full">
       <div class="form-group">
         <label>Observações / Descrição</label>
         <textarea id="f_obs" placeholder="Descreva os achados, não conformidades, ações necessárias..."></textarea>
       </div>
     </div>
-
     <div class="modal-footer">
       <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
       <button class="btn-salvar" onclick="salvarInspecao()">💾 Salvar</button>
@@ -377,7 +283,7 @@
   </div>
 </div>
 
-<!-- MODAL VER DETALHES -->
+<!-- MODAL VER -->
 <div class="modal-overlay" id="modalVer">
   <div class="modal">
     <h3>📋 Detalhes da Inspeção</h3>
@@ -389,7 +295,6 @@
 </div>
 
 <script>
-  // ── Auth ──
   const userData = localStorage.getItem('safenr_user');
   if (!userData) { window.location.href = './index.html'; }
   else {
@@ -397,83 +302,62 @@
     document.getElementById('nomeUsuario').textContent = user.nome || 'Usuário';
     document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
   }
+  function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
 
-  function sair() {
-    localStorage.removeItem('safenr_user');
-    window.location.href = './index.html';
-  }
-
-  // ── Dados ──
   let inspecoes = JSON.parse(localStorage.getItem('safenr_inspecoes') || '[]');
   let editandoId = null;
   let filtroAtivo = 'todos';
 
-  function salvarStorage() {
-    localStorage.setItem('safenr_inspecoes', JSON.stringify(inspecoes));
-  }
+  function salvarStorage() { localStorage.setItem('safenr_inspecoes', JSON.stringify(inspecoes)); }
 
-  // ── Renderizar Tabela ──
   function renderizar(lista) {
     const tbody = document.getElementById('tabelaBody');
     const empty = document.getElementById('emptyState');
     tbody.innerHTML = '';
-
     if (lista.length === 0) {
       empty.style.display = 'block';
       document.getElementById('totalRegistros').textContent = '0 registros';
       return;
     }
-
     empty.style.display = 'none';
     document.getElementById('totalRegistros').textContent = lista.length + ' registro(s)';
-
-    lista.forEach((ins, i) => {
+    lista.forEach(ins => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td style="color:rgba(255,255,255,0.3); font-size:0.8rem">#${String(ins.id).padStart(3,'0')}</td>
+        <td style="color:rgba(255,255,255,0.3);font-size:0.8rem">#${String(ins.id).padStart(3,'0')}</td>
         <td><strong>${ins.setor}</strong></td>
-        <td style="color:#00d4ff; font-size:0.82rem">${ins.nr}</td>
+        <td style="color:#00d4ff;font-size:0.82rem">${ins.nr}</td>
         <td>${ins.responsavel}</td>
         <td>${formatarData(ins.data)}</td>
         <td><span class="badge ${ins.status}">${labelStatus(ins.status)}</span></td>
         <td>
-          <button class="btn-acao" onclick="verDetalhes(${ins.id})" title="Ver">👁️</button>
-          <button class="btn-acao" onclick="editar(${ins.id})" title="Editar">✏️</button>
-          <button class="btn-acao" onclick="excluir(${ins.id})" title="Excluir">🗑️</button>
-        </td>
-      `;
+          <button class="btn-acao" onclick="verDetalhes(${ins.id})">👁️</button>
+          <button class="btn-acao" onclick="editar(${ins.id})">✏️</button>
+          <button class="btn-acao" onclick="excluir(${ins.id})">🗑️</button>
+        </td>`;
       tbody.appendChild(tr);
     });
   }
 
   function labelStatus(s) {
-    const m = { conforme:'Conforme', pendente:'Pendente', 'em-andamento':'Em Andamento', critico:'Crítico' };
-    return m[s] || s;
+    return { conforme:'Conforme', pendente:'Pendente', 'em-andamento':'Em Andamento', critico:'Crítico' }[s] || s;
   }
-
   function formatarData(d) {
     if (!d) return '—';
     const [y,m,dia] = d.split('-');
     return `${dia}/${m}/${y}`;
   }
-
-  // ── Filtrar ──
   function filtrar(status, btn) {
     filtroAtivo = status;
     document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    const lista = status === 'todos' ? inspecoes : inspecoes.filter(i => i.status === status);
-    renderizar(lista);
+    renderizar(status === 'todos' ? inspecoes : inspecoes.filter(i => i.status === status));
   }
-
-  // ── Modal Form ──
   function abrirModal(id = null) {
     editandoId = id;
     document.getElementById('modalTitulo').textContent = id ? '✏️ Editar Inspeção' : '📝 Nova Inspeção';
-    // Limpa
     ['f_setor','f_responsavel','f_nr','f_status','f_data','f_proxima','f_obs']
       .forEach(f => document.getElementById(f).value = '');
-
     if (id) {
       const ins = inspecoes.find(i => i.id === id);
       document.getElementById('f_setor').value       = ins.setor;
@@ -484,19 +368,11 @@
       document.getElementById('f_proxima').value     = ins.proxima || '';
       document.getElementById('f_obs').value         = ins.obs || '';
     } else {
-      // data de hoje como padrão
       document.getElementById('f_data').value = new Date().toISOString().split('T')[0];
     }
-
     document.getElementById('modalForm').classList.add('open');
   }
-
-  function fecharModal() {
-    document.getElementById('modalForm').classList.remove('open');
-    editandoId = null;
-  }
-
-  // ── Salvar ──
+  function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId = null; }
   function salvarInspecao() {
     const setor       = document.getElementById('f_setor').value.trim();
     const responsavel = document.getElementById('f_responsavel').value.trim();
@@ -505,12 +381,7 @@
     const data        = document.getElementById('f_data').value;
     const proxima     = document.getElementById('f_proxima').value;
     const obs         = document.getElementById('f_obs').value.trim();
-
-    if (!setor || !responsavel || !nr || !status || !data) {
-      alert('⚠️ Preencha todos os campos obrigatórios (*)');
-      return;
-    }
-
+    if (!setor || !responsavel || !nr || !status || !data) { alert('⚠️ Preencha todos os campos obrigatórios (*)'); return; }
     if (editandoId) {
       const idx = inspecoes.findIndex(i => i.id === editandoId);
       inspecoes[idx] = { ...inspecoes[idx], setor, responsavel, nr, status, data, proxima, obs };
@@ -518,24 +389,16 @@
       const novoId = inspecoes.length > 0 ? Math.max(...inspecoes.map(i => i.id)) + 1 : 1;
       inspecoes.push({ id: novoId, setor, responsavel, nr, status, data, proxima, obs });
     }
-
-    salvarStorage();
-    fecharModal();
-    aplicarFiltroAtual();
+    salvarStorage(); fecharModal();
+    renderizar(filtroAtivo === 'todos' ? inspecoes : inspecoes.filter(i => i.status === filtroAtivo));
   }
-
-  // ── Editar ──
   function editar(id) { abrirModal(id); }
-
-  // ── Excluir ──
   function excluir(id) {
     if (!confirm('Deseja realmente excluir esta inspeção?')) return;
     inspecoes = inspecoes.filter(i => i.id !== id);
     salvarStorage();
-    aplicarFiltroAtual();
+    renderizar(filtroAtivo === 'todos' ? inspecoes : inspecoes.filter(i => i.status === filtroAtivo));
   }
-
-  // ── Ver Detalhes ──
   function verDetalhes(id) {
     const ins = inspecoes.find(i => i.id === id);
     document.getElementById('modalVerConteudo').innerHTML = `
@@ -545,33 +408,16 @@
       <div class="detalhe-row"><span class="detalhe-label">Norma (NR)</span><span class="detalhe-valor" style="color:#00d4ff">${ins.nr}</span></div>
       <div class="detalhe-row"><span class="detalhe-label">Status</span><span class="badge ${ins.status}">${labelStatus(ins.status)}</span></div>
       <div class="detalhe-row"><span class="detalhe-label">Data da Inspeção</span><span class="detalhe-valor">${formatarData(ins.data)}</span></div>
-      <div class="detalhe-row"><span class="detalhe-label">Próxima Inspeção</span><span class="detalhe-valor">${formatarData(ins.proxima) || '—'}</span></div>
-      <div class="detalhe-row"><span class="detalhe-label">Observações</span><span class="detalhe-valor">${ins.obs || '—'}</span></div>
-    `;
+      <div class="detalhe-row"><span class="detalhe-label">Próxima Inspeção</span><span class="detalhe-valor">${formatarData(ins.proxima)}</span></div>
+      <div class="detalhe-row"><span class="detalhe-label">Observações</span><span class="detalhe-valor">${ins.obs || '—'}</span></div>`;
     document.getElementById('modalVer').classList.add('open');
   }
+  function fecharModalVer() { document.getElementById('modalVer').classList.remove('open'); }
 
-  function fecharModalVer() {
-    document.getElementById('modalVer').classList.remove('open');
-  }
+  document.getElementById('modalForm').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
+  document.getElementById('modalVer').addEventListener('click',  function(e) { if (e.target === this) fecharModalVer(); });
 
-  // ── Fechar modal clicando fora ──
-  document.getElementById('modalForm').addEventListener('click', function(e) {
-    if (e.target === this) fecharModal();
-  });
-  document.getElementById('modalVer').addEventListener('click', function(e) {
-    if (e.target === this) fecharModalVer();
-  });
-
-  function aplicarFiltroAtual() {
-    const lista = filtroAtivo === 'todos' ? inspecoes : inspecoes.filter(i => i.status === filtroAtivo);
-    renderizar(lista);
-  }
-
-  // ── Init ──
   renderizar(inspecoes);
 </script>
-
 </body>
 </html>
-
