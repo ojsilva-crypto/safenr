@@ -1,3 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SafeNR — Galeria de Fotos</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;z-index:10}
+    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
+    .sidebar-logo h1 span{color:#00d4ff}
+    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
+    .nav{flex:1;padding:20px 0;overflow-y:auto}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
+    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+    .user-info p{font-size:.82rem;font-weight:600}
+    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
+    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .topbar h2{font-size:1.4rem;font-weight:700}
+    .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
+    .btn-novo{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:opacity .2s,transform .2s}
+    .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
+    .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+    .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
+    .filtro-btn:hover,.filtro-btn.active{background:rgba(0,212,255,.12);border-color:#00d4ff;color:#00d4ff}
+    .fotos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .foto-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s}
+    .foto-card:hover{transform:translateY(-3px);border-color:rgba(0,212,255,.3)}
+    .foto-img{width:100%;height:160px;object-fit:cover;display:block;background:#0a1520}
+    .foto-placeholder{width:100%;height:160px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:rgba(255,255,255,.03)}
+    .foto-info{padding:12px}
+    .foto-info p{font-size:.83rem;font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .foto-info span{font-size:.72rem;color:rgba(255,255,255,.35)}
+    .foto-acoes{display:flex;gap:6px;padding:0 12px 12px}
+    .btn-acao{background:none;border:none;cursor:pointer;padding:5px 8px;border-radius:8px;font-size:.82rem;transition:background .2s;color:rgba(255,255,255,.6)}
+    .btn-acao:hover{background:rgba(255,255,255,.08);color:#fff}
+    .empty-state{text-align:center;padding:80px 20px;color:rgba(255,255,255,.3);grid-column:1/-1}
+    .empty-state div{font-size:3.5rem;margin-bottom:16px}
+    .badge{padding:3px 10px;border-radius:20px;font-size:.68rem;font-weight:600}
+    .badge.inspecao{background:rgba(0,212,255,.15);color:#00d4ff}
+    .badge.risco{background:rgba(248,113,113,.15);color:#f87171}
+    .badge.epi{background:rgba(251,146,60,.15);color:#fb923c}
+    .badge.geral{background:rgba(167,139,250,.15);color:#a78bfa}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
+    .modal-overlay.open{display:flex}
+    .modal-form{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:32px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto}
+    .modal-form h3{font-size:1.15rem;font-weight:700;margin-bottom:22px}
+    .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+    .form-group label{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.5)}
+    .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 14px;color:#fff;font-size:.88rem;outline:none;transition:border .2s;font-family:inherit}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#00d4ff}
+    .form-group select option{background:#1a2535}
+    .form-group textarea{resize:vertical;min-height:70px}
+    .upload-area{border:2px dashed rgba(255,255,255,.15);border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all .2s}
+    .upload-area:hover{border-color:#00d4ff;background:rgba(0,212,255,.04)}
+    .upload-area p{font-size:.85rem;color:rgba(255,255,255,.4);margin-top:8px}
+    .upload-preview{margin-top:12px;max-width:100%;max-height:200px;border-radius:8px;display:none}
+    .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:20px}
+    .btn-cancelar{padding:11px 22px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
+    .btn-salvar{padding:11px 26px;border-radius:10px;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
+    .modal-ver{background:#0a1520;border:1px solid rgba(255,255,255,.12);border-radius:20px;width:100%;max-width:700px;max-height:92vh;overflow-y:auto}
+    .modal-ver img{width:100%;max-height:420px;object-fit:contain;background:#000;border-radius:12px;margin-bottom:16px}
+    .modal-ver-body{padding:28px}
+    .detalhe-row{display:flex;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .detalhe-row:last-child{border-bottom:none}
+    .detalhe-label{font-size:.76rem;color:rgba(255,255,255,.4);min-width:130px;font-weight:600}
+    .detalhe-valor{font-size:.85rem;color:#fff}
+  </style>
+</head>
+<body>
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
@@ -17,10 +95,171 @@
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
-    <div class="user-info">
-      <p id="nomeUsuario">Usuário</p>
-      <span>Administrador</span>
-    </div>
+    <div class="user-info"><p id="nomeUsuario">Usuário</p><span>Administrador</span></div>
     <button class="btn-sair" onclick="sair()">✕</button>
   </div>
 </div>
+<div class="main">
+  <div class="topbar">
+    <div><h2>📷 Galeria de Fotos</h2><span id="totalFotos">0 fotos</span></div>
+    <button class="btn-novo" onclick="abrirForm()">+ Adicionar Foto</button>
+  </div>
+  <div class="filtros">
+    <button class="filtro-btn active" onclick="filtrar('todos',this)">Todas</button>
+    <button class="filtro-btn" onclick="filtrar('inspecao',this)">🔍 Inspeção</button>
+    <button class="filtro-btn" onclick="filtrar('risco',this)">⚠️ Risco</button>
+    <button class="filtro-btn" onclick="filtrar('epi',this)">🦺 EPI</button>
+    <button class="filtro-btn" onclick="filtrar('geral',this)">📁 Geral</button>
+  </div>
+  <div class="fotos-grid" id="fotosGrid"></div>
+</div>
+<div class="modal-overlay" id="modalForm">
+  <div class="modal-form">
+    <h3>📷 Adicionar Foto</h3>
+    <div class="form-group">
+      <label>Imagem *</label>
+      <div class="upload-area" onclick="document.getElementById('inputFoto').click()">
+        <div style="font-size:2rem">📁</div>
+        <p>Clique para selecionar uma imagem</p>
+        <img id="uploadPreview" class="upload-preview"/>
+      </div>
+      <input type="file" id="inputFoto" accept="image/*" style="display:none" onchange="previewFoto(this)"/>
+    </div>
+    <div class="form-group"><label>Título *</label><input type="text" id="f_titulo" placeholder="Ex: Inspeção de EPIs..."/></div>
+    <div class="form-group"><label>Categoria</label><select id="f_categoria"><option value="geral">📁 Geral</option><option value="inspecao">🔍 Inspeção</option><option value="risco">⚠️ Risco</option><option value="epi">🦺 EPI</option></select></div>
+    <div class="form-group"><label>Local / Setor</label><input type="text" id="f_local" placeholder="Ex: Produção, Almoxarifado..."/></div>
+    <div class="form-group"><label>Descrição</label><textarea id="f_desc" placeholder="Descreva o que a foto registra..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharForm()">Cancelar</button>
+      <button class="btn-salvar" onclick="salvarFoto()">Salvar</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="modalVer">
+  <div class="modal-ver">
+    <div class="modal-ver-body">
+      <img id="verImg" src="" alt="" style="width:100%;max-height:400px;object-fit:contain;background:#000;border-radius:12px;margin-bottom:16px"/>
+      <div id="verConteudo"></div>
+      <div class="modal-footer"><button class="btn-cancelar" onclick="fecharVer()">Fechar</button></div>
+    </div>
+  </div>
+</div>
+<script>
+var userData = localStorage.getItem('safenr_user');
+if (!userData) { window.location.href = './index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuário';
+document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
+
+var fotos = JSON.parse(localStorage.getItem('safenr_fotos') || '[]');
+var filtroAtivo = 'todos';
+var fotoBase64 = '';
+
+function salvarStorage() { localStorage.setItem('safenr_fotos', JSON.stringify(fotos)); }
+function fmtDT(iso) { if (!iso) return '—'; return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+
+function filtrar(s, btn) {
+  filtroAtivo = s;
+  document.querySelectorAll('.filtro-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderizar();
+}
+
+function getLista() {
+  if (filtroAtivo === 'todos') return fotos;
+  return fotos.filter(function(f){ return f.categoria === filtroAtivo; });
+}
+
+function renderizar() {
+  var grid = document.getElementById('fotosGrid');
+  var lista = getLista();
+  document.getElementById('totalFotos').textContent = fotos.length + ' foto(s)';
+  grid.innerHTML = '';
+  if (lista.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div>📷</div><p>Nenhuma foto cadastrada.<br>Clique em <strong>+ Adicionar Foto</strong>.</p></div>';
+    return;
+  }
+  lista.forEach(function(f) {
+    var div = document.createElement('div');
+    div.className = 'foto-card';
+    var imgHtml = f.imagem
+      ? '<img class="foto-img" src="' + f.imagem + '" alt="' + f.titulo + '"/>'
+      : '<div class="foto-placeholder">📷</div>';
+    var catLabel = {inspecao:'Inspeção',risco:'Risco',epi:'EPI',geral:'Geral'}[f.categoria] || 'Geral';
+    div.innerHTML = imgHtml +
+      '<div class="foto-info"><p>' + f.titulo + '</p><span>' + (f.local||'—') + ' • ' + fmtDT(f.data) + '</span></div>' +
+      '<div class="foto-acoes"><span class="badge ' + (f.categoria||'geral') + '">' + catLabel + '</span>' +
+      '<button class="btn-acao" onclick="verFoto(' + f.id + ')" style="margin-left:auto">👁️</button>' +
+      '<button class="btn-acao" onclick="excluir(' + f.id + ')">🗑️</button></div>';
+    grid.appendChild(div);
+  });
+}
+
+function previewFoto(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    fotoBase64 = e.target.result;
+    var prev = document.getElementById('uploadPreview');
+    prev.src = fotoBase64;
+    prev.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function abrirForm() {
+  fotoBase64 = '';
+  document.getElementById('f_titulo').value = '';
+  document.getElementById('f_categoria').value = 'geral';
+  document.getElementById('f_local').value = '';
+  document.getElementById('f_desc').value = '';
+  document.getElementById('inputFoto').value = '';
+  document.getElementById('uploadPreview').style.display = 'none';
+  document.getElementById('modalForm').classList.add('open');
+}
+function fecharForm() { document.getElementById('modalForm').classList.remove('open'); }
+
+function salvarFoto() {
+  var titulo = document.getElementById('f_titulo').value.trim();
+  if (!titulo) { alert('Informe o título da foto.'); return; }
+  var novoId = fotos.length > 0 ? Math.max.apply(null, fotos.map(function(f){ return f.id; })) + 1 : 1;
+  fotos.push({
+    id: novoId,
+    titulo: titulo,
+    categoria: document.getElementById('f_categoria').value,
+    local: document.getElementById('f_local').value.trim(),
+    desc: document.getElementById('f_desc').value.trim(),
+    imagem: fotoBase64,
+    data: new Date().toISOString(),
+    registradoPor: user.nome || 'Usuário'
+  });
+  salvarStorage();
+  fecharForm();
+  renderizar();
+}
+
+function verFoto(id) {
+  var f = fotos.find(function(x){ return x.id === id; });
+  document.getElementById('verImg').src = f.imagem || '';
+  document.getElementById('verImg').style.display = f.imagem ? 'block' : 'none';
+  function row(l,v){ return '<div class="detalhe-row"><span class="detalhe-label">' + l + '</span><span class="detalhe-valor">' + v + '</span></div>'; }
+  document.getElementById('verConteudo').innerHTML = row('Título', f.titulo) + row('Categoria', f.categoria||'Geral') + row('Local', f.local||'—') + row('Descrição', f.desc||'—') + row('Registrado por', '<span style="color:#00d4ff">' + (f.registradoPor||'—') + '</span>') + row('Data', '<span style="color:#00d4ff">' + fmtDT(f.data) + '</span>');
+  document.getElementById('modalVer').classList.add('open');
+}
+function fecharVer() { document.getElementById('modalVer').classList.remove('open'); }
+
+function excluir(id) {
+  if (!confirm('Excluir esta foto?')) return;
+  fotos = fotos.filter(function(f){ return f.id !== id; });
+  salvarStorage();
+  renderizar();
+}
+
+document.getElementById('modalForm').addEventListener('click', function(e){ if(e.target===this) fecharForm(); });
+document.getElementById('modalVer').addEventListener('click', function(e){ if(e.target===this) fecharVer(); });
+renderizar();
+</script>
+</body>
+</html>
