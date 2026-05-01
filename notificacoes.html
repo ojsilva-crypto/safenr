@@ -1,874 +1,99 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SafeNR – Notificações</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <style>
-    :root {
-      --bg-primary: #0f1117;
-      --bg-secondary: #1a1d27;
-      --bg-card: #1e2130;
-      --bg-hover: #252840;
-      --accent: #4f6ef7;
-      --accent-hover: #3a56d4;
-      --accent-green: #22c55e;
-      --accent-yellow: #f59e0b;
-      --accent-red: #ef4444;
-      --accent-purple: #a855f7;
-      --text-primary: #e2e8f0;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --border: #2d3148;
-      --bg-hover: #252840;
-      --sidebar-width: 260px;
-      --radius: 12px;
-      --radius-sm: 8px;
-      --shadow: 0 4px 24px rgba(0,0,0,0.4);
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      display: flex;
-      min-height: 100vh;
-    }
-
-    /* SIDEBAR */
-    .sidebar {
-      width: var(--sidebar-width);
-      background: var(--bg-secondary);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0; left: 0;
-      height: 100vh;
-      z-index: 100;
-      overflow-y: auto;
-    }
-
-    .sidebar-logo {
-      padding: 24px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .logo-icon {
-      width: 40px; height: 40px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-    }
-
-    .logo-text { font-size: 20px; font-weight: 700; }
-    .logo-sub  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
-    .sidebar-nav { padding: 16px 12px; flex: 1; }
-
-    .nav-section-title {
-      font-size: 10px; font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      padding: 8px 8px 6px;
-      margin-top: 8px;
-    }
-
-    .nav-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 12px;
-      border-radius: var(--radius-sm);
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 14px; font-weight: 500;
-      transition: all 0.2s;
-      margin-bottom: 2px;
-      position: relative;
-    }
-
-    .nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
-    .nav-item.active { background: rgba(79,110,247,0.15); color: var(--accent); }
-    .nav-item i { width: 18px; text-align: center; font-size: 15px; }
-
-    .nav-badge {
-      position: absolute; right: 10px;
-      background: var(--accent-red);
-      color: #fff;
-      font-size: 10px; font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 10px;
-      min-width: 18px;
-      text-align: center;
-    }
-
-    .sidebar-footer {
-      padding: 16px 12px;
-      border-top: 1px solid var(--border);
-    }
-
-    .user-info {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px;
-      border-radius: var(--radius-sm);
-      background: var(--bg-card);
-    }
-
-    .user-avatar {
-      width: 34px; height: 34px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 700;
-    }
-
-    .user-name { font-size: 13px; font-weight: 600; }
-    .user-role { font-size: 11px; color: var(--text-muted); }
-
-    /* MAIN */
-    .main {
-      margin-left: var(--sidebar-width);
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .topbar {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky; top: 0; z-index: 50;
-    }
-
-    .topbar-title { font-size: 20px; font-weight: 700; }
-    .topbar-sub   { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-
-    .topbar-actions { display: flex; gap: 10px; align-items: center; }
-
-    .btn {
-      padding: 9px 18px;
-      border-radius: var(--radius-sm);
-      border: none;
-      font-size: 13px; font-weight: 600;
-      cursor: pointer;
-      display: flex; align-items: center; gap: 8px;
-      transition: all 0.2s;
-    }
-
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: var(--accent-hover); }
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid var(--border);
-    }
-    .btn-ghost:hover { background: var(--bg-hover); color: var(--text-primary); }
-    .btn-danger { background: var(--accent-red); color: #fff; }
-    .btn-danger:hover { background: #dc2626; }
-
-    /* CONTENT */
-    .content { padding: 32px; flex: 1; }
-
-    /* FILTROS */
-    .filter-bar {
-      display: flex; gap: 10px; align-items: center;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-
-    .filter-btn {
-      padding: 8px 16px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-secondary);
-      font-size: 13px; font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex; align-items: center; gap: 6px;
-    }
-
-    .filter-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
-    .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-    .filter-count {
-      background: rgba(255,255,255,0.2);
-      padding: 1px 6px;
-      border-radius: 10px;
-      font-size: 11px;
-    }
-
-    /* STATS */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px;
-      display: flex; align-items: center; gap: 14px;
-    }
-
-    .stat-icon {
-      width: 44px; height: 44px;
-      border-radius: var(--radius-sm);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .stat-icon.red    { background: rgba(239,68,68,0.15);  color: var(--accent-red); }
-    .stat-icon.yellow { background: rgba(245,158,11,0.15); color: var(--accent-yellow); }
-    .stat-icon.blue   { background: rgba(79,110,247,0.15); color: var(--accent); }
-    .stat-icon.green  { background: rgba(34,197,94,0.15);  color: var(--accent-green); }
-
-    .stat-value { font-size: 22px; font-weight: 700; }
-    .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-    /* NOTIF LIST */
-    .notif-group { margin-bottom: 28px; }
-
-    .notif-group-title {
-      font-size: 12px; font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .notif-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      transition: all 0.2s;
-      position: relative;
-      cursor: pointer;
-    }
-
-    .notif-item:hover { background: var(--bg-hover); border-color: var(--border); }
-    .notif-item.unread { border-left: 3px solid var(--accent); }
-    .notif-item.unread.critical { border-left-color: var(--accent-red); }
-    .notif-item.unread.warning  { border-left-color: var(--accent-yellow); }
-    .notif-item.unread.success  { border-left-color: var(--accent-green); }
-
-    .notif-icon-wrap {
-      width: 42px; height: 42px;
-      border-radius: var(--radius-sm);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 17px;
-      flex-shrink: 0;
-    }
-
-    .notif-icon-wrap.critical { background: rgba(239,68,68,0.15);  color: var(--accent-red); }
-    .notif-icon-wrap.warning  { background: rgba(245,158,11,0.15); color: var(--accent-yellow); }
-    .notif-icon-wrap.info     { background: rgba(79,110,247,0.15); color: var(--accent); }
-    .notif-icon-wrap.success  { background: rgba(34,197,94,0.15);  color: var(--accent-green); }
-    .notif-icon-wrap.purple   { background: rgba(168,85,247,0.15); color: var(--accent-purple); }
-
-    .notif-body { flex: 1; }
-
-    .notif-title {
-      font-size: 14px; font-weight: 600;
-      margin-bottom: 4px;
-      display: flex; align-items: center; gap: 8px;
-    }
-
-    .notif-desc  { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
-    .notif-meta  { font-size: 11px; color: var(--text-muted); display: flex; gap: 12px; }
-
-    .unread-dot {
-      width: 8px; height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 6px;
-    }
-
-    .unread-dot.critical { background: var(--accent-red); }
-    .unread-dot.warning  { background: var(--accent-yellow); }
-    .unread-dot.success  { background: var(--accent-green); }
-
-    .notif-actions {
-      display: flex; gap: 6px;
-      opacity: 0;
-      transition: opacity 0.2s;
-      flex-shrink: 0;
-    }
-
-    .notif-item:hover .notif-actions { opacity: 1; }
-
-    .btn-icon {
-      width: 30px; height: 30px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-secondary);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s;
-    }
-
-    .btn-icon:hover { background: var(--bg-card); color: var(--text-primary); }
-    .btn-icon.danger:hover { background: rgba(239,68,68,0.15); color: var(--accent-red); }
-
-    .badge {
-      padding: 3px 8px;
-      border-radius: 10px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .badge-red    { background: rgba(239,68,68,0.15);  color: var(--accent-red); }
-    .badge-yellow { background: rgba(245,158,11,0.15); color: var(--accent-yellow); }
-    .badge-blue   { background: rgba(79,110,247,0.15); color: var(--accent); }
-    .badge-green  { background: rgba(34,197,94,0.15);  color: var(--accent-green); }
-    .badge-purple { background: rgba(168,85,247,0.15); color: var(--accent-purple); }
-
-    /* EMPTY STATE */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-    }
-
-    .empty-state i    { font-size: 48px; margin-bottom: 16px; opacity: .4; }
-    .empty-state h3   { font-size: 18px; margin-bottom: 8px; color: var(--text-secondary); }
-    .empty-state p    { font-size: 14px; }
-
-    /* TOAST */
-    .toast-container {
-      position: fixed;
-      bottom: 24px; right: 24px;
-      z-index: 2000;
-      display: flex; flex-direction: column; gap: 8px;
-    }
-
-    .toast {
-      padding: 14px 18px;
-      border-radius: var(--radius-sm);
-      font-size: 13px; font-weight: 500;
-      display: flex; align-items: center; gap: 10px;
-      animation: slideIn 0.3s ease;
-      min-width: 260px;
-      box-shadow: var(--shadow);
-    }
-
-    .toast.success { background: var(--accent-green); color: #fff; }
-    .toast.info    { background: var(--accent);       color: #fff; }
-    .toast.error   { background: var(--accent-red);   color: #fff; }
-
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to   { transform: translateX(0);   opacity: 1; }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notificações - SafeNR</title>
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+  <div class="container">
+    <nav class="nav">
+      <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+      <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
+      <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
+      <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
+      <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
+      <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
+      <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
+      <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
+      <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+      <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
+      <a class="nav-item active" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
+      <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
+    </nav>
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-icon">🛡️</div>
-    <div>
-      <div class="logo-text">SafeNR</div>
-      <div class="logo-sub">Gestão de Segurança</div>
-    </div>
-  </div>
+    <main class="content">
+      <header class="header">
+        <h1>🔔 Notificações</h1>
+        <button class="btn btn-secondary" id="limparTodas">Limpar Todas</button>
+      </header>
 
-  <nav class="sidebar-nav">
-    <div class="nav-section-title">Principal</div>
-    <a href="app.html"           class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
-    <a href="inspecoes.html"     class="nav-item"><i class="fas fa-clipboard-check"></i> Inspeções</a>
-    <a href="riscos.html"        class="nav-item"><i class="fas fa-exclamation-triangle"></i> Riscos</a>
-    <a href="checklists.html"    class="nav-item"><i class="fas fa-tasks"></i> Checklists</a>
-
-    <div class="nav-section-title">Gestão</div>
-    <a href="funcionarios.html"  class="nav-item"><i class="fas fa-users"></i> Funcionários</a>
-    <a href="epis.html"          class="nav-item"><i class="fas fa-hard-hat"></i> EPIs</a>
-    <a href="agenda.html"        class="nav-item"><i class="fas fa-calendar-alt"></i> Agenda</a>
-    <a href="fotos.html"         class="nav-item"><i class="fas fa-camera"></i> Fotos</a>
-
-    <div class="nav-section-title">Relatórios</div>
-    <a href="relatorios.html"    class="nav-item"><i class="fas fa-chart-bar"></i> Relatórios</a>
-    <a href="biblioteca.html"    class="nav-item"><i class="fas fa-book"></i> Biblioteca NRs</a>
-
-    <div class="nav-section-title">Sistema</div>
-    <a href="notificacoes.html"  class="nav-item active"><i class="fas fa-bell"></i> Notificações <span class="nav-badge" id="sidebarBadge">0</span></a>
-    <a href="configuracoes.html" class="nav-item"><i class="fas fa-cog"></i> Configurações</a>
-  </nav>
-
-  <div class="sidebar-footer">
-    <div class="user-info">
-      <div class="user-avatar" id="sidebarInitial">A</div>
-      <div>
-        <div class="user-name" id="sidebarName">Administrador</div>
-        <div class="user-role" id="sidebarRole">Admin</div>
-      </div>
-    </div>
-  </div>
-</aside>
-
-<!-- MAIN -->
-<div class="main">
-
-  <div class="topbar">
-    <div>
-      <div class="topbar-title">🔔 Notificações</div>
-      <div class="topbar-sub" id="topbarSub">Carregando alertas...</div>
-    </div>
-    <div class="topbar-actions">
-      <button class="btn btn-ghost" onclick="markAllRead()"><i class="fas fa-check-double"></i> Marcar todas como lidas</button>
-      <button class="btn btn-danger" onclick="clearAllNotifs()"><i class="fas fa-trash"></i> Limpar tudo</button>
-    </div>
-  </div>
-
-  <div class="content">
-
-    <!-- STATS -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-icon red"><i class="fas fa-exclamation-circle"></i></div>
-        <div>
-          <div class="stat-value" id="statCritical">0</div>
-          <div class="stat-label">Críticas</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon yellow"><i class="fas fa-exclamation-triangle"></i></div>
-        <div>
-          <div class="stat-value" id="statWarning">0</div>
-          <div class="stat-label">Avisos</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon blue"><i class="fas fa-info-circle"></i></div>
-        <div>
-          <div class="stat-value" id="statInfo">0</div>
-          <div class="stat-label">Informações</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green"><i class="fas fa-envelope-open"></i></div>
-        <div>
-          <div class="stat-value" id="statRead">0</div>
-          <div class="stat-label">Lidas</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- FILTROS -->
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="filterNotifs('all', this)">
-        <i class="fas fa-list"></i> Todas <span class="filter-count" id="fc-all">0</span>
-      </button>
-      <button class="filter-btn" onclick="filterNotifs('unread', this)">
-        <i class="fas fa-envelope"></i> Não lidas <span class="filter-count" id="fc-unread">0</span>
-      </button>
-      <button class="filter-btn" onclick="filterNotifs('critical', this)">
-        <i class="fas fa-exclamation-circle"></i> Críticas <span class="filter-count" id="fc-critical">0</span>
-      </button>
-      <button class="filter-btn" onclick="filterNotifs('warning', this)">
-        <i class="fas fa-exclamation-triangle"></i> Avisos <span class="filter-count" id="fc-warning">0</span>
-      </button>
-      <button class="filter-btn" onclick="filterNotifs('info', this)">
-        <i class="fas fa-info-circle"></i> Informações <span class="filter-count" id="fc-info">0</span>
-      </button>
-      <button class="filter-btn" onclick="filterNotifs('epi', this)">
-        <i class="fas fa-hard-hat"></i> EPIs
-      </button>
-      <button class="filter-btn" onclick="filterNotifs('inspecao', this)">
-        <i class="fas fa-clipboard-check"></i> Inspeções
-      </button>
-      <button class="filter-btn" onclick="filterNotifs('funcionario', this)">
-        <i class="fas fa-user"></i> Funcionários
-      </button>
-    </div>
-
-    <!-- LISTA -->
-    <div id="notifList">
-      <!-- dinâmico -->
-    </div>
-
-  </div>
-</div>
-
-<div class="toast-container" id="toastContainer"></div>
-
-<script>
-  // ─── ESTADO ───
-  let allNotifs    = [];
-  let activeFilter = 'all';
-
-  // ─── INIT ───
-  document.addEventListener('DOMContentLoaded', () => {
-    loadCurrentUser();
-    generateNotifications();
-    render();
-  });
-
-  // ─── USER ───
-  function loadCurrentUser() {
-    const u = JSON.parse(localStorage.getItem('safenr_current_user') || '{}');
-    if (u.nome) {
-      document.getElementById('sidebarName').textContent    = u.nome;
-      document.getElementById('sidebarRole').textContent    = u.perfil || 'Usuário';
-      document.getElementById('sidebarInitial').textContent = u.nome.charAt(0).toUpperCase();
-    }
-  }
-
-  // ─── GERAR NOTIFICAÇÕES DOS DADOS ───
-  function generateNotifications() {
-    const saved = localStorage.getItem('safenr_notificacoes');
-    if (saved) { allNotifs = JSON.parse(saved); updateStats(); return; }
-
-    const notifs = [];
-    const hoje   = new Date();
-
-    // EPIs vencidos / próximos do vencimento
-    const epis = JSON.parse(localStorage.getItem('safenr_epis') || '[]');
-    epis.forEach(epi => {
-      if (!epi.validade) return;
-      const venc  = new Date(epi.validade);
-      const dias  = Math.ceil((venc - hoje) / 86400000);
-      if (dias < 0) {
-        notifs.push({
-          id: 'epi_' + epi.id || Date.now() + Math.random(),
-          tipo: 'critical', categoria: 'epi',
-          icone: 'fa-hard-hat',
-          titulo: `EPI Vencido: ${epi.nome}`,
-          descricao: `O EPI "${epi.nome}" venceu há ${Math.abs(dias)} dia(s). CA: ${epi.ca || 'N/I'}`,
-          meta: { tempo: 'Agora', modulo: 'EPIs', link: 'epis.html' },
-          lida: false, data: new Date().toISOString()
-        });
-      } else if (dias <= 30) {
-        notifs.push({
-          id: 'epi_warn_' + Math.random(),
-          tipo: 'warning', categoria: 'epi',
-          icone: 'fa-hard-hat',
-          titulo: `EPI Vence em ${dias} dia(s): ${epi.nome}`,
-          descricao: `Providencie a renovação do CA do EPI "${epi.nome}"`,
-          meta: { tempo: 'Hoje', modulo: 'EPIs', link: 'epis.html' },
-          lida: false, data: new Date().toISOString()
-        });
-      }
-    });
-
-    // Inspeções atrasadas
-    const inspecoes = JSON.parse(localStorage.getItem('safenr_inspecoes') || '[]');
-    inspecoes.forEach(insp => {
-      if (insp.status === 'Atrasada' || insp.status === 'Pendente') {
-        notifs.push({
-          id: 'insp_' + Math.random(),
-          tipo: insp.status === 'Atrasada' ? 'critical' : 'warning',
-          categoria: 'inspecao',
-          icone: 'fa-clipboard-check',
-          titulo: `Inspeção ${insp.status}: ${insp.local || insp.titulo || 'Sem título'}`,
-          descricao: `Responsável: ${insp.responsavel || 'N/I'} — Prazo: ${insp.prazo || insp.data || 'N/I'}`,
-          meta: { tempo: 'Pendente', modulo: 'Inspeções', link: 'inspecoes.html' },
-          lida: false, data: new Date().toISOString()
-        });
-      }
-    });
-
-    // Funcionários com exame vencido
-    const funcs = JSON.parse(localStorage.getItem('safenr_funcionarios') || '[]');
-    funcs.forEach(f => {
-      if (!f.exameVencimento) return;
-      const venc = new Date(f.exameVencimento);
-      const dias = Math.ceil((venc - hoje) / 86400000);
-      if (dias < 0) {
-        notifs.push({
-          id: 'func_' + Math.random(),
-          tipo: 'critical', categoria: 'funcionario',
-          icone: 'fa-user-md',
-          titulo: `Exame Vencido: ${f.nome}`,
-          descricao: `Exame ocupacional de ${f.nome} venceu há ${Math.abs(dias)} dia(s)`,
-          meta: { tempo: 'Hoje', modulo: 'Funcionários', link: 'funcionarios.html' },
-          lida: false, data: new Date().toISOString()
-        });
-      } else if (dias <= 30) {
-        notifs.push({
-          id: 'func_warn_' + Math.random(),
-          tipo: 'warning', categoria: 'funcionario',
-          icone: 'fa-user-md',
-          titulo: `Exame vence em ${dias} dia(s): ${f.nome}`,
-          descricao: `Agende o exame periódico de ${f.nome} — ${f.cargo || ''}`,
-          meta: { tempo: 'Em breve', modulo: 'Funcionários', link: 'funcionarios.html' },
-          lida: false, data: new Date().toISOString()
-        });
-      }
-    });
-
-    // Riscos não tratados
-    const riscos = JSON.parse(localStorage.getItem('safenr_riscos') || '[]');
-    const altosRiscos = riscos.filter(r => r.nivel === 'Alto' || r.nivel === 'Crítico' || r.nivel === 'Extremo');
-    altosRiscos.forEach(r => {
-      notifs.push({
-        id: 'risco_' + Math.random(),
-        tipo: 'critical', categoria: 'risco',
-        icone: 'fa-exclamation-triangle',
-        titulo: `Risco ${r.nivel}: ${r.descricao || r.atividade || 'Sem descrição'}`,
-        descricao: `Área: ${r.area || 'N/I'} — Plano de ação necessário`,
-        meta: { tempo: 'Ativo', modulo: 'Riscos', link: 'riscos.html' },
-        lida: false, data: new Date().toISOString()
-      });
-    });
-
-    // Notificações padrão se não houver dados
-    if (notifs.length === 0) {
-      notifs.push(...getDefaultNotifs());
-    } else {
-      // adiciona algumas informativas
-      notifs.push(...getInfoNotifs());
-    }
-
-    allNotifs = notifs;
-    saveNotifs();
-    updateStats();
-  }
-
-  function getDefaultNotifs() {
-    return [
-      {
-        id: 'def1', tipo: 'info', categoria: 'sistema',
-        icone: 'fa-shield-alt',
-        titulo: 'Bem-vindo ao SafeNR!',
-        descricao: 'Sistema iniciado com sucesso. Comece cadastrando sua empresa em Configurações.',
-        meta: { tempo: 'Agora', modulo: 'Sistema', link: 'configuracoes.html' },
-        lida: false, data: new Date().toISOString()
-      },
-      {
-        id: 'def2', tipo: 'warning', categoria: 'epi',
-        icone: 'fa-hard-hat',
-        titulo: 'Nenhum EPI cadastrado',
-        descricao: 'Cadastre os EPIs da empresa para receber alertas de vencimento.',
-        meta: { tempo: 'Pendente', modulo: 'EPIs', link: 'epis.html' },
-        lida: false, data: new Date().toISOString()
-      },
-      {
-        id: 'def3', tipo: 'warning', categoria: 'inspecao',
-        icone: 'fa-clipboard-check',
-        titulo: 'Nenhuma inspeção cadastrada',
-        descricao: 'Agende inspeções de segurança para manter a conformidade com as NRs.',
-        meta: { tempo: 'Pendente', modulo: 'Inspeções', link: 'inspecoes.html' },
-        lida: false, data: new Date().toISOString()
-      },
-      {
-        id: 'def4', tipo: 'info', categoria: 'sistema',
-        icone: 'fa-book',
-        titulo: 'Biblioteca de NRs disponível',
-        descricao: 'Consulte os resumos das Normas Regulamentadoras na Biblioteca.',
-        meta: { tempo: 'Disponível', modulo: 'Biblioteca', link: 'biblioteca.html' },
-        lida: false, data: new Date().toISOString()
-      },
-    ];
-  }
-
-  function getInfoNotifs() {
-    return [
-      {
-        id: 'inf1', tipo: 'info', categoria: 'sistema',
-        icone: 'fa-shield-alt',
-        titulo: 'Sistema SafeNR ativo',
-        descricao: 'Monitoramento de segurança do trabalho em operação.',
-        meta: { tempo: 'Agora', modulo: 'Sistema', link: 'app.html' },
-        lida: true, data: new Date().toISOString()
-      },
-    ];
-  }
-
-  // ─── RENDER ───
-  function render(filter) {
-    filter = filter || activeFilter;
-    activeFilter = filter;
-
-    let list = [...allNotifs];
-
-    if (filter === 'unread')    list = list.filter(n => !n.lida);
-    else if (filter === 'critical') list = list.filter(n => n.tipo === 'critical');
-    else if (filter === 'warning')  list = list.filter(n => n.tipo === 'warning');
-    else if (filter === 'info')     list = list.filter(n => n.tipo === 'info');
-    else if (filter === 'epi')      list = list.filter(n => n.categoria === 'epi');
-    else if (filter === 'inspecao') list = list.filter(n => n.categoria === 'inspecao');
-    else if (filter === 'funcionario') list = list.filter(n => n.categoria === 'funcionario');
-
-    const container = document.getElementById('notifList');
-
-    if (!list.length) {
-      container.innerHTML = `
-        <div class="empty-state">
-          <i class="fas fa-bell-slash"></i>
-          <h3>Nenhuma notificação</h3>
-          <p>Não há alertas para o filtro selecionado.</p>
-        </div>`;
-      return;
-    }
-
-    // separar por lidas/não lidas
-    const unread = list.filter(n => !n.lida);
-    const read   = list.filter(n =>  n.lida);
-
-    let html = '';
-
-    if (unread.length) {
-      html += `<div class="notif-group">
-        <div class="notif-group-title">🔴 Não lidas (${unread.length})</div>
-        ${unread.map(n => notifCard(n)).join('')}
-      </div>`;
-    }
-
-    if (read.length) {
-      html += `<div class="notif-group">
-        <div class="notif-group-title">✅ Lidas (${read.length})</div>
-        ${read.map(n => notifCard(n)).join('')}
-      </div>`;
-    }
-
-    container.innerHTML = html;
-  }
-
-  function notifCard(n) {
-    const icons = { critical:'critical', warning:'warning', info:'info', success:'success' };
-    const badges = {
-      critical: '<span class="badge badge-red">Crítico</span>',
-      warning:  '<span class="badge badge-yellow">Aviso</span>',
-      info:     '<span class="badge badge-blue">Info</span>',
-      success:  '<span class="badge badge-green">OK</span>',
-    };
-
-    return `
-      <div class="notif-item ${n.lida ? '' : 'unread'} ${n.tipo}" onclick="markRead('${n.id}')">
-        ${!n.lida ? `<div class="unread-dot ${n.tipo}"></div>` : '<div style="width:8px"></div>'}
-        <div class="notif-icon-wrap ${icons[n.tipo] || 'info'}">
-          <i class="fas ${n.icone}"></i>
-        </div>
-        <div class="notif-body">
-          <div class="notif-title">
-            ${n.titulo}
-            ${badges[n.tipo] || ''}
+      <div class="notifications-container">
+        <!-- Notificação de alerta -->
+        <div class="notification notification-alert">
+          <span class="icon">⚠️</span>
+          <div class="notification-content">
+            <h3>Risco Detectado</h3>
+            <p>Falta de EPI identificada na inspeção de segurança do setor A</p>
+            <small>há 2 horas</small>
           </div>
-          <div class="notif-desc">${n.descricao}</div>
-          <div class="notif-meta">
-            <span><i class="fas fa-clock"></i> ${n.meta?.tempo || '—'}</span>
-            <span><i class="fas fa-tag"></i> ${n.meta?.modulo || '—'}</span>
+          <button class="btn-close" onclick="this.parentElement.remove()">✕</button>
+        </div>
+
+        <!-- Notificação de lembrete -->
+        <div class="notification notification-reminder">
+          <span class="icon">📌</span>
+          <div class="notification-content">
+            <h3>Lembrete: Inspeção Pendente</h3>
+            <p>Você tem uma inspeção agendada para hoje às 14:00</p>
+            <small>há 4 horas</small>
           </div>
+          <button class="btn-close" onclick="this.parentElement.remove()">✕</button>
         </div>
-        <div class="notif-actions">
-          ${n.meta?.link ? `<button class="btn-icon" onclick="goTo(event,'${n.meta.link}')" title="Ir para módulo"><i class="fas fa-arrow-right"></i></button>` : ''}
-          <button class="btn-icon danger" onclick="deleteNotif(event,'${n.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
+
+        <!-- Notificação de sucesso -->
+        <div class="notification notification-success">
+          <span class="icon">✅</span>
+          <div class="notification-content">
+            <h3>Relatório Concluído</h3>
+            <p>Seu relatório mensal de inspeções foi gerado com sucesso</p>
+            <small>há 1 dia</small>
+          </div>
+          <button class="btn-close" onclick="this.parentElement.remove()">✕</button>
         </div>
-      </div>`;
-  }
 
-  // ─── AÇÕES ───
-  function markRead(id) {
-    const n = allNotifs.find(n => n.id === id);
-    if (n) n.lida = true;
-    saveNotifs();
-    updateStats();
-    render();
-  }
+        <!-- Notificação de informação -->
+        <div class="notification notification-info">
+          <span class="icon">ℹ️</span>
+          <div class="notification-content">
+            <h3>Atualização de NR</h3>
+            <p>Nova versão da NR-6 disponível na Biblioteca de Normas</p>
+            <small>há 2 dias</small>
+          </div>
+          <button class="btn-close" onclick="this.parentElement.remove()">✕</button>
+        </div>
+      </div>
 
-  function markAllRead() {
-    allNotifs.forEach(n => n.lida = true);
-    saveNotifs();
-    updateStats();
-    render();
-    showToast('Todas as notificações marcadas como lidas!', 'success');
-  }
+      <!-- Se não houver notificações -->
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <p>🎉 Nenhuma notificação no momento</p>
+      </div>
+    </main>
+  </div>
 
-  function deleteNotif(e, id) {
-    e.stopPropagation();
-    allNotifs = allNotifs.filter(n => n.id !== id);
-    saveNotifs();
-    updateStats();
-    render();
-    showToast('Notificação removida.', 'info');
-  }
+  <script>
+    document.getElementById('limparTodas').addEventListener('click', function() {
+      document.querySelectorAll('.notification').forEach(n => n.remove());
+      document.getElementById('emptyState').style.display = 'block';
+    });
 
-  function clearAllNotifs() {
-    if (!confirm('Limpar todas as notificações?')) return;
-    allNotifs = [];
-    saveNotifs();
-    updateStats();
-    render();
-    showToast('Notificações limpas!', 'info');
-  }
-
-  function goTo(e, link) {
-    e.stopPropagation();
-    window.location.href = link;
-  }
-
-  function filterNotifs(f, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    render(f);
-  }
-
-  // ─── STATS ───
-  function updateStats() {
-    const critical = allNotifs.filter(n => n.tipo === 'critical' && !n.lida).length;
-    const warning  = allNotifs.filter(n => n.tipo === 'warning'  && !n.lida).length;
-    const info     = allNotifs.filter(n => n.tipo === 'info'     && !n.lida).length;
-    const read     = allNotifs.filter(n => n.lida).length;
-    const unread   = allNotifs.filter(n => !n.lida).length;
-
-    document.getElementById('statCritical').textContent = critical;
-    document.getElementById('statWarning').textContent  = warning;
-    document.getElementById('statInfo').textContent     = info;
-    document.getElementById('statRead').textContent     = read;
-
-    document.getElementById('fc-all').textContent      = allNotifs.length;
-    document.getElementById('fc-unread').textContent   = unread;
-    document.getElementById('fc-critical').textContent = allNotifs.filter(n => n.tipo === 'critical').length;
-    document.getElementById('fc-warning').textContent  = allNotifs.filter(n => n.tipo === 'warning').length;
-    document.getElementById('fc-info').textContent     = allNotifs.filter(n => n.tipo === 'info').length;
-
-    document.getElementById('sidebarBadge').textContent = unread || '0';
-    document.getElementById('topbarSub').textContent    =
-      `${unread} não lida(s) · ${allNotifs.length} no total`;
-  }
-
-  // ─── SAVE ───
-  function saveNotifs() {
-    localStorage.setItem('safenr_notificacoes', JSON.stringify(allNotifs));
-  }
-
-  // ─── TOAST ───
-  function showToast(msg, type = 'info') {
-    const icons = { success:'fa-check-circle', error:'fa-times-circle', info:'fa-info-circle' };
-    const el = document.createElement('div');
-    el.className = `toast ${type}`;
-    el.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
-    document.getElementById('toastContainer').appendChild(el);
-    setTimeout(() => el.remove(), 3500);
-  }
-</script>
+    // Mostrar empty state se não houver notificações
+    if (document.querySelectorAll('.notification').length === 0) {
+      document.getElementById('emptyState').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
 
+  
