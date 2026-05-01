@@ -1,1 +1,1845 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SafeNR – Configurações</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --bg-primary: #0f1117;
+      --bg-secondary: #1a1d27;
+      --bg-card: #1e2130;
+      --bg-hover: #252840;
+      --accent: #4f6ef7;
+      --accent-hover: #3a56d4;
+      --accent-green: #22c55e;
+      --accent-yellow: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-purple: #a855f7;
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #2d3148;
+      --border-light: #374160;
+      --sidebar-width: 260px;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
 
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0;
+      height: 100vh;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+
+    .logo-text { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+    .logo-sub  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .sidebar-nav { padding: 16px 12px; flex: 1; }
+
+    .nav-section-title {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      padding: 8px 8px 6px;
+      margin-top: 8px;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+      margin-bottom: 2px;
+      cursor: pointer;
+    }
+
+    .nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .nav-item.active { background: rgba(79,110,247,0.15); color: var(--accent); }
+    .nav-item i { width: 18px; text-align: center; font-size: 15px; }
+
+    .sidebar-footer {
+      padding: 16px 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .user-info {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+    }
+
+    .user-avatar {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+    }
+
+    .user-name  { font-size: 13px; font-weight: 600; }
+    .user-role  { font-size: 11px; color: var(--text-muted); }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+    }
+
+    .topbar-title { font-size: 20px; font-weight: 700; }
+    .topbar-sub   { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    .topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+    .btn {
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .btn-danger { background: var(--accent-red); color: #fff; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-success { background: var(--accent-green); color: #fff; }
+    .btn-success:hover { background: #16a34a; }
+    .btn-warning { background: var(--accent-yellow); color: #000; }
+    .btn-warning:hover { background: #d97706; }
+
+    /* ── CONTENT ── */
+    .content {
+      padding: 32px;
+      flex: 1;
+    }
+
+    /* ── TABS ── */
+    .config-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .config-tab {
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .config-tab:hover { color: var(--text-primary); background: var(--bg-hover); }
+    .config-tab.active { background: var(--accent); color: #fff; }
+
+    /* ── SECTIONS ── */
+    .config-section { display: none; }
+    .config-section.active { display: block; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 16px; font-weight: 600;
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .card-title i { color: var(--accent); }
+
+    /* ── FORM ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input, select, textarea {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79,110,247,0.15);
+    }
+
+    textarea { resize: vertical; min-height: 80px; }
+
+    select option { background: var(--bg-card); }
+
+    /* ── LOGO UPLOAD ── */
+    .logo-upload {
+      display: flex; align-items: center; gap: 20px;
+      padding: 20px;
+      background: var(--bg-secondary);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .logo-upload:hover { border-color: var(--accent); background: rgba(79,110,247,0.05); }
+
+    .logo-preview {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-weight: 700;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .logo-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+    .logo-upload-info h4 { font-size: 14px; margin-bottom: 4px; }
+    .logo-upload-info p  { font-size: 12px; color: var(--text-muted); }
+
+    /* ── USERS TABLE ── */
+    .table-container { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-hover); }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-green  { background: rgba(34,197,94,0.15);  color: var(--accent-green); }
+    .badge-blue   { background: rgba(79,110,247,0.15); color: var(--accent); }
+    .badge-yellow { background: rgba(245,158,11,0.15); color: var(--accent-yellow); }
+    .badge-red    { background: rgba(239,68,68,0.15);  color: var(--accent-red); }
+    .badge-purple { background: rgba(168,85,247,0.15); color: var(--accent-purple); }
+
+    .user-cell { display: flex; align-items: center; gap: 10px; }
+
+    .user-avatar-sm {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .action-btns { display: flex; gap: 6px; }
+
+    .btn-icon {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .btn-icon:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .btn-icon.danger:hover { background: rgba(239,68,68,0.15); color: var(--accent-red); border-color: var(--accent-red); }
+
+    /* ── TOGGLE ── */
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toggle-row:last-child { border-bottom: none; }
+
+    .toggle-info h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+    .toggle-info p  { font-size: 12px; color: var(--text-muted); }
+
+    .toggle {
+      position: relative;
+      width: 44px; height: 24px;
+      flex-shrink: 0;
+    }
+
+    .toggle input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 16px; height: 16px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      top: 3px; left: 3px;
+      transition: all 0.3s;
+    }
+
+    .toggle input:checked + .toggle-slider { background: var(--accent); border-color: var(--accent); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); background: #fff; }
+
+    /* ── SECURITY ── */
+    .security-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .security-item:last-child { border-bottom: none; }
+
+    .security-info { display: flex; align-items: center; gap: 14px; }
+
+    .security-icon {
+      width: 42px; height: 42px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+
+    .security-icon.green  { background: rgba(34,197,94,0.15);  color: var(--accent-green); }
+    .security-icon.yellow { background: rgba(245,158,11,0.15); color: var(--accent-yellow); }
+    .security-icon.blue   { background: rgba(79,110,247,0.15); color: var(--accent); }
+    .security-icon.red    { background: rgba(239,68,68,0.15);  color: var(--accent-red); }
+
+    .security-text h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+    .security-text p  { font-size: 12px; color: var(--text-muted); }
+
+    /* ── BACKUP ── */
+    .backup-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .backup-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .backup-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    .backup-card i { font-size: 28px; margin-bottom: 12px; display: block; }
+    .backup-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+    .backup-card p  { font-size: 12px; color: var(--text-muted); }
+
+    .backup-card.export i { color: var(--accent-green); }
+    .backup-card.import i { color: var(--accent); }
+    .backup-card.clear  i { color: var(--accent-red); }
+
+    /* ── STATS ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-value { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .stat-label { font-size: 12px; color: var(--text-muted); }
+
+    /* ── ABOUT ── */
+    .about-hero {
+      background: linear-gradient(135deg, rgba(79,110,247,0.1), rgba(168,85,247,0.1));
+      border: 1px solid rgba(79,110,247,0.2);
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .about-logo {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 16px;
+    }
+
+    .about-hero h2 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+    .about-hero p  { color: var(--text-secondary); font-size: 14px; }
+
+    .version-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      background: rgba(34,197,94,0.15);
+      color: var(--accent-green);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .features-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .feature-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+    }
+
+    .feature-item i { color: var(--accent-green); width: 16px; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 520px;
+      padding: 28px;
+      transform: translateY(20px);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .modal-title { font-size: 17px; font-weight: 600; }
+
+    .modal-close {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+
+    .modal-close:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+    .modal-footer {
+      display: flex; justify-content: flex-end; gap: 10px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── TOAST ── */
+    .toast-container {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      z-index: 2000;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .toast {
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex; align-items: center; gap: 10px;
+      animation: slideIn 0.3s ease;
+      min-width: 260px;
+      box-shadow: var(--shadow);
+    }
+
+    .toast.success { background: var(--accent-green); color: #fff; }
+    .toast.error   { background: var(--accent-red);   color: #fff; }
+    .toast.info    { background: var(--accent);        color: #fff; }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to   { transform: translateX(0);   opacity: 1; }
+    }
+
+    /* ── PROGRESS BAR STORAGE ── */
+    .storage-bar {
+      background: var(--bg-secondary);
+      border-radius: 6px;
+      height: 8px;
+      overflow: hidden;
+      margin: 8px 0 4px;
+    }
+
+    .storage-fill {
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-purple));
+      transition: width 0.5s ease;
+    }
+
+    .storage-info {
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: var(--text-muted);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .main { margin-left: 0; }
+      .content { padding: 16px; }
+      .topbar { padding: 14px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ SIDEBAR ═══════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">🛡️</div>
+    <div>
+      <div class="logo-text">SafeNR</div>
+      <div class="logo-sub">Gestão de Segurança</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">Principal</div>
+    <a href="app.html"           class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="inspecoes.html"     class="nav-item"><i class="fas fa-clipboard-check"></i> Inspeções</a>
+    <a href="riscos.html"        class="nav-item"><i class="fas fa-exclamation-triangle"></i> Riscos</a>
+    <a href="checklists.html"    class="nav-item"><i class="fas fa-tasks"></i> Checklists</a>
+
+    <div class="nav-section-title">Gestão</div>
+    <a href="funcionarios.html"  class="nav-item"><i class="fas fa-users"></i> Funcionários</a>
+    <a href="epis.html"          class="nav-item"><i class="fas fa-hard-hat"></i> EPIs</a>
+    <a href="agenda.html"        class="nav-item"><i class="fas fa-calendar-alt"></i> Agenda</a>
+    <a href="fotos.html"         class="nav-item"><i class="fas fa-camera"></i> Fotos</a>
+
+    <div class="nav-section-title">Relatórios</div>
+    <a href="relatorios.html"    class="nav-item"><i class="fas fa-chart-bar"></i> Relatórios</a>
+    <a href="biblioteca.html"    class="nav-item"><i class="fas fa-book"></i> Biblioteca NRs</a>
+
+    <div class="nav-section-title">Sistema</div>
+    <a href="notificacoes.html"  class="nav-item"><i class="fas fa-bell"></i> Notificações</a>
+    <a href="configuracoes.html" class="nav-item active"><i class="fas fa-cog"></i> Configurações</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar" id="sidebarInitial">A</div>
+      <div>
+        <div class="user-name" id="sidebarName">Administrador</div>
+        <div class="user-role" id="sidebarRole">Admin</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════ MAIN ═══════════════════════════════════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">⚙️ Configurações</div>
+      <div class="topbar-sub">Gerencie as preferências do sistema</div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="resetForm()"><i class="fas fa-undo"></i> Descartar</button>
+      <button class="btn btn-primary" onclick="saveAll()"><i class="fas fa-save"></i> Salvar Tudo</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- TABS -->
+    <div class="config-tabs">
+      <button class="config-tab active" onclick="switchTab('empresa')">
+        <i class="fas fa-building"></i> Empresa
+      </button>
+      <button class="config-tab" onclick="switchTab('usuarios')">
+        <i class="fas fa-users"></i> Usuários
+      </button>
+      <button class="config-tab" onclick="switchTab('preferencias')">
+        <i class="fas fa-sliders-h"></i> Preferências
+      </button>
+      <button class="config-tab" onclick="switchTab('seguranca')">
+        <i class="fas fa-shield-alt"></i> Segurança
+      </button>
+      <button class="config-tab" onclick="switchTab('backup')">
+        <i class="fas fa-database"></i> Backup
+      </button>
+      <button class="config-tab" onclick="switchTab('sobre')">
+        <i class="fas fa-info-circle"></i> Sobre
+      </button>
+    </div>
+
+    <!-- ═══ ABA EMPRESA ═══ -->
+    <div id="tab-empresa" class="config-section active">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-image"></i> Logotipo da Empresa</div>
+          <button class="btn btn-ghost" onclick="document.getElementById('logoInput').click()">
+            <i class="fas fa-upload"></i> Alterar Logo
+          </button>
+        </div>
+        <div class="logo-upload" onclick="document.getElementById('logoInput').click()">
+          <div class="logo-preview" id="logoPreview">🏢</div>
+          <div class="logo-upload-info">
+            <h4>Clique para enviar o logotipo</h4>
+            <p>PNG, JPG ou SVG • Máx. 2MB • Recomendado: 200×200px</p>
+          </div>
+        </div>
+        <input type="file" id="logoInput" accept="image/*" style="display:none" onchange="previewLogo(this)">
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-building"></i> Dados da Empresa</div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Razão Social *</label>
+            <input type="text" id="razaoSocial" placeholder="Ex: Construtora Silva Ltda">
+          </div>
+          <div class="form-group">
+            <label>Nome Fantasia</label>
+            <input type="text" id="nomeFantasia" placeholder="Ex: Silva Construções">
+          </div>
+          <div class="form-group">
+            <label>CNPJ *</label>
+            <input type="text" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18" oninput="maskCNPJ(this)">
+          </div>
+          <div class="form-group">
+            <label>Inscrição Estadual</label>
+            <input type="text" id="inscricaoEstadual" placeholder="000.000.000.000">
+          </div>
+          <div class="form-group">
+            <label>Ramo de Atividade</label>
+            <select id="ramoAtividade">
+              <option value="">Selecione...</option>
+              <option>Construção Civil</option>
+              <option>Indústria</option>
+              <option>Mineração</option>
+              <option>Logística e Transporte</option>
+              <option>Saúde</option>
+              <option>Comércio</option>
+              <option>Serviços</option>
+              <option>Agricultura</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>CNAE Principal</label>
+            <input type="text" id="cnae" placeholder="Ex: 4120-4/00">
+          </div>
+          <div class="form-group">
+            <label>Grau de Risco (NR-4)</label>
+            <select id="grauRisco">
+              <option value="">Selecione...</option>
+              <option>Grau 1 — Baixo</option>
+              <option>Grau 2 — Médio-Baixo</option>
+              <option>Grau 3 — Médio-Alto</option>
+              <option>Grau 4 — Alto</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Nº de Funcionários</label>
+            <input type="number" id="numFuncionarios" placeholder="Ex: 50" min="1">
+          </div>
+          <div class="form-group full">
+            <label>Endereço Completo</label>
+            <input type="text" id="endereco" placeholder="Rua, número, complemento, bairro">
+          </div>
+          <div class="form-group">
+            <label>Cidade</label>
+            <input type="text" id="cidade" placeholder="Ex: Curitibanos">
+          </div>
+          <div class="form-group">
+            <label>Estado</label>
+            <select id="estado">
+              <option value="">UF</option>
+              <option>AC</option><option>AL</option><option>AM</option><option>AP</option>
+              <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+              <option>GO</option><option>MA</option><option>MG</option><option>MS</option>
+              <option>MT</option><option>PA</option><option>PB</option><option>PE</option>
+              <option>PI</option><option>PR</option><option>RJ</option><option>RN</option>
+              <option>RO</option><option>RR</option><option>RS</option><option>SC</option>
+              <option>SE</option><option>SP</option><option>TO</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>CEP</label>
+            <input type="text" id="cep" placeholder="00000-000" maxlength="9" oninput="maskCEP(this)">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-phone"></i> Contato</div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Telefone</label>
+            <input type="text" id="telefone" placeholder="(48) 00000-0000">
+          </div>
+          <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" id="email" placeholder="contato@empresa.com.br">
+          </div>
+          <div class="form-group">
+            <label>Responsável pelo SESMT</label>
+            <input type="text" id="responsavelSesmt" placeholder="Nome do responsável">
+          </div>
+          <div class="form-group">
+            <label>Registro Profissional</label>
+            <input type="text" id="registroProfissional" placeholder="Ex: CREA / CFT / CRQ">
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-empresa -->
+
+    <!-- ═══ ABA USUÁRIOS ═══ -->
+    <div id="tab-usuarios" class="config-section">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-users"></i> Usuários do Sistema</div>
+          <button class="btn btn-primary" onclick="openUserModal()">
+            <i class="fas fa-plus"></i> Novo Usuário
+          </button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Usuário</th>
+                <th>E-mail</th>
+                <th>Perfil</th>
+                <th>Status</th>
+                <th>Último Acesso</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <!-- dinâmico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-key"></i> Níveis de Acesso</div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Perfil</th>
+                <th>Inspeções</th>
+                <th>Riscos</th>
+                <th>Funcionários</th>
+                <th>Relatórios</th>
+                <th>Configurações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-red">Administrador</span></td>
+                <td>✅ Total</td><td>✅ Total</td><td>✅ Total</td><td>✅ Total</td><td>✅ Total</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-purple">Técnico SST</span></td>
+                <td>✅ Total</td><td>✅ Total</td><td>✅ Total</td><td>✅ Total</td><td>❌</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-blue">Supervisor</span></td>
+                <td>✅ Total</td><td>⚠️ Leitura</td><td>⚠️ Leitura</td><td>⚠️ Leitura</td><td>❌</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-green">Inspetor</span></td>
+                <td>⚠️ Próprias</td><td>❌</td><td>❌</td><td>⚠️ Próprios</td><td>❌</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-yellow">Visitante</span></td>
+                <td>⚠️ Leitura</td><td>⚠️ Leitura</td><td>❌</td><td>⚠️ Leitura</td><td>❌</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /tab-usuarios -->
+
+    <!-- ═══ ABA PREFERÊNCIAS ═══ -->
+    <div id="tab-preferencias" class="config-section">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-bell"></i> Notificações</div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <h4>Vencimento de EPIs</h4>
+            <p>Alertar quando EPIs estiverem próximos do vencimento (CA)</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notifEPI" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <h4>Inspeções Atrasadas</h4>
+            <p>Alertar inspeções com prazo vencido</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notifInspecao" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <h4>Exames Médicos</h4>
+            <p>Alertar vencimento de exames ocupacionais dos funcionários</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notifExame" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <h4>Treinamentos</h4>
+            <p>Alertar treinamentos com vencimento próximo</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notifTreinamento">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <h4>Relatório Semanal por E-mail</h4>
+            <p>Receber resumo semanal do sistema por e-mail</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notifEmail">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-clock"></i> Antecedência dos Alertas</div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Alertar EPIs com (dias de antecedência)</label>
+            <select id="diasAlertaEPI">
+              <option value="15">15 dias</option>
+              <option value="30" selected>30 dias</option>
+              <option value="45">45 dias</option>
+              <option value="60">60 dias</option>
+              <option value="90">90 dias</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Alertar Exames com (dias de antecedência)</label>
+            <select id="diasAlertaExame">
+              <option value="15">15 dias</option>
+              <option value="30" selected>30 dias</option>
+              <option value="60">60 dias</option>
+              <option value="90">90 dias</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Alertar Treinamentos com (dias de antecedência)</label>
+            <select id="diasAlertaTreinamento">
+              <option value="30">30 dias</option>
+              <option value="60" selected>60 dias</option>
+              <option value="90">90 dias</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Fuso Horário</label>
+            <select id="fusoHorario">
+              <option value="America/Sao_Paulo" selected>América/São Paulo (BRT -3)</option>
+              <option value="America/Manaus">América/Manaus (AMT -4)</option>
+              <option value="America/Belem">América/Belém (BRT -3)</option>
+              <option value="America/Noronha">Fernando de Noronha (FNT -2)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-file-pdf"></i> Relatórios</div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Cabeçalho Padrão dos PDFs</label>
+            <input type="text" id="cabecalhoPDF" placeholder="Ex: Gestão de Segurança do Trabalho">
+          </div>
+          <div class="form-group">
+            <label>Rodapé Padrão dos PDFs</label>
+            <input type="text" id="rodapePDF" placeholder="Ex: Documento gerado pelo SafeNR">
+          </div>
+          <div class="form-group">
+            <label>Assinatura Digital (nome)</label>
+            <input type="text" id="assinaturaDigital" placeholder="Nome do responsável técnico">
+          </div>
+          <div class="form-group">
+            <label>Formato de Data nos Relatórios</label>
+            <select id="formatoData">
+              <option value="dd/mm/yyyy" selected>DD/MM/AAAA</option>
+              <option value="mm/dd/yyyy">MM/DD/AAAA</option>
+              <option value="yyyy-mm-dd">AAAA-MM-DD</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <h4>Incluir logotipo nos PDFs</h4>
+              <p>Exibir logo da empresa no cabeçalho dos relatórios</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="logoNoPDF" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-preferencias -->
+
+    <!-- ═══ ABA SEGURANÇA ═══ -->
+    <div id="tab-seguranca" class="config-section">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-lock"></i> Alterar Senha</div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Senha Atual</label>
+            <input type="password" id="senhaAtual" placeholder="••••••••">
+          </div>
+          <div class="form-group">
+            <label>Nova Senha</label>
+            <input type="password" id="novaSenha" placeholder="••••••••" oninput="checkPasswordStrength(this.value)">
+          </div>
+          <div class="form-group">
+            <label>Confirmar Nova Senha</label>
+            <input type="password" id="confirmarSenha" placeholder="••••••••">
+          </div>
+        </div>
+        <div id="strengthBar" style="margin-top:12px;display:none">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Força da senha: <span id="strengthLabel"></span></div>
+          <div class="storage-bar" style="height:6px">
+            <div class="storage-fill" id="strengthFill" style="width:0%"></div>
+          </div>
+        </div>
+        <div style="margin-top:16px">
+          <button class="btn btn-primary" onclick="changePassword()">
+            <i class="fas fa-key"></i> Atualizar Senha
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-shield-alt"></i> Configurações de Segurança</div>
+        </div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon green"><i class="fas fa-check-circle"></i></div>
+            <div class="security-text">
+              <h4>Sessão Automática</h4>
+              <p>Usuário atual logado via localStorage</p>
+            </div>
+          </div>
+          <span class="badge badge-green">Ativo</span>
+        </div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon yellow"><i class="fas fa-clock"></i></div>
+            <div class="security-text">
+              <h4>Tempo Limite de Sessão</h4>
+              <p>Deslogar automaticamente após inatividade</p>
+            </div>
+          </div>
+          <select id="sessionTimeout" style="width:auto;padding:6px 10px">
+            <option value="0">Nunca</option>
+            <option value="30">30 minutos</option>
+            <option value="60" selected>1 hora</option>
+            <option value="240">4 horas</option>
+            <option value="480">8 horas</option>
+          </select>
+        </div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon blue"><i class="fas fa-history"></i></div>
+            <div class="security-text">
+              <h4>Log de Atividades</h4>
+              <p>Registrar ações dos usuários no sistema</p>
+            </div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="logAtividades" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon red"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="security-text">
+              <h4>Encerrar Sessão</h4>
+              <p>Sair do sistema e voltar para o login</p>
+            </div>
+          </div>
+          <button class="btn btn-danger" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Sair
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /tab-seguranca -->
+
+    <!-- ═══ ABA BACKUP ═══ -->
+    <div id="tab-backup" class="config-section">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-database"></i> Armazenamento Local</div>
+        </div>
+        <div id="storageStats" class="stats-grid">
+          <!-- dinâmico -->
+        </div>
+        <div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Uso do localStorage</div>
+          <div class="storage-bar">
+            <div class="storage-fill" id="storageFill" style="width:0%"></div>
+          </div>
+          <div class="storage-info">
+            <span id="storageUsed">0 KB usados</span>
+            <span>Máx. ~5 MB</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-sync"></i> Backup e Restauração</div>
+        </div>
+        <div class="backup-grid">
+          <div class="backup-card export" onclick="exportBackup()">
+            <i class="fas fa-file-download"></i>
+            <h4>Exportar Backup</h4>
+            <p>Salvar todos os dados em arquivo JSON</p>
+          </div>
+          <div class="backup-card import" onclick="document.getElementById('importInput').click()">
+            <i class="fas fa-file-upload"></i>
+            <h4>Importar Backup</h4>
+            <p>Restaurar dados de um arquivo JSON</p>
+          </div>
+          <div class="backup-card clear" onclick="confirmClear()">
+            <i class="fas fa-trash-alt"></i>
+            <h4>Limpar Dados</h4>
+            <p>Apagar todos os dados do sistema</p>
+          </div>
+        </div>
+        <input type="file" id="importInput" accept=".json" style="display:none" onchange="importBackup(this)">
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-history"></i> Histórico de Backups</div>
+        </div>
+        <div id="backupHistory">
+          <p style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px">
+            Nenhum backup realizado ainda. Exporte seu primeiro backup acima! 💾
+          </p>
+        </div>
+      </div>
+
+    </div><!-- /tab-backup -->
+
+    <!-- ═══ ABA SOBRE ═══ -->
+    <div id="tab-sobre" class="config-section">
+
+      <div class="about-hero">
+        <div class="about-logo">🛡️</div>
+        <h2>SafeNR</h2>
+        <p>Sistema de Gestão de Segurança do Trabalho</p>
+        <div class="version-badge">✅ Versão 1.0.0 — Estável</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-star"></i> Funcionalidades Incluídas</div>
+        </div>
+        <div class="features-list">
+          <div class="feature-item"><i class="fas fa-check"></i> Dashboard com KPIs</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Gestão de Inspeções</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Matriz de Riscos</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Checklists por NR</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Cadastro de Funcionários</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Controle de EPIs</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Agenda Inteligente</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Galeria de Fotos</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Relatórios em PDF</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Biblioteca de NRs</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Backup/Restauração</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Configurações completas</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-road"></i> Próximas Atualizações</div>
+        </div>
+        <div class="features-list">
+          <div class="feature-item" style="opacity:.6"><i class="fas fa-clock" style="color:var(--accent-yellow)"></i> 🔥 Firebase — dados em nuvem</div>
+          <div class="feature-item" style="opacity:.6"><i class="fas fa-clock" style="color:var(--accent-yellow)"></i> 💳 Sistema SaaS / Assinaturas</div>
+          <div class="feature-item" style="opacity:.6"><i class="fas fa-clock" style="color:var(--accent-yellow)"></i> 📱 App Mobile (PWA)</div>
+          <div class="feature-item" style="opacity:.6"><i class="fas fa-clock" style="color:var(--accent-yellow)"></i> 📊 Dashboard com dados reais</div>
+          <div class="feature-item" style="opacity:.6"><i class="fas fa-clock" style="color:var(--accent-yellow)"></i> 🔔 Central de Notificações</div>
+          <div class="feature-item" style="opacity:.6"><i class="fas fa-clock" style="color:var(--accent-yellow)"></i> 📤 Exportação para Excel</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-info-circle"></i> Informações Técnicas</div>
+        </div>
+        <div class="form-grid">
+          <div class="stat-card">
+            <div class="stat-value" style="font-size:16px;color:var(--accent)">v1.0.0</div>
+            <div class="stat-label">Versão do Sistema</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="font-size:16px;color:var(--accent-green)">2025</div>
+            <div class="stat-label">Ano de Lançamento</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="font-size:16px;color:var(--accent-purple)">HTML5</div>
+            <div class="stat-label">Tecnologia</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="font-size:16px;color:var(--accent-yellow)">SST</div>
+            <div class="stat-label">Especialidade</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-sobre -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ═══════════════════════════════════════ MODAL USUÁRIO ═══════════════════════════════════════ -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="userModalTitle">➕ Novo Usuário</div>
+      <button class="modal-close" onclick="closeUserModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nome Completo *</label>
+        <input type="text" id="uNome" placeholder="Ex: João Silva">
+      </div>
+      <div class="form-group">
+        <label>E-mail *</label>
+        <input type="email" id="uEmail" placeholder="joao@empresa.com">
+      </div>
+      <div class="form-group">
+        <label>Senha *</label>
+        <input type="password" id="uSenha" placeholder="Mínimo 6 caracteres">
+      </div>
+      <div class="form-group">
+        <label>Perfil de Acesso *</label>
+        <select id="uPerfil">
+          <option value="">Selecione...</option>
+          <option>Administrador</option>
+          <option>Técnico SST</option>
+          <option>Supervisor</option>
+          <option>Inspetor</option>
+          <option>Visitante</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Cargo</label>
+        <input type="text" id="uCargo" placeholder="Ex: Técnico de Segurança">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="uStatus">
+          <option value="Ativo">Ativo</option>
+          <option value="Inativo">Inativo</option>
+        </select>
+      </div>
+    </div>
+    <input type="hidden" id="uEditIndex" value="-1">
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeUserModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveUser()"><i class="fas fa-save"></i> Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ MODAL CONFIRMAR CLEAR ═══════════════════════════════════════ -->
+<div class="modal-overlay" id="clearModal">
+  <div class="modal" style="max-width:420px;text-align:center">
+    <div style="font-size:48px;margin-bottom:16px">⚠️</div>
+    <h3 style="font-size:18px;margin-bottom:10px">Limpar todos os dados?</h3>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:24px">
+      Esta ação irá apagar <strong>permanentemente</strong> todos os dados do SafeNR.<br>
+      Faça um backup antes de continuar!
+    </p>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button class="btn btn-ghost" onclick="closeClearModal()">Cancelar</button>
+      <button class="btn btn-danger" onclick="clearAllData()"><i class="fas fa-trash"></i> Sim, apagar tudo</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ═══════════════════════════════════════ SCRIPTS ═══════════════════════════════════════ -->
+<script>
+  // ─── CHAVES DO LOCALSTORAGE ───
+  const KEYS = {
+    empresa:      'safenr_empresa',
+    usuarios:     'safenr_usuarios',
+    prefs:        'safenr_prefs',
+    seguranca:    'safenr_seguranca',
+    backupHist:   'safenr_backup_history',
+    currentUser:  'safenr_current_user',
+    // dados do sistema
+    inspecoes:    'safenr_inspecoes',
+    riscos:       'safenr_riscos',
+    funcionarios: 'safenr_funcionarios',
+    epis:         'safenr_epis',
+    checklists:   'safenr_checklists',
+    fotos:        'safenr_fotos',
+    agenda:       'safenr_agenda',
+  };
+
+  // ─── INIT ───
+  document.addEventListener('DOMContentLoaded', () => {
+    loadEmpresa();
+    loadUsuarios();
+    loadPrefs();
+    loadSeguranca();
+    loadStorageStats();
+    loadBackupHistory();
+    loadCurrentUser();
+  });
+
+  // ─── TABS ───
+  function switchTab(tab) {
+    document.querySelectorAll('.config-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.config-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    event.currentTarget.classList.add('active');
+    if (tab === 'backup') loadStorageStats();
+  }
+
+  // ─── LOAD CURRENT USER ───
+  function loadCurrentUser() {
+    const u = JSON.parse(localStorage.getItem(KEYS.currentUser) || '{}');
+    if (u.nome) {
+      document.getElementById('sidebarName').textContent = u.nome;
+      document.getElementById('sidebarRole').textContent = u.perfil || 'Usuário';
+      document.getElementById('sidebarInitial').textContent = u.nome.charAt(0).toUpperCase();
+    }
+  }
+
+  // ─── EMPRESA ───
+  function loadEmpresa() {
+    const d = JSON.parse(localStorage.getItem(KEYS.empresa) || '{}');
+    const fields = ['razaoSocial','nomeFantasia','cnpj','inscricaoEstadual','ramoAtividade',
+                    'cnae','grauRisco','numFuncionarios','endereco','cidade','estado','cep',
+                    'telefone','email','responsavelSesmt','registroProfissional',
+                    'cabecalhoPDF','rodapePDF','assinaturaDigital','formatoData'];
+    fields.forEach(f => {
+      const el = document.getElementById(f);
+      if (el && d[f]) el.value = d[f];
+    });
+    if (d.logoSrc) {
+      document.getElementById('logoPreview').innerHTML = `<img src="${d.logoSrc}" alt="Logo">`;
+    }
+  }
+
+  function saveEmpresa() {
+    const d = {};
+    const fields = ['razaoSocial','nomeFantasia','cnpj','inscricaoEstadual','ramoAtividade',
+                    'cnae','grauRisco','numFuncionarios','endereco','cidade','estado','cep',
+                    'telefone','email','responsavelSesmt','registroProfissional',
+                    'cabecalhoPDF','rodapePDF','assinaturaDigital','formatoData'];
+    fields.forEach(f => { const el = document.getElementById(f); if(el) d[f] = el.value; });
+    // logo
+    const img = document.getElementById('logoPreview').querySelector('img');
+    if (img) d.logoSrc = img.src;
+    localStorage.setItem(KEYS.empresa, JSON.stringify(d));
+  }
+
+  function previewLogo(input) {
+    if (!input.files || !input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('logoPreview').innerHTML = `<img src="${e.target.result}" alt="Logo">`;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+
+  // ─── MÁSCARAS ───
+  function maskCNPJ(el) {
+    let v = el.value.replace(/\D/g,'').substring(0,14);
+    v = v.replace(/^(\d{2})(\d)/,'$1.$2');
+    v = v.replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3');
+    v = v.replace(/\.(\d{3})(\d)/,'.$1/$2');
+    v = v.replace(/(\d{4})(\d)/,'$1-$2');
+    el.value = v;
+  }
+
+  function maskCEP(el) {
+    let v = el.value.replace(/\D/g,'').substring(0,8);
+    v = v.replace(/(\d{5})(\d)/,'$1-$2');
+    el.value = v;
+  }
+
+  // ─── USUÁRIOS ───
+  let users = [];
+
+  function loadUsuarios() {
+    users = JSON.parse(localStorage.getItem(KEYS.usuarios) || '[]');
+    if (users.length === 0) {
+      // usuário padrão
+      users = [{
+        nome: 'Administrador',
+        email: 'admin@safenr.com',
+        perfil: 'Administrador',
+        cargo: 'Administrador do Sistema',
+        status: 'Ativo',
+        ultimoAcesso: new Date().toLocaleDateString('pt-BR'),
+        senha: 'admin123'
+      }];
+      localStorage.setItem(KEYS.usuarios, JSON.stringify(users));
+    }
+    renderUsers();
+  }
+
+  function renderUsers() {
+    const tbody = document.getElementById('usersTableBody');
+    const colors = ['#4f6ef7','#22c55e','#f59e0b','#ef4444','#a855f7','#06b6d4'];
+    tbody.innerHTML = users.map((u, i) => `
+      <tr>
+        <td>
+          <div class="user-cell">
+            <div class="user-avatar-sm" style="background:${colors[i % colors.length]}20;color:${colors[i % colors.length]}">
+              ${u.nome.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <div style="font-weight:600">${u.nome}</div>
+              <div style="font-size:12px;color:var(--text-muted)">${u.cargo || '—'}</div>
+            </div>
+          </div>
+        </td>
+        <td style="color:var(--text-secondary)">${u.email}</td>
+        <td>${perfilBadge(u.perfil)}</td>
+        <td>${u.status === 'Ativo'
+              ? '<span class="badge badge-green">Ativo</span>'
+              : '<span class="badge badge-red">Inativo</span>'}</td>
+        <td style="color:var(--text-muted);font-size:13px">${u.ultimoAcesso || '—'}</td>
+        <td>
+          <div class="action-btns">
+            <button class="btn-icon" onclick="editUser(${i})" title="Editar"><i class="fas fa-pen"></i></button>
+            <button class="btn-icon danger" onclick="deleteUser(${i})" title="Excluir"><i class="fas fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function perfilBadge(p) {
+    const map = {
+      'Administrador': 'badge-red',
+      'Técnico SST':   'badge-purple',
+      'Supervisor':    'badge-blue',
+      'Inspetor':      'badge-green',
+      'Visitante':     'badge-yellow',
+    };
+    return `<span class="badge ${map[p] || 'badge-blue'}">${p}</span>`;
+  }
+
+  function openUserModal(editIdx = -1) {
+    document.getElementById('uNome').value   = '';
+    document.getElementById('uEmail').value  = '';
+    document.getElementById('uSenha').value  = '';
+    document.getElementById('uPerfil').value = '';
+    document.getElementById('uCargo').value  = '';
+    document.getElementById('uStatus').value = 'Ativo';
+    document.getElementById('uEditIndex').value = editIdx;
+
+    if (editIdx >= 0) {
+      const u = users[editIdx];
+      document.getElementById('uNome').value   = u.nome;
+      document.getElementById('uEmail').value  = u.email;
+      document.getElementById('uPerfil').value = u.perfil;
+      document.getElementById('uCargo').value  = u.cargo || '';
+      document.getElementById('uStatus').value = u.status;
+      document.getElementById('userModalTitle').textContent = '✏️ Editar Usuário';
+    } else {
+      document.getElementById('userModalTitle').textContent = '➕ Novo Usuário';
+    }
+    document.getElementById('userModal').classList.add('open');
+  }
+
+  function closeUserModal() {
+    document.getElementById('userModal').classList.remove('open');
+  }
+
+  function editUser(i) { openUserModal(i); }
+
+  function deleteUser(i) {
+    if (i === 0) { showToast('O usuário administrador não pode ser excluído!', 'error'); return; }
+    if (!confirm(`Excluir o usuário "${users[i].nome}"?`)) return;
+    users.splice(i, 1);
+    localStorage.setItem(KEYS.usuarios, JSON.stringify(users));
+    renderUsers();
+    showToast('Usuário excluído!', 'info');
+  }
+
+  function saveUser() {
+    const nome   = document.getElementById('uNome').value.trim();
+    const email  = document.getElementById('uEmail').value.trim();
+    const senha  = document.getElementById('uSenha').value.trim();
+    const perfil = document.getElementById('uPerfil').value;
+    const cargo  = document.getElementById('uCargo').value.trim();
+    const status = document.getElementById('uStatus').value;
+    const idx    = parseInt(document.getElementById('uEditIndex').value);
+
+    if (!nome || !email || !perfil) { showToast('Preencha todos os campos obrigatórios!', 'error'); return; }
+
+    const obj = { nome, email, perfil, cargo, status,
+                  ultimoAcesso: new Date().toLocaleDateString('pt-BR'),
+                  senha: senha || (idx >= 0 ? users[idx].senha : 'safenr123') };
+
+    if (idx >= 0) {
+      users[idx] = { ...users[idx], ...obj };
+    } else {
+      users.push(obj);
+    }
+
+    localStorage.setItem(KEYS.usuarios, JSON.stringify(users));
+    renderUsers();
+    closeUserModal();
+    showToast(idx >= 0 ? 'Usuário atualizado!' : 'Usuário criado com sucesso!', 'success');
+  }
+
+  // ─── PREFERÊNCIAS ───
+  function loadPrefs() {
+    const p = JSON.parse(localStorage.getItem(KEYS.prefs) || '{}');
+    const toggles = ['notifEPI','notifInspecao','notifExame','notifTreinamento','notifEmail','logoNoPDF'];
+    toggles.forEach(id => {
+      if (p[id] !== undefined) document.getElementById(id).checked = p[id];
+    });
+    const selects = ['diasAlertaEPI','diasAlertaExame','diasAlertaTreinamento','fusoHorario'];
+    selects.forEach(id => {
+      if (p[id]) document.getElementById(id).value = p[id];
+    });
+  }
+
+  function savePrefs() {
+    const p = {};
+    ['notifEPI','notifInspecao','notifExame','notifTreinamento','notifEmail','logoNoPDF'].forEach(id => {
+      p[id] = document.getElementById(id).checked;
+    });
+    ['diasAlertaEPI','diasAlertaExame','diasAlertaTreinamento','fusoHorario'].forEach(id => {
+      p[id] = document.getElementById(id).value;
+    });
+    localStorage.setItem(KEYS.prefs, JSON.stringify(p));
+  }
+
+  // ─── SEGURANÇA ───
+  function loadSeguranca() {
+    const s = JSON.parse(localStorage.getItem(KEYS.seguranca) || '{}');
+    if (s.sessionTimeout) document.getElementById('sessionTimeout').value = s.sessionTimeout;
+    if (s.logAtividades !== undefined) document.getElementById('logAtividades').checked = s.logAtividades;
+  }
+
+  function saveSeguranca() {
+    const s = {
+      sessionTimeout: document.getElementById('sessionTimeout').value,
+      logAtividades:  document.getElementById('logAtividades').checked,
+    };
+    localStorage.setItem(KEYS.seguranca, JSON.stringify(s));
+  }
+
+  function checkPasswordStrength(val) {
+    const bar   = document.getElementById('strengthBar');
+    const fill  = document.getElementById('strengthFill');
+    const label = document.getElementById('strengthLabel');
+    if (!val) { bar.style.display = 'none'; return; }
+    bar.style.display = 'block';
+    let score = 0;
+    if (val.length >= 8)        score++;
+    if (/[A-Z]/.test(val))      score++;
+    if (/[0-9]/.test(val))      score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const levels = [
+      { pct:'20%', color:'#ef4444', text:'Muito fraca' },
+      { pct:'40%', color:'#f97316', text:'Fraca' },
+      { pct:'60%', color:'#f59e0b', text:'Média' },
+      { pct:'80%', color:'#22c55e', text:'Forte' },
+      { pct:'100%',color:'#10b981', text:'Muito forte' },
+    ];
+    const lv = levels[Math.min(score, 4)];
+    fill.style.width      = lv.pct;
+    fill.style.background = lv.color;
+    label.textContent     = lv.text;
+    label.style.color     = lv.color;
+  }
+
+  function changePassword() {
+    const atual    = document.getElementById('senhaAtual').value;
+    const nova     = document.getElementById('novaSenha').value;
+    const confirmar = document.getElementById('confirmarSenha').value;
+    if (!atual || !nova || !confirmar) { showToast('Preencha todos os campos de senha!', 'error'); return; }
+    if (nova !== confirmar)            { showToast('As senhas não coincidem!', 'error'); return; }
+    if (nova.length < 6)               { showToast('A senha deve ter no mínimo 6 caracteres!', 'error'); return; }
+    // atualiza na lista de usuários
+    const cur = JSON.parse(localStorage.getItem(KEYS.currentUser) || '{}');
+    const idx = users.findIndex(u => u.email === cur.email);
+    if (idx >= 0) {
+      users[idx].senha = nova;
+      localStorage.setItem(KEYS.usuarios, JSON.stringify(users));
+    }
+    document.getElementById('senhaAtual').value   = '';
+    document.getElementById('novaSenha').value    = '';
+    document.getElementById('confirmarSenha').value = '';
+    showToast('Senha atualizada com sucesso!', 'success');
+  }
+
+  function logout() {
+    localStorage.removeItem(KEYS.currentUser);
+    window.location.href = 'index.html';
+  }
+
+  // ─── BACKUP / STORAGE ───
+  function loadStorageStats() {
+    const dataKeys = [KEYS.inspecoes, KEYS.riscos, KEYS.funcionarios,
+                      KEYS.epis, KEYS.checklists, KEYS.fotos, KEYS.agenda];
+    const labels   = ['Inspeções','Riscos','Funcionários','EPIs','Checklists','Fotos','Agenda'];
+    const colors   = ['--accent','--accent-green','--accent-purple','--accent-yellow',
+                      '--accent-red','--accent','--accent-green'];
+    let totalBytes = 0;
+    const counts   = [];
+
+    dataKeys.forEach(k => {
+      const raw  = localStorage.getItem(k) || '[]';
+      const arr  = JSON.parse(raw);
+      totalBytes += raw.length * 2;
+      counts.push(Array.isArray(arr) ? arr.length : 0);
+    });
+
+    // também conta os de config
+    [KEYS.empresa, KEYS.usuarios, KEYS.prefs, KEYS.seguranca].forEach(k => {
+      totalBytes += (localStorage.getItem(k) || '').length * 2;
+    });
+
+    const kb  = (totalBytes / 1024).toFixed(1);
+    const pct = Math.min((totalBytes / (5 * 1024 * 1024)) * 100, 100).toFixed(1);
+
+    document.getElementById('storageFill').style.width = pct + '%';
+    document.getElementById('storageUsed').textContent = `${kb} KB usados (${pct}%)`;
+
+    const grid = document.getElementById('storageStats');
+    grid.innerHTML = dataKeys.map((k, i) => `
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(${colors[i]})">${counts[i]}</div>
+        <div class="stat-label">${labels[i]}</div>
+      </div>
+    `).join('');
+  }
+
+  function exportBackup() {
+    const backup = {};
+    Object.values(KEYS).forEach(k => {
+      const val = localStorage.getItem(k);
+      if (val) backup[k] = JSON.parse(val);
+    });
+    backup._meta = {
+      version: '1.0.0',
+      exportedAt: new Date().toISOString(),
+      exportedBy: (JSON.parse(localStorage.getItem(KEYS.currentUser) || '{}')).nome || 'Sistema',
+    };
+
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `safenr_backup_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    // salva histórico
+    const hist = JSON.parse(localStorage.getItem(KEYS.backupHist) || '[]');
+    hist.unshift({ date: new Date().toLocaleString('pt-BR'), size: (JSON.stringify(backup).length / 1024).toFixed(1) + ' KB' });
+    if (hist.length > 10) hist.pop();
+    localStorage.setItem(KEYS.backupHist, JSON.stringify(hist));
+    loadBackupHistory();
+
+    showToast('Backup exportado com sucesso! 💾', 'success');
+  }
+
+  function importBackup(input) {
+    if (!input.files || !input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (!data._meta) { showToast('Arquivo de backup inválido!', 'error'); return; }
+        if (!confirm(`Restaurar backup de ${data._meta.exportedAt?.slice(0,10) || '?'}?\nIsso sobrescreverá os dados atuais.`)) return;
+        Object.entries(data).forEach(([k, v]) => {
+          if (k !== '_meta') localStorage.setItem(k, JSON.stringify(v));
+        });
+        showToast('Backup restaurado com sucesso! Recarregando...', 'success');
+        setTimeout(() => location.reload(), 1500);
+      } catch {
+        showToast('Erro ao ler o arquivo de backup!', 'error');
+      }
+    };
+    reader.readAsText(input.files[0]);
+    input.value = '';
+  }
+
+  function confirmClear()  { document.getElementById('clearModal').classList.add('open'); }
+  function closeClearModal() { document.getElementById('clearModal').classList.remove('open'); }
+
+  function clearAllData() {
+    const skip = ['safenr_current_user', 'safenr_usuarios'];
+    Object.values(KEYS).forEach(k => { if (!skip.includes(k)) localStorage.removeItem(k); });
+    closeClearModal();
+    showToast('Todos os dados foram apagados!', 'info');
+    setTimeout(() => location.reload(), 1200);
+  }
+
+  function loadBackupHistory() {
+    const hist = JSON.parse(localStorage.getItem(KEYS.backupHist) || '[]');
+    const el   = document.getElementById('backupHistory');
+    if (!hist.length) {
+      el.innerHTML = '<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px">Nenhum backup realizado ainda. Exporte seu primeiro backup acima! 💾</p>';
+      return;
+    }
+    el.innerHTML = `
+      <table>
+        <thead><tr><th>#</th><th>Data/Hora</th><th>Tamanho</th></tr></thead>
+        <tbody>
+          ${hist.map((h,i) => `
+            <tr>
+              <td style="color:var(--text-muted)">${i+1}</td>
+              <td>${h.date}</td>
+              <td><span class="badge badge-green">${h.size}</span></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  // ─── SAVE ALL ───
+  function saveAll() {
+    saveEmpresa();
+    savePrefs();
+    saveSeguranca();
+    showToast('Configurações salvas com sucesso! ✅', 'success');
+  }
+
+  function resetForm() {
+    if (!confirm('Descartar alterações não salvas?')) return;
+    loadEmpresa();
+    loadPrefs();
+    loadSeguranca();
+    showToast('Alterações descartadas.', 'info');
+  }
+
+  // ─── TOAST ───
+  function showToast(msg, type = 'info') {
+    const icons = { success:'fa-check-circle', error:'fa-times-circle', info:'fa-info-circle' };
+    const el    = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
+    document.getElementById('toastContainer').appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+</script>
+</body>
+</html>
