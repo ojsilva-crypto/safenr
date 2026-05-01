@@ -22,180 +22,245 @@
     .user-info p{font-size:.82rem;font-weight:600}
     .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
     .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
-    .btn-sair:hover{color:#ff6b6b}
     .main{margin-left:240px;flex:1;padding:32px}
-    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
-    .topbar h2{font-size:1.4rem;font-weight:700}
-    .topbar p{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:4px}
-    .cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:32px}
-    .card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:12px;transition:all .2s}
-    .card:hover{background:rgba(255,255,255,.06);transform:translateY(-2px)}
-    .card-header{display:flex;align-items:center;justify-content:space-between}
+    .topbar{margin-bottom:32px}
+    .topbar h2{font-size:1.6rem;font-weight:800}
+    .topbar p{color:rgba(255,255,255,.35);font-size:.88rem;margin-top:4px}
+    .cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+    .card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;transition:all .2s;cursor:pointer}
+    .card:hover{background:rgba(255,255,255,.07);transform:translateY(-2px)}
+    .card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
     .card-icon{font-size:1.8rem}
-    .card-badge{padding:4px 10px;border-radius:20px;font-size:.72rem;font-weight:600}
-    .card-badge.blue{background:rgba(0,212,255,.15);color:#00d4ff}
-    .card-badge.green{background:rgba(74,222,128,.15);color:#4ade80}
-    .card-badge.red{background:rgba(248,113,113,.15);color:#f87171}
-    .card-badge.orange{background:rgba(251,146,60,.15);color:#fb923c}
-    .card-badge.purple{background:rgba(167,139,250,.15);color:#a78bfa}
-    .card-value{font-size:2.2rem;font-weight:900}
-    .card-label{font-size:.82rem;color:rgba(255,255,255,.45)}
-    .card-sub{font-size:.78rem;color:rgba(255,255,255,.3);padding-top:8px;border-top:1px solid rgba(255,255,255,.06)}
-    .section-title{font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+    .card-badge{font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:20px}
+    .badge-blue{background:rgba(0,212,255,.15);color:#00d4ff}
+    .badge-red{background:rgba(248,113,113,.15);color:#f87171}
+    .badge-purple{background:rgba(167,139,250,.15);color:#a78bfa}
+    .badge-orange{background:rgba(251,146,60,.15);color:#fb923c}
+    .badge-green{background:rgba(74,222,128,.15);color:#4ade80}
+    .card-num{font-size:2.2rem;font-weight:900;margin-bottom:4px}
+    .card-label{font-size:.85rem;color:rgba(255,255,255,.5);margin-bottom:8px}
+    .card-sub{font-size:.75rem;color:rgba(255,255,255,.3)}
+    .section-title{font-size:1.05rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
     .panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px}
-    .list-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-    .list-item:last-child{border-bottom:none}
-    .list-item-info p{font-size:.88rem;font-weight:600}
-    .list-item-info span{font-size:.75rem;color:rgba(255,255,255,.35)}
-    .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
-    .badge.critico{background:rgba(248,113,113,.15);color:#f87171}
-    .badge.alto{background:rgba(251,146,60,.15);color:#fb923c}
-    .badge.medio{background:rgba(251,191,36,.15);color:#fbbf24}
-    .badge.baixo{background:rgba(74,222,128,.15);color:#4ade80}
-    .badge.aberto{background:rgba(96,165,250,.15);color:#60a5fa}
-    .badge.concluida{background:rgba(74,222,128,.15);color:#4ade80}
-    .badge.pendente{background:rgba(251,191,36,.15);color:#fbbf24}
-    .empty{text-align:center;padding:32px;color:rgba(255,255,255,.25);font-size:.85rem}
-    .alerta-box{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:.88rem}
-    .alerta-box.oculto{display:none}
-    .progresso-bar{height:6px;background:rgba(255,255,255,.08);border-radius:10px;margin-top:8px;overflow:hidden}
-    .progresso-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#00d4ff,#0099cc);transition:width .6s}
+    .panel h3{font-size:.95rem;font-weight:700;margin-bottom:16px}
+    .lista-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .lista-item:last-child{border-bottom:none}
+    .lista-item-info p{font-size:.88rem;font-weight:600}
+    .lista-item-info span{font-size:.75rem;color:rgba(255,255,255,.35)}
+    .badge-sm{padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600}
+    .bg-green{background:rgba(74,222,128,.15);color:#4ade80}
+    .bg-red{background:rgba(248,113,113,.15);color:#f87171}
+    .bg-yellow{background:rgba(251,191,36,.15);color:#fbbf24}
+    .bg-blue{background:rgba(0,212,255,.15);color:#00d4ff}
+    .bg-orange{background:rgba(251,146,60,.15);color:#fb923c}
+    .nr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .nr-mini{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px}
+    .nr-mini-top{display:flex;justify-content:space-between;margin-bottom:8px}
+    .nr-mini-badge{font-size:.7rem;font-weight:700;color:#00d4ff}
+    .nr-mini-pct{font-size:.78rem;font-weight:700}
+    .nr-mini p{font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:8px}
+    .mini-bar{height:4px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden}
+    .mini-fill{height:100%;border-radius:4px}
+    .agenda-lista .evento-mini{background:rgba(255,255,255,.04);border-left:3px solid #00d4ff;border-radius:8px;padding:10px 14px;margin-bottom:8px}
+    .agenda-lista .evento-mini.epi{border-left-color:#fb923c}
+    .agenda-lista .evento-mini.checklist{border-left-color:#a78bfa}
+    .agenda-lista .evento-mini p{font-size:.85rem;font-weight:600}
+    .agenda-lista .evento-mini span{font-size:.73rem;color:rgba(255,255,255,.35)}
+    .empty-panel{text-align:center;padding:24px;color:rgba(255,255,255,.25);font-size:.83rem}
   </style>
 </head>
 <body>
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
-    <p>Gestão de Segurança do Trabalho</p>
+    <p>Gestao de Seguranca do Trabalho</p>
   </div>
   <nav class="nav">
     <a class="nav-item active" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
-    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
+    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionários</a>
-    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatórios</a>
+    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
+    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configurações</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
+    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
-    <div class="user-info">
-      <p id="nomeUsuario">Usuário</p>
-      <span>Administrador</span>
-    </div>
-    <button class="btn-sair" onclick="sair()">✕</button>
+    <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
+    <button class="btn-sair" onclick="sair()">X</button>
   </div>
 </div>
 <div class="main">
   <div class="topbar">
-    <div>
-      <h2>🏠 Dashboard</h2>
-      <p id="dataHoje"></p>
-    </div>
-  </div>
-  <div class="alerta-box" id="alertaEpi">
-    🚨 <span id="alertaEpiTexto"></span>
+    <h2>🏠 Dashboard</h2>
+    <p id="dataHoje"></p>
   </div>
   <div class="cards-grid">
-    <div class="card">
-      <div class="card-header"><span class="card-icon">🔍</span><span class="card-badge blue">Total</span></div>
-      <div class="card-value" id="totalInspecoes">0</div>
-      <div class="card-label">Inspeções</div>
-      <div class="card-sub" id="subInspecoes">—</div>
+    <div class="card" onclick="window.location='./inspecoes.html'">
+      <div class="card-top"><span class="card-icon">🔍</span><span class="card-badge badge-blue" id="badgeInsp">Total</span></div>
+      <div class="card-num" id="numInsp">0</div>
+      <div class="card-label">Inspecoes</div>
+      <div class="card-sub" id="subInsp">0 concluida(s)</div>
     </div>
-    <div class="card">
-      <div class="card-header"><span class="card-icon">⚠️</span><span class="card-badge red">Total</span></div>
-      <div class="card-value" id="totalRiscos">0</div>
+    <div class="card" onclick="window.location='./riscos.html'">
+      <div class="card-top"><span class="card-icon">⚠️</span><span class="card-badge badge-red" id="badgeRisc">Total</span></div>
+      <div class="card-num" id="numRisc">0</div>
       <div class="card-label">Riscos</div>
-      <div class="card-sub" id="subRiscos">—</div>
+      <div class="card-sub" id="subRisc">0 critico(s)</div>
     </div>
-    <div class="card">
-      <div class="card-header"><span class="card-icon">👷</span><span class="card-badge purple">Total</span></div>
-      <div class="card-value" id="totalFunc">0</div>
-      <div class="card-label">Funcionários</div>
-      <div class="card-sub" id="subFunc">—</div>
+    <div class="card" onclick="window.location='./funcionarios.html'">
+      <div class="card-top"><span class="card-icon">👷</span><span class="card-badge badge-purple" id="badgeFunc">Total</span></div>
+      <div class="card-num" id="numFunc">0</div>
+      <div class="card-label">Funcionarios</div>
+      <div class="card-sub" id="subFunc">0 ativo(s)</div>
     </div>
-    <div class="card">
-      <div class="card-header"><span class="card-icon">🦺</span><span class="card-badge orange">Atenção</span></div>
-      <div class="card-value" id="totalEpiVenc">0</div>
+    <div class="card" onclick="window.location='./epis.html'">
+      <div class="card-top"><span class="card-icon">🦺</span><span class="card-badge badge-orange" id="badgeEpi">Atencao</span></div>
+      <div class="card-num" id="numEpi">0</div>
       <div class="card-label">EPIs Vencidos</div>
-      <div class="card-sub" id="subEpi">—</div>
+      <div class="card-sub" id="subEpi">Todos em dia</div>
     </div>
   </div>
-  <div class="two-col">
+  <div class="grid2">
     <div class="panel">
-      <div class="section-title">⚠️ Últimos Riscos</div>
-      <div id="listaRiscos"><div class="empty">Nenhum risco cadastrado</div></div>
+      <h3>📋 Conformidade NRs</h3>
+      <div class="nr-grid" id="nrGrid"></div>
     </div>
     <div class="panel">
-      <div class="section-title">🔍 Últimas Inspeções</div>
-      <div id="listaInspecoes"><div class="empty">Nenhuma inspeção cadastrada</div></div>
+      <h3>📅 Agenda — Proximas Pendencias</h3>
+      <div class="agenda-lista" id="agendaLista"></div>
     </div>
   </div>
-  <div class="two-col">
+  <div class="grid2">
     <div class="panel">
-      <div class="section-title">📋 Conformidade dos Checklists</div>
-      <div id="listaChecklists"><div class="empty">Nenhum checklist respondido</div></div>
+      <h3>🔍 Ultimas Inspecoes</h3>
+      <div id="listaInsp"></div>
     </div>
     <div class="panel">
-      <div class="section-title">👷 Funcionários com EPI Vencido</div>
-      <div id="listaEpiVenc"><div class="empty">Nenhum EPI vencido</div></div>
+      <h3>⚠️ Riscos Criticos</h3>
+      <div id="listaRisc"></div>
     </div>
   </div>
 </div>
 <script>
-var userData=localStorage.getItem('safenr_user');
-if(!userData){window.location.href='./index.html';}
-var user=JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent=user.nome||'Usuário';
-document.getElementById('avatarLetra').textContent=(user.nome||'U')[0].toUpperCase();
-function sair(){localStorage.removeItem('safenr_user');window.location.href='./index.html';}
-var meses=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-var hoje=new Date();
-document.getElementById('dataHoje').textContent='Hoje, '+hoje.getDate()+' de '+meses[hoje.getMonth()]+' de '+hoje.getFullYear();
-function fmt(d){if(!d)return'—';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
-function epiVencido(val){return val&&new Date(val)<new Date();}
-var inspecoes=JSON.parse(localStorage.getItem('safenr_inspecoes')||'[]');
-var riscos=JSON.parse(localStorage.getItem('safenr_riscos')||'[]');
-var funcionarios=JSON.parse(localStorage.getItem('safenr_funcionarios')||'[]');
-var NRS=['NR-05','NR-06','NR-07','NR-09','NR-10','NR-12','NR-17','NR-23','NR-35'];
-document.getElementById('totalInspecoes').textContent=inspecoes.length;
-var concl=inspecoes.filter(function(i){return i.status==='concluida'||i.status==='conforme';}).length;
-document.getElementById('subInspecoes').textContent=concl+' concluída(s)';
-document.getElementById('totalRiscos').textContent=riscos.length;
-var crit=riscos.filter(function(r){return r.nivel==='critico';}).length;
-document.getElementById('subRiscos').textContent=crit+' crítico(s)';
-document.getElementById('totalFunc').textContent=funcionarios.length;
-var ativ=funcionarios.filter(function(f){return f.status==='ativo';}).length;
-document.getElementById('subFunc').textContent=ativ+' ativo(s)';
-var episVencList=funcionarios.filter(function(f){return(f.epis||[]).some(function(e){return epiVencido(e.validade);});});
-document.getElementById('totalEpiVenc').textContent=episVencList.length;
-document.getElementById('subEpi').textContent=episVencList.length>0?'Requer atenção':'Todos em dia';
-if(episVencList.length>0){
-  document.getElementById('alertaEpiTexto').textContent=episVencList.length+' funcionário(s) com EPI vencido!';
-}else{
-  document.getElementById('alertaEpi').classList.add('oculto');
+var userData = localStorage.getItem('safenr_user');
+if (!userData) { window.location.href = './index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
+document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
+
+var meses = ['janeiro','fevereiro','marco','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+var dias = ['Domingo','Segunda','Terca','Quarta','Quinta','Sexta','Sabado'];
+var h = new Date();
+document.getElementById('dataHoje').textContent = dias[h.getDay()] + ', ' + h.getDate() + ' de ' + meses[h.getMonth()] + ' de ' + h.getFullYear();
+
+function fmt(d){ if(!d) return '--'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+
+// CARDS
+var insp = JSON.parse(localStorage.getItem('safenr_inspecoes')||'[]');
+var risc = JSON.parse(localStorage.getItem('safenr_riscos')||'[]');
+var func = JSON.parse(localStorage.getItem('safenr_funcionarios')||'[]');
+var epis = JSON.parse(localStorage.getItem('safenr_epis')||'[]');
+
+var concl = insp.filter(function(i){ return i.status==='concluida'||i.status==='conforme'; }).length;
+document.getElementById('numInsp').textContent = insp.length;
+document.getElementById('subInsp').textContent = concl + ' concluida(s)';
+if (insp.length > 0) document.getElementById('badgeInsp').className = 'card-badge badge-blue';
+
+var crit = risc.filter(function(r){ return r.nivel==='critico'; }).length;
+document.getElementById('numRisc').textContent = risc.length;
+document.getElementById('subRisc').textContent = crit + ' critico(s)';
+if (crit > 0) { document.getElementById('badgeRisc').textContent = 'Critico'; document.getElementById('badgeRisc').className = 'card-badge badge-red'; }
+
+var ativos = func.filter(function(f){ return f.status==='ativo'; }).length;
+document.getElementById('numFunc').textContent = func.length;
+document.getElementById('subFunc').textContent = ativos + ' ativo(s)';
+
+var venc = epis.filter(function(e){ return e.ca_validade && new Date(e.ca_validade) < new Date(); }).length;
+document.getElementById('numEpi').textContent = venc;
+document.getElementById('subEpi').textContent = venc > 0 ? venc + ' CA(s) vencido(s)' : 'Todos em dia';
+if (venc > 0) { document.getElementById('badgeEpi').textContent = 'Atencao'; document.getElementById('badgeEpi').className = 'card-badge badge-red'; }
+else { document.getElementById('badgeEpi').textContent = 'OK'; document.getElementById('badgeEpi').className = 'card-badge badge-green'; }
+
+// NR GRID
+var NRS = [
+  {id:'NR-05',nome:'CIPA',total:8},
+  {id:'NR-06',nome:'EPI',total:8},
+  {id:'NR-07',nome:'PCMSO',total:8},
+  {id:'NR-09',nome:'Riscos Amb.',total:8},
+  {id:'NR-10',nome:'Eletricidade',total:8},
+  {id:'NR-12',nome:'Maquinas',total:8},
+  {id:'NR-17',nome:'Ergonomia',total:8},
+  {id:'NR-23',nome:'Incendio',total:8},
+  {id:'NR-35',nome:'Altura',total:8}
+];
+var nrGrid = document.getElementById('nrGrid');
+NRS.forEach(function(nr){
+  var saved = JSON.parse(localStorage.getItem('safenr_checklist_'+nr.id)||'{}');
+  var ok = 0; for(var k in saved){ if(saved[k]==='ok') ok++; }
+  var pct = nr.total > 0 ? Math.round((ok/nr.total)*100) : 0;
+  var cor = pct>=80?'#4ade80':pct>=50?'#fbbf24':'#f87171';
+  var div = document.createElement('div');
+  div.className = 'nr-mini';
+  div.innerHTML = '<div class="nr-mini-top"><span class="nr-mini-badge">'+nr.id+'</span><span class="nr-mini-pct" style="color:'+cor+'">'+pct+'%</span></div><p>'+nr.nome+'</p><div class="mini-bar"><div class="mini-fill" style="width:'+pct+'%;background:'+cor+'"></div></div>';
+  nrGrid.appendChild(div);
+});
+
+// AGENDA
+var agenda = JSON.parse(localStorage.getItem('safenr_agenda')||'[]');
+var agDiv = document.getElementById('agendaLista');
+var limite = new Date(); limite.setDate(limite.getDate()+30);
+var proximos = agenda.filter(function(e){
+  if(e.status==='concluido') return false;
+  var d = new Date(e.data+'T00:00:00');
+  return d >= new Date();
+});
+proximos.sort(function(a,b){ return a.data.localeCompare(b.data); });
+if(proximos.length===0){
+  agDiv.innerHTML='<div class="empty-panel">Nenhuma pendencia agendada.</div>';
+} else {
+  proximos.slice(0,5).forEach(function(ev){
+    var d = document.createElement('div');
+    d.className = 'evento-mini '+ev.tipo;
+    d.innerHTML = '<p>'+ev.titulo+'</p><span>'+fmt(ev.data)+(ev.funcionario?' | '+ev.funcionario:'')+'</span>';
+    agDiv.appendChild(d);
+  });
 }
-var lr=document.getElementById('listaRiscos');
-if(riscos.length===0){lr.innerHTML='<div class="empty">Nenhum risco cadastrado</div>';}
-else{var ul=riscos.slice(-5).reverse();lr.innerHTML=ul.map(function(r){return'<div class="list-item"><div class="list-item-info"><p>'+r.descricao+'</p><span>'+r.setor+'</span></div><span class="badge '+r.nivel+'">'+(r.nivel==='critico'?'Crítico':r.nivel==='alto'?'Alto':r.nivel==='medio'?'Médio':'Baixo')+'</span></div>';}).join('');}
-var li=document.getElementById('listaInspecoes');
-if(inspecoes.length===0){li.innerHTML='<div class="empty">Nenhuma inspeção cadastrada</div>';}
-else{var ui=inspecoes.slice(-5).reverse();li.innerHTML=ui.map(function(i){var sl={concluida:'concluida',conforme:'concluida',pendente:'pendente',aberta:'aberto','nao-conforme':'critico'}[i.status]||'aberto';var tl={concluida:'Concluída',conforme:'Conforme',pendente:'Pendente',aberta:'Aberta','nao-conforme':'Não Conforme'}[i.status]||i.status;return'<div class="list-item"><div class="list-item-info"><p>'+(i.titulo||i.descricao||'—')+'</p><span>'+(i.setor||i.local||'—')+' • '+fmt(i.data)+'</span></div><span class="badge '+sl+'">'+tl+'</span></div>';}).join('');}
-var lc=document.getElementById('listaChecklists');
-var NOMES={'NR-05':'CIPA','NR-06':'EPI','NR-07':'PCMSO','NR-09':'Riscos Ambientais','NR-10':'Eletricidade','NR-12':'Máquinas','NR-17':'Ergonomia','NR-23':'Incêndio','NR-35':'Trabalho em Altura'};
-var TOTAL={'NR-05':8,'NR-06':8,'NR-07':8,'NR-09':8,'NR-10':8,'NR-12':8,'NR-17':8,'NR-23':8,'NR-35':8};
-var ckHtml='';
-NRS.forEach(function(nr){var saved=JSON.parse(localStorage.getItem('safenr_checklist_'+nr)||'{}');var total=TOTAL[nr]||0;var ok=Object.values(saved).filter(function(v){return v==='ok';}).length;var pct=total>0?Math.round((ok/total)*100):0;ckHtml+='<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:.82rem"><span>'+nr+' — '+NOMES[nr]+'</span><span style="color:rgba(255,255,255,.4)">'+pct+'%</span></div><div class="progresso-bar"><div class="progresso-fill" style="width:'+pct+'%"></div></div></div>';});
-lc.innerHTML=ckHtml||'<div class="empty">Nenhum checklist respondido</div>';
-var le=document.getElementById('listaEpiVenc');
-if(episVencList.length===0){le.innerHTML='<div class="empty">✅ Nenhum EPI vencido</div>';}
-else{le.innerHTML=episVencList.slice(0,5).map(function(f){var venc=(f.epis||[]).filter(function(e){return epiVencido(e.validade);});return'<div class="list-item"><div class="list-item-info"><p>'+f.nome+'</p><span>'+venc.map(function(e){return e.nome;}).join(', ')+'</span></div><span class="badge critico">Vencido</span></div>';}).join('');}
+
+// ULTIMAS INSPECOES
+var lInsp = document.getElementById('listaInsp');
+if(insp.length===0){ lInsp.innerHTML='<div class="empty-panel">Nenhuma inspecao cadastrada.</div>'; }
+else {
+  var ultimas = insp.slice(-4).reverse();
+  ultimas.forEach(function(i){
+    var st = i.status==='concluida'||i.status==='conforme' ? 'bg-green' : i.status==='nao-conforme'?'bg-red':'bg-yellow';
+    var div = document.createElement('div');
+    div.className = 'lista-item';
+    div.innerHTML = '<div class="lista-item-info"><p>'+(i.titulo||'Inspecao #'+i.id)+'</p><span>'+(i.setor||'--')+' | '+fmt(i.data)+'</span></div><span class="badge-sm '+st+'">'+(i.status||'pendente')+'</span>';
+    lInsp.appendChild(div);
+  });
+}
+
+// RISCOS CRITICOS
+var lRisc = document.getElementById('listaRisc');
+var critLista = risc.filter(function(r){ return r.nivel==='critico'; });
+if(critLista.length===0){ lRisc.innerHTML='<div class="empty-panel">Nenhum risco critico.</div>'; }
+else {
+  critLista.slice(0,4).forEach(function(r){
+    var div = document.createElement('div');
+    div.className = 'lista-item';
+    div.innerHTML = '<div class="lista-item-info"><p>'+(r.descricao||'Risco #'+r.id)+'</p><span>'+(r.setor||'--')+' | '+(r.tipo||'--')+'</span></div><span class="badge-sm bg-red">Critico</span>';
+    lRisc.appendChild(div);
+  });
+}
 </script>
 </body>
 </html>
+
 
