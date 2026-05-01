@@ -5,160 +5,76 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SafeNR — Riscos</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #0f1923; color: #fff;
-      display: flex; min-height: 100vh;
-    }
-    .sidebar {
-      width: 240px; background: #0a1520;
-      border-right: 1px solid rgba(255,255,255,0.07);
-      display: flex; flex-direction: column;
-      padding: 24px 0; position: fixed; height: 100vh;
-    }
-    .sidebar-logo { text-align: center; padding: 0 24px 28px; border-bottom: 1px solid rgba(255,255,255,0.07); }
-    .sidebar-logo h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: 2px; }
-    .sidebar-logo h1 span { color: #00d4ff; }
-    .sidebar-logo p { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-top: 2px; }
-    .nav { flex: 1; padding: 20px 0; }
-    .nav-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 13px 24px; cursor: pointer;
-      color: rgba(255,255,255,0.5); font-size: 0.9rem; font-weight: 500;
-      transition: all 0.2s; border-left: 3px solid transparent; text-decoration: none;
-    }
-    .nav-item:hover { color: #fff; background: rgba(255,255,255,0.04); }
-    .nav-item.active { color: #00d4ff; border-left-color: #00d4ff; background: rgba(0,212,255,0.06); }
-    .nav-item .icon { font-size: 1.1rem; width: 20px; text-align: center; }
-    .sidebar-user {
-      padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.07);
-      display: flex; align-items: center; gap: 12px;
-    }
-    .avatar {
-      width: 36px; height: 36px;
-      background: linear-gradient(135deg, #00d4ff, #0099cc);
-      border-radius: 50%; display: flex; align-items: center;
-      justify-content: center; font-weight: 700; font-size: 0.85rem;
-    }
-    .user-info p { font-size: 0.82rem; font-weight: 600; }
-    .user-info span { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
-    .btn-sair {
-      background: none; border: none; color: rgba(255,80,80,0.7);
-      cursor: pointer; font-size: 0.8rem; margin-left: auto;
-    }
-    .btn-sair:hover { color: #ff6b6b; }
-    .main { margin-left: 240px; flex: 1; padding: 32px; }
-    .topbar {
-      display: flex; align-items: center;
-      justify-content: space-between; margin-bottom: 28px;
-    }
-    .topbar h2 { font-size: 1.4rem; font-weight: 700; }
-    .topbar span { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
-    .btn-novo {
-      background: linear-gradient(135deg, #f87171, #dc2626);
-      border: none; border-radius: 10px; color: #fff;
-      font-size: 0.9rem; font-weight: 700; padding: 12px 24px;
-      cursor: pointer; transition: opacity 0.2s, transform 0.2s;
-    }
-    .btn-novo:hover { opacity: 0.85; transform: translateY(-1px); }
-    .filtros { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
-    .filtro-btn {
-      padding: 8px 18px; border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: transparent; color: rgba(255,255,255,0.5);
-      cursor: pointer; font-size: 0.82rem; font-weight: 500; transition: all 0.2s;
-    }
-    .filtro-btn:hover { border-color: #00d4ff; color: #00d4ff; }
-    .filtro-btn.active { background: rgba(0,212,255,0.12); border-color: #00d4ff; color: #00d4ff; }
-    .tabela-wrap {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px; overflow: hidden;
-    }
-    table { width: 100%; border-collapse: collapse; }
-    thead tr { background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08); }
-    th {
-      padding: 14px 18px; text-align: left; font-size: 0.78rem; font-weight: 600;
-      color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    td {
-      padding: 14px 18px; font-size: 0.87rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle;
-    }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(255,255,255,0.02); }
-    .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
-    .badge.baixo     { background: rgba(74,222,128,0.15);  color: #4ade80; }
-    .badge.medio     { background: rgba(251,191,36,0.15);   color: #fbbf24; }
-    .badge.alto      { background: rgba(251,146,60,0.15);   color: #fb923c; }
-    .badge.critico   { background: rgba(248,113,113,0.15);  color: #f87171; }
-    .badge.aberto    { background: rgba(96,165,250,0.15);   color: #60a5fa; }
-    .badge.em-tratamento { background: rgba(251,191,36,0.15); color: #fbbf24; }
-    .badge.resolvido { background: rgba(74,222,128,0.15);   color: #4ade80; }
-    .btn-acao {
-      background: none; border: none; cursor: pointer;
-      padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; transition: background 0.2s;
-    }
-    .btn-acao:hover { background: rgba(255,255,255,0.08); }
-    .empty-state { text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.3); }
-    .empty-state div { font-size: 3rem; margin-bottom: 12px; }
-    .empty-state p { font-size: 0.9rem; }
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-      z-index: 1000; align-items: center; justify-content: center;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal {
-      background: #0f1923; border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 20px; padding: 36px; width: 100%; max-width: 560px;
-      max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-    }
-    .modal h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 24px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-    .form-row.full { grid-template-columns: 1fr; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group label { font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.55); }
-    .form-group input, .form-group select, .form-group textarea {
-      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 10px; padding: 12px 14px; color: #fff; font-size: 0.9rem;
-      outline: none; transition: border 0.2s;
-    }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #00d4ff; }
-    .form-group textarea { resize: vertical; min-height: 80px; }
-    .form-group select option { background: #1a2535; }
-    .auto-field {
-      background: rgba(0,212,255,0.06) !important;
-      border-color: rgba(0,212,255,0.2) !important;
-      color: rgba(255,255,255,0.6) !important;
-      cursor: not-allowed !important;
-    }
-    .auto-tag {
-      font-size: 0.68rem; color: #00d4ff;
-      background: rgba(0,212,255,0.1);
-      border-radius: 20px; padding: 2px 8px;
-      margin-left: 6px; font-weight: 600;
-    }
-    .modal-footer { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
-    .btn-cancelar {
-      padding: 12px 24px; border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 0.9rem;
-    }
-    .btn-salvar {
-      padding: 12px 28px; border-radius: 10px;
-      background: linear-gradient(135deg, #f87171, #dc2626);
-      border: none; color: #fff; font-size: 0.9rem; font-weight: 700; cursor: pointer;
-    }
-    .btn-salvar:hover { opacity: 0.85; }
-    .detalhe-row {
-      display: flex; gap: 8px; margin-bottom: 12px;
-      padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .detalhe-row:last-child { border-bottom: none; }
-    .detalhe-label { font-size: 0.78rem; color: rgba(255,255,255,0.4); min-width: 140px; font-weight: 600; }
-    .detalhe-valor { font-size: 0.88rem; color: #fff; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh}
+    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
+    .sidebar-logo h1 span{color:#00d4ff}
+    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
+    .nav{flex:1;padding:20px 0}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
+    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+    .user-info p{font-size:.82rem;font-weight:600}
+    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
+    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+    .btn-sair:hover{color:#ff6b6b}
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .topbar h2{font-size:1.4rem;font-weight:700}
+    .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
+    .btn-novo{background:linear-gradient(135deg,#f87171,#dc2626);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:opacity .2s,transform .2s}
+    .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
+    .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+    .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
+    .filtro-btn:hover{border-color:#00d4ff;color:#00d4ff}
+    .filtro-btn.active{background:rgba(0,212,255,.12);border-color:#00d4ff;color:#00d4ff}
+    .tabela-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
+    table{width:100%;border-collapse:collapse}
+    thead tr{background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.08)}
+    th{padding:14px 18px;text-align:left;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px}
+    td{padding:14px 18px;font-size:.87rem;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:rgba(255,255,255,.02)}
+    .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
+    .badge.baixo{background:rgba(74,222,128,.15);color:#4ade80}
+    .badge.medio{background:rgba(251,191,36,.15);color:#fbbf24}
+    .badge.alto{background:rgba(251,146,60,.15);color:#fb923c}
+    .badge.critico{background:rgba(248,113,113,.15);color:#f87171}
+    .badge.aberto{background:rgba(96,165,250,.15);color:#60a5fa}
+    .badge.em-tratamento{background:rgba(251,191,36,.15);color:#fbbf24}
+    .badge.resolvido{background:rgba(74,222,128,.15);color:#4ade80}
+    .btn-acao{background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:8px;font-size:.85rem;transition:background .2s}
+    .btn-acao:hover{background:rgba(255,255,255,.08)}
+    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3)}
+    .empty-state div{font-size:3rem;margin-bottom:12px}
+    .empty-state p{font-size:.9rem}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
+    .modal-overlay.open{display:flex}
+    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+    .modal h3{font-size:1.2rem;font-weight:700;margin-bottom:24px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+    .form-row.full{grid-template-columns:1fr}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group label{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.55)}
+    .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;color:#fff;font-size:.9rem;outline:none;transition:border .2s;font-family:inherit}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#00d4ff}
+    .form-group textarea{resize:vertical;min-height:80px}
+    .form-group select option{background:#1a2535}
+    .auto-field{background:rgba(0,212,255,.06)!important;border-color:rgba(0,212,255,.2)!important;color:rgba(255,255,255,.6)!important;cursor:not-allowed!important}
+    .auto-tag{font-size:.68rem;color:#00d4ff;background:rgba(0,212,255,.1);border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:600}
+    .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
+    .btn-cancelar{padding:12px 24px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;font-size:.9rem}
+    .btn-salvar{padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#f87171,#dc2626);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
+    .btn-salvar:hover{opacity:.85}
+    .detalhe-row{display:flex;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .detalhe-row:last-child{border-bottom:none}
+    .detalhe-label{font-size:.78rem;color:rgba(255,255,255,.4);min-width:140px;font-weight:600}
+    .detalhe-valor{font-size:.88rem;color:#fff}
   </style>
 </head>
 <body>
@@ -171,4 +87,308 @@
   <nav class="nav">
     <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
     <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
-    <a class="nav-item active"
+    <a class="nav-item active" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
+    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
+    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionários</a>
+    <a class="nav-item" href="#"><span class="icon">📄</span> Relatórios</a>
+    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configurações</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="avatar" id="avatarLetra">A</div>
+    <div class="user-info">
+      <p id="nomeUsuario">Usuário</p>
+      <span>Administrador</span>
+    </div>
+    <button class="btn-sair" onclick="sair()">✕</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <h2>⚠️ Riscos</h2>
+      <span id="totalRegistros">0 registros</span>
+    </div>
+    <button class="btn-novo" onclick="abrirModal()">＋ Novo Risco</button>
+  </div>
+
+  <div class="filtros">
+    <button class="filtro-btn active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('aberto',this)">🔵 Aberto</button>
+    <button class="filtro-btn" onclick="filtrar('em-tratamento',this)">🟡 Em Tratamento</button>
+    <button class="filtro-btn" onclick="filtrar('resolvido',this)">✅ Resolvido</button>
+    <button class="filtro-btn" onclick="filtrar('critico',this)">🚨 Nível Crítico</button>
+  </div>
+
+  <div class="tabela-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Descrição do Risco</th>
+          <th>Setor</th>
+          <th>Nível</th>
+          <th>Status</th>
+          <th>Responsável</th>
+          <th>Prazo</th>
+          <th>Registrado por</th>
+          <th>Registrado em</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaBody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div>⚠️</div>
+      <p>Nenhum risco cadastrado.<br>Clique em <strong>+ Novo Risco</strong> para começar.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FORM -->
+<div class="modal-overlay" id="modalForm">
+  <div class="modal">
+    <h3 id="modalTitulo">⚠️ Novo Risco</h3>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Descrição do Risco *</label>
+        <textarea id="f_descricao" placeholder="Descreva o risco identificado..."></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Setor / Local *</label>
+        <input type="text" id="f_setor" placeholder="Ex: Produção, Elétrica..."/>
+      </div>
+      <div class="form-group">
+        <label>Responsável *</label>
+        <input type="text" id="f_responsavel" placeholder="Nome do responsável"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nível do Risco *</label>
+        <select id="f_nivel">
+          <option value="">Selecione</option>
+          <option value="baixo">🟢 Baixo</option>
+          <option value="medio">🟡 Médio</option>
+          <option value="alto">🟠 Alto</option>
+          <option value="critico">🔴 Crítico</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status *</label>
+        <select id="f_status">
+          <option value="">Selecione</option>
+          <option value="aberto">🔵 Aberto</option>
+          <option value="em-tratamento">🟡 Em Tratamento</option>
+          <option value="resolvido">✅ Resolvido</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>📅 Data de Identificação *</label>
+        <input type="date" id="f_data"/>
+      </div>
+      <div class="form-group">
+        <label>Prazo para resolução</label>
+        <input type="date" id="f_prazo"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>👤 Registrado por <span class="auto-tag">AUTOMÁTICO</span></label>
+        <input type="text" id="f_registradoPor" class="auto-field" readonly/>
+      </div>
+      <div class="form-group">
+        <label>🕐 Registrado em <span class="auto-tag">AUTOMÁTICO</span></label>
+        <input type="text" id="f_registradoEm" class="auto-field" readonly/>
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Medidas de Controle / Observações</label>
+        <textarea id="f_obs" placeholder="Descreva as medidas de controle, ações tomadas..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-salvar" onclick="salvarRisco()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VER -->
+<div class="modal-overlay" id="modalVer">
+  <div class="modal">
+    <h3>⚠️ Detalhes do Risco</h3>
+    <div id="modalVerConteudo"></div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModalVer()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var userData = localStorage.getItem('safenr_user');
+if(!userData){ window.location.href='./index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome||'Usuário';
+document.getElementById('avatarLetra').textContent = (user.nome||'U')[0].toUpperCase();
+function sair(){ localStorage.removeItem('safenr_user'); window.location.href='./index.html'; }
+
+var riscos = JSON.parse(localStorage.getItem('safenr_riscos')||'[]');
+var editandoId = null;
+var filtroAtivo = 'todos';
+
+function salvarStorage(){ localStorage.setItem('safenr_riscos', JSON.stringify(riscos)); }
+
+function formatarData(d){
+  if(!d) return '—';
+  var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0];
+}
+function formatarDT(iso){
+  if(!iso) return '—';
+  return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+function labelNivel(n){ return {baixo:'Baixo',medio:'Médio',alto:'Alto',critico:'Crítico'}[n]||n; }
+function labelStatus(s){ return {aberto:'Aberto','em-tratamento':'Em Tratamento',resolvido:'Resolvido'}[s]||s; }
+
+function renderizar(lista){
+  var tbody=document.getElementById('tabelaBody');
+  var empty=document.getElementById('emptyState');
+  tbody.innerHTML='';
+  if(lista.length===0){
+    empty.style.display='block';
+    document.getElementById('totalRegistros').textContent='0 registros';
+    return;
+  }
+  empty.style.display='none';
+  document.getElementById('totalRegistros').textContent=lista.length+' registro(s)';
+  lista.forEach(function(r){
+    var tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td style="color:rgba(255,255,255,.3);font-size:.8rem">#'+String(r.id).padStart(3,'0')+'</td>'+
+      '<td style="max-width:220px"><strong>'+r.descricao+'</strong></td>'+
+      '<td>'+r.setor+'</td>'+
+      '<td><span class="badge '+r.nivel+'">'+labelNivel(r.nivel)+'</span></td>'+
+      '<td><span class="badge '+r.status+'">'+labelStatus(r.status)+'</span></td>'+
+      '<td>'+r.responsavel+'</td>'+
+      '<td>'+formatarData(r.prazo)+'</td>'+
+      '<td><span style="font-size:.82rem">👤 '+(r.registradoPor||'—')+'</span></td>'+
+      '<td><span style="font-size:.78rem;color:rgba(255,255,255,.45)">'+formatarDT(r.registradoEm)+'</span></td>'+
+      '<td>'+
+        '<button class="btn-acao" onclick="verDetalhes('+r.id+')">👁️</button>'+
+        '<button class="btn-acao" onclick="editar('+r.id+')">✏️</button>'+
+        '<button class="btn-acao" onclick="excluir('+r.id+')">🗑️</button>'+
+      '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function filtrar(status,btn){
+  filtroAtivo=status;
+  document.querySelectorAll('.filtro-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  var lista=riscos;
+  if(status==='critico') lista=riscos.filter(function(r){ return r.nivel==='critico'; });
+  else if(status!=='todos') lista=riscos.filter(function(r){ return r.status===status; });
+  renderizar(lista);
+}
+
+function getLista(){
+  var lista=riscos;
+  if(filtroAtivo==='critico') lista=riscos.filter(function(r){ return r.nivel==='critico'; });
+  else if(filtroAtivo!=='todos') lista=riscos.filter(function(r){ return r.status===filtroAtivo; });
+  return lista;
+}
+
+function abrirModal(id){
+  editandoId=id||null;
+  document.getElementById('modalTitulo').textContent=id?'✏️ Editar Risco':'⚠️ Novo Risco';
+  ['f_descricao','f_setor','f_responsavel','f_nivel','f_status','f_data','f_prazo','f_obs'].forEach(function(f){
+    document.getElementById(f).value='';
+  });
+  document.getElementById('f_registradoPor').value=user.nome||'Usuário';
+  document.getElementById('f_registradoEm').value=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  if(id){
+    var r=riscos.find(function(x){ return x.id===id; });
+    document.getElementById('f_descricao').value=r.descricao;
+    document.getElementById('f_setor').value=r.setor;
+    document.getElementById('f_responsavel').value=r.responsavel;
+    document.getElementById('f_nivel').value=r.nivel;
+    document.getElementById('f_status').value=r.status;
+    document.getElementById('f_data').value=r.data;
+    document.getElementById('f_prazo').value=r.prazo||'';
+    document.getElementById('f_obs').value=r.obs||'';
+    document.getElementById('f_registradoPor').value=r.registradoPor||user.nome||'Usuário';
+    document.getElementById('f_registradoEm').value=r.registradoEm?new Date(r.registradoEm).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'}):'—';
+  } else {
+    document.getElementById('f_data').value=new Date().toISOString().split('T')[0];
+  }
+  document.getElementById('modalForm').classList.add('open');
+}
+
+function fecharModal(){ document.getElementById('modalForm').classList.remove('open'); editandoId=null; }
+
+function salvarRisco(){
+  var descricao=document.getElementById('f_descricao').value.trim();
+  var setor=document.getElementById('f_setor').value.trim();
+  var responsavel=document.getElementById('f_responsavel').value.trim();
+  var nivel=document.getElementById('f_nivel').value;
+  var status=document.getElementById('f_status').value;
+  var data=document.getElementById('f_data').value;
+  var prazo=document.getElementById('f_prazo').value;
+  var obs=document.getElementById('f_obs').value.trim();
+  if(!descricao||!setor||!responsavel||!nivel||!status||!data){
+    alert('⚠️ Preencha todos os campos obrigatórios (*)'); return;
+  }
+  if(editandoId){
+    var idx=riscos.findIndex(function(r){ return r.id===editandoId; });
+    riscos[idx]=Object.assign({},riscos[idx],{descricao:descricao,setor:setor,responsavel:responsavel,nivel:nivel,status:status,data:data,prazo:prazo,obs:obs});
+  } else {
+    var novoId=riscos.length>0?Math.max.apply(null,riscos.map(function(r){ return r.id; }))+1:1;
+    riscos.push({id:novoId,descricao:descricao,setor:setor,responsavel:responsavel,nivel:nivel,status:status,data:data,prazo:prazo,obs:obs,registradoPor:user.nome||'Usuário',registradoEm:new Date().toISOString()});
+  }
+  salvarStorage(); fecharModal(); renderizar(getLista());
+}
+
+function editar(id){ abrirModal(id); }
+
+function excluir(id){
+  if(!confirm('Deseja realmente excluir este risco?')) return;
+  riscos=riscos.filter(function(r){ return r.id!==id; });
+  salvarStorage(); renderizar(getLista());
+}
+
+function verDetalhes(id){
+  var r=riscos.find(function(x){ return x.id===id; });
+  document.getElementById('modalVerConteudo').innerHTML=
+    '<div class="detalhe-row"><span class="detalhe-label">Nº</span><span class="detalhe-valor">#'+String(r.id).padStart(3,'0')+'</span></div>'+
+    '<div class="detalhe-row"><span class="detalhe-label">Descrição</span><span class="detalhe-valor">'+r.descricao+'</span></div>'+
+    '<div class="detalhe-row"><span class="detalhe-label">Setor / Local</span><span class="detalhe-valor">'+r.setor+'</span></div>'+
+    '<div class="detalhe-row"><span class="detalhe-label">Nível do Risco</span><span class="badge '+r.nivel+'">'+labelNivel(r.nivel)+'</span></div>'+
+    '<div class="detalhe-row"><span class="detalhe-label">Status</span><span class="badge '+r.status+'">'+labelStatus(r.status)+'</span></div>'+
+    '<div class="detalhe-row"><span class="detalhe-label">Responsável</span><span class="detalhe-valor">'+r.responsavel+'</span></div>'+
+    '<div class="detalhe-row"><span class="detalhe-label">📅 Data Identificação</span><span class="detalhe-valor">'+formatarData(r.data)+'</span></div>'+
+    '<div class="detalhe-row"><span class="detalhe-label">Prazo Resolução</span><span class="detalhe-valor">'+formatarData(r.prazo)+'</span></div>'+
+    '<div class="detalhe-row"><span class="detalhe-label">Medidas / Obs.</span><span class="detalhe-valor">'+(r.obs||'—')+'</span></div>'+
+    '<div class="detalhe-row" style="background:rgba(0,212,255,.04);border-radius:10px;padding:12px;margin-top:8px;border:1px solid rgba(0,212,255,.1)">'+
+      '<span class="detalhe-label">👤 Registrado por</span>'+
+      '<span class="detalhe-valor" style="color:#00d4ff">'+(r.registradoPor||'—')+'</span></div>'+
+    '<div class="detalhe-row" style="background:rgba(0,212,255,.04);border-radius:10px;padding:12px;border:1px solid rgba(0,212,255,.1)">'+
+      '<span class="detalhe-label">🕐 Registrado em</span>'+
+      '<span class="detalhe-valor" style="color:#00d4ff">'+formatarDT(r.registradoEm)+'</span></div>';
+  document.getElementById('modalVer').classList.add('open');
+}
+
+function fecharModalVer(){ document.getElementById('modalVer').classList.remove('open'); }
+
+document.getElementById('modalForm').addEventListener('click',function(e){ if(e.target===this) fecharModal(); });
+document.getElementById('modalVer').addEventListener('click',function(e){ if(e.target===this) fecharModalVer(); });
+
+renderizar(getLista());
+</script>
+</body>
+</html>
