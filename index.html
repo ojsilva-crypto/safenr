@@ -1,1 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SafeNR — Login</title>
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 2px;
+    }
+
+    .logo h1 span { color: #00d4ff; }
+
+    .logo p {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    input:focus {
+      border-color: #00d4ff;
+    }
+
+    input::placeholder { color: rgba(255,255,255,0.3); }
+
+    .btn-login {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #00d4ff, #0099cc);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      letter-spacing: 1px;
+      transition: opacity 0.3s, transform 0.2s;
+    }
+
+    .btn-login:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .erro {
+      background: rgba(255,80,80,0.15);
+      border: 1px solid rgba(255,80,80,0.4);
+      color: #ff6b6b;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      text-align: center;
+      margin-top: 16px;
+      display: none;
+    }
+
+    .versao {
+      text-align: center;
+      color: rgba(255,255,255,0.25);
+      font-size: 0.75rem;
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">
+    <h1>Safe<span>NR</span></h1>
+    <p>Sistema de Gestão de Segurança do Trabalho</p>
+  </div>
+
+  <div class="form-group">
+    <label>E-mail</label>
+    <input type="email" id="email" placeholder="seu@email.com" />
+  </div>
+
+  <div class="form-group">
+    <label>Senha</label>
+    <input type="password" id="senha" placeholder="••••••••" />
+  </div>
+
+  <button class="btn-login" onclick="fazerLogin()">ENTRAR</button>
+
+  <div class="erro" id="erro">E-mail ou senha incorretos.</div>
+
+  <div class="versao">SafeNR v1.0 © 2026</div>
+</div>
+
+<script>
+  // Redireciona se já estiver logado
+  if (localStorage.getItem('safenr_user') || sessionStorage.getItem('safenr_user')) {
+    window.location.href = './app.html';
+  }
+
+  function fazerLogin() {
+    const email = document.getElementById('email').value.trim();
+    const senha = document.getElementById('senha').value.trim();
+    const erro  = document.getElementById('erro');
+
+    const usuarios = [
+      { email: 'admin@safenr.com.br', senha: 'safenr2026', nome: 'Administrador' },
+      { email: 'odair@safenr.com.br', senha: 'safenr2026', nome: 'Odair Silva' }
+    ];
+
+    const user = usuarios.find(u => u.email === email && u.senha === senha);
+
+    if (user) {
+      localStorage.setItem('safenr_user', JSON.stringify(user));
+      window.location.href = './app.html';
+    } else {
+      erro.style.display = 'block';
+      setTimeout(() => erro.style.display = 'none', 3000);
+    }
+  }
+
+  // Login com Enter
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') fazerLogin();
+  });
+</script>
+
+</body>
+</html>
 
