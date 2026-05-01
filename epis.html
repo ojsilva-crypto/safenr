@@ -1,1 +1,582 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SafeNR — Cadastro de EPIs</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;z-index:10}
+    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
+    .sidebar-logo h1 span{color:#00d4ff}
+    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
+    .nav{flex:1;padding:20px 0}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
+    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+    .user-info p{font-size:.82rem;font-weight:600}
+    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
+    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .topbar h2{font-size:1.4rem;font-weight:700}
+    .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
+    .btn-novo{background:linear-gradient(135deg,#4ade80,#16a34a);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:opacity .2s,transform .2s}
+    .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
+    .cards-resumo{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+    .card-r{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:6px}
+    .card-r-val{font-size:2rem;font-weight:900}
+    .card-r-lbl{font-size:.78rem;color:rgba(255,255,255,.4)}
+    .filtros{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+    .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
+    .filtro-btn:hover,.filtro-btn.active{background:rgba(0,212,255,.12);border-color:#00d4ff;color:#00d4ff}
+    .busca-inline{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:240px;margin-left:auto}
+    .busca-inline::placeholder{color:rgba(255,255,255,.3)}
+    .tabela-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
+    table{width:100%;border-collapse:collapse}
+    thead tr{background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.08)}
+    th{padding:13px 16px;text-align:left;font-size:.75rem;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px}
+    td{padding:13px 16px;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:rgba(255,255,255,.02)}
+    .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600;display:inline-block}
+    .badge.ok{background:rgba(74,222,128,.15);color:#4ade80}
+    .badge.vencido{background:rgba(248,113,113,.15);color:#f87171}
+    .badge.vencendo{background:rgba(251,191,36,.15);color:#fbbf24}
+    .badge.sem-estoque{background:rgba(248,113,113,.15);color:#f87171}
+    .badge.estoque-baixo{background:rgba(251,191,36,.15);color:#fbbf24}
+    .badge.normal{background:rgba(74,222,128,.15);color:#4ade80}
+    .btn-acao{background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:8px;font-size:.85rem;transition:background .2s}
+    .btn-acao:hover{background:rgba(255,255,255,.08)}
+    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3)}
+    .empty-state div{font-size:3rem;margin-bottom:12px}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
+    .modal-overlay.open{display:flex}
+    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:0;width:100%;max-width:680px;max-height:92vh;overflow-y:auto}
+    .modal-header-inner{padding:28px 32px 20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0f1923;z-index:5}
+    .modal-header-inner h3{font-size:1.15rem;font-weight:700}
+    .btn-fechar{background:rgba(255,255,255,.08);border:none;color:#fff;border-radius:10px;padding:8px 14px;cursor:pointer}
+    .modal-inner{padding:28px 32px}
+    .form-section{margin-bottom:22px}
+    .form-section-titulo{font-size:.8rem;font-weight:800;color:#00d4ff;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(0,212,255,.15)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+    .form-row.full{grid-template-columns:1fr}
+    .form-row.three{grid-template-columns:1fr 1fr 1fr}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group label{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.5)}
+    .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 14px;color:#fff;font-size:.88rem;outline:none;transition:border .2s;font-family:inherit}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#00d4ff}
+    .form-group select option{background:#1a2535}
+    .form-group textarea{resize:vertical;min-height:70px}
+    .auto-field{background:rgba(0,212,255,.06)!important;border-color:rgba(0,212,255,.2)!important;color:rgba(255,255,255,.6)!important;cursor:not-allowed!important}
+    .auto-tag{font-size:.65rem;color:#00d4ff;background:rgba(0,212,255,.1);border-radius:20px;padding:2px 7px;margin-left:5px;font-weight:600}
+    .alerta-ca{display:none;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;padding:10px 14px;font-size:.8rem;color:#f87171;margin-top:6px}
+    .modal-footer-inner{padding:20px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:flex-end;gap:12px}
+    .btn-cancelar{padding:11px 22px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
+    .btn-salvar{padding:11px 26px;border-radius:10px;background:linear-gradient(135deg,#4ade80,#16a34a);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
+    .detalhe-row{display:flex;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06);align-items:flex-start}
+    .detalhe-row:last-child{border-bottom:none}
+    .detalhe-label{font-size:.76rem;color:rgba(255,255,255,.4);min-width:160px;font-weight:600;padding-top:2px}
+    .detalhe-valor{font-size:.86rem;color:#fff;flex:1}
+    .dias-vencer{font-size:.75rem;padding:2px 8px;border-radius:20px;display:inline-block;margin-left:6px;font-weight:600}
+    .dias-vencer.ok{background:rgba(74,222,128,.12);color:#4ade80}
+    .dias-vencer.aviso{background:rgba(251,191,36,.12);color:#fbbf24}
+    .dias-vencer.vencido{background:rgba(248,113,113,.12);color:#f87171}
+  </style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Safe<span>NR</span></h1>
+    <p>Gestão de Segurança do Trabalho</p>
+  </div>
+  <nav class="nav">
+    <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
+    <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
+    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
+    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionários</a>
+    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatórios</a>
+    <a class="nav-item active" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
+    <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
+    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configurações</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="avatar" id="avatarLetra">A</div>
+    <div class="user-info">
+      <p id="nomeUsuario">Usuário</p>
+      <span>Administrador</span>
+    </div>
+    <button class="btn-sair" onclick="sair()">✕</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <h2>🦺 Cadastro de EPIs</h2>
+      <span id="totalRegistros">0 registros</span>
+    </div>
+    <button class="btn-novo" onclick="abrirModal()">＋ Novo EPI</button>
+  </div>
+
+  <div class="cards-resumo">
+    <div class="card-r"><div class="card-r-val" id="cntTotal">0</div><div class="card-r-lbl">🦺 Total de EPIs</div></div>
+    <div class="card-r"><div class="card-r-val" style="color:#f87171" id="cntVencidos">0</div><div class="card-r-lbl">🔴 CA Vencidos</div></div>
+    <div class="card-r"><div class="card-r-val" style="color:#fbbf24" id="cntVencendo">0</div><div class="card-r-lbl">🟡 Vencendo em 60 dias</div></div>
+    <div class="card-r"><div class="card-r-val" style="color:#f87171" id="cntSemEstoque">0</div><div class="card-r-lbl">📦 Estoque Baixo/Zero</div></div>
+  </div>
+
+  <div class="filtros">
+    <button class="filtro-btn active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('ca-ok',this)">✅ CA OK</button>
+    <button class="filtro-btn" onclick="filtrar('ca-vencido',this)">🔴 CA Vencido</button>
+    <button class="filtro-btn" onclick="filtrar('ca-vencendo',this)">🟡 Vencendo</button>
+    <button class="filtro-btn" onclick="filtrar('estoque-baixo',this)">📦 Estoque Baixo</button>
+    <input class="busca-inline" type="text" id="buscaInline" placeholder="🔍 Buscar EPI..." oninput="renderizar(getLista())"/>
+  </div>
+
+  <div class="tabela-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>EPI / Descrição</th>
+          <th>Tipo</th>
+          <th>Fabricante</th>
+          <th>Nº CA</th>
+          <th>Validade CA</th>
+          <th>Estoque</th>
+          <th>Status CA</th>
+          <th>Registrado por</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaBody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div>🦺</div>
+      <p>Nenhum EPI cadastrado.<br>Clique em <strong>+ Novo EPI</strong> para começar.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FORM -->
+<div class="modal-overlay" id="modalForm">
+  <div class="modal">
+    <div class="modal-header-inner">
+      <h3 id="modalTitulo">🦺 Novo EPI</h3>
+      <button class="btn-fechar" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-inner">
+
+      <!-- IDENTIFICAÇÃO -->
+      <div class="form-section">
+        <div class="form-section-titulo">🏷️ Identificação do EPI</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nome do EPI *</label>
+            <input type="text" id="f_nome" placeholder="Ex: Capacete de Segurança, Luva de Látex..."/>
+          </div>
+          <div class="form-group">
+            <label>Tipo / Categoria *</label>
+            <select id="f_tipo">
+              <option value="">Selecione</option>
+              <option value="Proteção da Cabeça">🪖 Proteção da Cabeça</option>
+              <option value="Proteção dos Olhos e Face">👓 Proteção dos Olhos e Face</option>
+              <option value="Proteção Auditiva">👂 Proteção Auditiva</option>
+              <option value="Proteção Respiratória">😷 Proteção Respiratória</option>
+              <option value="Proteção dos Membros Superiores">🧤 Proteção dos Membros Superiores</option>
+              <option value="Proteção dos Membros Inferiores">🥾 Proteção dos Membros Inferiores</option>
+              <option value="Proteção do Tronco">🦺 Proteção do Tronco</option>
+              <option value="Proteção Contra Quedas">🪝 Proteção Contra Quedas</option>
+              <option value="Proteção do Corpo Inteiro">👔 Proteção do Corpo Inteiro</option>
+              <option value="Proteção Contra Calor e Fogo">🔥 Proteção Contra Calor e Fogo</option>
+              <option value="Proteção Elétrica">⚡ Proteção Elétrica</option>
+              <option value="Outro">📦 Outro</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label>Descrição / Especificação Técnica</label>
+            <textarea id="f_descricao" placeholder="Ex: Capacete classe B, aba frontal, cor amarela, suspensão em nylon..."></textarea>
+          </div>
+        </div>
+        <div class="form-row three">
+          <div class="form-group">
+            <label>Marca / Modelo</label>
+            <input type="text" id="f_marca" placeholder="Ex: 3M, Vonder, MSA..."/>
+          </div>
+          <div class="form-group">
+            <label>Referência / Código Interno</label>
+            <input type="text" id="f_referencia" placeholder="Ex: EPI-001"/>
+          </div>
+          <div class="form-group">
+            <label>Tamanho / Numeração</label>
+            <input type="text" id="f_tamanho" placeholder="Ex: M, 42, Único"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- CERTIFICADO DE APROVAÇÃO -->
+      <div class="form-section">
+        <div class="form-section-titulo">📜 Certificado de Aprovação (CA)</div>
+        <div class="form-row three">
+          <div class="form-group">
+            <label>Número do CA *</label>
+            <input type="text" id="f_ca" placeholder="Ex: 12345"/>
+          </div>
+          <div class="form-group">
+            <label>Data de Emissão do CA</label>
+            <input type="date" id="f_ca_emissao"/>
+          </div>
+          <div class="form-group">
+            <label>Validade do CA *</label>
+            <input type="date" id="f_ca_validade" onchange="verificarCA()"/>
+          </div>
+        </div>
+        <div class="alerta-ca" id="alertaCA">⚠️ Este CA está vencido! Providencie a atualização imediatamente.</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Norma Técnica Aplicável</label>
+            <input type="text" id="f_norma" placeholder="Ex: ABNT NBR 8051, NR-06..."/>
+          </div>
+          <div class="form-group">
+            <label>Órgão Emissor do CA</label>
+            <input type="text" id="f_orgao" placeholder="Ex: MTE / INMETRO"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORNECEDOR -->
+      <div class="form-section">
+        <div class="form-section-titulo">🏭 Fornecedor</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nome do Fornecedor</label>
+            <input type="text" id="f_fornecedor" placeholder="Razão social ou nome fantasia"/>
+          </div>
+          <div class="form-group">
+            <label>CNPJ do Fornecedor</label>
+            <input type="text" id="f_cnpj" placeholder="00.000.000/0000-00"/>
+          </div>
+        </div>
+        <div class="form-row three">
+          <div class="form-group">
+            <label>Contato / Telefone</label>
+            <input type="text" id="f_contato" placeholder="(00) 00000-0000"/>
+          </div>
+          <div class="form-group">
+            <label>E-mail do Fornecedor</label>
+            <input type="text" id="f_email_forn" placeholder="contato@fornecedor.com"/>
+          </div>
+          <div class="form-group">
+            <label>Última Compra</label>
+            <input type="date" id="f_ultima_compra"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESTOQUE E CONTROLE -->
+      <div class="form-section">
+        <div class="form-section-titulo">📦 Estoque e Controle</div>
+        <div class="form-row three">
+          <div class="form-group">
+            <label>Qtd. em Estoque *</label>
+            <input type="number" id="f_estoque" placeholder="0" min="0"/>
+          </div>
+          <div class="form-group">
+            <label>Estoque Mínimo</label>
+            <input type="number" id="f_estoque_min" placeholder="5" min="0"/>
+          </div>
+          <div class="form-group">
+            <label>Custo Unitário (R$)</label>
+            <input type="number" id="f_custo" placeholder="0,00" step="0.01" min="0"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Vida Útil Estimada</label>
+            <input type="text" id="f_vida_util" placeholder="Ex: 12 meses, 2 anos..."/>
+          </div>
+          <div class="form-group">
+            <label>Local de Armazenamento</label>
+            <input type="text" id="f_local" placeholder="Ex: Almoxarifado Bloco A"/>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label>Observações</label>
+            <textarea id="f_obs" placeholder="Informações adicionais sobre higienização, restrições de uso, descarte..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGISTRO -->
+      <div class="form-section">
+        <div class="form-section-titulo">🕐 Registro</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Registrado por <span class="auto-tag">AUTOMÁTICO</span></label>
+            <input type="text" id="f_registradoPor" class="auto-field" readonly/>
+          </div>
+          <div class="form-group">
+            <label>Registrado em <span class="auto-tag">AUTOMÁTICO</span></label>
+            <input type="text" id="f_registradoEm" class="auto-field" readonly/>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer-inner">
+      <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-salvar" onclick="salvar()">💾 Salvar EPI</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VER -->
+<div class="modal-overlay" id="modalVer">
+  <div class="modal">
+    <div class="modal-header-inner">
+      <h3>🦺 Detalhes do EPI</h3>
+      <button class="btn-fechar" onclick="fecharModalVer()">✕</button>
+    </div>
+    <div class="modal-inner" id="modalVerConteudo"></div>
+    <div class="modal-footer-inner">
+      <button class="btn-cancelar" onclick="fecharModalVer()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var userData=localStorage.getItem('safenr_user');
+if(!userData){window.location.href='./index.html';}
+var user=JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent=user.nome||'Usuário';
+document.getElementById('avatarLetra').textContent=(user.nome||'U')[0].toUpperCase();
+function sair(){localStorage.removeItem('safenr_user');window.location.href='./index.html';}
+
+var registros=JSON.parse(localStorage.getItem('safenr_epis')||'[]');
+var editandoId=null;
+var filtroAtivo='todos';
+
+function salvarStorage(){localStorage.setItem('safenr_epis',JSON.stringify(registros));}
+function fmt(d){if(!d)return'—';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function fmtDT(iso){if(!iso)return'—';return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
+function fmtReal(v){if(!v&&v!==0)return'—';return'R$ '+parseFloat(v).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function diasParaVencer(val){
+  if(!val)return null;
+  var hoje=new Date();hoje.setHours(0,0,0,0);
+  var v=new Date(val);v.setHours(0,0,0,0);
+  return Math.floor((v-hoje)/(1000*60*60*24));
+}
+function statusCA(val){
+  var d=diasParaVencer(val);
+  if(d===null)return{cls:'ok',label:'Sem validade'};
+  if(d<0)return{cls:'vencido',label:'CA Vencido'};
+  if(d<=60)return{cls:'vencendo',label:'Vence em '+d+'d'};
+  return{cls:'ok',label:'CA OK'};
+}
+function statusEstoque(qtd,min){
+  qtd=parseInt(qtd)||0;min=parseInt(min)||0;
+  if(qtd===0)return{cls:'sem-estoque',label:'Sem estoque'};
+  if(min>0&&qtd<=min)return{cls:'estoque-baixo',label:'Estoque baixo'};
+  return{cls:'normal',label:'Normal'};
+}
+
+function atualizarCards(){
+  var total=registros.length;
+  var venc=registros.filter(function(r){var d=diasParaVencer(r.ca_validade);return d!==null&&d<0;}).length;
+  var vencendo=registros.filter(function(r){var d=diasParaVencer(r.ca_validade);return d!==null&&d>=0&&d<=60;}).length;
+  var semEst=registros.filter(function(r){var q=parseInt(r.estoque)||0;var m=parseInt(r.estoque_min)||0;return q===0||(m>0&&q<=m);}).length;
+  document.getElementById('cntTotal').textContent=total;
+  document.getElementById('cntVencidos').textContent=venc;
+  document.getElementById('cntVencendo').textContent=vencendo;
+  document.getElementById('cntSemEstoque').textContent=semEst;
+  document.getElementById('totalRegistros').textContent=total+' EPI(s) cadastrado(s)';
+}
+
+function getLista(){
+  var busca=document.getElementById('buscaInline').value.toLowerCase();
+  var lista=registros.filter(function(r){
+    if(filtroAtivo==='ca-vencido'){var d=diasParaVencer(r.ca_validade);if(!(d!==null&&d<0))return false;}
+    else if(filtroAtivo==='ca-ok'){var d=diasParaVencer(r.ca_validade);if(!(d===null||d>60))return false;}
+    else if(filtroAtivo==='ca-vencendo'){var d=diasParaVencer(r.ca_validade);if(!(d!==null&&d>=0&&d<=60))return false;}
+    else if(filtroAtivo==='estoque-baixo'){var q=parseInt(r.estoque)||0;var m=parseInt(r.estoque_min)||0;if(!(q===0||(m>0&&q<=m)))return false;}
+    if(busca&&!(r.nome.toLowerCase().includes(busca)||(r.fornecedor||'').toLowerCase().includes(busca)||(r.ca||'').toLowerCase().includes(busca)||(r.tipo||'').toLowerCase().includes(busca)))return false;
+    return true;
+  });
+  return lista;
+}
+
+function filtrar(f,btn){
+  filtroAtivo=f;
+  document.querySelectorAll('.filtro-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderizar(getLista());
+}
+
+function renderizar(lista){
+  var tbody=document.getElementById('tabelaBody');
+  var empty=document.getElementById('emptyState');
+  tbody.innerHTML='';
+  if(!lista||lista.length===0){empty.style.display='block';return;}
+  empty.style.display='none';
+  lista.forEach(function(r){
+    var sca=statusCA(r.ca_validade);
+    var sest=statusEstoque(r.estoque,r.estoque_min);
+    var tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td style="color:rgba(255,255,255,.3);font-size:.78rem">#'+String(r.id).padStart(3,'0')+'</td>'+
+      '<td><strong>'+r.nome+'</strong>'+(r.marca?'<br><span style="font-size:.75rem;color:rgba(255,255,255,.35)">'+r.marca+'</span>':'')+'</td>'+
+      '<td style="font-size:.8rem">'+(r.tipo||'—')+'</td>'+
+      '<td style="font-size:.82rem">'+(r.fornecedor||'—')+'</td>'+
+      '<td><span style="font-family:monospace;font-size:.85rem">'+(r.ca||'—')+'</span></td>'+
+      '<td>'+(r.ca_validade?fmt(r.ca_validade):'—')+'</td>'+
+      '<td><span style="font-weight:700">'+(r.estoque||0)+'</span>'+(r.estoque_min?'<span style="font-size:.72rem;color:rgba(255,255,255,.3)"> / mín '+r.estoque_min+'</span>':'')+'</td>'+
+      '<td><span class="badge '+sca.cls+'">'+sca.label+'</span></td>'+
+      '<td style="font-size:.8rem">👤 '+(r.registradoPor||'—')+'</td>'+
+      '<td>'+
+        '<button class="btn-acao" onclick="ver('+r.id+')">👁️</button>'+
+        '<button class="btn-acao" onclick="editar('+r.id+')">✏️</button>'+
+        '<button class="btn-acao" onclick="excluir('+r.id+')">🗑️</button>'+
+      '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function verificarCA(){
+  var val=document.getElementById('f_ca_validade').value;
+  var alerta=document.getElementById('alertaCA');
+  if(val&&new Date(val)<new Date()){alerta.style.display='block';}
+  else{alerta.style.display='none';}
+}
+
+function abrirModal(id){
+  editandoId=id||null;
+  document.getElementById('modalTitulo').textContent=id?'✏️ Editar EPI':'🦺 Novo EPI';
+  var campos=['f_nome','f_tipo','f_descricao','f_marca','f_referencia','f_tamanho','f_ca','f_ca_emissao','f_ca_validade','f_norma','f_orgao','f_fornecedor','f_cnpj','f_contato','f_email_forn','f_ultima_compra','f_estoque','f_estoque_min','f_custo','f_vida_util','f_local','f_obs'];
+  campos.forEach(function(c){document.getElementById(c).value='';});
+  document.getElementById('alertaCA').style.display='none';
+  document.getElementById('f_registradoPor').value=user.nome||'Usuário';
+  document.getElementById('f_registradoEm').value=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  if(id){
+    var r=registros.find(function(x){return x.id===id;});
+    Object.keys(r).forEach(function(k){
+      var el=document.getElementById('f_'+k);
+      if(el&&!el.readOnly)el.value=r[k]||'';
+    });
+    document.getElementById('f_registradoPor').value=r.registradoPor||user.nome;
+    document.getElementById('f_registradoEm').value=r.registradoEm?fmtDT(r.registradoEm):'—';
+    verificarCA();
+  }
+  document.getElementById('modalForm').classList.add('open');
+}
+
+function fecharModal(){document.getElementById('modalForm').classList.remove('open');editandoId=null;}
+
+function salvar(){
+  var nome=document.getElementById('f_nome').value.trim();
+  var tipo=document.getElementById('f_tipo').value;
+  var ca=document.getElementById('f_ca').value.trim();
+  var ca_validade=document.getElementById('f_ca_validade').value;
+  var estoque=document.getElementById('f_estoque').value;
+  if(!nome||!tipo){alert('⚠️ Preencha pelo menos o Nome e o Tipo do EPI.');return;}
+  var dados={
+    nome:nome,tipo:tipo,
+    descricao:document.getElementById('f_descricao').value.trim(),
+    marca:document.getElementById('f_marca').value.trim(),
+    referencia:document.getElementById('f_referencia').value.trim(),
+    tamanho:document.getElementById('f_tamanho').value.trim(),
+    ca:ca,ca_emissao:document.getElementById('f_ca_emissao').value,
+    ca_validade:ca_validade,
+    norma:document.getElementById('f_norma').value.trim(),
+    orgao:document.getElementById('f_orgao').value.trim(),
+    fornecedor:document.getElementById('f_fornecedor').value.trim(),
+    cnpj:document.getElementById('f_cnpj').value.trim(),
+    contato:document.getElementById('f_contato').value.trim(),
+    email_forn:document.getElementById('f_email_forn').value.trim(),
+    ultima_compra:document.getElementById('f_ultima_compra').value,
+    estoque:parseInt(estoque)||0,
+    estoque_min:parseInt(document.getElementById('f_estoque_min').value)||0,
+    custo:parseFloat(document.getElementById('f_custo').value)||0,
+    vida_util:document.getElementById('f_vida_util').value.trim(),
+    local:document.getElementById('f_local').value.trim(),
+    obs:document.getElementById('f_obs').value.trim()
+  };
+  if(editandoId){
+    var idx=registros.findIndex(function(r){return r.id===editandoId;});
+    registros[idx]=Object.assign({},registros[idx],dados);
+  } else {
+    var novoId=registros.length>0?Math.max.apply(null,registros.map(function(r){return r.id;}))+1:1;
+    registros.push(Object.assign({id:novoId,registradoPor:user.nome||'Usuário',registradoEm:new Date().toISOString()},dados));
+  }
+  salvarStorage();fecharModal();atualizarCards();renderizar(getLista());
+}
+
+function editar(id){abrirModal(id);}
+function excluir(id){
+  if(!confirm('Deseja excluir este EPI?'))return;
+  registros=registros.filter(function(r){return r.id!==id;});
+  salvarStorage();atualizarCards();renderizar(getLista());
+}
+
+function ver(id){
+  var r=registros.find(function(x){return x.id===id;});
+  var sca=statusCA(r.ca_validade);
+  var sest=statusEstoque(r.estoque,r.estoque_min);
+  var dias=diasParaVencer(r.ca_validade);
+  var diasTag=dias===null?'':dias<0?'<span class="dias-vencer vencido">Vencido há '+Math.abs(dias)+'d</span>':dias<=60?'<span class="dias-vencer aviso">Vence em '+dias+'d</span>':'<span class="dias-vencer ok">Válido por '+dias+'d</span>';
+
+  function row(label,valor){return'<div class="detalhe-row"><span class="detalhe-label">'+label+'</span><span class="detalhe-valor">'+valor+'</span></div>';}
+  var html='';
+  html+=row('#',String(r.id).padStart(3,'0'));
+  html+=row('Nome',r.nome);
+  html+=row('Tipo',r.tipo||'—');
+  html+=row('Descrição',r.descricao||'—');
+  html+=row('Marca / Modelo',r.marca||'—');
+  html+=row('Referência',r.referencia||'—');
+  html+=row('Tamanho',r.tamanho||'—');
+  html+='<div style="height:1px;background:rgba(0,212,255,.1);margin:10px 0"></div>';
+  html+=row('Nº do CA','<strong style="font-size:1rem">'+（r.ca||'—')+'</strong>');
+  html+=row('Emissão do CA',fmt(r.ca_emissao));
+  html+=row('Validade do CA',fmt(r.ca_validade)+' '+diasTag);
+  html+=row('Status CA','<span class="badge '+sca.cls+'">'+sca.label+'</span>');
+  html+=row('Norma Técnica',r.norma||'—');
+  html+=row('Órgão Emissor',r.orgao||'—');
+  html+='<div style="height:1px;background:rgba(0,212,255,.1);margin:10px 0"></div>';
+  html+=row('Fornecedor',r.fornecedor||'—');
+  html+=row('CNPJ',r.cnpj||'—');
+  html+=row('Contato',r.contato||'—');
+  html+=row('E-mail',r.email_forn||'—');
+  html+=row('Última Compra',fmt(r.ultima_compra));
+  html+='<div style="height:1px;background:rgba(0,212,255,.1);margin:10px 0"></div>';
+  html+=row('Estoque atual','<strong>'+r.estoque+'</strong> un. '+('| Mínimo: '+（r.estoque_min||0)+' un.'));
+  html+=row('Status Estoque','<span class="badge '+sest.cls+'">'+sest.label+'</span>');
+  html+=row('Custo Unitário',fmtReal(r.custo));
+  html+=row('Vida Útil',r.vida_util||'—');
+  html+=row('Local de Armazenamento',r.local||'—');
+  html+=row('Observações',r.obs||'—');
+  html+='<div style="height:1px;background:rgba(0,212,255,.1);margin:10px 0"></div>';
+  html+=row('👤 Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'—')+'</span>');
+  html+=row('🕐 Registrado em','<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
+
+  document.getElementById('modalVerConteudo').innerHTML=html;
+  document.getElementById('modalVer').classList.add('open');
+}
+function fecharModalVer(){document.getElementById('modalVer').classList.remove('open');}
+document.getElementById('modalForm').addEventListener('click',function(e){if(e.target===this)fecharModal();});
+document.getElementById('modalVer').addEventListener('click',function(e){if(e.target===this)fecharModalVer();});
+atualizarCards();
+renderizar(getLista());
+</script>
+</body>
+</html>
