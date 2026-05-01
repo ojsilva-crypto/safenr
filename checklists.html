@@ -5,88 +5,374 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SafeNR — Checklists</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #0f1923; color: #fff;
-      display: flex; min-height: 100vh;
-    }
-    .sidebar {
-      width: 240px; background: #0a1520;
-      border-right: 1px solid rgba(255,255,255,0.07);
-      display: flex; flex-direction: column;
-      padding: 24px 0; position: fixed; height: 100vh;
-    }
-    .sidebar-logo { text-align: center; padding: 0 24px 28px; border-bottom: 1px solid rgba(255,255,255,0.07); }
-    .sidebar-logo h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: 2px; }
-    .sidebar-logo h1 span { color: #00d4ff; }
-    .sidebar-logo p { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-top: 2px; }
-    .nav { flex: 1; padding: 20px 0; }
-    .nav-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 13px 24px; cursor: pointer;
-      color: rgba(255,255,255,0.5); font-size: 0.9rem; font-weight: 500;
-      transition: all 0.2s; border-left: 3px solid transparent; text-decoration: none;
-    }
-    .nav-item:hover { color: #fff; background: rgba(255,255,255,0.04); }
-    .nav-item.active { color: #00d4ff; border-left-color: #00d4ff; background: rgba(0,212,255,0.06); }
-    .nav-item .icon { font-size: 1.1rem; width: 20px; text-align: center; }
-    .sidebar-user {
-      padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.07);
-      display: flex; align-items: center; gap: 12px;
-    }
-    .avatar {
-      width: 36px; height: 36px;
-      background: linear-gradient(135deg, #00d4ff, #0099cc);
-      border-radius: 50%; display: flex; align-items: center;
-      justify-content: center; font-weight: 700; font-size: 0.85rem;
-    }
-    .user-info p { font-size: 0.82rem; font-weight: 600; }
-    .user-info span { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
-    .btn-sair {
-      background: none; border: none; color: rgba(255,80,80,0.7);
-      cursor: pointer; font-size: 0.8rem; margin-left: auto;
-    }
-    .btn-sair:hover { color: #ff6b6b; }
-    .main { margin-left: 240px; flex: 1; padding: 32px; }
-    .topbar { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; }
-    .topbar h2 { font-size: 1.4rem; font-weight: 700; }
-    .topbar p { color: rgba(255,255,255,0.4); font-size: 0.85rem; margin-top: 4px; }
-    .nrs-select-grid {
-      display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 28px;
-    }
-    .nr-btn {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px; padding: 18px 12px;
-      text-align: center; cursor: pointer;
-      transition: all 0.2s; display: flex;
-      flex-direction: column; align-items: center; gap: 6px;
-    }
-    .nr-btn:hover { background: rgba(0,212,255,0.07); border-color: rgba(0,212,255,0.3); }
-    .nr-btn.active { background: rgba(0,212,255,0.12); border-color: #00d4ff; box-shadow: 0 0 0 1px #00d4ff22; }
-    .nr-btn-icon { font-size: 1.5rem; }
-    .nr-btn-code { font-size: 0.88rem; font-weight: 800; color: #00d4ff; }
-    .nr-btn-nome { font-size: 0.68rem; color: rgba(255,255,255,0.4); }
-    .checklist-area {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px; padding: 28px;
-    }
-    .checklist-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
-    }
-    .checklist-header-left h3 { font-size: 1.1rem; font-weight: 700; }
-    .checklist-header-left p { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 3px; }
-    .progress-wrap { display: flex; align-items: center; gap: 12px; }
-    .progress-bar-bg {
-      width: 160px; height: 8px;
-      background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden;
-    }
-    .progress-bar-fill { height: 100%; border-radius: 99px; transition: width 0.4s; background: #00d4ff; }
-    .progress-pct { font-size: 0.88rem; font-weight: 700; color: #00d4ff; min-width: 36px; }
-    .btn-reset {
-      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 8px; color: rgba(255,255,255,0.5); cursor: pointer;
-      padding: 8px 14px; font-size: 0.8rem; transition: all
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh}
+    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
+    .sidebar-logo h1 span{color:#00d4ff}
+    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
+    .nav{flex:1;padding:20px 0}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
+    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+    .user-info p{font-size:.82rem;font-weight:600}
+    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
+    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+    .btn-sair:hover{color:#ff6b6b}
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px}
+    .topbar h2{font-size:1.4rem;font-weight:700}
+    .topbar p{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:4px}
+    .nrs-select-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+    .nr-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px 12px;text-align:center;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:6px}
+    .nr-btn:hover{background:rgba(0,212,255,.07);border-color:rgba(0,212,255,.3)}
+    .nr-btn.active{background:rgba(0,212,255,.12);border-color:#00d4ff;box-shadow:0 0 0 1px rgba(0,212,255,.13)}
+    .nr-btn-icon{font-size:1.5rem}
+    .nr-btn-code{font-size:.88rem;font-weight:800;color:#00d4ff}
+    .nr-btn-nome{font-size:.68rem;color:rgba(255,255,255,.4)}
+    .checklist-area{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px}
+    .checklist-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+    .checklist-header-left h3{font-size:1.1rem;font-weight:700}
+    .checklist-header-left p{font-size:.8rem;color:rgba(255,255,255,.4);margin-top:3px}
+    .progress-wrap{display:flex;align-items:center;gap:12px}
+    .progress-bar-bg{width:160px;height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+    .progress-bar-fill{height:100%;border-radius:99px;transition:width .4s;background:#00d4ff}
+    .progress-pct{font-size:.88rem;font-weight:700;color:#00d4ff;min-width:36px}
+    .btn-reset{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:rgba(255,255,255,.5);cursor:pointer;padding:8px 14px;font-size:.8rem;transition:all .2s}
+    .btn-reset:hover{background:rgba(255,255,255,.1);color:#fff}
+    .checklist-items{display:flex;flex-direction:column;gap:10px}
+    .check-item{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);cursor:pointer;transition:all .2s;user-select:none}
+    .check-item:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+    .check-item.checked{background:rgba(74,222,128,.06);border-color:rgba(74,222,128,.2)}
+    .check-item.na{background:rgba(96,165,250,.05);border-color:rgba(96,165,250,.15)}
+    .check-box{width:22px;height:22px;border-radius:6px;flex-shrink:0;border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:.75rem;transition:all .2s;margin-top:1px}
+    .check-item.checked .check-box{background:#4ade80;border-color:#4ade80}
+    .check-item.na .check-box{background:#60a5fa;border-color:#60a5fa;font-size:.6rem}
+    .check-content{flex:1}
+    .check-title{font-size:.88rem;font-weight:600;line-height:1.4}
+    .check-item.checked .check-title{text-decoration:line-through;color:rgba(255,255,255,.4)}
+    .check-desc{font-size:.75rem;color:rgba(255,255,255,.35);margin-top:4px;line-height:1.4}
+    .check-na-btn{background:none;border:1px solid rgba(96,165,250,.3);border-radius:6px;color:#60a5fa;cursor:pointer;padding:4px 10px;font-size:.7rem;font-weight:600;transition:all .2s;flex-shrink:0;margin-top:1px}
+    .check-na-btn:hover{background:rgba(96,165,250,.1)}
+    .check-item.na .check-na-btn{background:rgba(96,165,250,.15)}
+    .empty-nr{text-align:center;padding:60px 20px;color:rgba(255,255,255,.25)}
+    .empty-nr div{font-size:3rem;margin-bottom:12px}
+    .summary-bar{display:flex;gap:16px;margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.07);flex-wrap:wrap}
+    .summary-item{display:flex;align-items:center;gap:6px;font-size:.8rem}
+    .summary-dot{width:10px;height:10px;border-radius:50%}
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Safe<span>NR</span></h1>
+    <p>Gestão de Segurança do Trabalho</p>
+  </div>
+  <nav class="nav">
+    <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
+    <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
+    <a class="nav-item active" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
+    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionários</a>
+    <a class="nav-item" href="#"><span class="icon">📄</span> Relatórios</a>
+    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configurações</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="avatar" id="avatarLetra">A</div>
+    <div class="user-info">
+      <p id="nomeUsuario">Usuário</p>
+      <span>Administrador</span>
+    </div>
+    <button class="btn-sair" onclick="sair()">✕</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <h2>📋 Checklists</h2>
+      <p>Selecione uma NR para iniciar a verificação</p>
+    </div>
+  </div>
+
+  <div class="nrs-select-grid">
+    <div class="nr-btn" onclick="selecionarNR('NR-05',this)">
+      <div class="nr-btn-icon">🛡️</div>
+      <div class="nr-btn-code">NR-05</div>
+      <div class="nr-btn-nome">CIPA</div>
+    </div>
+    <div class="nr-btn" onclick="selecionarNR('NR-06',this)">
+      <div class="nr-btn-icon">🦺</div>
+      <div class="nr-btn-code">NR-06</div>
+      <div class="nr-btn-nome">EPI</div>
+    </div>
+    <div class="nr-btn" onclick="selecionarNR('NR-07',this)">
+      <div class="nr-btn-icon">🏥</div>
+      <div class="nr-btn-code">NR-07</div>
+      <div class="nr-btn-nome">PCMSO</div>
+    </div>
+    <div class="nr-btn" onclick="selecionarNR('NR-09',this)">
+      <div class="nr-btn-icon">🌡️</div>
+      <div class="nr-btn-code">NR-09</div>
+      <div class="nr-btn-nome">Riscos Ambientais</div>
+    </div>
+    <div class="nr-btn" onclick="selecionarNR('NR-10',this)">
+      <div class="nr-btn-icon">⚡</div>
+      <div class="nr-btn-code">NR-10</div>
+      <div class="nr-btn-nome">Eletricidade</div>
+    </div>
+    <div class="nr-btn" onclick="selecionarNR('NR-12',this)">
+      <div class="nr-btn-icon">⚙️</div>
+      <div class="nr-btn-code">NR-12</div>
+      <div class="nr-btn-nome">Máquinas</div>
+    </div>
+    <div class="nr-btn" onclick="selecionarNR('NR-17',this)">
+      <div class="nr-btn-icon">🪑</div>
+      <div class="nr-btn-code">NR-17</div>
+      <div class="nr-btn-nome">Ergonomia</div>
+    </div>
+    <div class="nr-btn" onclick="selecionarNR('NR-23',this)">
+      <div class="nr-btn-icon">🔥</div>
+      <div class="nr-btn-code">NR-23</div>
+      <div class="nr-btn-nome">Incêndio</div>
+    </div>
+    <div class="nr-btn" onclick="selecionarNR('NR-35',this)">
+      <div class="nr-btn-icon">🏗️</div>
+      <div class="nr-btn-code">NR-35</div>
+      <div class="nr-btn-nome">Trabalho em Altura</div>
+    </div>
+  </div>
+
+  <div class="checklist-area">
+    <div id="checklistVazio" class="empty-nr">
+      <div>📋</div>
+      <p>Selecione uma NR acima para carregar o checklist de verificação.</p>
+    </div>
+    <div id="checklistConteudo" style="display:none">
+      <div class="checklist-header">
+        <div class="checklist-header-left">
+          <h3 id="clTitulo">—</h3>
+          <p id="clSubtitulo">—</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div class="progress-wrap">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+            </div>
+            <span class="progress-pct" id="progressPct">0%</span>
+          </div>
+          <button class="btn-reset" onclick="resetChecklist()">🔄 Resetar</button>
+        </div>
+      </div>
+      <div class="checklist-items" id="checklistItems"></div>
+      <div class="summary-bar">
+        <div class="summary-item">
+          <div class="summary-dot" style="background:#4ade80"></div>
+          <span id="sumOk">0 Conformes</span>
+        </div>
+        <div class="summary-item">
+          <div class="summary-dot" style="background:#60a5fa"></div>
+          <span id="sumNa">0 N/A</span>
+        </div>
+        <div class="summary-item">
+          <div class="summary-dot" style="background:rgba(255,255,255,.15)"></div>
+          <span id="sumPend">0 Pendentes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var userData = localStorage.getItem('safenr_user');
+if (!userData) { window.location.href = './index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuário';
+document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+function sair(){ localStorage.removeItem('safenr_user'); window.location.href='./index.html'; }
+
+var CHECKLISTS = {
+  'NR-05':{titulo:'NR-05 — CIPA',sub:'Comissão Interna de Prevenção de Acidentes',itens:[
+    {t:'Constituição da CIPA',d:'A CIPA está constituída conforme o dimensionamento da NR-05'},
+    {t:'Ata de eleição registrada',d:'Existe ata de eleição dos membros representantes dos empregados'},
+    {t:'Mandato vigente',d:'O mandato dos membros está dentro do prazo de validade'},
+    {t:'Reuniões mensais realizadas',d:'As reuniões ordinárias são realizadas mensalmente'},
+    {t:'Atas de reunião arquivadas',d:'As atas das reuniões estão devidamente assinadas e arquivadas'},
+    {t:'Mapa de riscos elaborado',d:'O mapa de riscos foi elaborado e está afixado em local visível'},
+    {t:'Treinamento dos membros',d:'Todos os membros receberam o treinamento exigido'},
+    {t:'SESMT integrado',d:'A CIPA atua em conjunto com o SESMT quando existente'}
+  ]},
+  'NR-06':{titulo:'NR-06 — EPI',sub:'Equipamentos de Proteção Individual',itens:[
+    {t:'Fornecimento de EPI adequado',d:'Os EPIs fornecidos são adequados ao risco de cada atividade'},
+    {t:'CA (Certificado de Aprovação) válido',d:'Todos os EPIs possuem CA válido emitido pelo MTE'},
+    {t:'Treinamento para uso correto',d:'Os trabalhadores foram treinados para uso, guarda e conservação dos EPIs'},
+    {t:'Assinatura do recibo de entrega',d:'Existe ficha de entrega de EPI assinada pelo funcionário'},
+    {t:'EPIs em bom estado de conservação',d:'Os EPIs estão em perfeito estado, sem danos ou vencidos'},
+    {t:'Substituição imediata quando danificado',d:'Existe procedimento de substituição de EPI danificado'},
+    {t:'Higienização dos EPIs',d:'Há controle de higienização dos EPIs reutilizáveis'},
+    {t:'Armazenamento adequado',d:'Os EPIs são armazenados em local apropriado e identificado'}
+  ]},
+  'NR-07':{titulo:'NR-07 — PCMSO',sub:'Programa de Controle Médico de Saúde Ocupacional',itens:[
+    {t:'PCMSO elaborado por médico do trabalho',d:'O programa foi elaborado e é assinado por médico do trabalho'},
+    {t:'Exame admissional realizado',d:'Todo novo funcionário realizou exame admissional'},
+    {t:'Exames periódicos em dia',d:'Os exames periódicos estão sendo realizados nos prazos definidos'},
+    {t:'Exame demissional realizado',d:'Os funcionários demitidos realizaram exame demissional'},
+    {t:'ASO emitido corretamente',d:'O Atestado de Saúde Ocupacional está corretamente preenchido'},
+    {t:'Exames complementares realizados',d:'Os exames complementares conforme riscos estão atualizados'},
+    {t:'Relatório anual elaborado',d:'O relatório anual do PCMSO foi elaborado e apresentado à CIPA'},
+    {t:'Arquivo médico mantido',d:'Os prontuários e documentos são mantidos pelo prazo legal'}
+  ]},
+  'NR-09':{titulo:'NR-09 — PGR / Riscos Ambientais',sub:'Programa de Gerenciamento de Riscos',itens:[
+    {t:'PGR elaborado e vigente',d:'O Programa de Gerenciamento de Riscos está atualizado'},
+    {t:'Inventário de riscos realizado',d:'Foi realizado levantamento de todos os riscos ocupacionais'},
+    {t:'Agentes físicos avaliados',d:'Ruído, calor, frio, vibrações e radiações foram avaliados'},
+    {t:'Agentes químicos avaliados',d:'Substâncias e compostos químicos foram identificados e avaliados'},
+    {t:'Agentes biológicos avaliados',d:'Riscos biológicos foram identificados e controlados'},
+    {t:'Medidas de controle implantadas',d:'As medidas de eliminação ou controle de riscos foram adotadas'},
+    {t:'Monitoramento dos riscos',d:'Existe cronograma de monitoramento e reavaliação dos riscos'},
+    {t:'Trabalhadores informados',d:'Os trabalhadores foram informados sobre os riscos existentes'}
+  ]},
+  'NR-10':{titulo:'NR-10 — Segurança em Eletricidade',sub:'Instalações e Serviços em Eletricidade',itens:[
+    {t:'Prontuário de instalações elétricas',d:'O prontuário com esquemas unifilares está atualizado'},
+    {t:'Trabalhadores habilitados',d:'Somente trabalhadores capacitados operam instalações elétricas'},
+    {t:'Treinamento NR-10 básico',d:'Todos os envolvidos possuem treinamento NR-10 válido (2 anos)'},
+    {t:'SEP — treinamento complementar',d:'Trabalhadores em sistema energizado possuem curso SEP'},
+    {t:'EPIs elétricos fornecidos',d:'Luvas, capacetes, óculos e demais EPIs elétricos são fornecidos'},
+    {t:'Bloqueio e etiquetagem (LOTO)',d:'Existe procedimento de bloqueio de energia antes de manutenção'},
+    {t:'Aterramento das instalações',d:'O sistema de aterramento está em conformidade'},
+    {t:'Sinalização de risco elétrico',d:'Áreas de risco elétrico estão sinalizadas e com acesso restrito'}
+  ]},
+  'NR-12':{titulo:'NR-12 — Máquinas e Equipamentos',sub:'Segurança no Trabalho com Máquinas',itens:[
+    {t:'Proteções de partes móveis',d:'Todas as partes móveis e perigosas possuem proteção física'},
+    {t:'Dispositivos de parada de emergência',d:'Botões de emergência estão instalados e funcionando'},
+    {t:'Sinalização de segurança',d:'As máquinas possuem sinalização de riscos e instruções de uso'},
+    {t:'Manutenção preventiva documentada',d:'Existe cronograma de manutenção preventiva registrado'},
+    {t:'Operadores treinados e capacitados',d:'Todos os operadores receberam treinamento específico'},
+    {t:'Manual do fabricante disponível',d:'Os manuais de operação estão disponíveis em português'},
+    {t:'Distâncias de segurança respeitadas',d:'Os espaços ao redor das máquinas respeitam as distâncias mínimas'},
+    {t:'Projeto elétrico das máquinas',d:'O projeto elétrico das máquinas está em conformidade com a norma'}
+  ]},
+  'NR-17':{titulo:'NR-17 — Ergonomia',sub:'Adaptação das condições de trabalho',itens:[
+    {t:'Análise Ergonômica do Trabalho (AET)',d:'A AET foi realizada para os postos de trabalho críticos'},
+    {t:'Mobiliário adequado',d:'Mesas, cadeiras e bancadas são ajustáveis e adequados aos trabalhadores'},
+    {t:'Equipamentos de trabalho adequados',d:'Monitores, teclados e ferramentas seguem os padrões ergonômicos'},
+    {t:'Organização do trabalho',d:'Ritmo, pausas e jornada de trabalho são adequados'},
+    {t:'Condições ambientais de conforto',d:'Temperatura, umidade, ruído e iluminação estão em conformidade'},
+    {t:'Levantamento de cargas controlado',d:'Pesos máximos para levantamento manual são respeitados'},
+    {t:'Pausas e ginástica laboral',d:'Pausas obrigatórias e ginástica laboral são realizadas'},
+    {t:'Trabalhadores orientados',d:'Os trabalhadores foram orientados sobre posturas corretas'}
+  ]},
+  'NR-23':{titulo:'NR-23 — Proteção Contra Incêndio',sub:'Prevenção e combate a incêndios',itens:[
+    {t:'Extintores em quantidade suficiente',d:'Os extintores estão em número adequado e distribuídos corretamente'},
+    {t:'Extintores dentro do prazo de validade',d:'Todos os extintores estão com a carga e inspeção em dia'},
+    {t:'Saídas de emergência desobstruídas',d:'As saídas de emergência estão livres e sinalizadas'},
+    {t:'Plano de emergência elaborado',d:'Existe plano de evacuação e combate a incêndio documentado'},
+    {t:'Brigada de incêndio treinada',d:'Membros da brigada possuem treinamento atualizado'},
+    {t:'Simulacros realizados',d:'Simulados de evacuação foram realizados no último ano'},
+    {t:'Detectores e alarmes funcionando',d:'Sistema de detecção e alarme de incêndio está operacional'},
+    {t:'Armazenamento de inflamáveis seguro',d:'Materiais inflamáveis são armazenados em local adequado e sinalizado'}
+  ]},
+  'NR-35':{titulo:'NR-35 — Trabalho em Altura',sub:'Atividades acima de 2 metros do nível inferior',itens:[
+    {t:'Trabalhadores treinados NR-35',d:'Todos os trabalhadores em altura possuem treinamento válido (2 anos)'},
+    {t:'Ordem de Serviço emitida',d:'É emitida OS específica antes de cada trabalho em altura'},
+    {t:'Análise de Risco realizada',d:'A Análise de Risco ou PT foi elaborada para a atividade'},
+    {t:'Cinto de segurança tipo paraquedista',d:'O cinto paraquedista está disponível e em bom estado'},
+    {t:'Talabarte e trava-quedas fornecidos',d:'Dispositivos de conexão e trava-quedas são fornecidos e inspecionados'},
+    {t:'Ponto de ancoragem adequado',d:'Os pontos de ancoragem suportam a carga exigida'},
+    {t:'Área abaixo isolada e sinalizada',d:'A área embaixo do trabalho está isolada contra queda de objetos'},
+    {t:'Inspeção dos equipamentos antes do uso',d:'Cintos e acessórios são inspecionados antes de cada uso'}
+  ]}
+};
+
+var nrAtiva = null;
+var estadoChecks = {};
+
+function selecionarNR(nr, btn){
+  nrAtiva = nr;
+  document.querySelectorAll('.nr-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  var saved = localStorage.getItem('safenr_checklist_'+nr);
+  estadoChecks = saved ? JSON.parse(saved) : {};
+  renderChecklist();
+}
+
+function renderChecklist(){
+  var cl = CHECKLISTS[nrAtiva];
+  document.getElementById('checklistVazio').style.display = 'none';
+  document.getElementById('checklistConteudo').style.display = 'block';
+  document.getElementById('clTitulo').textContent = cl.titulo;
+  document.getElementById('clSubtitulo').textContent = cl.sub;
+  var container = document.getElementById('checklistItems');
+  container.innerHTML = '';
+  cl.itens.forEach(function(item, idx){
+    var estado = estadoChecks[idx] || 'pendente';
+    var div = document.createElement('div');
+    div.className = 'check-item' + (estado==='ok' ? ' checked' : estado==='na' ? ' na' : '');
+    div.innerHTML =
+      '<div class="check-box">' + (estado==='ok' ? '✓' : estado==='na' ? 'N/A' : '') + '</div>' +
+      '<div class="check-content">' +
+        '<div class="check-title">' + item.t + '</div>' +
+        '<div class="check-desc">' + item.d + '</div>' +
+      '</div>' +
+      '<button class="check-na-btn" onclick="toggleNA(event,' + idx + ')">N/A</button>';
+    div.addEventListener('click', function(e){
+      if(e.target.classList.contains('check-na-btn')) return;
+      toggleCheck(idx);
+    });
+    container.appendChild(div);
+  });
+  atualizarProgresso();
+}
+
+function toggleCheck(idx){
+  var atual = estadoChecks[idx] || 'pendente';
+  estadoChecks[idx] = atual === 'ok' ? 'pendente' : 'ok';
+  salvarEstado();
+  renderChecklist();
+}
+
+function toggleNA(e, idx){
+  e.stopPropagation();
+  var atual = estadoChecks[idx] || 'pendente';
+  estadoChecks[idx] = atual === 'na' ? 'pendente' : 'na';
+  salvarEstado();
+  renderChecklist();
+}
+
+function salvarEstado(){
+  localStorage.setItem('safenr_checklist_'+nrAtiva, JSON.stringify(estadoChecks));
+}
+
+function resetChecklist(){
+  if(!confirm('Deseja resetar todos os itens deste checklist?')) return;
+  estadoChecks = {};
+  salvarEstado();
+  renderChecklist();
+}
+
+function atualizarProgresso(){
+  var cl = CHECKLISTS[nrAtiva];
+  var total = cl.itens.length;
+  var ok=0, na=0;
+  for(var k in estadoChecks){
+    if(estadoChecks[k]==='ok') ok++;
+    if(estadoChecks[k]==='na') na++;
+  }
+  var pend = total - ok - na;
+  var pct = total > 0 ? Math.round(((ok+na)/total)*100) : 0;
+  document.getElementById('progressBar').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.getElementById('sumOk').textContent = ok+' Conforme(s)';
+  document.getElementById('sumNa').textContent = na+' N/A';
+  document.getElementById('sumPend').textContent = pend+' Pendente(s)';
+  document.getElementById('progressBar').style.background =
+    pct===100 ? '#4ade80' : pct>=60 ? '#fbbf24' : '#00d4ff';
+}
+</script>
+</body>
+</html>
