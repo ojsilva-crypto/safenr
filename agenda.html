@@ -22,95 +22,78 @@
     .user-info p{font-size:.82rem;font-weight:600}
     .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
     .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
-    .main{margin-left:240px;flex:1;padding:32px;display:flex;flex-direction:column;gap:24px}
+    .main{margin-left:240px;flex:1;padding:32px;display:flex;flex-direction:column;gap:20px}
     .topbar{display:flex;align-items:center;justify-content:space-between}
-    .topbar h2{font-size:1.4rem;font-weight:700}
-    .topbar p{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:4px}
+    .topbar-left h2{font-size:1.4rem;font-weight:700}
+    .topbar-left p{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:4px}
     .btn-novo{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
     .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
-
-    /* LAYOUT PRINCIPAL */
-    .agenda-layout{display:grid;grid-template-columns:1fr 360px;gap:20px}
-
-    /* CALENDARIO */
-    .calendario-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px}
-    .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-    .cal-header h3{font-size:1.1rem;font-weight:700}
-    .cal-nav{background:rgba(255,255,255,.07);border:none;color:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:1rem;transition:background .2s}
-    .cal-nav:hover{background:rgba(255,255,255,.12)}
-    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-    .cal-dia-nome{text-align:center;font-size:.72rem;color:rgba(255,255,255,.35);font-weight:600;padding:8px 0;text-transform:uppercase}
-    .cal-dia{min-height:72px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:6px;cursor:pointer;transition:all .2s;position:relative}
+    .agenda-layout{display:grid;grid-template-columns:1fr 340px;gap:20px}
+    .col-esq{display:flex;flex-direction:column;gap:16px}
+    .col-dir{display:flex;flex-direction:column;gap:16px}
+    .panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px}
+    .panel h4{font-size:.95rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+    .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .cal-header h3{font-size:1rem;font-weight:700}
+    .cal-nav{background:rgba(255,255,255,.07);border:none;color:#fff;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:1rem;transition:background .2s}
+    .cal-nav:hover{background:rgba(255,255,255,.14)}
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+    .cal-dia-nome{text-align:center;font-size:.68rem;color:rgba(255,255,255,.3);font-weight:700;padding:6px 0;text-transform:uppercase}
+    .cal-dia{min-height:64px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:8px;padding:5px;cursor:pointer;transition:all .2s;position:relative}
     .cal-dia:hover{background:rgba(255,255,255,.06);border-color:rgba(0,212,255,.2)}
-    .cal-dia.hoje{border-color:#00d4ff;background:rgba(0,212,255,.06)}
-    .cal-dia.outro-mes{opacity:.3}
-    .cal-dia.selecionado{border-color:#00d4ff;background:rgba(0,212,255,.1)}
-    .cal-dia-num{font-size:.82rem;font-weight:700;margin-bottom:4px}
+    .cal-dia.hoje{border-color:#00d4ff;background:rgba(0,212,255,.07)}
+    .cal-dia.outro-mes{opacity:.25;cursor:default}
+    .cal-dia.selecionado{border-color:#00d4ff;background:rgba(0,212,255,.12)}
+    .cal-dia-num{font-size:.78rem;font-weight:700;margin-bottom:3px}
     .cal-dia.hoje .cal-dia-num{color:#00d4ff}
-    .cal-evento{font-size:.65rem;padding:2px 5px;border-radius:4px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
-    .cal-evento.checklist{background:rgba(0,212,255,.2);color:#00d4ff}
-    .cal-evento.epi{background:rgba(251,146,60,.2);color:#fb923c}
-    .cal-evento.manual{background:rgba(167,139,250,.2);color:#a78bfa}
-    .cal-evento.mais{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);text-align:center}
-
-    /* PAINEL LATERAL */
-    .painel-lateral{display:flex;flex-direction:column;gap:16px}
-
-    /* DIA SELECIONADO */
-    .painel-dia{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px}
-    .painel-dia h4{font-size:.95rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-    .evento-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px;margin-bottom:8px;border-left:3px solid #00d4ff}
+    .cal-dia.selecionado .cal-dia-num{color:#00d4ff}
+    .cal-ponto{width:6px;height:6px;border-radius:50%;display:inline-block;margin:1px}
+    .cal-ponto.checklist{background:#00d4ff}
+    .cal-ponto.epi{background:#fb923c}
+    .cal-ponto.manual{background:#a78bfa}
+    .cal-mais{font-size:.6rem;color:rgba(255,255,255,.4)}
+    .evento-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px;margin-bottom:8px;border-left:3px solid #a78bfa}
     .evento-item.epi{border-left-color:#fb923c}
-    .evento-item.manual{border-left-color:#a78bfa}
     .evento-item.checklist{border-left-color:#00d4ff}
-    .evento-item p{font-size:.85rem;font-weight:600;margin-bottom:4px}
-    .evento-item span{font-size:.75rem;color:rgba(255,255,255,.4)}
-    .evento-item-acoes{display:flex;gap:6px;margin-top:8px}
-    .btn-mini{padding:4px 10px;border-radius:6px;border:none;cursor:pointer;font-size:.72rem;font-weight:600}
+    .evento-item.manual{border-left-color:#a78bfa}
+    .evento-item p{font-size:.85rem;font-weight:600;margin-bottom:3px}
+    .evento-item span{font-size:.73rem;color:rgba(255,255,255,.38)}
+    .evento-item-acoes{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+    .btn-mini{padding:4px 11px;border-radius:6px;border:none;cursor:pointer;font-size:.72rem;font-weight:600}
     .btn-mini.concluir{background:rgba(74,222,128,.15);color:#4ade80}
     .btn-mini.excluir{background:rgba(248,113,113,.15);color:#f87171}
-    .empty-dia{text-align:center;padding:20px;color:rgba(255,255,255,.25);font-size:.83rem}
-
-    /* IA EPI */
-    .painel-ia{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px}
-    .painel-ia h4{font-size:.95rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-    .painel-ia .ia-sub{font-size:.75rem;color:rgba(255,255,255,.35);margin-bottom:14px}
-    .ia-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 12px;margin-bottom:8px}
-    .ia-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-    .ia-item-top p{font-size:.83rem;font-weight:600}
-    .ia-badge{padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:700}
-    .ia-badge.urgente{background:rgba(248,113,113,.2);color:#f87171}
-    .ia-badge.atencao{background:rgba(251,191,36,.2);color:#fbbf24}
-    .ia-badge.ok{background:rgba(74,222,128,.2);color:#4ade80}
-    .ia-item span{font-size:.73rem;color:rgba(255,255,255,.35)}
-    .ia-rec{font-size:.72rem;color:#00d4ff;margin-top:4px;font-style:italic}
-    .ia-empty{text-align:center;padding:20px;color:rgba(255,255,255,.25);font-size:.82rem}
-
-    /* PROXIMOS EVENTOS */
-    .painel-proximos{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px}
-    .painel-proximos h4{font-size:.95rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-
-    /* MODAL */
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
-    .modal-overlay.open{display:flex}
-    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:32px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto}
-    .modal h3{font-size:1.15rem;font-weight:700;margin-bottom:22px}
-    .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-    .form-group label{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.5)}
-    .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 14px;color:#fff;font-size:.88rem;outline:none;transition:border .2s;font-family:inherit}
-    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#00d4ff}
-    .form-group select option{background:#1a2535}
-    .form-group textarea{resize:vertical;min-height:70px}
-    .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:20px}
-    .btn-cancelar{padding:11px 22px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
-    .btn-salvar{padding:11px 26px;border-radius:10px;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
-
-    .badge{padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:600;display:inline-block}
+    .badge{padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:600}
     .badge.concluido{background:rgba(74,222,128,.15);color:#4ade80}
     .badge.pendente{background:rgba(251,191,36,.15);color:#fbbf24}
     .badge.atrasado{background:rgba(248,113,113,.15);color:#f87171}
-
-    .secao-titulo{font-size:.78rem;font-weight:800;color:#00d4ff;text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(0,212,255,.12)}
+    .empty-panel{text-align:center;padding:22px;color:rgba(255,255,255,.22);font-size:.82rem;line-height:1.6}
+    .proximos-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 13px;margin-bottom:7px;border-left:3px solid #00d4ff;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .proximos-item.epi{border-left-color:#fb923c}
+    .proximos-item.manual{border-left-color:#a78bfa}
+    .proximos-item-info p{font-size:.83rem;font-weight:600;margin-bottom:2px}
+    .proximos-item-info span{font-size:.72rem;color:rgba(255,255,255,.35)}
+    .ia-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 13px;margin-bottom:8px}
+    .ia-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+    .ia-item-top p{font-size:.83rem;font-weight:600}
+    .ia-badge{padding:3px 9px;border-radius:20px;font-size:.67rem;font-weight:700}
+    .ia-badge.urgente{background:rgba(248,113,113,.2);color:#f87171}
+    .ia-badge.atencao{background:rgba(251,191,36,.2);color:#fbbf24}
+    .ia-badge.ok{background:rgba(74,222,128,.2);color:#4ade80}
+    .ia-item span{font-size:.72rem;color:rgba(255,255,255,.35)}
+    .ia-rec{font-size:.71rem;color:#00d4ff;margin-top:4px;font-style:italic}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(5px);z-index:1000;align-items:center;justify-content:center}
+    .modal-overlay.open{display:flex}
+    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:32px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto}
+    .modal h3{font-size:1.1rem;font-weight:700;margin-bottom:20px}
+    .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+    .form-group label{font-size:.79rem;font-weight:600;color:rgba(255,255,255,.5)}
+    .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 14px;color:#fff;font-size:.88rem;outline:none;transition:border .2s;font-family:inherit}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#00d4ff}
+    .form-group select option{background:#1a2535}
+    .form-group textarea{resize:vertical;min-height:65px}
+    .modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+    .btn-cancelar{padding:10px 20px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
+    .btn-salvar{padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;color:#fff;font-size:.88rem;font-weight:700;cursor:pointer}
   </style>
 </head>
 <body>
@@ -141,7 +124,7 @@
 
 <div class="main">
   <div class="topbar">
-    <div>
+    <div class="topbar-left">
       <h2>📅 Agenda de Pendencias</h2>
       <p>Calendario integrado com Checklists, EPIs e Funcionarios</p>
     </div>
@@ -149,51 +132,46 @@
   </div>
 
   <div class="agenda-layout">
-    <!-- CALENDARIO -->
-    <div>
-      <div class="calendario-wrap">
+    <div class="col-esq">
+      <!-- CALENDARIO -->
+      <div class="panel">
         <div class="cal-header">
           <button class="cal-nav" onclick="mesAnterior()">&#8249;</button>
-          <h3 id="mesAno"></h3>
+          <h3 id="mesAnoTitulo"></h3>
           <button class="cal-nav" onclick="proximoMes()">&#8250;</button>
         </div>
         <div class="cal-grid" id="calGrid"></div>
       </div>
-
-      <!-- PROXIMOS EVENTOS -->
-      <div class="painel-proximos" style="margin-top:16px">
+      <!-- PROXIMOS 30 DIAS -->
+      <div class="panel">
         <h4>🔔 Proximas Pendencias (30 dias)</h4>
         <div id="proximosLista"></div>
       </div>
     </div>
 
-    <!-- PAINEL LATERAL -->
-    <div class="painel-lateral">
-
+    <div class="col-dir">
       <!-- DIA SELECIONADO -->
-      <div class="painel-dia">
-        <h4>📌 <span id="diaSelecionadoTitulo">Selecione um dia</span></h4>
-        <div id="eventosDia"><div class="empty-dia">Clique em um dia do calendario para ver os eventos.</div></div>
+      <div class="panel">
+        <h4>📌 <span id="diaTitulo">Selecione um dia</span></h4>
+        <div id="eventosDia"><div class="empty-panel">Clique em um dia do calendario.</div></div>
       </div>
-
       <!-- IA EPI -->
-      <div class="painel-ia">
+      <div class="panel">
         <h4>🤖 IA — Gestao de EPIs</h4>
-        <p class="ia-sub">Analise inteligente de frequencia de troca por funcionario</p>
+        <p style="font-size:.74rem;color:rgba(255,255,255,.3);margin-bottom:12px">Analise inteligente de frequencia de troca</p>
         <div id="iaLista"></div>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- MODAL NOVA PENDENCIA -->
+<!-- MODAL -->
 <div class="modal-overlay" id="modalForm">
   <div class="modal">
     <h3>📌 Nova Pendencia</h3>
     <div class="form-group">
       <label>Titulo *</label>
-      <input type="text" id="f_titulo" placeholder="Ex: Renovar CA do capacete..."/>
+      <input type="text" id="f_titulo" placeholder="Ex: Renovar CA do capacete"/>
     </div>
     <div class="form-group">
       <label>Data *</label>
@@ -202,9 +180,9 @@
     <div class="form-group">
       <label>Tipo</label>
       <select id="f_tipo">
-        <option value="manual">📌 Manual</option>
-        <option value="checklist">📋 Checklist / Plano de Acao</option>
-        <option value="epi">🦺 Troca de EPI</option>
+        <option value="manual">Manual</option>
+        <option value="checklist">Checklist / Plano de Acao</option>
+        <option value="epi">Troca de EPI</option>
       </select>
     </div>
     <div class="form-group">
@@ -233,126 +211,137 @@ document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
 document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
 function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
 
-// DADOS
-var eventos = JSON.parse(localStorage.getItem('safenr_agenda') || '[]');
+// VARS
 var hoje = new Date();
 var anoAtual = hoje.getFullYear();
 var mesAtual = hoje.getMonth();
-var diaSelecionado = null;
+var diaSel = null;
+var eventos = JSON.parse(localStorage.getItem('safenr_agenda') || '[]');
 
 function salvarStorage() { localStorage.setItem('safenr_agenda', JSON.stringify(eventos)); }
 
-// GERAR EVENTOS AUTOMATICOS DOS EPIs E CHECKLISTS
-function gerarEventosAuto() {
-  var funcionarios = JSON.parse(localStorage.getItem('safenr_funcionarios') || '[]');
-  var existentes = eventos.map(function(e){ return e.autoId || ''; });
-
-  funcionarios.forEach(function(f) {
-    var epis = f.epis || [];
-    epis.forEach(function(epi) {
-      if (!epi.validade) return;
-      var autoId = 'epi_' + f.id + '_' + epi.nome;
-      if (existentes.indexOf(autoId) !== -1) return;
+// IMPORTAR EPIs DOS FUNCIONARIOS AUTOMATICAMENTE
+function importarEPIs() {
+  var funcs = JSON.parse(localStorage.getItem('safenr_funcionarios') || '[]');
+  var ids = [];
+  for (var i = 0; i < eventos.length; i++) {
+    if (eventos[i].autoId) ids.push(eventos[i].autoId);
+  }
+  for (var f = 0; f < funcs.length; f++) {
+    var func = funcs[f];
+    var epis = func.epis || [];
+    for (var e = 0; e < epis.length; e++) {
+      var epi = epis[e];
+      if (!epi.validade) continue;
+      var autoId = 'epi_' + func.id + '_' + epi.nome;
+      if (ids.indexOf(autoId) !== -1) continue;
       eventos.push({
         id: Date.now() + Math.random(),
         autoId: autoId,
         titulo: 'Trocar EPI: ' + epi.nome,
         data: epi.validade,
         tipo: 'epi',
-        funcionario: f.nome,
-        desc: 'Vencimento do EPI ' + epi.nome + ' do funcionario ' + f.nome,
+        funcionario: func.nome,
+        desc: 'Vencimento do CA do EPI ' + epi.nome + ' — Funcionario: ' + func.nome,
         status: 'pendente',
         auto: true
       });
-    });
-  });
-
+    }
+  }
   salvarStorage();
 }
+importarEPIs();
 
-gerarEventosAuto();
-
-// FORMATAR DATA
+// UTILS
 function fmt(d) {
   if (!d) return '--';
   var p = d.split('-');
   return p[2] + '/' + p[1] + '/' + p[0];
 }
-function fmtMes(ano, mes) {
-  var meses = ['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  return meses[mes] + ' ' + ano;
+function fmtMes(a, m) {
+  var arr = ['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  return arr[m] + ' ' + a;
 }
-
-// STATUS EVENTO
 function getStatus(ev) {
   if (ev.status === 'concluido') return 'concluido';
   var d = new Date(ev.data + 'T00:00:00');
   var h = new Date(); h.setHours(0,0,0,0);
-  if (d < h) return 'atrasado';
-  return 'pendente';
+  return d < h ? 'atrasado' : 'pendente';
 }
-function labelStatus(s) { return {concluido:'Concluido', pendente:'Pendente', atrasado:'Atrasado'}[s] || s; }
-
-// EVENTOS DO DIA
-function getEventosDia(ano, mes, dia) {
-  var str = ano + '-' + String(mes+1).padStart(2,'0') + '-' + String(dia).padStart(2,'0');
-  return eventos.filter(function(e){ return e.data === str; });
+function labelStatus(s) {
+  return {concluido:'Concluido', pendente:'Pendente', atrasado:'Atrasado'}[s] || s;
+}
+function getCorTipo(t) {
+  return {epi:'#fb923c', checklist:'#00d4ff', manual:'#a78bfa'}[t] || '#a78bfa';
+}
+function getEventosDia(a, m, d) {
+  var str = a + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+  return eventos.filter(function(e) { return e.data === str; });
 }
 
-// RENDERIZAR CALENDARIO
-function renderCalendario() {
-  document.getElementById('mesAno').textContent = fmtMes(anoAtual, mesAtual);
+// NAVEGACAO
+function mesAnterior() {
+  mesAtual--;
+  if (mesAtual < 0) { mesAtual = 11; anoAtual--; }
+  renderCal();
+  renderProximos();
+}
+function proximoMes() {
+  mesAtual++;
+  if (mesAtual > 11) { mesAtual = 0; anoAtual++; }
+  renderCal();
+  renderProximos();
+}
+
+// CALENDARIO
+function renderCal() {
+  document.getElementById('mesAnoTitulo').textContent = fmtMes(anoAtual, mesAtual);
   var grid = document.getElementById('calGrid');
   grid.innerHTML = '';
-
-  var dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
-  dias.forEach(function(d) {
-    var el = document.createElement('div');
-    el.className = 'cal-dia-nome';
-    el.textContent = d;
-    grid.appendChild(el);
-  });
-
-  var primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
+  var semana = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+  for (var s = 0; s < 7; s++) {
+    var dn = document.createElement('div');
+    dn.className = 'cal-dia-nome';
+    dn.textContent = semana[s];
+    grid.appendChild(dn);
+  }
+  var primeiro = new Date(anoAtual, mesAtual, 1).getDay();
   var totalDias = new Date(anoAtual, mesAtual + 1, 0).getDate();
-  var diasMesAnterior = new Date(anoAtual, mesAtual, 0).getDate();
+  var diasAnt = new Date(anoAtual, mesAtual, 0).getDate();
 
-  // Dias do mes anterior
-  for (var i = primeiroDia - 1; i >= 0; i--) {
+  for (var pa = primeiro - 1; pa >= 0; pa--) {
     var el = document.createElement('div');
     el.className = 'cal-dia outro-mes';
-    el.innerHTML = '<div class="cal-dia-num">' + (diasMesAnterior - i) + '</div>';
+    el.innerHTML = '<div class="cal-dia-num">' + (diasAnt - pa) + '</div>';
     grid.appendChild(el);
   }
 
-  // Dias do mes atual
-  for (var d = 1; d <= totalDias; d++) {
+  for (var dia = 1; dia <= totalDias; dia++) {
     var el = document.createElement('div');
-    var isHoje = (d === hoje.getDate() && mesAtual === hoje.getMonth() && anoAtual === hoje.getFullYear());
-    var isSel = diaSelecionado && (d === diaSelecionado.dia && mesAtual === diaSelecionado.mes && anoAtual === diaSelecionado.ano);
+    var isHoje = (dia === hoje.getDate() && mesAtual === hoje.getMonth() && anoAtual === hoje.getFullYear());
+    var isSel = diaSel && (dia === diaSel.dia && mesAtual === diaSel.mes && anoAtual === diaSel.ano);
     el.className = 'cal-dia' + (isHoje ? ' hoje' : '') + (isSel ? ' selecionado' : '');
 
-    var evsDia = getEventosDia(anoAtual, mesAtual, d);
-    var html = '<div class="cal-dia-num">' + d + '</div>';
-    var max = 2;
-    for (var ei = 0; ei < Math.min(evsDia.length, max); ei++) {
-      var ev = evsDia[ei];
-      html += '<div class="cal-evento ' + ev.tipo + '">' + ev.titulo + '</div>';
+    var evsDia = getEventosDia(anoAtual, mesAtual, dia);
+    var html = '<div class="cal-dia-num">' + dia + '</div><div>';
+    var maxPontos = 4;
+    for (var pi = 0; pi < Math.min(evsDia.length, maxPontos); pi++) {
+      html += '<span class="cal-ponto ' + evsDia[pi].tipo + '"></span>';
     }
-    if (evsDia.length > max) {
-      html += '<div class="cal-evento mais">+' + (evsDia.length - max) + ' mais</div>';
+    if (evsDia.length > maxPontos) {
+      html += '<span class="cal-mais">+' + (evsDia.length - maxPontos) + '</span>';
     }
+    html += '</div>';
     el.innerHTML = html;
 
-    (function(dia) {
-      el.onclick = function() { selecionarDia(anoAtual, mesAtual, dia); };
-    })(d);
+    (function(d) {
+      el.onclick = function() { selecionarDia(anoAtual, mesAtual, d); };
+    })(dia);
 
     grid.appendChild(el);
   }
 
-  // Completar grid
-  var total = primeiroDia + totalDias;
+  var total = primeiro + totalDias;
   var resto = total % 7 === 0 ? 0 : 7 - (total % 7);
   for (var r = 1; r <= resto; r++) {
     var el = document.createElement('div');
@@ -362,196 +351,168 @@ function renderCalendario() {
   }
 }
 
-function mesAnterior() {
-  mesAtual--;
-  if (mesAtual < 0) { mesAtual = 11; anoAtual--; }
-  renderCalendario();
-  renderProximos();
-}
-function proximoMes() {
-  mesAtual++;
-  if (mesAtual > 11) { mesAtual = 0; anoAtual++; }
-  renderCalendario();
-  renderProximos();
-}
-
 // SELECIONAR DIA
-function selecionarDia(ano, mes, dia) {
-  diaSelecionado = { ano: ano, mes: mes, dia: dia };
-  renderCalendario();
+function selecionarDia(a, m, d) {
+  diaSel = { ano: a, mes: m, dia: d };
+  renderCal();
   var meses = ['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  document.getElementById('diaSelecionadoTitulo').textContent = dia + ' de ' + meses[mes] + ' de ' + ano;
-  var evs = getEventosDia(ano, mes, dia);
+  document.getElementById('diaTitulo').textContent = d + ' de ' + meses[m] + ' de ' + a;
+  var evs = getEventosDia(a, m, d);
   var div = document.getElementById('eventosDia');
+  div.innerHTML = '';
   if (evs.length === 0) {
-    div.innerHTML = '<div class="empty-dia">Nenhum evento neste dia.<br><small>Clique em + Nova Pendencia para adicionar.</small></div>';
+    div.innerHTML = '<div class="empty-panel">Nenhum evento neste dia.<br><small>Use + Nova Pendencia para adicionar.</small></div>';
     return;
   }
-  div.innerHTML = '';
-  evs.forEach(function(ev) {
+  for (var i = 0; i < evs.length; i++) {
+    var ev = evs[i];
     var st = getStatus(ev);
     var el = document.createElement('div');
     el.className = 'evento-item ' + ev.tipo;
+    var acoes = '';
+    if (ev.status !== 'concluido') {
+      acoes += '<button class="btn-mini concluir" data-id="' + ev.id + '" onclick="concluir(this)">Concluir</button>';
+    }
+    acoes += '<button class="btn-mini excluir" data-id="' + ev.id + '" onclick="excluirEv(this)">Excluir</button>';
     el.innerHTML =
       '<p>' + ev.titulo + '</p>' +
-      '<span>' + (ev.funcionario ? 'Funcionario: ' + ev.funcionario + ' | ' : '') + 'Tipo: ' + ev.tipo + '</span>' +
-      (ev.desc ? '<div style="font-size:.75rem;color:rgba(255,255,255,.35);margin-top:4px">' + ev.desc + '</div>' : '') +
-      '<div style="margin-top:8px"><span class="badge ' + st + '">' + labelStatus(st) + '</span></div>' +
-      '<div class="evento-item-acoes">' +
-        (ev.status !== 'concluido' ? '<button class="btn-mini concluir" onclick="concluir(' + ev.id + ')">Concluir</button>' : '') +
-        '<button class="btn-mini excluir" onclick="excluirEvento(' + ev.id + ')">Excluir</button>' +
-      '</div>';
+      '<span>' + fmt(ev.data) + (ev.funcionario ? ' | ' + ev.funcionario : '') + ' | ' + ev.tipo + '</span>' +
+      (ev.desc ? '<div style="font-size:.73rem;color:rgba(255,255,255,.3);margin-top:4px">' + ev.desc + '</div>' : '') +
+      '<div style="margin-top:7px"><span class="badge ' + st + '">' + labelStatus(st) + '</span></div>' +
+      '<div class="evento-item-acoes">' + acoes + '</div>';
     div.appendChild(el);
-  });
+  }
 }
 
-function concluir(id) {
+function concluir(btn) {
+  var id = parseFloat(btn.getAttribute('data-id'));
   for (var i = 0; i < eventos.length; i++) {
     if (eventos[i].id === id) { eventos[i].status = 'concluido'; break; }
   }
   salvarStorage();
-  renderCalendario();
+  renderCal();
   renderProximos();
   renderIA();
-  if (diaSelecionado) selecionarDia(diaSelecionado.ano, diaSelecionado.mes, diaSelecionado.dia);
+  if (diaSel) selecionarDia(diaSel.ano, diaSel.mes, diaSel.dia);
 }
 
-function excluirEvento(id) {
+function excluirEv(btn) {
   if (!confirm('Excluir este evento?')) return;
-  eventos = eventos.filter(function(e){ return e.id !== id; });
+  var id = parseFloat(btn.getAttribute('data-id'));
+  eventos = eventos.filter(function(e) { return e.id !== id; });
   salvarStorage();
-  renderCalendario();
+  renderCal();
   renderProximos();
   renderIA();
-  if (diaSelecionado) selecionarDia(diaSelecionado.ano, diaSelecionado.mes, diaSelecionado.dia);
+  if (diaSel) selecionarDia(diaSel.ano, diaSel.mes, diaSel.dia);
 }
 
 // PROXIMOS 30 DIAS
 function renderProximos() {
   var div = document.getElementById('proximosLista');
-  var limite = new Date(); limite.setDate(limite.getDate() + 30);
+  var agora = new Date(); agora.setHours(0,0,0,0);
+  var limite = new Date(agora); limite.setDate(limite.getDate() + 30);
   var lista = eventos.filter(function(e) {
     if (e.status === 'concluido') return false;
     var d = new Date(e.data + 'T00:00:00');
-    return d >= new Date() && d <= limite;
+    return d >= agora && d <= limite;
   });
-  lista.sort(function(a,b){ return a.data.localeCompare(b.data); });
+  lista.sort(function(a,b) { return a.data.localeCompare(b.data); });
+  div.innerHTML = '';
   if (lista.length === 0) {
-    div.innerHTML = '<div style="color:rgba(255,255,255,.25);font-size:.82rem;text-align:center;padding:16px">Nenhuma pendencia nos proximos 30 dias</div>';
+    div.innerHTML = '<div class="empty-panel">Nenhuma pendencia nos proximos 30 dias.</div>';
     return;
   }
-  div.innerHTML = '';
-  lista.forEach(function(ev) {
+  for (var i = 0; i < lista.length; i++) {
+    var ev = lista[i];
     var st = getStatus(ev);
     var el = document.createElement('div');
-    el.className = 'evento-item ' + ev.tipo;
-    el.style.cursor = 'pointer';
+    el.className = 'proximos-item ' + ev.tipo;
     el.innerHTML =
-      '<div style="display:flex;justify-content:space-between;align-items:center">' +
+      '<div class="proximos-item-info">' +
         '<p>' + ev.titulo + '</p>' +
-        '<span class="badge ' + st + '">' + labelStatus(st) + '</span>' +
+        '<span>' + fmt(ev.data) + (ev.funcionario ? ' | ' + ev.funcionario : '') + '</span>' +
       '</div>' +
-      '<span>' + fmt(ev.data) + (ev.funcionario ? ' | ' + ev.funcionario : '') + '</span>';
-    grid.appendChild(el);
+      '<span class="badge ' + st + '">' + labelStatus(st) + '</span>';
     div.appendChild(el);
-  });
+  }
 }
 
-// IA — GESTAO DE EPI
+// IA EPI
 function renderIA() {
-  var funcionarios = JSON.parse(localStorage.getItem('safenr_funcionarios') || '[]');
+  var funcs = JSON.parse(localStorage.getItem('safenr_funcionarios') || '[]');
   var div = document.getElementById('iaLista');
-
-  if (funcionarios.length === 0) {
-    div.innerHTML = '<div class="ia-empty">Nenhum funcionario cadastrado.<br>Cadastre funcionarios com EPIs para ativar a IA.</div>';
+  div.innerHTML = '';
+  if (funcs.length === 0) {
+    div.innerHTML = '<div class="empty-panel">Nenhum funcionario cadastrado.<br>Cadastre funcionarios com EPIs para ativar a IA.</div>';
     return;
   }
-
   var analises = [];
-
-  funcionarios.forEach(function(f) {
-    var epis = f.epis || [];
-    epis.forEach(function(epi) {
+  for (var f = 0; f < funcs.length; f++) {
+    var func = funcs[f];
+    var epis = func.epis || [];
+    for (var e = 0; e < epis.length; e++) {
+      var epi = epis[e];
       var nivel = 'ok';
-      var recomendacao = '';
-      var diasRestantes = null;
-
+      var rec = '';
+      var dias = null;
       if (epi.validade) {
         var valDate = new Date(epi.validade + 'T00:00:00');
-        var hojeD = new Date(); hojeD.setHours(0,0,0,0);
-        diasRestantes = Math.round((valDate - hojeD) / 86400000);
-
-        if (diasRestantes < 0) {
+        var agora2 = new Date(); agora2.setHours(0,0,0,0);
+        dias = Math.round((valDate - agora2) / 86400000);
+        if (dias < 0) {
           nivel = 'urgente';
-          recomendacao = 'EPI vencido ha ' + Math.abs(diasRestantes) + ' dias. Substituir IMEDIATAMENTE.';
-        } else if (diasRestantes <= 15) {
+          rec = 'EPI VENCIDO ha ' + Math.abs(dias) + ' dias. Substituir IMEDIATAMENTE.';
+        } else if (dias <= 15) {
           nivel = 'urgente';
-          recomendacao = 'Vence em ' + diasRestantes + ' dias. Providenciar substituicao urgente.';
-        } else if (diasRestantes <= 30) {
+          rec = 'Vence em ' + dias + ' dia(s). Substituir com urgencia.';
+        } else if (dias <= 30) {
           nivel = 'atencao';
-          recomendacao = 'Vence em ' + diasRestantes + ' dias. Agendar troca em breve.';
-        } else if (diasRestantes <= 60) {
+          rec = 'Vence em ' + dias + ' dias. Providenciar substituicao.';
+        } else if (dias <= 60) {
           nivel = 'atencao';
-          recomendacao = 'Vence em ' + diasRestantes + ' dias. Monitorar proximamente.';
+          rec = 'Vence em ' + dias + ' dias. Monitorar.';
         } else {
           nivel = 'ok';
-          recomendacao = 'EPI em dia. Proximo vencimento em ' + diasRestantes + ' dias.';
+          rec = 'Em dia. Proximo vencimento em ' + dias + ' dias.';
         }
       } else {
         nivel = 'atencao';
-        recomendacao = 'Validade nao informada. Verifique o CA deste EPI.';
+        rec = 'Validade nao informada. Verificar CA.';
       }
-
-      // Frequencia de troca baseada no historico de eventos concluidos
-      var trocasRealizadas = eventos.filter(function(ev) {
-        return ev.tipo === 'epi' && ev.funcionario === f.nome && ev.titulo.indexOf(epi.nome) !== -1 && ev.status === 'concluido';
+      var trocas = eventos.filter(function(ev) {
+        return ev.tipo === 'epi' && ev.funcionario === func.nome && ev.titulo.indexOf(epi.nome) !== -1 && ev.status === 'concluido';
       }).length;
-
-      var freqTexto = trocasRealizadas === 0 ? 'Sem historico de trocas' : trocasRealizadas + ' troca(s) registrada(s)';
-
       analises.push({
-        funcionario: f.nome,
-        epi: epi.nome,
-        validade: epi.validade,
-        diasRestantes: diasRestantes,
-        nivel: nivel,
-        recomendacao: recomendacao,
-        frequencia: freqTexto
+        func: func.nome, epi: epi.nome, validade: epi.validade,
+        dias: dias, nivel: nivel, rec: rec,
+        freq: trocas === 0 ? 'Sem historico' : trocas + ' troca(s) registrada(s)'
       });
-    });
+    }
+  }
+  analises.sort(function(a,b) {
+    var o = { urgente:0, atencao:1, ok:2 };
+    return o[a.nivel] - o[b.nivel];
   });
-
-  // Ordenar: urgente primeiro
-  analises.sort(function(a, b) {
-    var ordem = { urgente: 0, atencao: 1, ok: 2 };
-    return ordem[a.nivel] - ordem[b.nivel];
-  });
-
   if (analises.length === 0) {
-    div.innerHTML = '<div class="ia-empty">Nenhum EPI vinculado aos funcionarios.<br>Adicione EPIs no cadastro de funcionarios.</div>';
+    div.innerHTML = '<div class="empty-panel">Nenhum EPI vinculado.<br>Adicione EPIs no cadastro de funcionarios.</div>';
     return;
   }
-
-  div.innerHTML = '';
   var max = 8;
   for (var i = 0; i < Math.min(analises.length, max); i++) {
     var a = analises[i];
     var el = document.createElement('div');
     el.className = 'ia-item';
-    var labelNivel = { urgente: 'URGENTE', atencao: 'ATENCAO', ok: 'OK' }[a.nivel];
+    var labelN = {urgente:'URGENTE', atencao:'ATENCAO', ok:'OK'}[a.nivel];
     el.innerHTML =
-      '<div class="ia-item-top">' +
-        '<p>' + a.funcionario + ' — ' + a.epi + '</p>' +
-        '<span class="ia-badge ' + a.nivel + '">' + labelNivel + '</span>' +
-      '</div>' +
-      '<span>' + (a.validade ? 'Validade: ' + fmt(a.validade) : 'Sem validade') + ' | ' + a.frequencia + '</span>' +
-      '<div class="ia-rec">IA: ' + a.recomendacao + '</div>';
+      '<div class="ia-item-top"><p>' + a.func + ' — ' + a.epi + '</p><span class="ia-badge ' + a.nivel + '">' + labelN + '</span></div>' +
+      '<span>' + (a.validade ? 'Validade: ' + fmt(a.validade) : 'Sem validade') + ' | ' + a.freq + '</span>' +
+      '<div class="ia-rec">IA: ' + a.rec + '</div>';
     div.appendChild(el);
   }
-
   if (analises.length > max) {
     var mais = document.createElement('div');
-    mais.style.cssText = 'text-align:center;font-size:.75rem;color:rgba(255,255,255,.3);padding:8px';
+    mais.style.cssText = 'text-align:center;font-size:.73rem;color:rgba(255,255,255,.25);padding:8px';
     mais.textContent = '+ ' + (analises.length - max) + ' outros EPIs';
     div.appendChild(mais);
   }
@@ -560,23 +521,21 @@ function renderIA() {
 // MODAL
 function abrirModal() {
   document.getElementById('f_titulo').value = '';
-  document.getElementById('f_data').value = diaSelecionado
-    ? diaSelecionado.ano + '-' + String(diaSelecionado.mes+1).padStart(2,'0') + '-' + String(diaSelecionado.dia).padStart(2,'0')
-    : new Date().toISOString().split('T')[0];
+  document.getElementById('f_data').value = diaSel
+    ? diaSel.ano + '-' + String(diaSel.mes+1).padStart(2,'0') + '-' + String(diaSel.dia).padStart(2,'0')
+    : hoje.toISOString().split('T')[0];
   document.getElementById('f_tipo').value = 'manual';
   document.getElementById('f_desc').value = '';
 
-  // Popular funcionarios
-  var funcionarios = JSON.parse(localStorage.getItem('safenr_funcionarios') || '[]');
+  var funcs = JSON.parse(localStorage.getItem('safenr_funcionarios') || '[]');
   var sel = document.getElementById('f_funcionario');
   sel.innerHTML = '<option value="">-- Nenhum --</option>';
-  funcionarios.forEach(function(f) {
+  for (var i = 0; i < funcs.length; i++) {
     var opt = document.createElement('option');
-    opt.value = f.nome;
-    opt.textContent = f.nome + ' (' + (f.cargo || f.setor || '--') + ')';
+    opt.value = funcs[i].nome;
+    opt.textContent = funcs[i].nome + (funcs[i].cargo ? ' (' + funcs[i].cargo + ')' : '');
     sel.appendChild(opt);
-  });
-
+  }
   document.getElementById('modalForm').classList.add('open');
 }
 
@@ -586,8 +545,7 @@ function salvar() {
   var titulo = document.getElementById('f_titulo').value.trim();
   var data = document.getElementById('f_data').value;
   if (!titulo || !data) { alert('Preencha Titulo e Data.'); return; }
-
-  var novoId = Date.now();
+  var novoId = Date.now() + Math.random();
   eventos.push({
     id: novoId,
     titulo: titulo,
@@ -600,20 +558,16 @@ function salvar() {
     criadoPor: user.nome || 'Usuario',
     criadoEm: new Date().toISOString()
   });
-
   salvarStorage();
   fecharModal();
-
-  // Ir para o mes do evento salvo
   var partes = data.split('-');
   anoAtual = parseInt(partes[0]);
   mesAtual = parseInt(partes[1]) - 1;
-  diaSelecionado = { ano: anoAtual, mes: mesAtual, dia: parseInt(partes[2]) };
-
-  renderCalendario();
+  diaSel = { ano: anoAtual, mes: mesAtual, dia: parseInt(partes[2]) };
+  renderCal();
   renderProximos();
   renderIA();
-  selecionarDia(diaSelecionado.ano, diaSelecionado.mes, diaSelecionado.dia);
+  selecionarDia(diaSel.ano, diaSel.mes, diaSel.dia);
 }
 
 document.getElementById('modalForm').addEventListener('click', function(e) {
@@ -621,10 +575,9 @@ document.getElementById('modalForm').addEventListener('click', function(e) {
 });
 
 // INIT
-renderCalendario();
+renderCal();
 renderProximos();
 renderIA();
 </script>
 </body>
 </html>
-
