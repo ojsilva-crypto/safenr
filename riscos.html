@@ -6,58 +6,40 @@
   <title>SafeNR — Riscos</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #0f1923;
-      color: #fff;
-      display: flex;
-      min-height: 100vh;
+      background: #0f1923; color: #fff;
+      display: flex; min-height: 100vh;
     }
-
-    /* ── SIDEBAR ── */
     .sidebar {
-      width: 240px;
-      background: #0a1520;
+      width: 240px; background: #0a1520;
       border-right: 1px solid rgba(255,255,255,0.07);
-      display: flex;
-      flex-direction: column;
-      padding: 24px 0;
-      position: fixed;
-      height: 100vh;
+      display: flex; flex-direction: column;
+      padding: 24px 0; position: fixed; height: 100vh;
     }
-    .sidebar-logo {
-      text-align: center;
-      padding: 0 24px 28px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
+    .sidebar-logo { text-align: center; padding: 0 24px 28px; border-bottom: 1px solid rgba(255,255,255,0.07); }
     .sidebar-logo h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: 2px; }
     .sidebar-logo h1 span { color: #00d4ff; }
     .sidebar-logo p { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-top: 2px; }
-
     .nav { flex: 1; padding: 20px 0; }
     .nav-item {
       display: flex; align-items: center; gap: 12px;
       padding: 13px 24px; cursor: pointer;
       color: rgba(255,255,255,0.5); font-size: 0.9rem; font-weight: 500;
-      transition: all 0.2s; border-left: 3px solid transparent;
-      text-decoration: none;
+      transition: all 0.2s; border-left: 3px solid transparent; text-decoration: none;
     }
     .nav-item:hover { color: #fff; background: rgba(255,255,255,0.04); }
     .nav-item.active { color: #00d4ff; border-left-color: #00d4ff; background: rgba(0,212,255,0.06); }
     .nav-item .icon { font-size: 1.1rem; width: 20px; text-align: center; }
-
     .sidebar-user {
-      padding: 16px 24px;
-      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.07);
       display: flex; align-items: center; gap: 12px;
     }
     .avatar {
       width: 36px; height: 36px;
       background: linear-gradient(135deg, #00d4ff, #0099cc);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 0.85rem;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-weight: 700; font-size: 0.85rem;
     }
     .user-info p { font-size: 0.82rem; font-weight: 600; }
     .user-info span { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
@@ -66,280 +48,121 @@
       cursor: pointer; font-size: 0.8rem; margin-left: auto;
     }
     .btn-sair:hover { color: #ff6b6b; }
-
-    /* ── MAIN ── */
     .main { margin-left: 240px; flex: 1; padding: 32px; }
-
     .topbar {
       display: flex; align-items: center;
       justify-content: space-between; margin-bottom: 28px;
     }
     .topbar h2 { font-size: 1.4rem; font-weight: 700; }
     .topbar span { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
-
     .btn-novo {
-      background: linear-gradient(135deg, #ff6b35, #e84545);
-      border: none; border-radius: 10px;
-      color: #fff; font-size: 0.9rem; font-weight: 700;
-      padding: 12px 24px; cursor: pointer;
-      transition: opacity 0.2s, transform 0.2s;
+      background: linear-gradient(135deg, #f87171, #dc2626);
+      border: none; border-radius: 10px; color: #fff;
+      font-size: 0.9rem; font-weight: 700; padding: 12px 24px;
+      cursor: pointer; transition: opacity 0.2s, transform 0.2s;
     }
     .btn-novo:hover { opacity: 0.85; transform: translateY(-1px); }
-
-    /* ── CARDS RESUMO ── */
-    .cards-resumo {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-    .card-resumo {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px;
-      padding: 20px;
-      display: flex; align-items: center; gap: 16px;
-      transition: transform 0.2s;
-    }
-    .card-resumo:hover { transform: translateY(-2px); }
-    .card-resumo-icon {
-      width: 48px; height: 48px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; flex-shrink: 0;
-    }
-    .card-resumo-icon.baixo    { background: rgba(74,222,128,0.15); }
-    .card-resumo-icon.medio    { background: rgba(251,191,36,0.15); }
-    .card-resumo-icon.alto     { background: rgba(251,146,60,0.15); }
-    .card-resumo-icon.critico  { background: rgba(248,113,113,0.15); }
-    .card-resumo-val { font-size: 1.8rem; font-weight: 800; }
-    .card-resumo-val.baixo   { color: #4ade80; }
-    .card-resumo-val.medio   { color: #fbbf24; }
-    .card-resumo-val.alto    { color: #fb923c; }
-    .card-resumo-val.critico { color: #f87171; }
-    .card-resumo-label { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-top: 2px; }
-
-    /* ── FILTROS ── */
-    .filtros {
-      display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;
-      align-items: center;
-    }
+    .filtros { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
     .filtro-btn {
       padding: 8px 18px; border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.15);
       background: transparent; color: rgba(255,255,255,0.5);
-      cursor: pointer; font-size: 0.82rem; font-weight: 500;
-      transition: all 0.2s;
+      cursor: pointer; font-size: 0.82rem; font-weight: 500; transition: all 0.2s;
     }
     .filtro-btn:hover { border-color: #00d4ff; color: #00d4ff; }
     .filtro-btn.active { background: rgba(0,212,255,0.12); border-color: #00d4ff; color: #00d4ff; }
-
-    /* ── KANBAN ── */
-    .kanban {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-    .kanban-col {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 16px;
-      padding: 20px;
-      min-height: 300px;
-    }
-    .kanban-col-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 16px;
-    }
-    .kanban-col-title {
-      font-size: 0.85rem; font-weight: 700;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .kanban-count {
-      background: rgba(255,255,255,0.1);
-      border-radius: 20px; padding: 2px 10px;
-      font-size: 0.75rem; color: rgba(255,255,255,0.5);
-    }
-
-    /* ── CARD RISCO ── */
-    .risco-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-      transition: transform 0.2s, border-color 0.2s;
-      cursor: pointer;
-      position: relative;
-    }
-    .risco-card:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.18); }
-    .risco-card-header {
-      display: flex; align-items: flex-start;
-      justify-content: space-between; margin-bottom: 10px;
-    }
-    .risco-card-titulo { font-size: 0.88rem; font-weight: 700; flex: 1; }
-    .nivel-badge {
-      padding: 3px 10px; border-radius: 20px;
-      font-size: 0.7rem; font-weight: 700;
-      white-space: nowrap; margin-left: 8px;
-    }
-    .nivel-badge.baixo   { background: rgba(74,222,128,0.15);  color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
-    .nivel-badge.medio   { background: rgba(251,191,36,0.15);   color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
-    .nivel-badge.alto    { background: rgba(251,146,60,0.15);   color: #fb923c; border: 1px solid rgba(251,146,60,0.3); }
-    .nivel-badge.critico { background: rgba(248,113,113,0.15);  color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
-
-    .risco-card-info {
-      font-size: 0.78rem; color: rgba(255,255,255,0.45);
-      display: flex; flex-direction: column; gap: 4px;
-    }
-    .risco-card-info span { display: flex; align-items: center; gap: 6px; }
-
-    .risco-card-footer {
-      display: flex; align-items: center;
-      justify-content: space-between; margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-    .prazo-badge {
-      font-size: 0.72rem; padding: 3px 10px;
-      border-radius: 20px;
-    }
-    .prazo-badge.ok      { background: rgba(74,222,128,0.1);  color: #4ade80; }
-    .prazo-badge.alerta  { background: rgba(251,191,36,0.1);  color: #fbbf24; }
-    .prazo-badge.vencido { background: rgba(248,113,113,0.1); color: #f87171; }
-
-    .risco-acoes { display: flex; gap: 4px; }
-    .btn-acao {
-      background: none; border: none; cursor: pointer;
-      padding: 4px 8px; border-radius: 6px; font-size: 0.82rem;
-      transition: background 0.2s;
-    }
-    .btn-acao:hover { background: rgba(255,255,255,0.1); }
-
-    /* ── LISTA (alternativa) ── */
     .tabela-wrap {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 16px; overflow: hidden;
     }
     table { width: 100%; border-collapse: collapse; }
-    thead tr {
-      background: rgba(255,255,255,0.05);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
+    thead tr { background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08); }
     th {
-      padding: 14px 18px; text-align: left;
-      font-size: 0.78rem; font-weight: 600;
-      color: rgba(255,255,255,0.45); text-transform: uppercase;
+      padding: 14px 18px; text-align: left; font-size: 0.78rem; font-weight: 600;
+      color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.5px;
     }
     td {
       padding: 14px 18px; font-size: 0.87rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      vertical-align: middle;
+      border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle;
     }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: rgba(255,255,255,0.02); }
-
-    .empty-state {
-      text-align: center; padding: 60px 20px;
-      color: rgba(255,255,255,0.3);
+    .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+    .badge.baixo     { background: rgba(74,222,128,0.15);  color: #4ade80; }
+    .badge.medio     { background: rgba(251,191,36,0.15);   color: #fbbf24; }
+    .badge.alto      { background: rgba(251,146,60,0.15);   color: #fb923c; }
+    .badge.critico   { background: rgba(248,113,113,0.15);  color: #f87171; }
+    .badge.aberto    { background: rgba(96,165,250,0.15);   color: #60a5fa; }
+    .badge.em-tratamento { background: rgba(251,191,36,0.15); color: #fbbf24; }
+    .badge.resolvido { background: rgba(74,222,128,0.15);   color: #4ade80; }
+    .btn-acao {
+      background: none; border: none; cursor: pointer;
+      padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; transition: background 0.2s;
     }
+    .btn-acao:hover { background: rgba(255,255,255,0.08); }
+    .empty-state { text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.3); }
     .empty-state div { font-size: 3rem; margin-bottom: 12px; }
-
-    /* VIEW TOGGLE */
-    .view-toggle { display: flex; gap: 6px; }
-    .view-btn {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px; padding: 7px 12px;
-      color: rgba(255,255,255,0.5); cursor: pointer;
-      font-size: 0.85rem; transition: all 0.2s;
-    }
-    .view-btn.active { background: rgba(0,212,255,0.12); border-color: #00d4ff; color: #00d4ff; }
-
-    /* ── MODAL ── */
+    .empty-state p { font-size: 0.9rem; }
     .modal-overlay {
       display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
       z-index: 1000; align-items: center; justify-content: center;
     }
     .modal-overlay.open { display: flex; }
     .modal {
-      background: #0f1923;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 20px; padding: 36px;
-      width: 100%; max-width: 580px;
-      max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      background: #0f1923; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 36px; width: 100%; max-width: 560px;
+      max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.6);
     }
     .modal h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 24px; }
-
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
     .form-row.full { grid-template-columns: 1fr; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group label { font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.55); }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 10px; padding: 12px 14px;
-      color: #fff; font-size: 0.9rem; outline: none;
-      transition: border 0.2s;
+    .form-group input, .form-group select, .form-group textarea {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px; padding: 12px 14px; color: #fff; font-size: 0.9rem;
+      outline: none; transition: border 0.2s;
     }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus { border-color: #00d4ff; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #00d4ff; }
     .form-group textarea { resize: vertical; min-height: 80px; }
     .form-group select option { background: #1a2535; }
-
-    .modal-footer {
-      display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;
+    .auto-field {
+      background: rgba(0,212,255,0.06) !important;
+      border-color: rgba(0,212,255,0.2) !important;
+      color: rgba(255,255,255,0.6) !important;
+      cursor: not-allowed !important;
     }
+    .auto-tag {
+      font-size: 0.68rem; color: #00d4ff;
+      background: rgba(0,212,255,0.1);
+      border-radius: 20px; padding: 2px 8px;
+      margin-left: 6px; font-weight: 600;
+    }
+    .modal-footer { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
     .btn-cancelar {
       padding: 12px 24px; border-radius: 10px;
       border: 1px solid rgba(255,255,255,0.15);
-      background: transparent; color: rgba(255,255,255,0.6);
-      cursor: pointer; font-size: 0.9rem;
+      background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 0.9rem;
     }
     .btn-salvar {
       padding: 12px 28px; border-radius: 10px;
-      background: linear-gradient(135deg, #ff6b35, #e84545);
-      border: none; color: #fff;
-      font-size: 0.9rem; font-weight: 700; cursor: pointer;
+      background: linear-gradient(135deg, #f87171, #dc2626);
+      border: none; color: #fff; font-size: 0.9rem; font-weight: 700; cursor: pointer;
     }
     .btn-salvar:hover { opacity: 0.85; }
-
-    /* DETALHE */
     .detalhe-row {
       display: flex; gap: 8px; margin-bottom: 12px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
     }
     .detalhe-row:last-child { border-bottom: none; }
-    .detalhe-label { font-size: 0.78rem; color: rgba(255,255,255,0.4); min-width: 130px; font-weight: 600; }
+    .detalhe-label { font-size: 0.78rem; color: rgba(255,255,255,0.4); min-width: 140px; font-weight: 600; }
     .detalhe-valor { font-size: 0.88rem; color: #fff; }
-
-    /* BARRA NIVEL */
-    .nivel-barra-wrap { margin: 16px 0; }
-    .nivel-barra-label { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-bottom: 8px; }
-    .nivel-barra-track {
-      background: rgba(255,255,255,0.06);
-      border-radius: 20px; height: 8px; display: flex;
-    }
-    .nivel-barra-seg {
-      flex: 1; height: 100%; transition: all 0.3s;
-    }
-    .nivel-barra-seg:first-child { border-radius: 20px 0 0 20px; }
-    .nivel-barra-seg:last-child  { border-radius: 0 20px 20px 0; }
-    .nivel-barra-seg.ativo.baixo   { background: #4ade80; }
-    .nivel-barra-seg.ativo.medio   { background: #fbbf24; }
-    .nivel-barra-seg.ativo.alto    { background: #fb923c; }
-    .nivel-barra-seg.ativo.critico { background: #f87171; }
   </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
@@ -349,7 +172,7 @@
     <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
     <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
     <a class="nav-item active" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
-    <a class="nav-item" href="#"><span class="icon">📋</span> Checklists</a>
+    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
     <a class="nav-item" href="#"><span class="icon">👷</span> Funcionários</a>
     <a class="nav-item" href="#"><span class="icon">📄</span> Relatórios</a>
     <a class="nav-item" href="#"><span class="icon">⚙️</span> Configurações</a>
@@ -364,111 +187,44 @@
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div>
       <h2>⚠️ Riscos</h2>
       <span id="totalRegistros">0 registros</span>
     </div>
-    <div style="display:flex; gap:12px; align-items:center">
-      <div class="view-toggle">
-        <button class="view-btn active" id="btnKanban" onclick="setView('kanban')" title="Kanban">⊞</button>
-        <button class="view-btn" id="btnLista" onclick="setView('lista')" title="Lista">☰</button>
-      </div>
-      <button class="btn-novo" onclick="abrirModal()">＋ Novo Risco</button>
-    </div>
+    <button class="btn-novo" onclick="abrirModal()">＋ Novo Risco</button>
   </div>
 
-  <!-- CARDS RESUMO -->
-  <div class="cards-resumo">
-    <div class="card-resumo">
-      <div class="card-resumo-icon baixo">🟢</div>
-      <div>
-        <div class="card-resumo-val baixo" id="cnt-baixo">0</div>
-        <div class="card-resumo-label">Baixo</div>
-      </div>
-    </div>
-    <div class="card-resumo">
-      <div class="card-resumo-icon medio">🟡</div>
-      <div>
-        <div class="card-resumo-val medio" id="cnt-medio">0</div>
-        <div class="card-resumo-label">Médio</div>
-      </div>
-    </div>
-    <div class="card-resumo">
-      <div class="card-resumo-icon alto">🟠</div>
-      <div>
-        <div class="card-resumo-val alto" id="cnt-alto">0</div>
-        <div class="card-resumo-label">Alto</div>
-      </div>
-    </div>
-    <div class="card-resumo">
-      <div class="card-resumo-icon critico">🔴</div>
-      <div>
-        <div class="card-resumo-val critico" id="cnt-critico">0</div>
-        <div class="card-resumo-label">Crítico</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FILTROS -->
   <div class="filtros">
-    <button class="filtro-btn active" onclick="filtrar('todos',this)">Todos</button>
-    <button class="filtro-btn" onclick="filtrar('aberto',this)">📂 Aberto</button>
-    <button class="filtro-btn" onclick="filtrar('em-tratamento',this)">🔧 Em Tratamento</button>
-    <button class="filtro-btn" onclick="filtrar('resolvido',this)">✅ Resolvido</button>
+    <button class="filtro-btn active" onclick="filtrar('todos', this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('aberto', this)">🔵 Aberto</button>
+    <button class="filtro-btn" onclick="filtrar('em-tratamento', this)">🟡 Em Tratamento</button>
+    <button class="filtro-btn" onclick="filtrar('resolvido', this)">✅ Resolvido</button>
+    <button class="filtro-btn" onclick="filtrar('critico', this)">🚨 Nível Crítico</button>
   </div>
 
-  <!-- VIEW KANBAN -->
-  <div id="viewKanban">
-    <div class="kanban">
-      <div class="kanban-col">
-        <div class="kanban-col-header">
-          <div class="kanban-col-title">📂 <span>Abertos</span></div>
-          <span class="kanban-count" id="k-cnt-aberto">0</span>
-        </div>
-        <div id="k-aberto"></div>
-      </div>
-      <div class="kanban-col">
-        <div class="kanban-col-header">
-          <div class="kanban-col-title">🔧 <span>Em Tratamento</span></div>
-          <span class="kanban-count" id="k-cnt-tratamento">0</span>
-        </div>
-        <div id="k-tratamento"></div>
-      </div>
-      <div class="kanban-col">
-        <div class="kanban-col-header">
-          <div class="kanban-col-title">✅ <span>Resolvidos</span></div>
-          <span class="kanban-count" id="k-cnt-resolvido">0</span>
-        </div>
-        <div id="k-resolvido"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- VIEW LISTA -->
-  <div id="viewLista" style="display:none">
-    <div class="tabela-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Título do Risco</th>
-            <th>Setor</th>
-            <th>Nível</th>
-            <th>Responsável</th>
-            <th>Prazo</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="tabelaBody"></tbody>
-      </table>
-      <div class="empty-state" id="emptyState" style="display:none">
-        <div>⚠️</div>
-        <p>Nenhum risco cadastrado.<br>Clique em <strong>+ Novo Risco</strong> para começar.</p>
-      </div>
+  <div class="tabela-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Descrição do Risco</th>
+          <th>Setor</th>
+          <th>Nível</th>
+          <th>Status</th>
+          <th>Responsável</th>
+          <th>Prazo</th>
+          <th>Registrado por</th>
+          <th>Registrado em</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaBody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div>⚠️</div>
+      <p>Nenhum risco cadastrado.<br>Clique em <strong>+ Novo Risco</strong> para começar.</p>
     </div>
   </div>
 </div>
@@ -477,28 +233,25 @@
 <div class="modal-overlay" id="modalForm">
   <div class="modal">
     <h3 id="modalTitulo">⚠️ Novo Risco</h3>
-
     <div class="form-row full">
       <div class="form-group">
-        <label>Título do Risco *</label>
-        <input type="text" id="f_titulo" placeholder="Ex: Falta de EPI na área de solda..."/>
+        <label>Descrição do Risco *</label>
+        <textarea id="f_descricao" placeholder="Descreva o risco identificado..."></textarea>
       </div>
     </div>
-
     <div class="form-row">
       <div class="form-group">
         <label>Setor / Local *</label>
         <input type="text" id="f_setor" placeholder="Ex: Produção, Elétrica..."/>
       </div>
       <div class="form-group">
-        <label>Responsável pela Correção *</label>
+        <label>Responsável pelo tratamento *</label>
         <input type="text" id="f_responsavel" placeholder="Nome do responsável"/>
       </div>
     </div>
-
     <div class="form-row">
       <div class="form-group">
-        <label>Nível de Criticidade *</label>
+        <label>Nível do Risco *</label>
         <select id="f_nivel">
           <option value="">Selecione</option>
           <option value="baixo">🟢 Baixo</option>
@@ -511,39 +264,38 @@
         <label>Status *</label>
         <select id="f_status">
           <option value="">Selecione</option>
-          <option value="aberto">📂 Aberto</option>
-          <option value="em-tratamento">🔧 Em Tratamento</option>
+          <option value="aberto">🔵 Aberto</option>
+          <option value="em-tratamento">🟡 Em Tratamento</option>
           <option value="resolvido">✅ Resolvido</option>
         </select>
       </div>
     </div>
-
     <div class="form-row">
       <div class="form-group">
-        <label>Tipo de Risco</label>
-        <select id="f_tipo">
-          <option value="">Selecione</option>
-          <option>Físico</option>
-          <option>Químico</option>
-          <option>Biológico</option>
-          <option>Ergonômico</option>
-          <option>Acidente</option>
-          <option>Psicossocial</option>
-        </select>
+        <label>📅 Data de Identificação *</label>
+        <input type="date" id="f_data"/>
       </div>
       <div class="form-group">
-        <label>Prazo para Resolução *</label>
+        <label>Prazo para resolução</label>
         <input type="date" id="f_prazo"/>
       </div>
     </div>
-
-    <div class="form-row full">
+    <div class="form-row">
       <div class="form-group">
-        <label>Descrição / Detalhamento</label>
-        <textarea id="f_desc" placeholder="Descreva o risco, causas, possíveis consequências e medidas recomendadas..."></textarea>
+        <label>👤 Registrado por <span class="auto-tag">AUTOMÁTICO</span></label>
+        <input type="text" id="f_registradoPor" class="auto-field" readonly/>
+      </div>
+      <div class="form-group">
+        <label>🕐 Registrado em <span class="auto-tag">AUTOMÁTICO</span></label>
+        <input type="text" id="f_registradoEm" class="auto-field" readonly/>
       </div>
     </div>
-
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Medidas de Controle / Observações</label>
+        <textarea id="f_obs" placeholder="Descreva as medidas de controle, ações tomadas..."></textarea>
+      </div>
+    </div>
     <div class="modal-footer">
       <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
       <button class="btn-salvar" onclick="salvarRisco()">💾 Salvar</button>
@@ -563,208 +315,143 @@
 </div>
 
 <script>
-  // ── Auth ──
   const userData = localStorage.getItem('safenr_user');
   if (!userData) { window.location.href = './index.html'; }
-  else {
-    const user = JSON.parse(userData);
-    document.getElementById('nomeUsuario').textContent = user.nome || 'Usuário';
-    document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
-  }
-  function sair() {
-    localStorage.removeItem('safenr_user');
-    window.location.href = './index.html';
-  }
+  const user = JSON.parse(userData);
+  document.getElementById('nomeUsuario').textContent = user.nome || 'Usuário';
+  document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+  function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
 
-  // ── Dados ──
   let riscos = JSON.parse(localStorage.getItem('safenr_riscos') || '[]');
   let editandoId = null;
   let filtroAtivo = 'todos';
-  let viewAtual = 'kanban';
 
   function salvarStorage() { localStorage.setItem('safenr_riscos', JSON.stringify(riscos)); }
 
-  // ── Helpers ──
-  function labelNivel(n) {
-    return { baixo:'🟢 Baixo', medio:'🟡 Médio', alto:'🟠 Alto', critico:'🔴 Crítico' }[n] || n;
-  }
-  function labelStatus(s) {
-    return { aberto:'📂 Aberto', 'em-tratamento':'🔧 Em Tratamento', resolvido:'✅ Resolvido' }[s] || s;
-  }
   function formatarData(d) {
     if (!d) return '—';
     const [y,m,dia] = d.split('-');
     return `${dia}/${m}/${y}`;
   }
-  function prazoInfo(prazo) {
-    if (!prazo) return { label: 'Sem prazo', cls: 'ok' };
-    const hoje = new Date(); hoje.setHours(0,0,0,0);
-    const p = new Date(prazo + 'T00:00:00');
-    const diff = Math.ceil((p - hoje) / (1000*60*60*24));
-    if (diff < 0)  return { label: `Vencido há ${Math.abs(diff)}d`, cls: 'vencido' };
-    if (diff <= 7) return { label: `Vence em ${diff}d`, cls: 'alerta' };
-    return { label: `${diff} dias`, cls: 'ok' };
-  }
-
-  // ── Atualizar contadores ──
-  function atualizarContadores(lista) {
-    ['baixo','medio','alto','critico'].forEach(n => {
-      document.getElementById(`cnt-${n}`).textContent = lista.filter(r => r.nivel === n).length;
-    });
-    document.getElementById('totalRegistros').textContent = lista.length + ' registro(s)';
-  }
-
-  // ── View Toggle ──
-  function setView(v) {
-    viewAtual = v;
-    document.getElementById('viewKanban').style.display = v === 'kanban' ? 'block' : 'none';
-    document.getElementById('viewLista').style.display  = v === 'lista'  ? 'block' : 'none';
-    document.getElementById('btnKanban').classList.toggle('active', v === 'kanban');
-    document.getElementById('btnLista').classList.toggle('active',  v === 'lista');
-    aplicarFiltroAtual();
-  }
-
-  // ── Filtrar ──
-  function filtrar(status, btn) {
-    filtroAtivo = status;
-    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    aplicarFiltroAtual();
-  }
-
-  function aplicarFiltroAtual() {
-    const lista = filtroAtivo === 'todos'
-      ? riscos
-      : riscos.filter(r => r.status === filtroAtivo);
-    atualizarContadores(riscos);
-    if (viewAtual === 'kanban') renderKanban(lista);
-    else renderLista(lista);
-  }
-
-  // ── Render Kanban ──
-  function renderKanban(lista) {
-    const cols = { aberto: [], 'em-tratamento': [], resolvido: [] };
-    lista.forEach(r => { if (cols[r.status]) cols[r.status].push(r); });
-
-    ['aberto','em-tratamento','resolvido'].forEach(s => {
-      const key = s === 'em-tratamento' ? 'tratamento' : s;
-      const el = document.getElementById(`k-${key}`);
-      const cnt = document.getElementById(`k-cnt-${key === 'tratamento' ? 'tratamento' : s}`);
-      cnt.textContent = cols[s].length;
-
-      if (cols[s].length === 0) {
-        el.innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,0.2);font-size:0.82rem">Nenhum risco</div>`;
-        return;
-      }
-
-      el.innerHTML = cols[s].map(r => {
-        const p = prazoInfo(r.prazo);
-        return `
-          <div class="risco-card" onclick="verDetalhes(${r.id})">
-            <div class="risco-card-header">
-              <div class="risco-card-titulo">${r.titulo}</div>
-              <span class="nivel-badge ${r.nivel}">${r.nivel.charAt(0).toUpperCase()+r.nivel.slice(1)}</span>
-            </div>
-            <div class="risco-card-info">
-              <span>📍 ${r.setor}</span>
-              <span>👷 ${r.responsavel}</span>
-              ${r.tipo ? `<span>🏷️ ${r.tipo}</span>` : ''}
-            </div>
-            <div class="risco-card-footer">
-              <span class="prazo-badge ${p.cls}">⏰ ${p.label}</span>
-              <div class="risco-acoes" onclick="event.stopPropagation()">
-                <button class="btn-acao" onclick="editar(${r.id})" title="Editar">✏️</button>
-                <button class="btn-acao" onclick="excluir(${r.id})" title="Excluir">🗑️</button>
-              </div>
-            </div>
-          </div>`;
-      }).join('');
+  function formatarDT(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleString('pt-BR', {
+      day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'
     });
   }
+  function labelNivel(n) {
+    return {baixo:'Baixo', medio:'Médio', alto:'Alto', critico:'Crítico'}[n] || n;
+  }
+  function labelStatus(s) {
+    return {aberto:'Aberto', 'em-tratamento':'Em Tratamento', resolvido:'Resolvido'}[s] || s;
+  }
 
-  // ── Render Lista ──
-  function renderLista(lista) {
+  function renderizar(lista) {
     const tbody = document.getElementById('tabelaBody');
     const empty = document.getElementById('emptyState');
     tbody.innerHTML = '';
-
     if (lista.length === 0) {
-      empty.style.display = 'block'; return;
+      empty.style.display = 'block';
+      document.getElementById('totalRegistros').textContent = '0 registros';
+      return;
     }
     empty.style.display = 'none';
-
+    document.getElementById('totalRegistros').textContent = lista.length + ' registro(s)';
     lista.forEach(r => {
-      const p = prazoInfo(r.prazo);
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td style="color:rgba(255,255,255,0.3);font-size:0.8rem">#${String(r.id).padStart(3,'0')}</td>
-        <td><strong>${r.titulo}</strong></td>
+        <td style="max-width:220px"><strong>${r.descricao}</strong></td>
         <td>${r.setor}</td>
-        <td><span class="nivel-badge ${r.nivel}">${labelNivel(r.nivel)}</span></td>
+        <td><span class="badge ${r.nivel}">${labelNivel(r.nivel)}</span></td>
+        <td><span class="badge ${r.status}">${labelStatus(r.status)}</span></td>
         <td>${r.responsavel}</td>
-        <td><span class="prazo-badge ${p.cls}">⏰ ${p.label}</span></td>
-        <td><span style="font-size:0.82rem">${labelStatus(r.status)}</span></td>
+        <td>${formatarData(r.prazo)}</td>
+        <td><span style="font-size:0.82rem">👤 ${r.registradoPor || '—'}</span></td>
+        <td><span style="font-size:0.78rem;color:rgba(255,255,255,0.45)">${formatarDT(r.registradoEm)}</span></td>
         <td>
-          <button class="btn-acao" onclick="verDetalhes(${r.id})" title="Ver">👁️</button>
-          <button class="btn-acao" onclick="editar(${r.id})" title="Editar">✏️</button>
-          <button class="btn-acao" onclick="excluir(${r.id})" title="Excluir">🗑️</button>
+          <button class="btn-acao" onclick="verDetalhes(${r.id})">👁️</button>
+          <button class="btn-acao" onclick="editar(${r.id})">✏️</button>
+          <button class="btn-acao" onclick="excluir(${r.id})">🗑️</button>
         </td>`;
       tbody.appendChild(tr);
     });
   }
 
-  // ── Modal Form ──
+  function filtrar(status, btn) {
+    filtroAtivo = status;
+    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    let lista = riscos;
+    if (status === 'critico') lista = riscos.filter(r => r.nivel === 'critico');
+    else if (status !== 'todos') lista = riscos.filter(r => r.status === status);
+    renderizar(lista);
+  }
+
   function abrirModal(id = null) {
     editandoId = id;
     document.getElementById('modalTitulo').textContent = id ? '✏️ Editar Risco' : '⚠️ Novo Risco';
-    ['f_titulo','f_setor','f_responsavel','f_nivel','f_status','f_tipo','f_prazo','f_desc']
-      .forEach(f => document.getElementById(f).value = '');
+    ['f_descricao','f_setor','f_responsavel','f_nivel','f_status','f_data','f_prazo','f_obs'].forEach(f => {
+      document.getElementById(f).value = '';
+    });
+
+    document.getElementById('f_registradoPor').value = user.nome || 'Usuário';
+    document.getElementById('f_registradoEm').value  = new Date().toLocaleString('pt-BR', {
+      day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit'
+    });
 
     if (id) {
       const r = riscos.find(r => r.id === id);
-      document.getElementById('f_titulo').value      = r.titulo;
-      document.getElementById('f_setor').value       = r.setor;
-      document.getElementById('f_responsavel').value = r.responsavel;
-      document.getElementById('f_nivel').value       = r.nivel;
-      document.getElementById('f_status').value      = r.status;
-      document.getElementById('f_tipo').value        = r.tipo || '';
-      document.getElementById('f_prazo').value       = r.prazo || '';
-      document.getElementById('f_desc').value        = r.desc || '';
+      document.getElementById('f_descricao').value  = r.descricao;
+      document.getElementById('f_setor').value      = r.setor;
+      document.getElementById('f_responsavel').value= r.responsavel;
+      document.getElementById('f_nivel').value      = r.nivel;
+      document.getElementById('f_status').value     = r.status;
+      document.getElementById('f_data').value       = r.data;
+      document.getElementById('f_prazo').value      = r.prazo || '';
+      document.getElementById('f_obs').value        = r.obs || '';
+      document.getElementById('f_registradoPor').value = r.registradoPor || user.nome || 'Usuário';
+      document.getElementById('f_registradoEm').value  = r.registradoEm
+        ? new Date(r.registradoEm).toLocaleString('pt-BR', {
+            day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit'
+          })
+        : '—';
+    } else {
+      document.getElementById('f_data').value = new Date().toISOString().split('T')[0];
     }
     document.getElementById('modalForm').classList.add('open');
   }
-  function fecharModal() {
-    document.getElementById('modalForm').classList.remove('open');
-    editandoId = null;
-  }
 
-  // ── Salvar ──
+  function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId = null; }
+
   function salvarRisco() {
-    const titulo      = document.getElementById('f_titulo').value.trim();
+    const descricao   = document.getElementById('f_descricao').value.trim();
     const setor       = document.getElementById('f_setor').value.trim();
     const responsavel = document.getElementById('f_responsavel').value.trim();
     const nivel       = document.getElementById('f_nivel').value;
     const status      = document.getElementById('f_status').value;
-    const tipo        = document.getElementById('f_tipo').value;
+    const data        = document.getElementById('f_data').value;
     const prazo       = document.getElementById('f_prazo').value;
-    const desc        = document.getElementById('f_desc').value.trim();
-
-    if (!titulo || !setor || !responsavel || !nivel || !status || !prazo) {
-      alert('⚠️ Preencha todos os campos obrigatórios (*)');
-      return;
+    const obs         = document.getElementById('f_obs').value.trim();
+    if (!descricao || !setor || !responsavel || !nivel || !status || !data) {
+      alert('⚠️ Preencha todos os campos obrigatórios (*)'); return;
     }
-
     if (editandoId) {
       const idx = riscos.findIndex(r => r.id === editandoId);
-      riscos[idx] = { ...riscos[idx], titulo, setor, responsavel, nivel, status, tipo, prazo, desc };
+      riscos[idx] = { ...riscos[idx], descricao, setor, responsavel, nivel, status, data, prazo, obs };
     } else {
       const novoId = riscos.length > 0 ? Math.max(...riscos.map(r => r.id)) + 1 : 1;
-      riscos.push({ id: novoId, titulo, setor, responsavel, nivel, status, tipo, prazo, desc });
+      riscos.push({
+        id: novoId, descricao, setor, responsavel, nivel, status, data, prazo, obs,
+        registradoPor: user.nome || 'Usuário',
+        registradoEm: new Date().toISOString()
+      });
     }
-
-    salvarStorage();
-    fecharModal();
-    aplicarFiltroAtual();
+    salvarStorage(); fecharModal();
+    let lista = riscos;
+    if (filtroAtivo === 'critico') lista = riscos.filter(r => r.nivel === 'critico');
+    else if (filtroAtivo !== 'todos') lista = riscos.filter(r => r.status === filtroAtivo);
+    renderizar(lista);
   }
 
   function editar(id) { abrirModal(id); }
@@ -773,51 +460,40 @@
     if (!confirm('Deseja realmente excluir este risco?')) return;
     riscos = riscos.filter(r => r.id !== id);
     salvarStorage();
-    aplicarFiltroAtual();
+    let lista = riscos;
+    if (filtroAtivo === 'critico') lista = riscos.filter(r => r.nivel === 'critico');
+    else if (filtroAtivo !== 'todos') lista = riscos.filter(r => r.status === filtroAtivo);
+    renderizar(lista);
   }
 
-  // ── Ver Detalhes ──
   function verDetalhes(id) {
     const r = riscos.find(r => r.id === id);
-    const p = prazoInfo(r.prazo);
-    const niveis = { baixo: 1, medio: 2, alto: 3, critico: 4 };
-    const nv = niveis[r.nivel] || 0;
-    const segs = ['baixo','medio','alto','critico'].map((n,i) =>
-      `<div class="nivel-barra-seg ${i < nv ? 'ativo '+r.nivel : ''}"></div>`
-    ).join('');
-
     document.getElementById('modalVerConteudo').innerHTML = `
       <div class="detalhe-row"><span class="detalhe-label">Nº</span><span class="detalhe-valor">#${String(r.id).padStart(3,'0')}</span></div>
-      <div class="detalhe-row"><span class="detalhe-label">Título</span><span class="detalhe-valor">${r.titulo}</span></div>
+      <div class="detalhe-row"><span class="detalhe-label">Descrição</span><span class="detalhe-valor">${r.descricao}</span></div>
       <div class="detalhe-row"><span class="detalhe-label">Setor / Local</span><span class="detalhe-valor">${r.setor}</span></div>
+      <div class="detalhe-row"><span class="detalhe-label">Nível do Risco</span><span class="badge ${r.nivel}">${labelNivel(r.nivel)}</span></div>
+      <div class="detalhe-row"><span class="detalhe-label">Status</span><span class="badge ${r.status}">${labelStatus(r.status)}</span></div>
       <div class="detalhe-row"><span class="detalhe-label">Responsável</span><span class="detalhe-valor">${r.responsavel}</span></div>
-      <div class="detalhe-row"><span class="detalhe-label">Tipo de Risco</span><span class="detalhe-valor">${r.tipo || '—'}</span></div>
-      <div class="detalhe-row"><span class="detalhe-label">Nível</span><span class="nivel-badge ${r.nivel}">${labelNivel(r.nivel)}</span></div>
-      <div class="detalhe-row"><span class="detalhe-label">Status</span><span class="detalhe-valor">${labelStatus(r.status)}</span></div>
-      <div class="detalhe-row"><span class="detalhe-label">Prazo</span><span class="prazo-badge ${p.cls}">⏰ ${formatarData(r.prazo)} — ${p.label}</span></div>
-      <div class="nivel-barra-wrap">
-        <div class="nivel-barra-label">Nível de Criticidade</div>
-        <div class="nivel-barra-track">${segs}</div>
+      <div class="detalhe-row"><span class="detalhe-label">📅 Data Identificação</span><span class="detalhe-valor">${formatarData(r.data)}</span></div>
+      <div class="detalhe-row"><span class="detalhe-label">Prazo Resolução</span><span class="detalhe-valor">${formatarData(r.prazo)}</span></div>
+      <div class="detalhe-row"><span class="detalhe-label">Medidas / Obs.</span><span class="detalhe-valor">${r.obs || '—'}</span></div>
+      <div class="detalhe-row" style="background:rgba(0,212,255,0.04);border-radius:10px;padding:12px;margin-top:8px;border:1px solid rgba(0,212,255,0.1)">
+        <span class="detalhe-label">👤 Registrado por</span>
+        <span class="detalhe-valor" style="color:#00d4ff">${r.registradoPor || '—'}</span>
       </div>
-      <div class="detalhe-row"><span class="detalhe-label">Descrição</span><span class="detalhe-valor">${r.desc || '—'}</span></div>
-    `;
+      <div class="detalhe-row" style="background:rgba(0,212,255,0.04);border-radius:10px;padding:12px;border:1px solid rgba(0,212,255,0.1)">
+        <span class="detalhe-label">🕐 Registrado em</span>
+        <span class="detalhe-valor" style="color:#00d4ff">${formatarDT(r.registradoEm)}</span>
+      </div>`;
     document.getElementById('modalVer').classList.add('open');
   }
   function fecharModalVer() { document.getElementById('modalVer').classList.remove('open'); }
 
-  // Fechar clicando fora
-  ['modalForm','modalVer'].forEach(id => {
-    document.getElementById(id).addEventListener('click', function(e) {
-      if (e.target === this) {
-        id === 'modalForm' ? fecharModal() : fecharModalVer();
-      }
-    });
-  });
+  document.getElementById('modalForm').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
+  document.getElementById('modalVer').addEventListener('click',  function(e) { if (e.target === this) fecharModalVer(); });
 
-  // ── Init ──
-  aplicarFiltroAtual();
+  renderizar(riscos);
 </script>
-
 </body>
 </html>
-
