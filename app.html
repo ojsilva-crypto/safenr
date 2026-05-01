@@ -1,3 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SafeNR — Dashboard</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;z-index:10}
+    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
+    .sidebar-logo h1 span{color:#00d4ff}
+    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
+    .nav{flex:1;padding:20px 0;overflow-y:auto}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
+    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+    .user-info p{font-size:.82rem;font-weight:600}
+    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
+    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+    .btn-sair:hover{color:#ff6b6b}
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .topbar h2{font-size:1.4rem;font-weight:700}
+    .topbar p{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:4px}
+    .cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:32px}
+    .card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:12px;transition:all .2s}
+    .card:hover{background:rgba(255,255,255,.06);transform:translateY(-2px)}
+    .card-header{display:flex;align-items:center;justify-content:space-between}
+    .card-icon{font-size:1.8rem}
+    .card-badge{padding:4px 10px;border-radius:20px;font-size:.72rem;font-weight:600}
+    .card-badge.blue{background:rgba(0,212,255,.15);color:#00d4ff}
+    .card-badge.green{background:rgba(74,222,128,.15);color:#4ade80}
+    .card-badge.red{background:rgba(248,113,113,.15);color:#f87171}
+    .card-badge.orange{background:rgba(251,146,60,.15);color:#fb923c}
+    .card-badge.purple{background:rgba(167,139,250,.15);color:#a78bfa}
+    .card-value{font-size:2.2rem;font-weight:900}
+    .card-label{font-size:.82rem;color:rgba(255,255,255,.45)}
+    .card-sub{font-size:.78rem;color:rgba(255,255,255,.3);padding-top:8px;border-top:1px solid rgba(255,255,255,.06)}
+    .section-title{font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+    .panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px}
+    .list-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .list-item:last-child{border-bottom:none}
+    .list-item-info p{font-size:.88rem;font-weight:600}
+    .list-item-info span{font-size:.75rem;color:rgba(255,255,255,.35)}
+    .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
+    .badge.critico{background:rgba(248,113,113,.15);color:#f87171}
+    .badge.alto{background:rgba(251,146,60,.15);color:#fb923c}
+    .badge.medio{background:rgba(251,191,36,.15);color:#fbbf24}
+    .badge.baixo{background:rgba(74,222,128,.15);color:#4ade80}
+    .badge.aberto{background:rgba(96,165,250,.15);color:#60a5fa}
+    .badge.concluida{background:rgba(74,222,128,.15);color:#4ade80}
+    .badge.pendente{background:rgba(251,191,36,.15);color:#fbbf24}
+    .empty{text-align:center;padding:32px;color:rgba(255,255,255,.25);font-size:.85rem}
+    .alerta-box{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:.88rem}
+    .alerta-box.oculto{display:none}
+    .progresso-bar{height:6px;background:rgba(255,255,255,.08);border-radius:10px;margin-top:8px;overflow:hidden}
+    .progresso-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#00d4ff,#0099cc);transition:width .6s}
+  </style>
+</head>
+<body>
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
@@ -24,4 +90,112 @@
     <button class="btn-sair" onclick="sair()">✕</button>
   </div>
 </div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <h2>🏠 Dashboard</h2>
+      <p id="dataHoje"></p>
+    </div>
+  </div>
+  <div class="alerta-box" id="alertaEpi">
+    🚨 <span id="alertaEpiTexto"></span>
+  </div>
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-header"><span class="card-icon">🔍</span><span class="card-badge blue">Total</span></div>
+      <div class="card-value" id="totalInspecoes">0</div>
+      <div class="card-label">Inspeções</div>
+      <div class="card-sub" id="subInspecoes">—</div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-icon">⚠️</span><span class="card-badge red">Total</span></div>
+      <div class="card-value" id="totalRiscos">0</div>
+      <div class="card-label">Riscos</div>
+      <div class="card-sub" id="subRiscos">—</div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-icon">👷</span><span class="card-badge purple">Total</span></div>
+      <div class="card-value" id="totalFunc">0</div>
+      <div class="card-label">Funcionários</div>
+      <div class="card-sub" id="subFunc">—</div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-icon">🦺</span><span class="card-badge orange">Atenção</span></div>
+      <div class="card-value" id="totalEpiVenc">0</div>
+      <div class="card-label">EPIs Vencidos</div>
+      <div class="card-sub" id="subEpi">—</div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="panel">
+      <div class="section-title">⚠️ Últimos Riscos</div>
+      <div id="listaRiscos"><div class="empty">Nenhum risco cadastrado</div></div>
+    </div>
+    <div class="panel">
+      <div class="section-title">🔍 Últimas Inspeções</div>
+      <div id="listaInspecoes"><div class="empty">Nenhuma inspeção cadastrada</div></div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="panel">
+      <div class="section-title">📋 Conformidade dos Checklists</div>
+      <div id="listaChecklists"><div class="empty">Nenhum checklist respondido</div></div>
+    </div>
+    <div class="panel">
+      <div class="section-title">👷 Funcionários com EPI Vencido</div>
+      <div id="listaEpiVenc"><div class="empty">Nenhum EPI vencido</div></div>
+    </div>
+  </div>
+</div>
+<script>
+var userData=localStorage.getItem('safenr_user');
+if(!userData){window.location.href='./index.html';}
+var user=JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent=user.nome||'Usuário';
+document.getElementById('avatarLetra').textContent=(user.nome||'U')[0].toUpperCase();
+function sair(){localStorage.removeItem('safenr_user');window.location.href='./index.html';}
+var meses=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+var hoje=new Date();
+document.getElementById('dataHoje').textContent='Hoje, '+hoje.getDate()+' de '+meses[hoje.getMonth()]+' de '+hoje.getFullYear();
+function fmt(d){if(!d)return'—';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function epiVencido(val){return val&&new Date(val)<new Date();}
+var inspecoes=JSON.parse(localStorage.getItem('safenr_inspecoes')||'[]');
+var riscos=JSON.parse(localStorage.getItem('safenr_riscos')||'[]');
+var funcionarios=JSON.parse(localStorage.getItem('safenr_funcionarios')||'[]');
+var NRS=['NR-05','NR-06','NR-07','NR-09','NR-10','NR-12','NR-17','NR-23','NR-35'];
+document.getElementById('totalInspecoes').textContent=inspecoes.length;
+var concl=inspecoes.filter(function(i){return i.status==='concluida'||i.status==='conforme';}).length;
+document.getElementById('subInspecoes').textContent=concl+' concluída(s)';
+document.getElementById('totalRiscos').textContent=riscos.length;
+var crit=riscos.filter(function(r){return r.nivel==='critico';}).length;
+document.getElementById('subRiscos').textContent=crit+' crítico(s)';
+document.getElementById('totalFunc').textContent=funcionarios.length;
+var ativ=funcionarios.filter(function(f){return f.status==='ativo';}).length;
+document.getElementById('subFunc').textContent=ativ+' ativo(s)';
+var episVencList=funcionarios.filter(function(f){return(f.epis||[]).some(function(e){return epiVencido(e.validade);});});
+document.getElementById('totalEpiVenc').textContent=episVencList.length;
+document.getElementById('subEpi').textContent=episVencList.length>0?'Requer atenção':'Todos em dia';
+if(episVencList.length>0){
+  document.getElementById('alertaEpiTexto').textContent=episVencList.length+' funcionário(s) com EPI vencido!';
+}else{
+  document.getElementById('alertaEpi').classList.add('oculto');
+}
+var lr=document.getElementById('listaRiscos');
+if(riscos.length===0){lr.innerHTML='<div class="empty">Nenhum risco cadastrado</div>';}
+else{var ul=riscos.slice(-5).reverse();lr.innerHTML=ul.map(function(r){return'<div class="list-item"><div class="list-item-info"><p>'+r.descricao+'</p><span>'+r.setor+'</span></div><span class="badge '+r.nivel+'">'+(r.nivel==='critico'?'Crítico':r.nivel==='alto'?'Alto':r.nivel==='medio'?'Médio':'Baixo')+'</span></div>';}).join('');}
+var li=document.getElementById('listaInspecoes');
+if(inspecoes.length===0){li.innerHTML='<div class="empty">Nenhuma inspeção cadastrada</div>';}
+else{var ui=inspecoes.slice(-5).reverse();li.innerHTML=ui.map(function(i){var sl={concluida:'concluida',conforme:'concluida',pendente:'pendente',aberta:'aberto','nao-conforme':'critico'}[i.status]||'aberto';var tl={concluida:'Concluída',conforme:'Conforme',pendente:'Pendente',aberta:'Aberta','nao-conforme':'Não Conforme'}[i.status]||i.status;return'<div class="list-item"><div class="list-item-info"><p>'+(i.titulo||i.descricao||'—')+'</p><span>'+(i.setor||i.local||'—')+' • '+fmt(i.data)+'</span></div><span class="badge '+sl+'">'+tl+'</span></div>';}).join('');}
+var lc=document.getElementById('listaChecklists');
+var NOMES={'NR-05':'CIPA','NR-06':'EPI','NR-07':'PCMSO','NR-09':'Riscos Ambientais','NR-10':'Eletricidade','NR-12':'Máquinas','NR-17':'Ergonomia','NR-23':'Incêndio','NR-35':'Trabalho em Altura'};
+var TOTAL={'NR-05':8,'NR-06':8,'NR-07':8,'NR-09':8,'NR-10':8,'NR-12':8,'NR-17':8,'NR-23':8,'NR-35':8};
+var ckHtml='';
+NRS.forEach(function(nr){var saved=JSON.parse(localStorage.getItem('safenr_checklist_'+nr)||'{}');var total=TOTAL[nr]||0;var ok=Object.values(saved).filter(function(v){return v==='ok';}).length;var pct=total>0?Math.round((ok/total)*100):0;ckHtml+='<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:.82rem"><span>'+nr+' — '+NOMES[nr]+'</span><span style="color:rgba(255,255,255,.4)">'+pct+'%</span></div><div class="progresso-bar"><div class="progresso-fill" style="width:'+pct+'%"></div></div></div>';});
+lc.innerHTML=ckHtml||'<div class="empty">Nenhum checklist respondido</div>';
+var le=document.getElementById('listaEpiVenc');
+if(episVencList.length===0){le.innerHTML='<div class="empty">✅ Nenhum EPI vencido</div>';}
+else{le.innerHTML=episVencList.slice(0,5).map(function(f){var venc=(f.epis||[]).filter(function(e){return epiVencido(e.validade);});return'<div class="list-item"><div class="list-item-info"><p>'+f.nome+'</p><span>'+venc.map(function(e){return e.nome;}).join(', ')+'</span></div><span class="badge critico">Vencido</span></div>';}).join('');}
+</script>
+</body>
+</html>
 
