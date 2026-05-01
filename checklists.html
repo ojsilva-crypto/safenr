@@ -26,7 +26,7 @@
     .topbar{margin-bottom:28px}
     .topbar h2{font-size:1.4rem;font-weight:700}
     .topbar p{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:4px}
-    .nr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+    .nr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     .nr-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;cursor:pointer;transition:all .2s}
     .nr-card:hover{background:rgba(255,255,255,.07);border-color:rgba(0,212,255,.3);transform:translateY(-2px)}
     .nr-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
@@ -48,41 +48,42 @@
     .item-texto{flex:1}
     .item-texto p{font-size:.88rem;font-weight:600;margin-bottom:2px}
     .item-texto span{font-size:.75rem;color:rgba(255,255,255,.35)}
-    .item-opcoes{display:flex;gap:8px}
-    .opt-btn{padding:7px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.8rem;font-weight:600;transition:all .2s;white-space:nowrap}
+    .item-opcoes{display:flex;gap:8px;flex-shrink:0}
+    .opt-btn{padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.8rem;font-weight:600;transition:all .2s}
     .opt-btn.ok.sel{background:rgba(74,222,128,.2);border-color:#4ade80;color:#4ade80}
     .opt-btn.nao.sel{background:rgba(248,113,113,.2);border-color:#f87171;color:#f87171}
     .opt-btn.na.sel{background:rgba(167,139,250,.2);border-color:#a78bfa;color:#a78bfa}
     .modal-footer{padding:20px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center}
     .modal-footer-pct{font-size:.88rem;color:rgba(255,255,255,.5)}
     .btn-salvar{padding:11px 28px;border-radius:10px;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
-    .resumo-salvo{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:12px;padding:16px 20px;margin-bottom:20px;font-size:.85rem;display:none}
+    .msg-salvo{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:.83rem;color:#4ade80;display:none}
   </style>
 </head>
 <body>
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
-    <p>Gestão de Segurança do Trabalho</p>
+    <p>Gestao de Seguranca do Trabalho</p>
   </div>
   <nav class="nav">
     <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
-    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
+    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item active" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionários</a>
-    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatórios</a>
+    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
+    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configurações</a>
+    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
-    <div class="user-info"><p id="nomeUsuario">Usuário</p><span>Administrador</span></div>
-    <button class="btn-sair" onclick="sair()">✕</button>
+    <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
+    <button class="btn-sair" onclick="sair()">X</button>
   </div>
 </div>
+
 <div class="main">
   <div class="topbar">
     <h2>📋 Checklists de NRs</h2>
@@ -90,121 +91,157 @@
   </div>
   <div class="nr-grid" id="nrGrid"></div>
 </div>
+
 <div class="modal-overlay" id="modalChecklist">
   <div class="modal">
     <div class="modal-header">
-      <div><h2 id="modalNRTitulo"></h2><p id="modalNRDesc"></p></div>
-      <button class="btn-fechar" onclick="fecharModal()">✕</button>
+      <div>
+        <h2 id="modalNRTitulo">NR</h2>
+        <p id="modalNRDesc">Descricao</p>
+      </div>
+      <button class="btn-fechar" onclick="fecharModal()">X</button>
     </div>
     <div class="modal-body">
-      <div class="resumo-salvo" id="resumoSalvo"></div>
+      <div class="msg-salvo" id="msgSalvo">Respostas salvas com sucesso!</div>
       <div id="itensChecklist"></div>
     </div>
     <div class="modal-footer">
       <span class="modal-footer-pct" id="pctAtual">0% conforme</span>
-      <button class="btn-salvar" onclick="salvarChecklist()">💾 Salvar Respostas</button>
+      <button class="btn-salvar" onclick="salvarChecklist()">Salvar Respostas</button>
     </div>
   </div>
 </div>
+
 <script>
 var userData = localStorage.getItem('safenr_user');
 if (!userData) { window.location.href = './index.html'; }
 var user = JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent = user.nome || 'Usuário';
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
 document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
-function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
+
+function sair() {
+  localStorage.removeItem('safenr_user');
+  window.location.href = './index.html';
+}
 
 var NRS = [
-  {id:'NR-05',nome:'CIPA',desc:'Comissão Interna de Prevenção de Acidentes',itens:[
-    {p:'A CIPA está constituída e registrada no MTE?',ref:'Art. 5.3'},
-    {p:'Os membros da CIPA foram eleitos por votação?',ref:'Art. 5.14'},
-    {p:'As reuniões ordinárias ocorrem mensalmente?',ref:'Art. 5.9'},
-    {p:'As atas de reunião são lavradas e arquivadas?',ref:'Art. 5.30'},
-    {p:'O Mapa de Riscos está elaborado e afixado?',ref:'Art. 5.16'},
-    {p:'Os membros receberam treinamento de 20h?',ref:'Art. 5.38'},
-    {p:'A CIPA possui livro de atas?',ref:'Art. 5.30'},
-    {p:'Existe Plano de Trabalho anual da CIPA?',ref:'Art. 5.16'}
-  ]},
-  {id:'NR-06',nome:'EPI',desc:'Equipamentos de Proteção Individual',itens:[
-    {p:'Todos os EPIs possuem CA válido?',ref:'Art. 6.4'},
-    {p:'Os EPIs são fornecidos gratuitamente?',ref:'Art. 6.3'},
-    {p:'Existe ficha de controle de entrega de EPI?',ref:'Art. 6.6.1'},
-    {p:'Os funcionários foram treinados no uso dos EPIs?',ref:'Art. 6.6.1'},
-    {p:'Os EPIs estão em bom estado de conservação?',ref:'Art. 6.6.1'},
-    {p:'É feita a higienização periódica dos EPIs?',ref:'Art. 6.6.1'},
-    {p:'Os EPIs danificados são substituídos imediatamente?',ref:'Art. 6.6.1'},
-    {p:'Os funcionários usam os EPIs corretamente?',ref:'Art. 6.7.1'}
-  ]},
-  {id:'NR-07',nome:'PCMSO',desc:'Programa de Controle Médico de Saúde Ocupacional',itens:[
-    {p:'O PCMSO está elaborado e atualizado?',ref:'Art. 7.1'},
-    {p:'Os exames admissionais são realizados antes do início?',ref:'Art. 7.4.1'},
-    {p:'Os exames periódicos estão em dia?',ref:'Art. 7.4.3'},
-    {p:'Existe ASO para todos os funcionários?',ref:'Art. 7.5'},
-    {p:'O exame demissional é realizado?',ref:'Art. 7.4.5'},
-    {p:'Os ASOs são arquivados por 20 anos?',ref:'Art. 7.5'},
-    {p:'O PCMSO é assinado por Médico do Trabalho?',ref:'Art. 7.3.1'},
-    {p:'Os exames complementares previstos são realizados?',ref:'Art. 7.4.3'}
-  ]},
-  {id:'NR-09',nome:'Riscos Ambientais',desc:'Avaliação e Controle das Exposições Ocupacionais',itens:[
-    {p:'Existe inventário de riscos ambientais atualizado?',ref:'Art. 9.1'},
-    {p:'Os agentes físicos foram avaliados quantitativamente?',ref:'Art. 9.3'},
-    {p:'Os agentes químicos estão identificados e controlados?',ref:'Art. 9.4'},
-    {p:'Os níveis de ruído foram medidos?',ref:'Art. 9.8'},
-    {p:'Existe relatório anual das avaliações ambientais?',ref:'Art. 9.6.4'},
-    {p:'As medidas de controle foram implementadas?',ref:'Art. 9.6'},
-    {p:'Os trabalhadores foram informados sobre os riscos?',ref:'Art. 9.6.3'},
-    {p:'O relatório está arquivado por 20 anos?',ref:'Art. 9.6.4'}
-  ]},
-  {id:'NR-10',nome:'Eletricidade',desc:'Segurança em Instalações e Serviços em Eletricidade',itens:[
-    {p:'Os trabalhadores com eletricidade são habilitados?',ref:'Art. 10.6'},
-    {p:'Os treinamentos NR-10 estão dentro do prazo bienal?',ref:'Art. 10.7.1'},
-    {p:'Existe prontuário das instalações elétricas?',ref:'Art. 10.2.3'},
-    {p:'Os EPIs elétricos têm CA válido?',ref:'Art. 10.2.9'},
-    {p:'O procedimento de LOTO está implementado?',ref:'Art. 10.3.1'},
-    {p:'As instalações elétricas têm aterramento adequado?',ref:'Art. 10.3.3'},
-    {p:'Existe sinalização de segurança nas instalações?',ref:'Art. 10.2.10'},
-    {p:'Os extintores próximos às instalações são adequados?',ref:'Art. 10.2'}
-  ]},
-  {id:'NR-12',nome:'Máquinas',desc:'Segurança no Trabalho em Máquinas e Equipamentos',itens:[
-    {p:'Todas as máquinas possuem proteções nas zonas de perigo?',ref:'Art. 12.4'},
-    {p:'Os dispositivos de parada de emergência funcionam?',ref:'Art. 12.3'},
-    {p:'Os operadores são capacitados para operar as máquinas?',ref:'Art. 12.47'},
-    {p:'Existe manutenção preventiva documentada?',ref:'Art. 12.38'},
-    {p:'As proteções fixas estão instaladas corretamente?',ref:'Art. 12.12'},
-    {p:'As distâncias de segurança são respeitadas?',ref:'Anexo I'},
-    {p:'Existe sinalização de segurança nas máquinas?',ref:'Art. 12.4'},
-    {p:'O procedimento LOTO está implementado para manutenção?',ref:'Art. 12.3'}
-  ]},
-  {id:'NR-17',nome:'Ergonomia',desc:'Condições Ergonômicas do Trabalho',itens:[
-    {p:'A AET (Análise Ergonômica do Trabalho) está elaborada?',ref:'Art. 17.7'},
-    {p:'Os postos de trabalho são ajustáveis às características dos trabalhadores?',ref:'Art. 17.3'},
-    {p:'A iluminação dos postos de trabalho é adequada?',ref:'Art. 17.3'},
-    {p:'As pausas para descanso são concedidas conforme a norma?',ref:'Art. 17.4'},
-    {p:'O peso máximo para levantamento manual é respeitado?',ref:'Art. 17.6'},
-    {p:'As cadeiras e mesas atendem às especificações ergonômicas?',ref:'Art. 17.3'},
-    {p:'Os monitores de vídeo estão posicionados adequadamente?',ref:'Art. 17.5'},
-    {p:'Os trabalhadores foram treinados sobre ergonomia?',ref:'Art. 17.7'}
-  ]},
-  {id:'NR-23',nome:'Incêndio',desc:'Proteção Contra Incêndios',itens:[
-    {p:'Os extintores estão dentro do prazo de validade?',ref:'Art. 23.4'},
-    {p:'As saídas de emergência estão desobstruídas e sinalizadas?',ref:'Art. 23.2'},
-    {p:'Existe brigada de incêndio treinada?',ref:'Art. 23.5'},
-    {p:'A iluminação de emergência funciona corretamente?',ref:'Art. 23.2'},
-    {p:'O plano de evacuação está elaborado e divulgado?',ref:'Art. 23.1'},
-    {p:'Os hidrantes e mangueiras estão em bom estado?',ref:'Art. 23.4'},
-    {p:'Os funcionários foram treinados no uso de extintores?',ref:'Art. 23.5'},
-    {p:'As rotas de fuga estão com sinalização fotoluminescente?',ref:'Art. 23.2'}
-  ]},
-  {id:'NR-35',nome:'Trabalho em Altura',desc:'Segurança no Trabalho em Altura',itens:[
-    {p:'Os trabalhadores em altura possuem capacitação NR-35?',ref:'Art. 35.3'},
-    {p:'A capacitação está dentro do prazo bienal?',ref:'Art. 35.3'},
-    {p:'É emitida APR antes de cada trabalho em altura?',ref:'Art. 35.2'},
-    {p:'É emitida Permissão de Trabalho (PT)?',ref:'Art. 35.2'},
-    {p:'Os cintos paraquedistas estão em bom estado?',ref:'Art. 35.4'},
-    {p:'Os pontos de ancoragem suportam no mínimo 15 kN?',ref:'Art. 35.4'},
-    {p:'Existe plano de resgate elaborado?',ref:'Art. 35.5'},
-    {p:'Os EPIs contra queda possuem CA válido?',ref:'NR-06/35'}
-  ]}
+  {
+    id: 'NR-05', nome: 'CIPA', desc: 'Comissao Interna de Prevencao de Acidentes',
+    itens: [
+      'A CIPA esta constituida e registrada no MTE?',
+      'Os membros da CIPA foram eleitos por votacao?',
+      'As reunioes ordinarias ocorrem mensalmente?',
+      'As atas de reuniao sao lavradas e arquivadas?',
+      'O Mapa de Riscos esta elaborado e afixado?',
+      'Os membros receberam treinamento de 20h?',
+      'A CIPA possui livro de atas?',
+      'Existe Plano de Trabalho anual da CIPA?'
+    ]
+  },
+  {
+    id: 'NR-06', nome: 'EPI', desc: 'Equipamentos de Protecao Individual',
+    itens: [
+      'Todos os EPIs possuem CA valido?',
+      'Os EPIs sao fornecidos gratuitamente?',
+      'Existe ficha de controle de entrega de EPI?',
+      'Os funcionarios foram treinados no uso dos EPIs?',
+      'Os EPIs estao em bom estado de conservacao?',
+      'E feita a higienizacao periodica dos EPIs?',
+      'Os EPIs danificados sao substituidos imediatamente?',
+      'Os funcionarios usam os EPIs corretamente?'
+    ]
+  },
+  {
+    id: 'NR-07', nome: 'PCMSO', desc: 'Programa de Controle Medico de Saude Ocupacional',
+    itens: [
+      'O PCMSO esta elaborado e atualizado?',
+      'Os exames admissionais sao realizados antes do inicio?',
+      'Os exames periodicos estao em dia?',
+      'Existe ASO para todos os funcionarios?',
+      'O exame demissional e realizado?',
+      'Os ASOs sao arquivados por 20 anos?',
+      'O PCMSO e assinado por Medico do Trabalho?',
+      'Os exames complementares previstos sao realizados?'
+    ]
+  },
+  {
+    id: 'NR-09', nome: 'Riscos Ambientais', desc: 'Avaliacao e Controle das Exposicoes Ocupacionais',
+    itens: [
+      'Existe inventario de riscos ambientais atualizado?',
+      'Os agentes fisicos foram avaliados quantitativamente?',
+      'Os agentes quimicos estao identificados e controlados?',
+      'Os niveis de ruido foram medidos?',
+      'Existe relatorio anual das avaliacoes ambientais?',
+      'As medidas de controle foram implementadas?',
+      'Os trabalhadores foram informados sobre os riscos?',
+      'O relatorio esta arquivado por 20 anos?'
+    ]
+  },
+  {
+    id: 'NR-10', nome: 'Eletricidade', desc: 'Seguranca em Instalacoes e Servicos em Eletricidade',
+    itens: [
+      'Os trabalhadores com eletricidade sao habilitados?',
+      'Os treinamentos NR-10 estao dentro do prazo bienal?',
+      'Existe prontuario das instalacoes eletricas?',
+      'Os EPIs eletricos tem CA valido?',
+      'O procedimento de LOTO esta implementado?',
+      'As instalacoes eletricas tem aterramento adequado?',
+      'Existe sinalizacao de seguranca nas instalacoes?',
+      'Os extintores proximos as instalacoes sao adequados?'
+    ]
+  },
+  {
+    id: 'NR-12', nome: 'Maquinas', desc: 'Seguranca no Trabalho em Maquinas e Equipamentos',
+    itens: [
+      'Todas as maquinas possuem protecoes nas zonas de perigo?',
+      'Os dispositivos de parada de emergencia funcionam?',
+      'Os operadores sao capacitados para operar as maquinas?',
+      'Existe manutencao preventiva documentada?',
+      'As protecoes fixas estao instaladas corretamente?',
+      'As distancias de seguranca sao respeitadas?',
+      'Existe sinalizacao de seguranca nas maquinas?',
+      'O procedimento LOTO esta implementado para manutencao?'
+    ]
+  },
+  {
+    id: 'NR-17', nome: 'Ergonomia', desc: 'Condicoes Ergonomicas do Trabalho',
+    itens: [
+      'A AET esta elaborada?',
+      'Os postos de trabalho sao ajustaveis?',
+      'A iluminacao dos postos de trabalho e adequada?',
+      'As pausas para descanso sao concedidas?',
+      'O peso maximo para levantamento manual e respeitado?',
+      'As cadeiras e mesas atendem as especificacoes?',
+      'Os monitores de video estao posicionados adequadamente?',
+      'Os trabalhadores foram treinados sobre ergonomia?'
+    ]
+  },
+  {
+    id: 'NR-23', nome: 'Incendio', desc: 'Protecao Contra Incendios',
+    itens: [
+      'Os extintores estao dentro do prazo de validade?',
+      'As saidas de emergencia estao desobstruidas?',
+      'Existe brigada de incendio treinada?',
+      'A iluminacao de emergencia funciona corretamente?',
+      'O plano de evacuacao esta elaborado e divulgado?',
+      'Os hidrantes e mangueiras estao em bom estado?',
+      'Os funcionarios foram treinados no uso de extintores?',
+      'As rotas de fuga estao sinalizadas?'
+    ]
+  },
+  {
+    id: 'NR-35', nome: 'Trabalho em Altura', desc: 'Seguranca no Trabalho em Altura',
+    itens: [
+      'Os trabalhadores em altura possuem capacitacao NR-35?',
+      'A capacitacao esta dentro do prazo bienal?',
+      'E emitida APR antes de cada trabalho em altura?',
+      'E emitida Permissao de Trabalho (PT)?',
+      'Os cintos paraquedistas estao em bom estado?',
+      'Os pontos de ancoragem suportam no minimo 15 kN?',
+      'Existe plano de resgate elaborado?',
+      'Os EPIs contra queda possuem CA valido?'
+    ]
+  }
 ];
 
 var nrAtual = null;
@@ -213,82 +250,113 @@ var respostas = {};
 function getPct(nr) {
   var saved = JSON.parse(localStorage.getItem('safenr_checklist_' + nr.id) || '{}');
   var total = nr.itens.length;
-  var ok = Object.values(saved).filter(function(v){ return v === 'ok'; }).length;
+  var ok = 0;
+  for (var k in saved) { if (saved[k] === 'ok') ok++; }
   return total > 0 ? Math.round((ok / total) * 100) : 0;
 }
-function getColor(pct){ return pct >= 80 ? '#4ade80' : pct >= 50 ? '#fbbf24' : '#f87171'; }
+
+function getColor(pct) {
+  if (pct >= 80) return '#4ade80';
+  if (pct >= 50) return '#fbbf24';
+  return '#f87171';
+}
 
 function renderGrid() {
   var grid = document.getElementById('nrGrid');
   grid.innerHTML = '';
-  NRS.forEach(function(nr) {
+  for (var i = 0; i < NRS.length; i++) {
+    var nr = NRS[i];
     var pct = getPct(nr);
     var cor = getColor(pct);
     var div = document.createElement('div');
     div.className = 'nr-card';
-    div.onclick = function(){ abrirChecklist(nr.id); };
-    div.innerHTML = '<div class="nr-card-top"><span class="nr-badge">' + nr.id + '</span><span class="nr-pct" style="color:' + cor + '">' + pct + '%</span></div><h3>' + nr.nome + '</h3><p>' + nr.desc + '</p><div class="progresso-bar"><div class="progresso-fill" style="width:' + pct + '%;background:' + cor + '"></div></div>';
+    div.setAttribute('data-id', nr.id);
+    div.innerHTML =
+      '<div class="nr-card-top">' +
+        '<span class="nr-badge">' + nr.id + '</span>' +
+        '<span class="nr-pct" style="color:' + cor + '">' + pct + '%</span>' +
+      '</div>' +
+      '<h3>' + nr.nome + '</h3>' +
+      '<p>' + nr.desc + '</p>' +
+      '<div class="progresso-bar">' +
+        '<div class="progresso-fill" style="width:' + pct + '%;background:' + cor + '"></div>' +
+      '</div>';
+    div.onclick = function() {
+      abrirChecklist(this.getAttribute('data-id'));
+    };
     grid.appendChild(div);
-  });
+  }
 }
 
 function abrirChecklist(nrId) {
-  nrAtual = NRS.find(function(n){ return n.id === nrId; });
-  document.getElementById('modalNRTitulo').textContent = nrAtual.id + ' — ' + nrAtual.nome;
+  for (var i = 0; i < NRS.length; i++) {
+    if (NRS[i].id === nrId) { nrAtual = NRS[i]; break; }
+  }
+  document.getElementById('modalNRTitulo').textContent = nrAtual.id + ' - ' + nrAtual.nome;
   document.getElementById('modalNRDesc').textContent = nrAtual.desc;
+  document.getElementById('msgSalvo').style.display = 'none';
   respostas = JSON.parse(localStorage.getItem('safenr_checklist_' + nrId) || '{}');
   renderItens();
-  var saved = Object.keys(respostas).length > 0;
-  var rs = document.getElementById('resumoSalvo');
-  if (saved) { rs.style.display = 'block'; rs.innerHTML = '✅ Respostas anteriores carregadas.'; }
-  else { rs.style.display = 'none'; }
   document.getElementById('modalChecklist').classList.add('open');
 }
 
 function renderItens() {
   var div = document.getElementById('itensChecklist');
   div.innerHTML = '';
-  nrAtual.itens.forEach(function(item, i) {
+  for (var i = 0; i < nrAtual.itens.length; i++) {
+    var texto = nrAtual.itens[i];
     var resp = respostas[i] || '';
     var el = document.createElement('div');
     el.className = 'item-checklist';
     el.innerHTML =
-      '<div class="item-texto"><p>' + item.p + '</p><span>Ref: ' + item.ref + '</span></div>' +
+      '<div class="item-texto"><p>' + texto + '</p></div>' +
       '<div class="item-opcoes">' +
-        '<button class="opt-btn ok' + (resp === 'ok' ? ' sel' : '') + '" onclick="responder(' + i + ',\'ok\',this)">OK</button>' +
-        '<button class="opt-btn nao' + (resp === 'nao' ? ' sel' : '') + '" onclick="responder(' + i + ',\'nao\',this)">Nao</button>' +
-        '<button class="opt-btn na' + (resp === 'na' ? ' sel' : '') + '" onclick="responder(' + i + ',\'na\',this)">N/A</button>' +
+        '<button class="opt-btn ok' + (resp === 'ok' ? ' sel' : '') + '" data-idx="' + i + '" data-val="ok" onclick="responder(this)">OK</button>' +
+        '<button class="opt-btn nao' + (resp === 'nao' ? ' sel' : '') + '" data-idx="' + i + '" data-val="nao" onclick="responder(this)">Nao</button>' +
+        '<button class="opt-btn na' + (resp === 'na' ? ' sel' : '') + '" data-idx="' + i + '" data-val="na" onclick="responder(this)">N/A</button>' +
       '</div>';
     div.appendChild(el);
-  });
+  }
   atualizarPct();
 }
 
-function responder(i, val, btn) {
-  respostas[i] = val;
+function responder(btn) {
+  var idx = parseInt(btn.getAttribute('data-idx'));
+  var val = btn.getAttribute('data-val');
+  respostas[idx] = val;
   var parent = btn.parentElement;
-  parent.querySelectorAll('.opt-btn').forEach(function(b){ b.classList.remove('sel'); });
+  var btns = parent.querySelectorAll('.opt-btn');
+  for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('sel'); }
   btn.classList.add('sel');
   atualizarPct();
 }
 
 function atualizarPct() {
   var total = nrAtual.itens.length;
-  var ok = Object.values(respostas).filter(function(v){ return v === 'ok'; }).length;
+  var ok = 0;
+  for (var k in respostas) { if (respostas[k] === 'ok') ok++; }
   var pct = total > 0 ? Math.round((ok / total) * 100) : 0;
-  document.getElementById('pctAtual').textContent = pct + '% conforme (' + ok + '/' + total + ' itens OK)';
+  document.getElementById('pctAtual').textContent = pct + '% conforme (' + ok + '/' + total + ' OK)';
 }
 
 function salvarChecklist() {
   localStorage.setItem('safenr_checklist_' + nrAtual.id, JSON.stringify(respostas));
-  var rs = document.getElementById('resumoSalvo');
-  rs.style.display = 'block';
-  rs.innerHTML = 'Respostas salvas em ' + new Date().toLocaleString('pt-BR') + ' por ' + (user.nome || 'Usuário');
+  var msg = document.getElementById('msgSalvo');
+  msg.style.display = 'block';
+  msg.textContent = 'Salvo em ' + new Date().toLocaleString('pt-BR') + ' por ' + (user.nome || 'Usuario');
   renderGrid();
 }
 
-function fecharModal(){ document.getElementById('modalChecklist').classList.remove('open'); }
-document.getElementById('modalChecklist').addEventListener('click', function(e){ if(e.target === this) fecharModal(); });
+function fecharModal() {
+  document.getElementById('modalChecklist').classList.remove('open');
+  nrAtual = null;
+  respostas = {};
+}
+
+document.getElementById('modalChecklist').addEventListener('click', function(e) {
+  if (e.target === this) fecharModal();
+});
+
 renderGrid();
 </script>
 </body>
