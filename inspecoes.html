@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SafeNR — Inspeções</title>
+  <title>SafeNR — Inspecoes</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
@@ -26,12 +26,13 @@
     .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
     .topbar h2{font-size:1.4rem;font-weight:700}
     .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
-    .btn-novo{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:opacity .2s,transform .2s}
+    .btn-novo{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
     .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
-    .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+    .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
     .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
-    .filtro-btn:hover{border-color:#00d4ff;color:#00d4ff}
-    .filtro-btn.active{background:rgba(0,212,255,.12);border-color:#00d4ff;color:#00d4ff}
+    .filtro-btn:hover,.filtro-btn.active{background:rgba(0,212,255,.12);border-color:#00d4ff;color:#00d4ff}
+    .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:220px;margin-left:auto}
+    .busca-input::placeholder{color:rgba(255,255,255,.3)}
     .tabela-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
     table{width:100%;border-collapse:collapse}
     thead tr{background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.08)}
@@ -41,15 +42,16 @@
     tr:hover td{background:rgba(255,255,255,.02)}
     .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
     .badge.concluida,.badge.conforme{background:rgba(74,222,128,.15);color:#4ade80}
-    .badge.pendente,.badge.aberta{background:rgba(251,191,36,.15);color:#fbbf24}
+    .badge.pendente{background:rgba(251,191,36,.15);color:#fbbf24}
     .badge.nao-conforme{background:rgba(248,113,113,.15);color:#f87171}
+    .badge.em-andamento{background:rgba(0,212,255,.15);color:#00d4ff}
     .btn-acao{background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:8px;font-size:.85rem;transition:background .2s}
     .btn-acao:hover{background:rgba(255,255,255,.08)}
     .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3)}
     .empty-state div{font-size:3rem;margin-bottom:12px}
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
     .modal-overlay.open{display:flex}
-    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto}
     .modal h3{font-size:1.2rem;font-weight:700;margin-bottom:24px}
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
     .form-row.full{grid-template-columns:1fr}
@@ -57,143 +59,160 @@
     .form-group label{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.55)}
     .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;color:#fff;font-size:.9rem;outline:none;transition:border .2s;font-family:inherit}
     .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#00d4ff}
-    .form-group textarea{resize:vertical;min-height:80px}
     .form-group select option{background:#1a2535}
+    .form-group textarea{resize:vertical;min-height:80px}
     .auto-field{background:rgba(0,212,255,.06)!important;border-color:rgba(0,212,255,.2)!important;color:rgba(255,255,255,.6)!important;cursor:not-allowed!important}
     .auto-tag{font-size:.68rem;color:#00d4ff;background:rgba(0,212,255,.1);border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:600}
     .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
-    .btn-cancelar{padding:12px 24px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;font-size:.9rem}
+    .btn-cancelar{padding:12px 24px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
     .btn-salvar{padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
     .detalhe-row{display:flex;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
     .detalhe-row:last-child{border-bottom:none}
-    .detalhe-label{font-size:.78rem;color:rgba(255,255,255,.4);min-width:140px;font-weight:600}
-    .detalhe-valor{font-size:.88rem;color:#fff}
+    .detalhe-label{font-size:.78rem;color:rgba(255,255,255,.4);min-width:150px;font-weight:600}
+    .detalhe-valor{font-size:.88rem;color:#fff;flex:1}
   </style>
 </head>
 <body>
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
-    <p>Gestão de Segurança do Trabalho</p>
+    <p>Gestao de Seguranca do Trabalho</p>
   </div>
   <nav class="nav">
     <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
-    <a class="nav-item active" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
+    <a class="nav-item active" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionários</a>
-    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatórios</a>
+    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
+    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configurações</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
+    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
-    <div class="user-info">
-      <p id="nomeUsuario">Usuário</p>
-      <span>Administrador</span>
-    </div>
-    <button class="btn-sair" onclick="sair()">✕</button>
+    <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
+    <button class="btn-sair" onclick="sair()">X</button>
   </div>
 </div>
 <div class="main">
   <div class="topbar">
-    <div><h2>🔍 Inspeções</h2><span id="totalRegistros">0 registros</span></div>
-    <button class="btn-novo" onclick="abrirModal()">＋ Nova Inspeção</button>
+    <div><h2>🔍 Inspecoes</h2><span id="totalRegistros">0 registros</span></div>
+    <button class="btn-novo" onclick="abrirModal()">+ Nova Inspecao</button>
   </div>
   <div class="filtros">
     <button class="filtro-btn active" onclick="filtrar('todos',this)">Todos</button>
-    <button class="filtro-btn" onclick="filtrar('pendente',this)">🟡 Pendente</button>
-    <button class="filtro-btn" onclick="filtrar('concluida',this)">✅ Concluída</button>
-    <button class="filtro-btn" onclick="filtrar('nao-conforme',this)">🔴 Não Conforme</button>
+    <button class="filtro-btn" onclick="filtrar('pendente',this)">Pendente</button>
+    <button class="filtro-btn" onclick="filtrar('em-andamento',this)">Em Andamento</button>
+    <button class="filtro-btn" onclick="filtrar('concluida',this)">Concluida</button>
+    <button class="filtro-btn" onclick="filtrar('nao-conforme',this)">Nao Conforme</button>
+    <input class="busca-input" type="text" placeholder="Buscar..." oninput="renderizar(getLista())"/>
   </div>
   <div class="tabela-wrap">
     <table>
-      <thead><tr><th>#</th><th>Título</th><th>Setor/Local</th><th>Status</th><th>Data</th><th>Responsável</th><th>Registrado por</th><th>Registrado em</th><th>Ações</th></tr></thead>
+      <thead><tr><th>#</th><th>Titulo</th><th>Setor</th><th>Status</th><th>Data</th><th>Responsavel</th><th>Registrado por</th><th>Acoes</th></tr></thead>
       <tbody id="tabelaBody"></tbody>
     </table>
-    <div class="empty-state" id="emptyState" style="display:none"><div>🔍</div><p>Nenhuma inspeção cadastrada.<br>Clique em <strong>+ Nova Inspeção</strong> para começar.</p></div>
+    <div class="empty-state" id="emptyState" style="display:none"><div>🔍</div><p>Nenhuma inspecao cadastrada.<br>Clique em <strong>+ Nova Inspecao</strong>.</p></div>
   </div>
 </div>
 <div class="modal-overlay" id="modalForm">
   <div class="modal">
-    <h3 id="modalTitulo">🔍 Nova Inspeção</h3>
-    <div class="form-row full"><div class="form-group"><label>Título *</label><input type="text" id="f_titulo" placeholder="Ex: Inspeção de EPIs..."/></div></div>
+    <h3 id="modalTitulo">Nova Inspecao</h3>
+    <div class="form-row full"><div class="form-group"><label>Titulo *</label><input type="text" id="f_titulo" placeholder="Ex: Inspecao de EPI - Producao"/></div></div>
     <div class="form-row">
-      <div class="form-group"><label>Setor / Local *</label><input type="text" id="f_setor" placeholder="Ex: Produção..."/></div>
-      <div class="form-group"><label>Responsável *</label><input type="text" id="f_responsavel" placeholder="Nome do responsável"/></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Status *</label><select id="f_status"><option value="">Selecione</option><option value="pendente">🟡 Pendente</option><option value="concluida">✅ Concluída</option><option value="nao-conforme">🔴 Não Conforme</option></select></div>
+      <div class="form-group"><label>Setor *</label><input type="text" id="f_setor" placeholder="Ex: Producao"/></div>
       <div class="form-group"><label>Data *</label><input type="date" id="f_data"/></div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Registrado por <span class="auto-tag">AUTO</span></label><input type="text" id="f_registradoPor" class="auto-field" readonly/></div>
-      <div class="form-group"><label>Registrado em <span class="auto-tag">AUTO</span></label><input type="text" id="f_registradoEm" class="auto-field" readonly/></div>
+      <div class="form-group"><label>Status *</label><select id="f_status"><option value="">Selecione</option><option value="pendente">Pendente</option><option value="em-andamento">Em Andamento</option><option value="concluida">Concluida</option><option value="nao-conforme">Nao Conforme</option><option value="conforme">Conforme</option></select></div>
+      <div class="form-group"><label>Responsavel</label><input type="text" id="f_resp" placeholder="Nome do responsavel"/></div>
     </div>
-    <div class="form-row full"><div class="form-group"><label>Observações</label><textarea id="f_obs" placeholder="Descreva observações..."></textarea></div></div>
-    <div class="modal-footer"><button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">💾 Salvar</button></div>
+    <div class="form-row full"><div class="form-group"><label>Observacoes</label><textarea id="f_obs" placeholder="Descreva os detalhes da inspecao..."></textarea></div></div>
+    <div class="form-row">
+      <div class="form-group"><label>Registrado por <span class="auto-tag">AUTO</span></label><input type="text" id="f_regPor" class="auto-field" readonly/></div>
+      <div class="form-group"><label>Registrado em <span class="auto-tag">AUTO</span></label><input type="text" id="f_regEm" class="auto-field" readonly/></div>
+    </div>
+    <div class="modal-footer"><button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">Salvar</button></div>
   </div>
 </div>
 <div class="modal-overlay" id="modalVer">
-  <div class="modal"><h3>🔍 Detalhes da Inspeção</h3><div id="modalVerConteudo"></div><div class="modal-footer"><button class="btn-cancelar" onclick="fecharModalVer()">Fechar</button></div></div>
+  <div class="modal"><h3>Detalhes da Inspecao</h3><div id="modalVerConteudo"></div><div class="modal-footer"><button class="btn-cancelar" onclick="fecharVer()">Fechar</button></div></div>
 </div>
 <script>
-var userData=localStorage.getItem('safenr_user');
-if(!userData){window.location.href='./index.html';}
-var user=JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent=user.nome||'Usuário';
-document.getElementById('avatarLetra').textContent=(user.nome||'U')[0].toUpperCase();
-function sair(){localStorage.removeItem('safenr_user');window.location.href='./index.html';}
-var registros=JSON.parse(localStorage.getItem('safenr_inspecoes')||'[]');
-var editandoId=null,filtroAtivo='todos';
-function salvarStorage(){localStorage.setItem('safenr_inspecoes',JSON.stringify(registros));}
-function fmt(d){if(!d)return'—';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
-function fmtDT(iso){if(!iso)return'—';return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
-function labelStatus(s){return{pendente:'Pendente',concluida:'Concluída','nao-conforme':'Não Conforme'}[s]||s;}
-function renderizar(lista){
-  var tbody=document.getElementById('tabelaBody'),empty=document.getElementById('emptyState');
-  tbody.innerHTML='';
-  if(lista.length===0){empty.style.display='block';document.getElementById('totalRegistros').textContent='0 registros';return;}
-  empty.style.display='none';
-  document.getElementById('totalRegistros').textContent=lista.length+' registro(s)';
-  lista.forEach(function(r){
-    var tr=document.createElement('tr');
-    tr.innerHTML='<td style="color:rgba(255,255,255,.3);font-size:.8rem">#'+String(r.id).padStart(3,'0')+'</td><td><strong>'+(r.titulo||'—')+'</strong></td><td>'+(r.setor||'—')+'</td><td><span class="badge '+(r.status||'pendente')+'">'+labelStatus(r.status)+'</span></td><td>'+fmt(r.data)+'</td><td>'+(r.responsavel||'—')+'</td><td style="font-size:.82rem">👤 '+(r.registradoPor||'—')+'</td><td style="font-size:.78rem;color:rgba(255,255,255,.45)">'+fmtDT(r.registradoEm)+'</td><td><button class="btn-acao" onclick="ver('+r.id+')">👁️</button><button class="btn-acao" onclick="editar('+r.id+')">✏️</button><button class="btn-acao" onclick="excluir('+r.id+')">🗑️</button></td>';
+var userData = localStorage.getItem('safenr_user');
+if (!userData) { window.location.href = './index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
+document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
+var registros = JSON.parse(localStorage.getItem('safenr_inspecoes') || '[]');
+var editandoId = null, filtroAtivo = 'todos';
+function salvarStorage() { localStorage.setItem('safenr_inspecoes', JSON.stringify(registros)); }
+function fmt(d) { if (!d) return '--'; var p = d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function fmtDT(iso) { if (!iso) return '--'; return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+function getLista() {
+  var busca = document.querySelector('.busca-input').value.toLowerCase();
+  return registros.filter(function(r) {
+    if (filtroAtivo !== 'todos' && r.status !== filtroAtivo) return false;
+    if (busca && !(r.titulo||'').toLowerCase().includes(busca) && !(r.setor||'').toLowerCase().includes(busca)) return false;
+    return true;
+  });
+}
+function filtrar(s, btn) { filtroAtivo = s; document.querySelectorAll('.filtro-btn').forEach(function(b){ b.classList.remove('active'); }); btn.classList.add('active'); renderizar(getLista()); }
+function renderizar(lista) {
+  var tbody = document.getElementById('tabelaBody'), empty = document.getElementById('emptyState');
+  tbody.innerHTML = '';
+  document.getElementById('totalRegistros').textContent = registros.length + ' registro(s)';
+  if (lista.length === 0) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  lista.forEach(function(r) {
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td style="color:rgba(255,255,255,.3);font-size:.8rem">#'+String(r.id).padStart(3,'0')+'</td><td><strong>'+(r.titulo||'--')+'</strong></td><td>'+(r.setor||'--')+'</td><td><span class="badge '+(r.status||'pendente')+'">'+(r.status||'pendente')+'</span></td><td>'+fmt(r.data)+'</td><td>'+(r.responsavel||'--')+'</td><td style="font-size:.82rem">👤 '+(r.registradoPor||'--')+'</td><td><button class="btn-acao" onclick="ver('+r.id+')">👁️</button><button class="btn-acao" onclick="editar('+r.id+')">✏️</button><button class="btn-acao" onclick="excluir('+r.id+')">🗑️</button></td>';
     tbody.appendChild(tr);
   });
 }
-function getLista(){return filtroAtivo==='todos'?registros:registros.filter(function(r){return r.status===filtroAtivo;});}
-function filtrar(s,btn){filtroAtivo=s;document.querySelectorAll('.filtro-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');renderizar(getLista());}
-function abrirModal(id){
-  editandoId=id||null;
-  document.getElementById('modalTitulo').textContent=id?'✏️ Editar Inspeção':'🔍 Nova Inspeção';
-  ['f_titulo','f_setor','f_responsavel','f_status','f_data','f_obs'].forEach(function(f){document.getElementById(f).value='';});
-  document.getElementById('f_registradoPor').value=user.nome||'Usuário';
-  document.getElementById('f_registradoEm').value=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  if(id){var r=registros.find(function(x){return x.id===id;});document.getElementById('f_titulo').value=r.titulo||'';document.getElementById('f_setor').value=r.setor||'';document.getElementById('f_responsavel').value=r.responsavel||'';document.getElementById('f_status').value=r.status||'';document.getElementById('f_data').value=r.data||'';document.getElementById('f_obs').value=r.obs||'';document.getElementById('f_registradoPor').value=r.registradoPor||user.nome;document.getElementById('f_registradoEm').value=r.registradoEm?fmtDT(r.registradoEm):'—';}
-  else{document.getElementById('f_data').value=new Date().toISOString().split('T')[0];}
+function abrirModal(id) {
+  editandoId = id || null;
+  document.getElementById('modalTitulo').textContent = id ? 'Editar Inspecao' : 'Nova Inspecao';
+  ['f_titulo','f_setor','f_data','f_status','f_resp','f_obs'].forEach(function(f){ document.getElementById(f).value = ''; });
+  document.getElementById('f_regPor').value = user.nome || 'Usuario';
+  document.getElementById('f_regEm').value = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  if (id) {
+    var r = registros.find(function(x){ return x.id === id; });
+    document.getElementById('f_titulo').value = r.titulo||'';
+    document.getElementById('f_setor').value = r.setor||'';
+    document.getElementById('f_data').value = r.data||'';
+    document.getElementById('f_status').value = r.status||'';
+    document.getElementById('f_resp').value = r.responsavel||'';
+    document.getElementById('f_obs').value = r.obs||'';
+    document.getElementById('f_regPor').value = r.registradoPor||user.nome;
+    document.getElementById('f_regEm').value = fmtDT(r.registradoEm);
+  }
   document.getElementById('modalForm').classList.add('open');
 }
-function fecharModal(){document.getElementById('modalForm').classList.remove('open');editandoId=null;}
-function salvar(){
-  var titulo=document.getElementById('f_titulo').value.trim(),setor=document.getElementById('f_setor').value.trim(),responsavel=document.getElementById('f_responsavel').value.trim(),status=document.getElementById('f_status').value,data=document.getElementById('f_data').value,obs=document.getElementById('f_obs').value.trim();
-  if(!titulo||!setor||!responsavel||!status||!data){alert('⚠️ Preencha todos os campos obrigatórios (*)');return;}
-  if(editandoId){var idx=registros.findIndex(function(r){return r.id===editandoId;});registros[idx]=Object.assign({},registros[idx],{titulo:titulo,setor:setor,responsavel:responsavel,status:status,data:data,obs:obs});}
-  else{var novoId=registros.length>0?Math.max.apply(null,registros.map(function(r){return r.id;}))+1:1;registros.push({id:novoId,titulo:titulo,setor:setor,responsavel:responsavel,status:status,data:data,obs:obs,registradoPor:user.nome||'Usuário',registradoEm:new Date().toISOString()});}
-  salvarStorage();fecharModal();renderizar(getLista());
+function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId = null; }
+function salvar() {
+  var titulo = document.getElementById('f_titulo').value.trim(), setor = document.getElementById('f_setor').value.trim(), data = document.getElementById('f_data').value, status = document.getElementById('f_status').value;
+  if (!titulo || !setor || !data || !status) { alert('Preencha todos os campos obrigatorios.'); return; }
+  var dados = { titulo:titulo, setor:setor, data:data, status:status, responsavel:document.getElementById('f_resp').value.trim(), obs:document.getElementById('f_obs').value.trim() };
+  if (editandoId) { var idx = registros.findIndex(function(r){ return r.id === editandoId; }); registros[idx] = Object.assign({}, registros[idx], dados); }
+  else { var nId = registros.length > 0 ? Math.max.apply(null, registros.map(function(r){ return r.id; })) + 1 : 1; registros.push(Object.assign({id:nId, registradoPor:user.nome||'Usuario', registradoEm:new Date().toISOString()}, dados)); }
+  salvarStorage(); fecharModal(); renderizar(getLista());
 }
-function editar(id){abrirModal(id);}
-function excluir(id){if(!confirm('Deseja excluir esta inspeção?'))return;registros=registros.filter(function(r){return r.id!==id;});salvarStorage();renderizar(getLista());}
-function ver(id){
-  var r=registros.find(function(x){return x.id===id;});
-  document.getElementById('modalVerConteudo').innerHTML='<div class="detalhe-row"><span class="detalhe-label">Título</span><span class="detalhe-valor">'+(r.titulo||'—')+'</span></div><div class="detalhe-row"><span class="detalhe-label">Setor</span><span class="detalhe-valor">'+(r.setor||'—')+'</span></div><div class="detalhe-row"><span class="detalhe-label">Status</span><span class="badge '+(r.status||'pendente')+'">'+labelStatus(r.status)+'</span></div><div class="detalhe-row"><span class="detalhe-label">Responsável</span><span class="detalhe-valor">'+(r.responsavel||'—')+'</span></div><div class="detalhe-row"><span class="detalhe-label">Data</span><span class="detalhe-valor">'+fmt(r.data)+'</span></div><div class="detalhe-row"><span class="detalhe-label">Observações</span><span class="detalhe-valor">'+(r.obs||'—')+'</span></div><div class="detalhe-row"><span class="detalhe-label">👤 Registrado por</span><span class="detalhe-valor" style="color:#00d4ff">'+(r.registradoPor||'—')+'</span></div><div class="detalhe-row"><span class="detalhe-label">🕐 Registrado em</span><span class="detalhe-valor" style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span></div>';
+function editar(id) { abrirModal(id); }
+function excluir(id) { if (!confirm('Excluir esta inspecao?')) return; registros = registros.filter(function(r){ return r.id !== id; }); salvarStorage(); renderizar(getLista()); }
+function ver(id) {
+  var r = registros.find(function(x){ return x.id === id; });
+  function row(l,v){ return '<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>'; }
+  document.getElementById('modalVerConteudo').innerHTML = row('Titulo',r.titulo||'--')+row('Setor',r.setor||'--')+row('Status','<span class="badge '+(r.status||'pendente')+'">'+(r.status||'--')+'</span>')+row('Data',fmt(r.data))+row('Responsavel',r.responsavel||'--')+row('Observacoes',r.obs||'--')+row('Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+row('Registrado em','<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
   document.getElementById('modalVer').classList.add('open');
 }
-function fecharModalVer(){document.getElementById('modalVer').classList.remove('open');}
-document.getElementById('modalForm').addEventListener('click',function(e){if(e.target===this)fecharModal();});
-document.getElementById('modalVer').addEventListener('click',function(e){if(e.target===this)fecharModalVer();});
+function fecharVer() { document.getElementById('modalVer').classList.remove('open'); }
+document.getElementById('modalForm').addEventListener('click', function(e){ if(e.target===this) fecharModal(); });
+document.getElementById('modalVer').addEventListener('click', function(e){ if(e.target===this) fecharVer(); });
 renderizar(getLista());
 </script>
 </body>
