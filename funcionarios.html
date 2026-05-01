@@ -1,3 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SafeNR — Funcionários</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;z-index:10}
+    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
+    .sidebar-logo h1 span{color:#00d4ff}
+    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
+    .nav{flex:1;padding:20px 0;overflow-y:auto}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
+    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+    .user-info p{font-size:.82rem;font-weight:600}
+    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
+    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .topbar h2{font-size:1.4rem;font-weight:700}
+    .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
+    .btn-novo{background:linear-gradient(135deg,#a78bfa,#7c3aed);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:opacity .2s,transform .2s}
+    .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
+    .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+    .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
+    .filtro-btn:hover,.filtro-btn.active{background:rgba(0,212,255,.12);border-color:#00d4ff;color:#00d4ff}
+    .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:220px;margin-left:auto}
+    .busca-input::placeholder{color:rgba(255,255,255,.3)}
+    .tabela-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
+    table{width:100%;border-collapse:collapse}
+    thead tr{background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.08)}
+    th{padding:14px 18px;text-align:left;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px}
+    td{padding:14px 18px;font-size:.87rem;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:rgba(255,255,255,.02)}
+    .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
+    .badge.ativo{background:rgba(74,222,128,.15);color:#4ade80}
+    .badge.inativo{background:rgba(248,113,113,.15);color:#f87171}
+    .badge.ferias{background:rgba(251,191,36,.15);color:#fbbf24}
+    .badge.afastado{background:rgba(251,146,60,.15);color:#fb923c}
+    .badge.epi-ok{background:rgba(74,222,128,.15);color:#4ade80}
+    .badge.epi-venc{background:rgba(248,113,113,.15);color:#f87171}
+    .btn-acao{background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:8px;font-size:.85rem;transition:background .2s}
+    .btn-acao:hover{background:rgba(255,255,255,.08)}
+    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3)}
+    .empty-state div{font-size:3rem;margin-bottom:12px}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
+    .modal-overlay.open{display:flex}
+    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:0;width:100%;max-width:620px;max-height:92vh;overflow-y:auto}
+    .modal-header{padding:28px 32px 20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0f1923;z-index:5}
+    .modal-header h3{font-size:1.15rem;font-weight:700}
+    .btn-fechar{background:rgba(255,255,255,.08);border:none;color:#fff;border-radius:10px;padding:8px 14px;cursor:pointer}
+    .modal-body{padding:28px 32px}
+    .secao-titulo{font-size:.78rem;font-weight:800;color:#00d4ff;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(0,212,255,.15);margin-top:20px}
+    .secao-titulo:first-child{margin-top:0}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+    .form-row.full{grid-template-columns:1fr}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group label{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.5)}
+    .form-group input,.form-group select{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 14px;color:#fff;font-size:.88rem;outline:none;transition:border .2s;font-family:inherit}
+    .form-group input:focus,.form-group select:focus{border-color:#00d4ff}
+    .form-group select option{background:#1a2535}
+    .auto-field{background:rgba(0,212,255,.06)!important;border-color:rgba(0,212,255,.2)!important;color:rgba(255,255,255,.6)!important;cursor:not-allowed!important}
+    .auto-tag{font-size:.65rem;color:#00d4ff;background:rgba(0,212,255,.1);border-radius:20px;padding:2px 7px;margin-left:5px;font-weight:600}
+    .modal-footer{padding:20px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:flex-end;gap:12px}
+    .btn-cancelar{padding:11px 22px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
+    .btn-salvar{padding:11px 26px;border-radius:10px;background:linear-gradient(135deg,#a78bfa,#7c3aed);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
+    .epi-lista{margin-top:10px}
+    .epi-item{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:10px 14px;margin-bottom:8px}
+    .epi-item-info p{font-size:.85rem;font-weight:600}
+    .epi-item-info span{font-size:.75rem;color:rgba(255,255,255,.4)}
+    .btn-rm-epi{background:none;border:none;color:rgba(248,113,113,.7);cursor:pointer;font-size:.9rem}
+    .btn-add-epi{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:10px;color:#00d4ff;padding:9px 18px;cursor:pointer;font-size:.82rem;font-weight:600;margin-top:4px;width:100%}
+    .detalhe-row{display:flex;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .detalhe-row:last-child{border-bottom:none}
+    .detalhe-label{font-size:.76rem;color:rgba(255,255,255,.4);min-width:150px;font-weight:600}
+    .detalhe-valor{font-size:.86rem;color:#fff;flex:1}
+  </style>
+</head>
+<body>
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
@@ -17,11 +104,161 @@
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
-    <div class="user-info">
-      <p id="nomeUsuario">Usuário</p>
-      <span>Administrador</span>
-    </div>
+    <div class="user-info"><p id="nomeUsuario">Usuário</p><span>Administrador</span></div>
     <button class="btn-sair" onclick="sair()">✕</button>
   </div>
 </div>
-
+<div class="main">
+  <div class="topbar">
+    <div><h2>👷 Funcionários</h2><span id="totalRegistros">0 registros</span></div>
+    <button class="btn-novo" onclick="abrirModal()">＋ Novo Funcionário</button>
+  </div>
+  <div class="filtros">
+    <button class="filtro-btn active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('ativo',this)">✅ Ativo</button>
+    <button class="filtro-btn" onclick="filtrar('inativo',this)">🔴 Inativo</button>
+    <button class="filtro-btn" onclick="filtrar('ferias',this)">🏖️ Férias</button>
+    <button class="filtro-btn" onclick="filtrar('afastado',this)">🏥 Afastado</button>
+    <input class="busca-input" type="text" placeholder="🔍 Buscar funcionário..." oninput="renderizar(getLista())"/>
+  </div>
+  <div class="tabela-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Nome</th><th>Cargo / Setor</th><th>Status</th><th>Admissão</th><th>EPIs</th><th>Registrado por</th><th>Ações</th></tr></thead>
+      <tbody id="tabelaBody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none"><div>👷</div><p>Nenhum funcionário cadastrado.<br>Clique em <strong>+ Novo Funcionário</strong>.</p></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modalForm">
+  <div class="modal">
+    <div class="modal-header"><h3 id="modalTitulo">👷 Novo Funcionário</h3><button class="btn-fechar" onclick="fecharModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="secao-titulo">👤 Dados Pessoais</div>
+      <div class="form-row"><div class="form-group"><label>Nome Completo *</label><input type="text" id="f_nome" placeholder="Nome completo"/></div><div class="form-group"><label>CPF</label><input type="text" id="f_cpf" placeholder="000.000.000-00"/></div></div>
+      <div class="form-row"><div class="form-group"><label>Data de Nascimento</label><input type="date" id="f_nascimento"/></div><div class="form-group"><label>Telefone</label><input type="text" id="f_telefone" placeholder="(00) 00000-0000"/></div></div>
+      <div class="form-row full"><div class="form-group"><label>E-mail</label><input type="text" id="f_email" placeholder="email@empresa.com"/></div></div>
+      <div class="secao-titulo">🏭 Dados Profissionais</div>
+      <div class="form-row"><div class="form-group"><label>Cargo *</label><input type="text" id="f_cargo" placeholder="Ex: Operador de Máquinas"/></div><div class="form-group"><label>Setor *</label><input type="text" id="f_setor" placeholder="Ex: Produção"/></div></div>
+      <div class="form-row"><div class="form-group"><label>Data de Admissão</label><input type="date" id="f_admissao"/></div><div class="form-group"><label>Status *</label><select id="f_status"><option value="">Selecione</option><option value="ativo">✅ Ativo</option><option value="inativo">🔴 Inativo</option><option value="ferias">🏖️ Férias</option><option value="afastado">🏥 Afastado</option></select></div></div>
+      <div class="form-row"><div class="form-group"><label>Matrícula</label><input type="text" id="f_matricula" placeholder="Ex: 001234"/></div><div class="form-group"><label>NR Treinamentos</label><input type="text" id="f_treinamentos" placeholder="Ex: NR-10, NR-35"/></div></div>
+      <div class="secao-titulo">🦺 EPIs Vinculados</div>
+      <div class="epi-lista" id="epiLista"></div>
+      <button class="btn-add-epi" onclick="addEpiRow()">＋ Adicionar EPI</button>
+      <div class="secao-titulo">🕐 Registro</div>
+      <div class="form-row">
+        <div class="form-group"><label>Registrado por <span class="auto-tag">AUTO</span></label><input type="text" id="f_registradoPor" class="auto-field" readonly/></div>
+        <div class="form-group"><label>Registrado em <span class="auto-tag">AUTO</span></label><input type="text" id="f_registradoEm" class="auto-field" readonly/></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">💾 Salvar</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modalVer">
+  <div class="modal"><div class="modal-header"><h3>👷 Detalhes do Funcionário</h3><button class="btn-fechar" onclick="fecharModalVer()">✕</button></div><div class="modal-body" id="modalVerConteudo"></div><div class="modal-footer"><button class="btn-cancelar" onclick="fecharModalVer()">Fechar</button></div></div>
+</div>
+<script>
+var userData=localStorage.getItem('safenr_user');
+if(!userData){window.location.href='./index.html';}
+var user=JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent=user.nome||'Usuário';
+document.getElementById('avatarLetra').textContent=(user.nome||'U')[0].toUpperCase();
+function sair(){localStorage.removeItem('safenr_user');window.location.href='./index.html';}
+var registros=JSON.parse(localStorage.getItem('safenr_funcionarios')||'[]');
+var editandoId=null,filtroAtivo='todos';
+var episTemp=[];
+function salvarStorage(){localStorage.setItem('safenr_funcionarios',JSON.stringify(registros));}
+function fmt(d){if(!d)return'—';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function fmtDT(iso){if(!iso)return'—';return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
+function epiVencido(v){return v&&new Date(v)<new Date();}
+function labelStatus(s){return{ativo:'Ativo',inativo:'Inativo',ferias:'Férias',afastado:'Afastado'}[s]||s;}
+function getLista(){
+  var busca=document.querySelector('.busca-input').value.toLowerCase();
+  return registros.filter(function(r){
+    if(filtroAtivo!=='todos'&&r.status!==filtroAtivo)return false;
+    if(busca&&!(r.nome.toLowerCase().includes(busca)||(r.cargo||'').toLowerCase().includes(busca)||(r.setor||'').toLowerCase().includes(busca)))return false;
+    return true;
+  });
+}
+function filtrar(s,btn){filtroAtivo=s;document.querySelectorAll('.filtro-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');renderizar(getLista());}
+function renderizar(lista){
+  var tbody=document.getElementById('tabelaBody'),empty=document.getElementById('emptyState');
+  tbody.innerHTML='';
+  document.getElementById('totalRegistros').textContent=registros.length+' registro(s)';
+  if(lista.length===0){empty.style.display='block';return;}
+  empty.style.display='none';
+  lista.forEach(function(r){
+    var epis=r.epis||[];
+    var venc=epis.some(function(e){return epiVencido(e.validade);});
+    var epiStatus=epis.length===0?'<span style="color:rgba(255,255,255,.3);font-size:.78rem">Nenhum</span>':'<span class="badge '+(venc?'epi-venc':'epi-ok')+'">'+(venc?'⚠️ Vencido':'✅ OK')+' ('+epis.length+')</span>';
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="color:rgba(255,255,255,.3);font-size:.8rem">#'+String(r.id).padStart(3,'0')+'</td><td><strong>'+r.nome+'</strong>'+(r.matricula?'<br><span style="font-size:.72rem;color:rgba(255,255,255,.3)">Mat: '+r.matricula+'</span>':'')+'</td><td><span style="font-size:.85rem">'+（r.cargo||'—')+'</span><br><span style="font-size:.75rem;color:rgba(255,255,255,.35)">'+（r.setor||'—')+'</span></td><td><span class="badge '+(r.status||'ativo')+'">'+labelStatus(r.status)+'</span></td><td>'+fmt(r.admissao)+'</td><td>'+epiStatus+'</td><td style="font-size:.82rem">👤 '+(r.registradoPor||'—')+'</td><td><button class="btn-acao" onclick="ver('+r.id+')">👁️</button><button class="btn-acao" onclick="editar('+r.id+')">✏️</button><button class="btn-acao" onclick="excluir('+r.id+')">🗑️</button></td>';
+    tbody.appendChild(tr);
+  });
+}
+function addEpiRow(nome,validade){
+  var div=document.createElement('div');
+  div.className='epi-item';
+  div.innerHTML='<div style="display:flex;gap:10px;flex:1"><input type="text" placeholder="Nome do EPI" value="'+(nome||'')+'" style="flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 12px;color:#fff;font-size:.83rem;outline:none"/><input type="date" value="'+(validade||'')+'" title="Validade" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 12px;color:#fff;font-size:.83rem;outline:none"/></div><button class="btn-rm-epi" onclick="this.parentElement.remove()">🗑️</button>';
+  document.getElementById('epiLista').appendChild(div);
+}
+function getEpisForm(){
+  var items=document.querySelectorAll('#epiLista .epi-item');
+  var epis=[];
+  items.forEach(function(item){
+    var inputs=item.querySelectorAll('input');
+    var nome=inputs[0].value.trim(),val=inputs[1].value;
+    if(nome)epis.push({nome:nome,validade:val});
+  });
+  return epis;
+}
+function abrirModal(id){
+  editandoId=id||null;
+  document.getElementById('modalTitulo').textContent=id?'✏️ Editar Funcionário':'👷 Novo Funcionário';
+  ['f_nome','f_cpf','f_nascimento','f_telefone','f_email','f_cargo','f_setor','f_admissao','f_status','f_matricula','f_treinamentos'].forEach(function(f){document.getElementById(f).value='';});
+  document.getElementById('epiLista').innerHTML='';
+  document.getElementById('f_registradoPor').value=user.nome||'Usuário';
+  document.getElementById('f_registradoEm').value=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  if(id){
+    var r=registros.find(function(x){return x.id===id;});
+    document.getElementById('f_nome').value=r.nome||'';
+    document.getElementById('f_cpf').value=r.cpf||'';
+    document.getElementById('f_nascimento').value=r.nascimento||'';
+    document.getElementById('f_telefone').value=r.telefone||'';
+    document.getElementById('f_email').value=r.email||'';
+    document.getElementById('f_cargo').value=r.cargo||'';
+    document.getElementById('f_setor').value=r.setor||'';
+    document.getElementById('f_admissao').value=r.admissao||'';
+    document.getElementById('f_status').value=r.status||'';
+    document.getElementById('f_matricula').value=r.matricula||'';
+    document.getElementById('f_treinamentos').value=r.treinamentos||'';
+    document.getElementById('f_registradoPor').value=r.registradoPor||user.nome;
+    document.getElementById('f_registradoEm').value=r.registradoEm?fmtDT(r.registradoEm):'—';
+    (r.epis||[]).forEach(function(e){addEpiRow(e.nome,e.validade);});
+  }
+  document.getElementById('modalForm').classList.add('open');
+}
+function fecharModal(){document.getElementById('modalForm').classList.remove('open');editandoId=null;}
+function salvar(){
+  var nome=document.getElementById('f_nome').value.trim(),cargo=document.getElementById('f_cargo').value.trim(),setor=document.getElementById('f_setor').value.trim(),status=document.getElementById('f_status').value;
+  if(!nome||!cargo||!setor||!status){alert('⚠️ Preencha Nome, Cargo, Setor e Status.');return;}
+  var dados={nome:nome,cpf:document.getElementById('f_cpf').value.trim(),nascimento:document.getElementById('f_nascimento').value,telefone:document.getElementById('f_telefone').value.trim(),email:document.getElementById('f_email').value.trim(),cargo:cargo,setor:setor,admissao:document.getElementById('f_admissao').value,status:status,matricula:document.getElementById('f_matricula').value.trim(),treinamentos:document.getElementById('f_treinamentos').value.trim(),epis:getEpisForm()};
+  if(editandoId){var idx=registros.findIndex(function(r){return r.id===editandoId;});registros[idx]=Object.assign({},registros[idx],dados);}
+  else{var novoId=registros.length>0?Math.max.apply(null,registros.map(function(r){return r.id;}))+1:1;registros.push(Object.assign({id:novoId,registradoPor:user.nome||'Usuário',registradoEm:new Date().toISOString()},dados));}
+  salvarStorage();fecharModal();renderizar(getLista());
+}
+function editar(id){abrirModal(id);}
+function excluir(id){if(!confirm('Deseja excluir este funcionário?'))return;registros=registros.filter(function(r){return r.id!==id;});salvarStorage();renderizar(getLista());}
+function ver(id){
+  var r=registros.find(function(x){return x.id===id;});
+  function row(l,v){return'<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>';}
+  var epis=(r.epis||[]).map(function(e){return'<span style="display:inline-block;background:rgba(255,255,255,.07);border-radius:8px;padding:3px 10px;font-size:.78rem;margin:2px">'+(epiVencido(e.validade)?'⚠️ ':'✅ ')+e.nome+(e.validade?' ('+fmt(e.validade)+')':'')+'</span>';}).join('')||'—';
+  document.getElementById('modalVerConteudo').innerHTML=row('Nome',r.nome)+row('CPF',r.cpf||'—')+row('Nascimento',fmt(r.nascimento))+row('Telefone',r.telefone||'—')+row('E-mail',r.email||'—')+row('Cargo',r.cargo||'—')+row('Setor',r.setor||'—')+row('Status','<span class="badge '+(r.status||'ativo')+'">'+labelStatus(r.status)+'</span>')+row('Admissão',fmt(r.admissao))+row('Matrícula',r.matricula||'—')+row('Treinamentos',r.treinamentos||'—')+row('EPIs',epis)+row('👤 Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'—')+'</span>')+row('🕐 Registrado em','<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
+  document.getElementById('modalVer').classList.add('open');
+}
+function fecharModalVer(){document.getElementById('modalVer').classList.remove('open');}
+document.getElementById('modalForm').addEventListener('click',function(e){if(e.target===this)fecharModal();});
+document.getElementById('modalVer').addEventListener('click',function(e){if(e.target===this)fecharModalVer();});
+renderizar(getLista());
+</script>
+</body>
+</html>
