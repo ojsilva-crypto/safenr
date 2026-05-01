@@ -53,8 +53,6 @@
       cursor: pointer; font-size: 0.8rem; margin-left: auto;
     }
     .btn-sair:hover { color: #ff6b6b; }
-
-    /* MAIN */
     .main { margin-left: 240px; flex: 1; padding: 32px; }
     .topbar {
       display: flex; justify-content: space-between;
@@ -63,8 +61,6 @@
     .topbar h2 { font-size: 1.5rem; font-weight: 700; }
     .topbar p { color: rgba(255,255,255,0.4); font-size: 0.85rem; margin-top: 4px; }
     .topbar-right { font-size: 0.78rem; color: rgba(255,255,255,0.3); text-align: right; }
-
-    /* CARDS TOPO */
     .cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-bottom: 28px; }
     .card {
       background: rgba(255,255,255,0.04);
@@ -83,8 +79,6 @@
     .card-sub.up   { color: #4ade80; }
     .card-sub.down { color: #f87171; }
     .card-sub.warn { color: #fbbf24; }
-
-    /* GRID INFERIOR */
     .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .panel {
       background: rgba(255,255,255,0.03);
@@ -96,12 +90,7 @@
       margin-bottom: 6px; display: flex; align-items: center;
       justify-content: space-between; gap: 8px;
     }
-    .panel-subtitle {
-      font-size: 0.72rem; color: rgba(255,255,255,0.3);
-      margin-bottom: 18px;
-    }
-
-    /* INSPEÇÕES RECENTES */
+    .panel-subtitle { font-size: 0.72rem; color: rgba(255,255,255,0.3); margin-bottom: 18px; }
     .inspecao-item {
       display: flex; align-items: center;
       justify-content: space-between;
@@ -115,13 +104,7 @@
     .badge.pendente     { background: rgba(251,191,36,0.15);  color: #fbbf24; }
     .badge.critico      { background: rgba(248,113,113,0.15); color: #f87171; }
     .badge.em-andamento { background: rgba(96,165,250,0.15);  color: #60a5fa; }
-
-    /* GRID NRs */
-    .nrs-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
+    .nrs-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
     .nr-card {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
@@ -133,16 +116,12 @@
       position: relative; overflow: hidden;
     }
     .nr-card::after {
-      content: '↗';
-      position: absolute; top: 6px; right: 8px;
-      font-size: 0.65rem; color: rgba(255,255,255,0.2);
-      transition: color 0.2s;
+      content: '↗'; position: absolute; top: 6px; right: 8px;
+      font-size: 0.65rem; color: rgba(255,255,255,0.2); transition: color 0.2s;
     }
     .nr-card:hover {
-      background: rgba(0,212,255,0.08);
-      border-color: rgba(0,212,255,0.35);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,212,255,0.08);
+      background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.35);
+      transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,212,255,0.08);
     }
     .nr-card:hover::after { color: #00d4ff; }
     .nr-card-icon { font-size: 1.3rem; }
@@ -152,7 +131,6 @@
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
@@ -163,7 +141,7 @@
     <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="#"><span class="icon">👷</span> Funcionários</a>
+    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionários</a>
     <a class="nav-item" href="#"><span class="icon">📄</span> Relatórios</a>
     <a class="nav-item" href="#"><span class="icon">⚙️</span> Configurações</a>
   </nav>
@@ -177,7 +155,6 @@
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div>
@@ -187,7 +164,6 @@
     <span class="topbar-right">SafeNR v1.0</span>
   </div>
 
-  <!-- CARDS ESTATÍSTICAS -->
   <div class="cards">
     <div class="card">
       <div class="card-icon">🔍</div>
@@ -215,10 +191,7 @@
     </div>
   </div>
 
-  <!-- GRID INFERIOR -->
   <div class="bottom-grid">
-
-    <!-- INSPEÇÕES RECENTES -->
     <div class="panel">
       <div class="panel-title">📋 Inspeções Recentes</div>
       <div class="panel-subtitle">Últimas 5 inspeções registradas</div>
@@ -229,7 +202,6 @@
       </div>
     </div>
 
-    <!-- NORMAS REGULAMENTADORAS -->
     <div class="panel">
       <div class="panel-title">
         📘 Normas Regulamentadoras
@@ -237,82 +209,44 @@
       </div>
       <div class="panel-subtitle">Clique para abrir a norma no site do Ministério do Trabalho</div>
       <div class="nrs-grid">
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-1-nr-1" target="_blank" rel="noopener">
-          <div class="nr-card-icon">📋</div>
-          <div class="nr-card-code">NR-01</div>
-          <div class="nr-card-nome">Disposições Gerais / GRO</div>
+          <div class="nr-card-icon">📋</div><div class="nr-card-code">NR-01</div><div class="nr-card-nome">Disposições Gerais / GRO</div>
         </a>
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-5-nr-5" target="_blank" rel="noopener">
-          <div class="nr-card-icon">🛡️</div>
-          <div class="nr-card-code">NR-05</div>
-          <div class="nr-card-nome">CIPA</div>
+          <div class="nr-card-icon">🛡️</div><div class="nr-card-code">NR-05</div><div class="nr-card-nome">CIPA</div>
         </a>
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-6-nr-6" target="_blank" rel="noopener">
-          <div class="nr-card-icon">🦺</div>
-          <div class="nr-card-code">NR-06</div>
-          <div class="nr-card-nome">EPI</div>
+          <div class="nr-card-icon">🦺</div><div class="nr-card-code">NR-06</div><div class="nr-card-nome">EPI</div>
         </a>
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-7-nr-7" target="_blank" rel="noopener">
-          <div class="nr-card-icon">🏥</div>
-          <div class="nr-card-code">NR-07</div>
-          <div class="nr-card-nome">PCMSO</div>
+          <div class="nr-card-icon">🏥</div><div class="nr-card-code">NR-07</div><div class="nr-card-nome">PCMSO</div>
         </a>
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-9-nr-9" target="_blank" rel="noopener">
-          <div class="nr-card-icon">🌡️</div>
-          <div class="nr-card-code">NR-09</div>
-          <div class="nr-card-nome">Riscos Ambientais</div>
+          <div class="nr-card-icon">🌡️</div><div class="nr-card-code">NR-09</div><div class="nr-card-nome">Riscos Ambientais</div>
         </a>
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-10-nr-10" target="_blank" rel="noopener">
-          <div class="nr-card-icon">⚡</div>
-          <div class="nr-card-code">NR-10</div>
-          <div class="nr-card-nome">Eletricidade</div>
+          <div class="nr-card-icon">⚡</div><div class="nr-card-code">NR-10</div><div class="nr-card-nome">Eletricidade</div>
         </a>
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-11-nr-11" target="_blank" rel="noopener">
-          <div class="nr-card-icon">📦</div>
-          <div class="nr-card-code">NR-11</div>
-          <div class="nr-card-nome">Armazenagem</div>
+          <div class="nr-card-icon">📦</div><div class="nr-card-code">NR-11</div><div class="nr-card-nome">Armazenagem</div>
         </a>
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-12-nr-12" target="_blank" rel="noopener">
-          <div class="nr-card-icon">⚙️</div>
-          <div class="nr-card-code">NR-12</div>
-          <div class="nr-card-nome">Máquinas e Equipamentos</div>
+          <div class="nr-card-icon">⚙️</div><div class="nr-card-code">NR-12</div><div class="nr-card-nome">Máquinas e Equipamentos</div>
         </a>
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-17-nr-17" target="_blank" rel="noopener">
-          <div class="nr-card-icon">🪑</div>
-          <div class="nr-card-code">NR-17</div>
-          <div class="nr-card-nome">Ergonomia</div>
+          <div class="nr-card-icon">🪑</div><div class="nr-card-code">NR-17</div><div class="nr-card-nome">Ergonomia</div>
         </a>
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-23-nr-23" target="_blank" rel="noopener">
-          <div class="nr-card-icon">🔥</div>
-          <div class="nr-card-code">NR-23</div>
-          <div class="nr-card-nome">Proteção c/ Incêndio</div>
+          <div class="nr-card-icon">🔥</div><div class="nr-card-code">NR-23</div><div class="nr-card-nome">Proteção c/ Incêndio</div>
         </a>
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-24-nr-24" target="_blank" rel="noopener">
-          <div class="nr-card-icon">🚿</div>
-          <div class="nr-card-code">NR-24</div>
-          <div class="nr-card-nome">Condições Sanitárias</div>
+          <div class="nr-card-icon">🚿</div><div class="nr-card-code">NR-24</div><div class="nr-card-nome">Condições Sanitárias</div>
         </a>
-
         <a class="nr-card" href="https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/norma-regulamentadora-no-35-nr-35" target="_blank" rel="noopener">
-          <div class="nr-card-icon">🏗️</div>
-          <div class="nr-card-code">NR-35</div>
-          <div class="nr-card-nome">Trabalho em Altura</div>
+          <div class="nr-card-icon">🏗️</div><div class="nr-card-code">NR-35</div><div class="nr-card-nome">Trabalho em Altura</div>
         </a>
-
       </div>
     </div>
-
   </div>
 </div>
 
