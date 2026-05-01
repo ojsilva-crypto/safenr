@@ -11,8 +11,6 @@
       background: #0f1923; color: #fff;
       display: flex; min-height: 100vh;
     }
-
-    /* SIDEBAR */
     .sidebar {
       width: 240px; background: #0a1520;
       border-right: 1px solid rgba(255,255,255,0.07);
@@ -26,7 +24,6 @@
     .sidebar-logo h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: 2px; }
     .sidebar-logo h1 span { color: #00d4ff; }
     .sidebar-logo p { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-top: 2px; }
-
     .nav { flex: 1; padding: 20px 0; }
     .nav-item {
       display: flex; align-items: center; gap: 12px;
@@ -38,7 +35,6 @@
     .nav-item:hover { color: #fff; background: rgba(255,255,255,0.04); }
     .nav-item.active { color: #00d4ff; border-left-color: #00d4ff; background: rgba(0,212,255,0.06); }
     .nav-item .icon { font-size: 1.1rem; width: 20px; text-align: center; }
-
     .sidebar-user {
       padding: 16px 24px;
       border-top: 1px solid rgba(255,255,255,0.07);
@@ -57,10 +53,7 @@
       cursor: pointer; font-size: 0.8rem; margin-left: auto;
     }
     .btn-sair:hover { color: #ff6b6b; }
-
-    /* MAIN */
     .main { margin-left: 240px; flex: 1; padding: 32px; }
-
     .topbar {
       display: flex; justify-content: space-between;
       align-items: flex-start; margin-bottom: 32px;
@@ -68,14 +61,11 @@
     .topbar h2 { font-size: 1.5rem; font-weight: 700; }
     .topbar p { color: rgba(255,255,255,0.4); font-size: 0.85rem; margin-top: 4px; }
     .topbar-right { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
-
-    /* CARDS */
     .cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-bottom: 28px; }
     .card {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px; padding: 24px;
-      transition: transform 0.2s;
+      border-radius: 16px; padding: 24px; transition: transform 0.2s;
     }
     .card:hover { transform: translateY(-3px); }
     .card-icon { font-size: 1.8rem; margin-bottom: 12px; }
@@ -89,8 +79,6 @@
     .card-sub.up   { color: #4ade80; }
     .card-sub.down { color: #f87171; }
     .card-sub.warn { color: #fbbf24; }
-
-    /* BOTTOM GRID */
     .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .panel {
       background: rgba(255,255,255,0.03);
@@ -101,33 +89,25 @@
       font-size: 0.9rem; font-weight: 700;
       margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
     }
-
-    /* INSPEÇÕES RECENTES */
     .inspecao-item {
       display: flex; align-items: center;
       justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     .inspecao-item:last-child { border-bottom: none; }
     .inspecao-info p { font-size: 0.87rem; font-weight: 600; }
     .inspecao-info span { font-size: 0.75rem; color: rgba(255,255,255,0.35); }
-    .badge {
-      padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600;
-    }
+    .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
     .badge.conforme     { background: rgba(74,222,128,0.15); color: #4ade80; }
     .badge.pendente     { background: rgba(251,191,36,0.15);  color: #fbbf24; }
     .badge.critico      { background: rgba(248,113,113,0.15); color: #f87171; }
     .badge.em-andamento { background: rgba(96,165,250,0.15);  color: #60a5fa; }
-
-    /* NRS */
     .nrs-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
     .nr-card {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 10px; padding: 14px 10px;
-      text-align: center; cursor: pointer;
-      transition: all 0.2s;
+      text-align: center; cursor: pointer; transition: all 0.2s;
     }
     .nr-card:hover { background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.3); }
     .nr-card p { font-size: 0.82rem; font-weight: 700; color: #00d4ff; }
@@ -136,7 +116,6 @@
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
@@ -146,7 +125,7 @@
     <a class="nav-item active" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
     <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
-    <a class="nav-item" href="#"><span class="icon">📋</span> Checklists</a>
+    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
     <a class="nav-item" href="#"><span class="icon">👷</span> Funcionários</a>
     <a class="nav-item" href="#"><span class="icon">📄</span> Relatórios</a>
     <a class="nav-item" href="#"><span class="icon">⚙️</span> Configurações</a>
@@ -161,7 +140,6 @@
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div>
@@ -171,7 +149,6 @@
     <span class="topbar-right">SafeNR v1.0</span>
   </div>
 
-  <!-- CARDS -->
   <div class="cards">
     <div class="card">
       <div class="card-icon">🔍</div>
@@ -199,7 +176,6 @@
     </div>
   </div>
 
-  <!-- BOTTOM -->
   <div class="bottom-grid">
     <div class="panel">
       <div class="panel-title">📋 Inspeções Recentes</div>
@@ -230,7 +206,6 @@
 </div>
 
 <script>
-  // Auth
   const userData = localStorage.getItem('safenr_user');
   if (!userData) { window.location.href = './index.html'; }
   else {
@@ -238,28 +213,22 @@
     document.getElementById('nomeUsuario').textContent = user.nome || 'Usuário';
     document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
   }
-  function sair() {
-    localStorage.removeItem('safenr_user');
-    window.location.href = './index.html';
-  }
+  function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
 
-  // Data
-  const dias = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
-  const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-  const agora = new Date();
+  const dias   = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+  const meses  = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  const agora  = new Date();
   document.getElementById('dataAtual').textContent =
     `${dias[agora.getDay()]}, ${agora.getDate()} de ${meses[agora.getMonth()]} de ${agora.getFullYear()}`;
 
-  // Dados do localStorage
   const inspecoes = JSON.parse(localStorage.getItem('safenr_inspecoes') || '[]');
   const riscos    = JSON.parse(localStorage.getItem('safenr_riscos')    || '[]');
 
-  // Contadores
-  const conformes = inspecoes.filter(i => i.status === 'conforme').length;
-  const criticos  = riscos.filter(r => r.nivel === 'critico' && r.status !== 'resolvido').length
-                  + inspecoes.filter(i => i.status === 'critico').length;
+  const conformes     = inspecoes.filter(i => i.status === 'conforme').length;
+  const criticos      = riscos.filter(r => r.nivel === 'critico' && r.status !== 'resolvido').length
+                      + inspecoes.filter(i => i.status === 'critico').length;
   const riscosAbertos = riscos.filter(r => r.status !== 'resolvido').length;
-  const pct = inspecoes.length > 0 ? Math.round((conformes / inspecoes.length) * 100) : 0;
+  const pct           = inspecoes.length > 0 ? Math.round((conformes / inspecoes.length) * 100) : 0;
 
   document.getElementById('totalInspecoes').textContent = inspecoes.length;
   document.getElementById('totalRiscos').textContent    = riscosAbertos;
@@ -271,7 +240,6 @@
   document.getElementById('subConformes').textContent = `↑ ${pct}% de conformidade`;
   document.getElementById('subCriticos').textContent  = criticos > 0 ? '⚠️ Ação imediata' : '✓ Tudo sob controle';
 
-  // Inspeções recentes
   const recentes = [...inspecoes].reverse().slice(0, 5);
   if (recentes.length > 0) {
     document.getElementById('listaInspecoes').innerHTML = recentes.map(i => `
