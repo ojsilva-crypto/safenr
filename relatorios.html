@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SafeNR — Relatórios</title>
+  <title>SafeNR — Relatorios</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
@@ -26,176 +26,163 @@
     .topbar{margin-bottom:28px}
     .topbar h2{font-size:1.4rem;font-weight:700}
     .topbar p{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:4px}
-    .rel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
-    .rel-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;cursor:pointer;transition:all .2s}
-    .rel-card:hover{background:rgba(255,255,255,.07);border-color:rgba(0,212,255,.3);transform:translateY(-2px)}
-    .rel-icon{font-size:2rem;margin-bottom:12px}
-    .rel-card h3{font-size:.95rem;font-weight:700;margin-bottom:6px}
-    .rel-card p{font-size:.78rem;color:rgba(255,255,255,.35);margin-bottom:16px;line-height:1.5}
-    .btn-gerar{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:10px;color:#fff;font-size:.82rem;font-weight:700;padding:9px 20px;cursor:pointer;width:100%}
-    .btn-gerar:hover{opacity:.85}
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:1000;align-items:flex-start;justify-content:center;padding:30px 20px;overflow-y:auto}
-    .modal-overlay.open{display:flex}
-    .modal{background:#fff;color:#111;border-radius:16px;width:100%;max-width:800px;margin:auto;overflow:hidden}
-    .modal-actions{background:#0f1923;padding:16px 28px;display:flex;gap:12px;justify-content:flex-end;border-bottom:1px solid rgba(255,255,255,.08)}
-    .btn-imprimir{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:10px;color:#fff;font-size:.88rem;font-weight:700;padding:10px 22px;cursor:pointer}
-    .btn-fechar2{background:rgba(255,255,255,.1);border:none;border-radius:10px;color:#fff;font-size:.88rem;padding:10px 18px;cursor:pointer}
-    .relatorio-body{padding:40px;font-family:'Segoe UI',sans-serif}
-    .rel-header{border-bottom:3px solid #0099cc;padding-bottom:20px;margin-bottom:28px}
-    .rel-header h1{font-size:1.5rem;font-weight:800;color:#0a1520}
-    .rel-header p{font-size:.85rem;color:#666;margin-top:4px}
-    .rel-header-meta{display:flex;gap:24px;margin-top:12px;flex-wrap:wrap}
-    .rel-header-meta span{font-size:.78rem;color:#888;background:#f5f5f5;padding:4px 12px;border-radius:20px}
-    .rel-secao{margin-bottom:28px}
-    .rel-secao h2{font-size:1rem;font-weight:700;color:#0a1520;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #e5e7eb}
-    table.rel-tabela{width:100%;border-collapse:collapse;font-size:.83rem}
-    table.rel-tabela th{background:#0a1520;color:#fff;padding:10px 14px;text-align:left;font-size:.75rem}
-    table.rel-tabela td{padding:9px 14px;border-bottom:1px solid #e5e7eb;color:#333}
-    table.rel-tabela tr:nth-child(even) td{background:#f9fafb}
-    .rel-badge{padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:600;display:inline-block}
-    .rel-badge.critico{background:#fee2e2;color:#dc2626}
-    .rel-badge.alto{background:#ffedd5;color:#ea580c}
-    .rel-badge.medio{background:#fef9c3;color:#ca8a04}
-    .rel-badge.baixo{background:#dcfce7;color:#16a34a}
-    .rel-badge.ok{background:#dcfce7;color:#16a34a}
-    .rel-badge.vencido{background:#fee2e2;color:#dc2626}
-    .rel-badge.ativo{background:#dcfce7;color:#16a34a}
-    .rel-badge.inativo{background:#fee2e2;color:#dc2626}
-    .rel-resumo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-    .rel-resumo-item{background:#f5f5f5;border-radius:10px;padding:14px;text-align:center}
-    .rel-resumo-item .val{font-size:1.6rem;font-weight:900;color:#0a1520}
-    .rel-resumo-item .lbl{font-size:.72rem;color:#888;margin-top:2px}
-    .rel-footer{border-top:1px solid #e5e7eb;padding-top:16px;margin-top:28px;font-size:.75rem;color:#999;display:flex;justify-content:space-between}
-    @media print{.modal-actions{display:none!important}}
+    .rel-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+    .rel-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px}
+    .rel-card h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+    .rel-card p{font-size:.82rem;color:rgba(255,255,255,.35);margin-bottom:20px}
+    .btn-gerar{width:100%;padding:12px;border-radius:10px;border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s}
+    .btn-gerar:hover{opacity:.85;transform:translateY(-1px)}
+    .btn-azul{background:linear-gradient(135deg,#00d4ff,#0099cc)}
+    .btn-verde{background:linear-gradient(135deg,#4ade80,#16a34a)}
+    .btn-laranja{background:linear-gradient(135deg,#fb923c,#ea580c)}
+    .btn-roxo{background:linear-gradient(135deg,#a78bfa,#7c3aed)}
+    .btn-vermelho{background:linear-gradient(135deg,#f87171,#dc2626)}
+    .btn-amarelo{background:linear-gradient(135deg,#fbbf24,#d97706)}
+    .resumo-box{background:rgba(255,255,255,.04);border-radius:10px;padding:16px;margin-top:16px;display:none}
+    .resumo-box h4{font-size:.85rem;font-weight:700;margin-bottom:10px;color:#00d4ff}
+    .resumo-item{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.82rem}
+    .resumo-item:last-child{border-bottom:none}
+    .resumo-item span:last-child{font-weight:700;color:#fff}
+    @media print{.sidebar,.btn-gerar{display:none!important}.main{margin-left:0!important}.rel-card{break-inside:avoid}}
   </style>
 </head>
 <body>
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
-    <p>Gestão de Segurança do Trabalho</p>
+    <p>Gestao de Seguranca do Trabalho</p>
   </div>
   <nav class="nav">
     <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
-    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
+    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionários</a>
-    <a class="nav-item active" href="./relatorios.html"><span class="icon">📄</span> Relatórios</a>
+    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
+    <a class="nav-item active" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configurações</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
+    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
-    <div class="user-info"><p id="nomeUsuario">Usuário</p><span>Administrador</span></div>
-    <button class="btn-sair" onclick="sair()">✕</button>
+    <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
+    <button class="btn-sair" onclick="sair()">X</button>
   </div>
 </div>
 <div class="main">
   <div class="topbar">
-    <h2>📄 Relatórios</h2>
-    <p>Gere e imprima relatórios completos do sistema</p>
+    <h2>📄 Relatorios</h2>
+    <p>Gere e exporte relatorios do sistema</p>
   </div>
   <div class="rel-grid">
-    <div class="rel-card"><div class="rel-icon">📊</div><h3>Relatório Geral</h3><p>Resumo completo de inspeções, riscos, funcionários e EPIs em um único documento.</p><button class="btn-gerar" onclick="gerarGeral()">📄 Gerar Relatório</button></div>
-    <div class="rel-card"><div class="rel-icon">⚠️</div><h3>Relatório de Riscos</h3><p>Todos os riscos cadastrados com nível, setor e medidas de controle implementadas.</p><button class="btn-gerar" onclick="gerarRiscos()">📄 Gerar Relatório</button></div>
-    <div class="rel-card"><div class="rel-icon">🔍</div><h3>Relatório de Inspeções</h3><p>Histórico completo de inspeções realizadas com status e responsáveis.</p><button class="btn-gerar" onclick="gerarInspecoes()">📄 Gerar Relatório</button></div>
-    <div class="rel-card"><div class="rel-icon">👷</div><h3>Relatório de Funcionários</h3><p>Lista completa com cargos, setores, status e situação dos EPIs vinculados.</p><button class="btn-gerar" onclick="gerarFuncionarios()">📄 Gerar Relatório</button></div>
-    <div class="rel-card"><div class="rel-icon">🦺</div><h3>Relatório de EPIs</h3><p>Todos os EPIs cadastrados com CA, validade, fornecedor e situação do estoque.</p><button class="btn-gerar" onclick="gerarEPIs()">📄 Gerar Relatório</button></div>
-    <div class="rel-card"><div class="rel-icon">📋</div><h3>Relatório de Checklists</h3><p>Conformidade de todas as NRs avaliadas com percentual de itens OK.</p><button class="btn-gerar" onclick="gerarChecklists()">📄 Gerar Relatório</button></div>
-  </div>
-</div>
-<div class="modal-overlay" id="modalRel">
-  <div class="modal">
-    <div class="modal-actions">
-      <button class="btn-fechar2" onclick="fecharModal()">✕ Fechar</button>
-      <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    <div class="rel-card">
+      <h3>🔍 Relatorio de Inspecoes</h3>
+      <p>Resumo geral de todas as inspecoes cadastradas no sistema.</p>
+      <button class="btn-gerar btn-azul" onclick="gerarInspecoes()">Gerar Relatorio</button>
+      <div class="resumo-box" id="relInsp"></div>
     </div>
-    <div class="relatorio-body" id="relatorioBody"></div>
+    <div class="rel-card">
+      <h3>⚠️ Relatorio de Riscos</h3>
+      <p>Listagem de riscos identificados por nivel de criticidade.</p>
+      <button class="btn-gerar btn-vermelho" onclick="gerarRiscos()">Gerar Relatorio</button>
+      <div class="resumo-box" id="relRisc"></div>
+    </div>
+    <div class="rel-card">
+      <h3>📋 Conformidade NRs</h3>
+      <p>Percentual de conformidade de cada Norma Regulamentadora.</p>
+      <button class="btn-gerar btn-verde" onclick="gerarNRs()">Gerar Relatorio</button>
+      <div class="resumo-box" id="relNR"></div>
+    </div>
+    <div class="rel-card">
+      <h3>👷 Relatorio de Funcionarios</h3>
+      <p>Listagem de funcionarios com status e EPIs vinculados.</p>
+      <button class="btn-gerar btn-roxo" onclick="gerarFuncionarios()">Gerar Relatorio</button>
+      <div class="resumo-box" id="relFunc"></div>
+    </div>
+    <div class="rel-card">
+      <h3>🦺 Relatorio de EPIs</h3>
+      <p>Situacao dos EPIs cadastrados, CAs validos e vencidos.</p>
+      <button class="btn-gerar btn-laranja" onclick="gerarEPIs()">Gerar Relatorio</button>
+      <div class="resumo-box" id="relEPI"></div>
+    </div>
+    <div class="rel-card">
+      <h3>📅 Relatorio de Agenda</h3>
+      <p>Pendencias agendadas, concluidas e em atraso.</p>
+      <button class="btn-gerar btn-amarelo" onclick="gerarAgenda()">Gerar Relatorio</button>
+      <div class="resumo-box" id="relAgenda"></div>
+    </div>
   </div>
 </div>
 <script>
-var userData=localStorage.getItem('safenr_user');
-if(!userData){window.location.href='./index.html';}
-var user=JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent=user.nome||'Usuário';
-document.getElementById('avatarLetra').textContent=(user.nome||'U')[0].toUpperCase();
-function sair(){localStorage.removeItem('safenr_user');window.location.href='./index.html';}
-function fmt(d){if(!d)return'—';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
-function fmtDT(iso){if(!iso)return'—';return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
-function agora(){return new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
-function header(titulo,subtitulo){return'<div class="rel-header"><h1>🛡️ SafeNR — '+titulo+'</h1><p>'+subtitulo+'</p><div class="rel-header-meta"><span>📅 Gerado em: '+agora()+'</span><span>👤 Por: '+(user.nome||'Usuário')+'</span></div></div>';}
-function footer(){return'<div class="rel-footer"><span>SafeNR — Sistema de Gestão de Segurança do Trabalho</span><span>Gerado em '+agora()+'</span></div>';}
-function fecharModal(){document.getElementById('modalRel').classList.remove('open');}
-function abrirModal(html){document.getElementById('relatorioBody').innerHTML=html;document.getElementById('modalRel').classList.add('open');}
-document.getElementById('modalRel').addEventListener('click',function(e){if(e.target===this)fecharModal();});
-
-function gerarGeral(){
-  var insp=JSON.parse(localStorage.getItem('safenr_inspecoes')||'[]');
-  var risc=JSON.parse(localStorage.getItem('safenr_riscos')||'[]');
-  var func=JSON.parse(localStorage.getItem('safenr_funcionarios')||'[]');
-  var epis=JSON.parse(localStorage.getItem('safenr_epis')||'[]');
-  var epiVenc=epis.filter(function(e){return e.ca_validade&&new Date(e.ca_validade)<new Date();}).length;
-  var html=header('Relatório Geral','Resumo executivo de todas as áreas do sistema');
-  html+='<div class="rel-resumo-grid"><div class="rel-resumo-item"><div class="val">'+insp.length+'</div><div class="lbl">Inspeções</div></div><div class="rel-resumo-item"><div class="val">'+risc.length+'</div><div class="lbl">Riscos</div></div><div class="rel-resumo-item"><div class="val">'+func.length+'</div><div class="lbl">Funcionários</div></div><div class="rel-resumo-item"><div class="val" style="color:'+(epiVenc>0?'#dc2626':'#16a34a')+'">'+epiVenc+'</div><div class="lbl">EPIs CA Vencido</div></div></div>';
-  html+='<div class="rel-secao"><h2>⚠️ Riscos Críticos</h2>';
-  var crit=risc.filter(function(r){return r.nivel==='critico';});
-  if(crit.length===0){html+='<p style="color:#666;font-size:.85rem">Nenhum risco crítico cadastrado.</p>';}
-  else{html+='<table class="rel-tabela"><thead><tr><th>Descrição</th><th>Setor</th><th>Status</th><th>Responsável</th></tr></thead><tbody>'+crit.map(function(r){return'<tr><td>'+r.descricao+'</td><td>'+（r.setor||'—')+'</td><td><span class="rel-badge critico">Crítico</span></td><td>'+(r.responsavel||'—')+'</td></tr>';}).join('')+'</tbody></table>';}
-  html+='</div>'+footer();
-  abrirModal(html);
+var userData = localStorage.getItem('safenr_user');
+if (!userData) { window.location.href = './index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
+document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+function sair(){ localStorage.removeItem('safenr_user'); window.location.href='./index.html'; }
+function fmt(d){ if(!d) return '--'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function showBox(id, titulo, itens){
+  var box=document.getElementById(id);
+  box.style.display='block';
+  var html='<h4>'+titulo+'</h4>';
+  itens.forEach(function(it){ html+='<div class="resumo-item"><span>'+it[0]+'</span><span>'+it[1]+'</span></div>'; });
+  box.innerHTML=html;
 }
-
-function gerarRiscos(){
-  var risc=JSON.parse(localStorage.getItem('safenr_riscos')||'[]');
-  var html=header('Relatório de Riscos','Todos os riscos ocupacionais identificados');
-  if(risc.length===0){html+='<p style="color:#666">Nenhum risco cadastrado.</p>';}
-  else{html+='<table class="rel-tabela"><thead><tr><th>#</th><th>Descrição</th><th>Setor</th><th>Tipo</th><th>Nível</th><th>Status</th><th>Data</th><th>Responsável</th><th>Medida de Controle</th></tr></thead><tbody>'+risc.map(function(r){var nl={critico:'critico',alto:'alto',medio:'medio',baixo:'baixo'}[r.nivel]||'baixo';return'<tr><td>#'+String(r.id).padStart(3,'0')+'</td><td>'+r.descricao+'</td><td>'+(r.setor||'—')+'</td><td>'+(r.tipo||'—')+'</td><td><span class="rel-badge '+nl+'">'+{critico:'Crítico',alto:'Alto',medio:'Médio',baixo:'Baixo'}[r.nivel]+'</span></td><td>'+(r.status||'—')+'</td><td>'+fmt(r.data)+'</td><td>'+(r.responsavel||'—')+'</td><td>'+(r.medida||'—')+'</td></tr>';}).join('')+'</tbody></table>';}
-  html+=footer();abrirModal(html);
-}
-
 function gerarInspecoes(){
-  var insp=JSON.parse(localStorage.getItem('safenr_inspecoes')||'[]');
-  var html=header('Relatório de Inspeções','Histórico de todas as inspeções realizadas');
-  if(insp.length===0){html+='<p style="color:#666">Nenhuma inspeção cadastrada.</p>';}
-  else{html+='<table class="rel-tabela"><thead><tr><th>#</th><th>Título</th><th>Setor</th><th>Status</th><th>Data</th><th>Responsável</th><th>Observações</th></tr></thead><tbody>'+insp.map(function(i){return'<tr><td>#'+String(i.id).padStart(3,'0')+'</td><td>'+（i.titulo||'—')+'</td><td>'+(i.setor||'—')+'</td><td><span class="rel-badge '+(i.status==='concluida'||i.status==='conforme'?'ok':i.status==='nao-conforme'?'vencido':'medio')+'">'+(i.status||'—')+'</span></td><td>'+fmt(i.data)+'</td><td>'+(i.responsavel||'—')+'</td><td>'+(i.obs||'—')+'</td></tr>';}).join('')+'</tbody></table>';}
-  html+=footer();abrirModal(html);
+  var data=JSON.parse(localStorage.getItem('safenr_inspecoes')||'[]');
+  var total=data.length;
+  var concl=data.filter(function(i){ return i.status==='concluida'||i.status==='conforme'; }).length;
+  var pend=data.filter(function(i){ return i.status==='pendente'; }).length;
+  var nc=data.filter(function(i){ return i.status==='nao-conforme'; }).length;
+  var and=data.filter(function(i){ return i.status==='em-andamento'; }).length;
+  showBox('relInsp','Inspecoes',[['Total de Inspecoes',total],['Concluidas / Conformes',concl],['Pendentes',pend],['Em Andamento',and],['Nao Conformes',nc]]);
 }
-
-function gerarFuncionarios(){
-  var func=JSON.parse(localStorage.getItem('safenr_funcionarios')||'[]');
-  var html=header('Relatório de Funcionários','Lista completa de colaboradores');
-  if(func.length===0){html+='<p style="color:#666">Nenhum funcionário cadastrado.</p>';}
-  else{html+='<table class="rel-tabela"><thead><tr><th>#</th><th>Nome</th><th>Cargo</th><th>Setor</th><th>Status</th><th>Admissão</th><th>EPIs</th><th>Treinamentos</th></tr></thead><tbody>'+func.map(function(f){var venc=(f.epis||[]).some(function(e){return e.validade&&new Date(e.validade)<new Date();});return'<tr><td>#'+String(f.id).padStart(3,'0')+'</td><td>'+f.nome+'</td><td>'+(f.cargo||'—')+'</td><td>'+(f.setor||'—')+'</td><td><span class="rel-badge '+(f.status||'ativo')+'">'+(f.status||'—')+'</span></td><td>'+fmt(f.admissao)+'</td><td><span class="rel-badge '+(venc?'vencido':'ok')+'">'+(venc?'⚠️ Vencido':'✅ OK')+'</span></td><td>'+(f.treinamentos||'—')+'</td></tr>';}).join('')+'</tbody></table>';}
-  html+=footer();abrirModal(html);
+function gerarRiscos(){
+  var data=JSON.parse(localStorage.getItem('safenr_riscos')||'[]');
+  var total=data.length;
+  var crit=data.filter(function(r){ return r.nivel==='critico'; }).length;
+  var alto=data.filter(function(r){ return r.nivel==='alto'; }).length;
+  var med=data.filter(function(r){ return r.nivel==='medio'; }).length;
+  var bx=data.filter(function(r){ return r.nivel==='baixo'; }).length;
+  var el=data.filter(function(r){ return r.nivel==='eliminado'; }).length;
+  showBox('relRisc','Riscos',[['Total de Riscos',total],['Criticos',crit],['Altos',alto],['Medios',med],['Baixos',bx],['Eliminados',el]]);
 }
-
-function gerarEPIs(){
-  var epis=JSON.parse(localStorage.getItem('safenr_epis')||'[]');
-  var html=header('Relatório de EPIs','Cadastro completo de Equipamentos de Proteção Individual');
-  if(epis.length===0){html+='<p style="color:#666">Nenhum EPI cadastrado.</p>';}
-  else{html+='<table class="rel-tabela"><thead><tr><th>#</th><th>EPI</th><th>Tipo</th><th>CA</th><th>Validade CA</th><th>Fornecedor</th><th>Estoque</th><th>Status</th></tr></thead><tbody>'+epis.map(function(e){var venc=e.ca_validade&&new Date(e.ca_validade)<new Date();return'<tr><td>#'+String(e.id).padStart(3,'0')+'</td><td>'+e.nome+'</td><td>'+(e.tipo||'—')+'</td><td>'+(e.ca||'—')+'</td><td>'+fmt(e.ca_validade)+'</td><td>'+(e.fornecedor||'—')+'</td><td>'+(e.estoque||0)+' un.</td><td><span class="rel-badge '+(venc?'vencido':'ok')+'">'+(venc?'CA Vencido':'CA OK')+'</span></td></tr>';}).join('')+'</tbody></table>';}
-  html+=footer();abrirModal(html);
-}
-
-function gerarChecklists(){
-  var NRS=['NR-05','NR-06','NR-07','NR-09','NR-10','NR-12','NR-17','NR-23','NR-35'];
-  var NOMES={'NR-05':'CIPA','NR-06':'EPI','NR-07':'PCMSO','NR-09':'Riscos Ambientais','NR-10':'Eletricidade','NR-12':'Máquinas','NR-17':'Ergonomia','NR-23':'Incêndio','NR-35':'Trabalho em Altura'};
-  var TOTAL={'NR-05':8,'NR-06':8,'NR-07':8,'NR-09':8,'NR-10':8,'NR-12':8,'NR-17':8,'NR-23':8,'NR-35':8};
-  var html=header('Relatório de Checklists NR','Conformidade de todas as Normas Regulamentadoras avaliadas');
-  html+='<table class="rel-tabela"><thead><tr><th>NR</th><th>Nome</th><th>Itens OK</th><th>Total</th><th>Conformidade</th><th>Status</th></tr></thead><tbody>';
-  NRS.forEach(function(nr){
-    var saved=JSON.parse(localStorage.getItem('safenr_checklist_'+nr)||'{}');
-    var total=TOTAL[nr]||0;
-    var ok=Object.values(saved).filter(function(v){return v==='ok';}).length;
-    var pct=total>0?Math.round((ok/total)*100):0;
-    var cls=pct>=80?'ok':pct>=50?'medio':'vencido';
-    html+='<tr><td>'+nr+'</td><td>'+NOMES[nr]+'</td><td>'+ok+'</td><td>'+total+'</td><td><strong>'+pct+'%</strong></td><td><span class="rel-badge '+cls+'">'+(pct>=80?'Conforme':pct>=50?'Parcial':'Não Conforme')+'</span></td></tr>';
+function gerarNRs(){
+  var NRS=[{id:'NR-05',nome:'CIPA',total:8},{id:'NR-06',nome:'EPI',total:8},{id:'NR-07',nome:'PCMSO',total:8},{id:'NR-09',nome:'Riscos Amb.',total:8},{id:'NR-10',nome:'Eletricidade',total:8},{id:'NR-12',nome:'Maquinas',total:8},{id:'NR-17',nome:'Ergonomia',total:8},{id:'NR-23',nome:'Incendio',total:8},{id:'NR-35',nome:'Altura',total:8}];
+  var itens=NRS.map(function(nr){
+    var s=JSON.parse(localStorage.getItem('safenr_checklist_'+nr.id)||'{}'),ok=0;
+    for(var k in s){ if(s[k]==='ok') ok++; }
+    var pct=nr.total>0?Math.round((ok/nr.total)*100):0;
+    return [nr.id+' — '+nr.nome, pct+'%'];
   });
-  html+='</tbody></table>'+footer();
-  abrirModal(html);
+  showBox('relNR','Conformidade por NR',itens);
+}
+function gerarFuncionarios(){
+  var data=JSON.parse(localStorage.getItem('safenr_funcionarios')||'[]');
+  var ativos=data.filter(function(f){ return f.status==='ativo'; }).length;
+  var inativos=data.filter(function(f){ return f.status==='inativo'; }).length;
+  var ferias=data.filter(function(f){ return f.status==='ferias'; }).length;
+  var comEPI=data.filter(function(f){ return f.epis&&f.epis.length>0; }).length;
+  showBox('relFunc','Funcionarios',[['Total',data.length],['Ativos',ativos],['Inativos',inativos],['Em Ferias',ferias],['Com EPIs Vinculados',comEPI]]);
+}
+function gerarEPIs(){
+  var data=JSON.parse(localStorage.getItem('safenr_epis')||'[]');
+  var hoje=new Date(); hoje.setHours(0,0,0,0);
+  var validos=data.filter(function(e){ return !e.ca_validade||new Date(e.ca_validade+'T00:00:00')>=hoje; }).length;
+  var vencidos=data.filter(function(e){ return e.ca_validade&&new Date(e.ca_validade+'T00:00:00')<hoje; }).length;
+  var avencer=data.filter(function(e){ if(!e.ca_validade) return false; var d=new Date(e.ca_validade+'T00:00:00'); var diff=(d-hoje)/86400000; return diff>=0&&diff<=30; }).length;
+  showBox('relEPI','EPIs Cadastrados',[['Total de EPIs',data.length],['CA Validos',validos],['CA Vencidos',vencidos],['Vencem em 30 dias',avencer]]);
+}
+function gerarAgenda(){
+  var data=JSON.parse(localStorage.getItem('safenr_agenda')||'[]');
+  var hoje=new Date(); hoje.setHours(0,0,0,0);
+  var pend=data.filter(function(e){ return e.status!=='concluido'&&new Date(e.data+'T00:00:00')>=hoje; }).length;
+  var atras=data.filter(function(e){ return e.status!=='concluido'&&new Date(e.data+'T00:00:00')<hoje; }).length;
+  var concl=data.filter(function(e){ return e.status==='concluido'; }).length;
+  var epiEv=data.filter(function(e){ return e.tipo==='epi'; }).length;
+  showBox('relAgenda','Agenda de Pendencias',[['Total de Eventos',data.length],['Pendentes',pend],['Em Atraso',atras],['Concluidos',concl],['Eventos de EPI',epiEv]]);
 }
 </script>
 </body>
