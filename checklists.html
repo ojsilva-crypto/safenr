@@ -50,7 +50,6 @@
     .item-texto span{font-size:.75rem;color:rgba(255,255,255,.35)}
     .item-opcoes{display:flex;gap:8px}
     .opt-btn{padding:7px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.8rem;font-weight:600;transition:all .2s;white-space:nowrap}
-    .opt-btn:hover{border-color:rgba(255,255,255,.4)}
     .opt-btn.ok.sel{background:rgba(74,222,128,.2);border-color:#4ade80;color:#4ade80}
     .opt-btn.nao.sel{background:rgba(248,113,113,.2);border-color:#f87171;color:#f87171}
     .opt-btn.na.sel{background:rgba(167,139,250,.2);border-color:#a78bfa;color:#a78bfa}
@@ -108,14 +107,14 @@
   </div>
 </div>
 <script>
-var userData=localStorage.getItem('safenr_user');
-if(!userData){window.location.href='./index.html';}
-var user=JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent=user.nome||'Usuário';
-document.getElementById('avatarLetra').textContent=(user.nome||'U')[0].toUpperCase();
-function sair(){localStorage.removeItem('safenr_user');window.location.href='./index.html';}
+var userData = localStorage.getItem('safenr_user');
+if (!userData) { window.location.href = './index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuário';
+document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
 
-var NRS=[
+var NRS = [
   {id:'NR-05',nome:'CIPA',desc:'Comissão Interna de Prevenção de Acidentes',itens:[
     {p:'A CIPA está constituída e registrada no MTE?',ref:'Art. 5.3'},
     {p:'Os membros da CIPA foram eleitos por votação?',ref:'Art. 5.14'},
@@ -138,7 +137,7 @@ var NRS=[
   ]},
   {id:'NR-07',nome:'PCMSO',desc:'Programa de Controle Médico de Saúde Ocupacional',itens:[
     {p:'O PCMSO está elaborado e atualizado?',ref:'Art. 7.1'},
-    {p:'Os exames admissionais são realizados antes do início das atividades?',ref:'Art. 7.4.1'},
+    {p:'Os exames admissionais são realizados antes do início?',ref:'Art. 7.4.1'},
     {p:'Os exames periódicos estão em dia?',ref:'Art. 7.4.3'},
     {p:'Existe ASO para todos os funcionários?',ref:'Art. 7.5'},
     {p:'O exame demissional é realizado?',ref:'Art. 7.4.5'},
@@ -157,8 +156,8 @@ var NRS=[
     {p:'O relatório está arquivado por 20 anos?',ref:'Art. 9.6.4'}
   ]},
   {id:'NR-10',nome:'Eletricidade',desc:'Segurança em Instalações e Serviços em Eletricidade',itens:[
-    {p:'Os trabalhadores com eletricidade são habilitados/qualificados?',ref:'Art. 10.6'},
-    {p:'Os treinamentos NR-10 estão dentro do prazo (bienal)?',ref:'Art. 10.7.1'},
+    {p:'Os trabalhadores com eletricidade são habilitados?',ref:'Art. 10.6'},
+    {p:'Os treinamentos NR-10 estão dentro do prazo bienal?',ref:'Art. 10.7.1'},
     {p:'Existe prontuário das instalações elétricas?',ref:'Art. 10.2.3'},
     {p:'Os EPIs elétricos têm CA válido?',ref:'Art. 10.2.9'},
     {p:'O procedimento de LOTO está implementado?',ref:'Art. 10.3.1'},
@@ -168,7 +167,7 @@ var NRS=[
   ]},
   {id:'NR-12',nome:'Máquinas',desc:'Segurança no Trabalho em Máquinas e Equipamentos',itens:[
     {p:'Todas as máquinas possuem proteções nas zonas de perigo?',ref:'Art. 12.4'},
-    {p:'Os dispositivos de parada de emergência funcionam corretamente?',ref:'Art. 12.3'},
+    {p:'Os dispositivos de parada de emergência funcionam?',ref:'Art. 12.3'},
     {p:'Os operadores são capacitados para operar as máquinas?',ref:'Art. 12.47'},
     {p:'Existe manutenção preventiva documentada?',ref:'Art. 12.38'},
     {p:'As proteções fixas estão instaladas corretamente?',ref:'Art. 12.12'},
@@ -194,11 +193,11 @@ var NRS=[
     {p:'O plano de evacuação está elaborado e divulgado?',ref:'Art. 23.1'},
     {p:'Os hidrantes e mangueiras estão em bom estado?',ref:'Art. 23.4'},
     {p:'Os funcionários foram treinados no uso de extintores?',ref:'Art. 23.5'},
-    {p:'As rotas de fuga estão sinalizadas com sinalização fotoluminescente?',ref:'Art. 23.2'}
+    {p:'As rotas de fuga estão com sinalização fotoluminescente?',ref:'Art. 23.2'}
   ]},
   {id:'NR-35',nome:'Trabalho em Altura',desc:'Segurança no Trabalho em Altura',itens:[
     {p:'Os trabalhadores em altura possuem capacitação NR-35?',ref:'Art. 35.3'},
-    {p:'A capacitação está dentro do prazo (bienal)?',ref:'Art. 35.3'},
+    {p:'A capacitação está dentro do prazo bienal?',ref:'Art. 35.3'},
     {p:'É emitida APR antes de cada trabalho em altura?',ref:'Art. 35.2'},
     {p:'É emitida Permissão de Trabalho (PT)?',ref:'Art. 35.2'},
     {p:'Os cintos paraquedistas estão em bom estado?',ref:'Art. 35.4'},
@@ -208,87 +207,88 @@ var NRS=[
   ]}
 ];
 
-var nrAtual=null;
-var respostas={};
+var nrAtual = null;
+var respostas = {};
 
-function getPct(nr){
-  var saved=JSON.parse(localStorage.getItem('safenr_checklist_'+nr.id)||'{}');
-  var total=nr.itens.length;
-  var ok=Object.values(saved).filter(function(v){return v==='ok';}).length;
-  return total>0?Math.round((ok/total)*100):0;
+function getPct(nr) {
+  var saved = JSON.parse(localStorage.getItem('safenr_checklist_' + nr.id) || '{}');
+  var total = nr.itens.length;
+  var ok = Object.values(saved).filter(function(v){ return v === 'ok'; }).length;
+  return total > 0 ? Math.round((ok / total) * 100) : 0;
 }
-function getColor(pct){if(pct>=80)return'#4ade80';if(pct>=50)return'#fbbf24';return'#f87171';}
+function getColor(pct){ return pct >= 80 ? '#4ade80' : pct >= 50 ? '#fbbf24' : '#f87171'; }
 
-function renderGrid(){
-  var grid=document.getElementById('nrGrid');
-  grid.innerHTML='';
-  NRS.forEach(function(nr){
-    var pct=getPct(nr);
-    var cor=getColor(pct);
-    var div=document.createElement('div');
-    div.className='nr-card';
-    div.onclick=function(){abrirChecklist(nr.id);};
-    div.innerHTML='<div class="nr-card-top"><span class="nr-badge">'+nr.id+'</span><span class="nr-pct" style="color:'+cor+'">'+pct+'%</span></div><h3>'+nr.nome+'</h3><p>'+nr.desc+'</p><div class="progresso-bar"><div class="progresso-fill" style="width:'+pct+'%;background:'+cor+'"></div></div>';
+function renderGrid() {
+  var grid = document.getElementById('nrGrid');
+  grid.innerHTML = '';
+  NRS.forEach(function(nr) {
+    var pct = getPct(nr);
+    var cor = getColor(pct);
+    var div = document.createElement('div');
+    div.className = 'nr-card';
+    div.onclick = function(){ abrirChecklist(nr.id); };
+    div.innerHTML = '<div class="nr-card-top"><span class="nr-badge">' + nr.id + '</span><span class="nr-pct" style="color:' + cor + '">' + pct + '%</span></div><h3>' + nr.nome + '</h3><p>' + nr.desc + '</p><div class="progresso-bar"><div class="progresso-fill" style="width:' + pct + '%;background:' + cor + '"></div></div>';
     grid.appendChild(div);
   });
 }
 
-function abrirChecklist(nrId){
-  nrAtual=NRS.find(function(n){return n.id===nrId;});
-  document.getElementById('modalNRTitulo').textContent=nrAtual.id+' — '+nrAtual.nome;
-  document.getElementById('modalNRDesc').textContent=nrAtual.desc;
-  respostas=JSON.parse(localStorage.getItem('safenr_checklist_'+nrId)||'{}');
+function abrirChecklist(nrId) {
+  nrAtual = NRS.find(function(n){ return n.id === nrId; });
+  document.getElementById('modalNRTitulo').textContent = nrAtual.id + ' — ' + nrAtual.nome;
+  document.getElementById('modalNRDesc').textContent = nrAtual.desc;
+  respostas = JSON.parse(localStorage.getItem('safenr_checklist_' + nrId) || '{}');
   renderItens();
-  var saved=Object.keys(respostas).length>0;
-  var rs=document.getElementById('resumoSalvo');
-  if(saved){rs.style.display='block';rs.innerHTML='✅ Respostas anteriores carregadas. Última atualização registrada.';}
-  else{rs.style.display='none';}
+  var saved = Object.keys(respostas).length > 0;
+  var rs = document.getElementById('resumoSalvo');
+  if (saved) { rs.style.display = 'block'; rs.innerHTML = '✅ Respostas anteriores carregadas.'; }
+  else { rs.style.display = 'none'; }
   document.getElementById('modalChecklist').classList.add('open');
 }
 
-function renderItens(){
-  var div=document.getElementById('itensChecklist');
-  div.innerHTML='';
-  nrAtual.itens.forEach(function(item,i){
-    var resp=respostas[i]||'';
-    var el=document.createElement('div');
-    el.className='item-checklist';
-    el.innerHTML='<div class="item-texto"><p>'+item.p+'</p><span>Ref: '+item.ref+'</span></div>'+
-      '<div class="item-opcoes">'+
-        '<button class="opt-btn ok'+(resp==='ok'?' sel':'')+'\" onclick="responder('+i+',\'ok\',this)">✅ OK</button>'+
-        '<button class="opt-btn nao'+(resp==='nao'?' sel':'')+'\" onclick="responder('+i+',\'nao\',this)">❌ Não</button>'+
-        '<button class="opt-btn na'+(resp==='na'?' sel':'')+'\" onclick="responder('+i+',\'na\',this)">➖ N/A</button>'+
+function renderItens() {
+  var div = document.getElementById('itensChecklist');
+  div.innerHTML = '';
+  nrAtual.itens.forEach(function(item, i) {
+    var resp = respostas[i] || '';
+    var el = document.createElement('div');
+    el.className = 'item-checklist';
+    el.innerHTML =
+      '<div class="item-texto"><p>' + item.p + '</p><span>Ref: ' + item.ref + '</span></div>' +
+      '<div class="item-opcoes">' +
+        '<button class="opt-btn ok' + (resp === 'ok' ? ' sel' : '') + '" onclick="responder(' + i + ',\'ok\',this)">OK</button>' +
+        '<button class="opt-btn nao' + (resp === 'nao' ? ' sel' : '') + '" onclick="responder(' + i + ',\'nao\',this)">Nao</button>' +
+        '<button class="opt-btn na' + (resp === 'na' ? ' sel' : '') + '" onclick="responder(' + i + ',\'na\',this)">N/A</button>' +
       '</div>';
     div.appendChild(el);
   });
   atualizarPct();
 }
 
-function responder(i,val,btn){
-  respostas[i]=val;
-  var parent=btn.closest('.item-opcoes');
-  parent.querySelectorAll('.opt-btn').forEach(function(b){b.classList.remove('sel');});
+function responder(i, val, btn) {
+  respostas[i] = val;
+  var parent = btn.parentElement;
+  parent.querySelectorAll('.opt-btn').forEach(function(b){ b.classList.remove('sel'); });
   btn.classList.add('sel');
   atualizarPct();
 }
 
-function atualizarPct(){
-  var total=nrAtual.itens.length;
-  var ok=Object.values(respostas).filter(function(v){return v==='ok';}).length;
-  var pct=total>0?Math.round((ok/total)*100):0;
-  document.getElementById('pctAtual').textContent=pct+'% conforme ('+ok+'/'+total+' itens OK)';
+function atualizarPct() {
+  var total = nrAtual.itens.length;
+  var ok = Object.values(respostas).filter(function(v){ return v === 'ok'; }).length;
+  var pct = total > 0 ? Math.round((ok / total) * 100) : 0;
+  document.getElementById('pctAtual').textContent = pct + '% conforme (' + ok + '/' + total + ' itens OK)';
 }
 
-function salvarChecklist(){
-  localStorage.setItem('safenr_checklist_'+nrAtual.id,JSON.stringify(respostas));
-  var rs=document.getElementById('resumoSalvo');
-  rs.style.display='block';
-  rs.innerHTML='✅ Respostas salvas com sucesso em '+new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})+' por '+（user.nome||'Usuário');
+function salvarChecklist() {
+  localStorage.setItem('safenr_checklist_' + nrAtual.id, JSON.stringify(respostas));
+  var rs = document.getElementById('resumoSalvo');
+  rs.style.display = 'block';
+  rs.innerHTML = 'Respostas salvas em ' + new Date().toLocaleString('pt-BR') + ' por ' + (user.nome || 'Usuário');
   renderGrid();
 }
 
-function fecharModal(){document.getElementById('modalChecklist').classList.remove('open');}
-document.getElementById('modalChecklist').addEventListener('click',function(e){if(e.target===this)fecharModal();});
+function fecharModal(){ document.getElementById('modalChecklist').classList.remove('open'); }
+document.getElementById('modalChecklist').addEventListener('click', function(e){ if(e.target === this) fecharModal(); });
 renderGrid();
 </script>
 </body>
