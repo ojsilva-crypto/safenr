@@ -1,1 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SafeNR — Relatórios</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;z-index:10}
+    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
+    .sidebar-logo h1 span{color:#00d4ff}
+    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
+    .nav{flex:1;padding:20px 0}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
+    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+    .user-info p{font-size:.82rem;font-weight:600}
+    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
+    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+    .btn-sair:hover{color:#ff6b6b}
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .topbar h2{font-size:1.4rem;font-weight:700}
+    .topbar p{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:4px}
+    .relatorios-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:32px}
+    .rel-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px 24px;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:14px}
+    .rel-card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);transform:translateY(-2px)}
+    .rel-card-icon{font-size:2.2rem}
+    .rel-card h3{font-size:1rem;font-weight:700}
+    .rel-card p{font-size:.8rem;color:rgba(255,255,255,.4);line-height:1.5}
+    .rel-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)}
+    .rel-card-count{font-size:.82rem;color:rgba(255,255,255,.35)}
+    .btn-gerar{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:8px;color:#fff;font-size:.8rem;font-weight:700;padding:8px 16px;cursor:pointer;transition:opacity .2s}
+    .btn-gerar:hover{opacity:.85}
+    .btn-gerar.green{background:linear-gradient(135deg,#4ade80,#16a34a)}
+    .btn-gerar.orange{background:linear-gradient(135deg,#fb923c,#ea580c)}
+    .btn-gerar.purple{background:linear-gradient(135deg,#a78bfa,#7c3aed)}
+    .btn-gerar.red{background:linear-gradient(135deg,#f87171,#dc2626)}
+    .filtros-rel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;margin-bottom:28px}
+    .filtros-rel h3{font-size:.9rem;font-weight:700;margin-bottom:16px;color:rgba(255,255,255,.7)}
+    .filtros-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group label{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.45)}
+    .form-group input,.form-group select{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 12px;color:#fff;font-size:.85rem;outline:none}
+    .form-group input:focus,.form-group select:focus{border-color:#00d4ff}
+    .form-group select option{background:#1a2535}
+
+    /* ===== ESTILOS DE IMPRESSÃO A4 ===== */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 15mm 15mm 15mm 15mm;
+      }
+      body{background:#fff !important;color:#000 !important;display:block !important;font-family:'Segoe UI',Arial,sans-serif}
+      .sidebar,.topbar,.relatorios-grid,.filtros-rel,.no-print{display:none !important}
+      .main{margin-left:0 !important;padding:0 !important}
+      .print-area{display:block !important}
+      .print-area *{color:#000 !important;background:transparent !important;border-color:#ddd !important;box-shadow:none !important}
+    }
+    .print-area{display:none}
+
+    /* Estilos do documento impresso */
+    .doc-a4{width:210mm;min-height:297mm;background:#fff;color:#000;margin:0 auto;padding:15mm;font-family:'Segoe UI',Arial,sans-serif;font-size:10pt;line-height:1.5;display:none}
+    .doc-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:8mm;border-bottom:2px solid #0099cc;margin-bottom:8mm}
+    .doc-header-logo{display:flex;flex-direction:column}
+    .doc-header-logo .logo-text{font-size:22pt;font-weight:900;letter-spacing:2px;color:#0099cc}
+    .doc-header-logo .logo-text span{color:#005f80}
+    .doc-header-logo small{font-size:8pt;color:#888;margin-top:2px}
+    .doc-header-info{text-align:right;font-size:8.5pt;color:#555}
+    .doc-header-info strong{display:block;font-size:10pt;color:#000;margin-bottom:2px}
+    .doc-titulo{font-size:14pt;font-weight:800;color:#0099cc;margin-bottom:2mm;text-align:center}
+    .doc-subtitulo{font-size:9pt;color:#777;text-align:center;margin-bottom:6mm}
+    .doc-divider{height:1px;background:#e0e0e0;margin:5mm 0}
+    .doc-resumo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm;margin-bottom:7mm}
+    .doc-resumo-item{border:1px solid #ddd;border-radius:6px;padding:4mm;text-align:center}
+    .doc-resumo-item .val{font-size:18pt;font-weight:900;color:#0099cc}
+    .doc-resumo-item .lbl{font-size:7.5pt;color:#777;margin-top:1mm}
+    .doc-section-title{font-size:10pt;font-weight:800;color:#333;margin:6mm 0 3mm;padding-left:3mm;border-left:3px solid #0099cc}
+    .doc-table{width:100%;border-collapse:collapse;font-size:8.5pt;margin-bottom:6mm}
+    .doc-table thead tr{background:#0099cc;color:#fff}
+    .doc-table th{padding:3mm 4mm;text-align:left;font-weight:600;font-size:8pt}
+    .doc-table td{padding:2.5mm 4mm;border-bottom:1px solid #eee;vertical-align:middle}
+    .doc-table tr:nth-child(even) td{background:#f9f9f9}
+    .doc-table tr:last-child td{border-bottom:none}
+    .doc-badge{padding:2px 8px;border-radius:20px;font-size:7.5pt;font-weight:700;display:inline-block}
+    .doc-badge.critico{background:#fee2e2;color:#dc2626}
+    .doc-badge.alto{background:#ffedd5;color:#ea580c}
+    .doc-badge.medio{background:#fef9c3;color:#ca8a04}
+    .doc-badge.baixo{background:#dcfce7;color:#16a34a}
+    .doc-badge.aberto{background:#dbeafe;color:#2563eb}
+    .doc-badge.em-tratamento{background:#fef9c3;color:#ca8a04}
+    .doc-badge.resolvido{background:#dcfce7;color:#16a34a}
+    .doc-badge.conforme{background:#dcfce7;color:#16a34a}
+    .doc-badge.nao-conforme{background:#fee2e2;color:#dc2626}
+    .doc-badge.ativo{background:#dcfce7;color:#16a34a}
+    .doc-badge.inativo{background:#fee2e2;color:#dc2626}
+    .doc-badge.ferias{background:#fef9c3;color:#ca8a04}
+    .doc-badge.afastado{background:#dbeafe;color:#2563eb}
+    .doc-footer{margin-top:auto;padding-top:6mm;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:flex-end;font-size:7.5pt;color:#aaa}
+    .doc-assinatura{text-align:center;margin-top:12mm}
+    .doc-assinatura-linha{width:60mm;border-bottom:1px solid #333;margin:0 auto 2mm}
+    .doc-assinatura p{font-size:8pt;color:#555}
+    .doc-obs-box{background:#f8f9fa;border:1px solid #e0e0e0;border-radius:6px;padding:4mm;font-size:8.5pt;color:#444;margin-bottom:5mm}
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Safe<span>NR</span></h1>
+    <p>Gestão de Segurança do Trabalho</p>
+  </div>
+  <nav class="nav">
+    <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspeções</a>
+    <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
+    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
+    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionários</a>
+    <a class="nav-item active" href="./relatorios.html"><span class="icon">📄</span> Relatórios</a>
+    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configurações</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="avatar" id="avatarLetra">A</div>
+    <div class="user-info">
+      <p id="nomeUsuario">Usuário</p>
+      <span>Administrador</span>
+    </div>
+    <button class="btn-sair" onclick="sair()">✕</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar no-print">
+    <div>
+      <h2>📄 Relatórios</h2>
+      <p>Gere relatórios completos em PDF formato A4</p>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros-rel no-print">
+    <h3>🔎 Filtros de Data</h3>
+    <div class="filtros-row">
+      <div class="form-group">
+        <label>Data Inicial</label>
+        <input type="date" id="filtroDataInicio"/>
+      </div>
+      <div class="form-group">
+        <label>Data Final</label>
+        <input type="date" id="filtroDataFim"/>
+      </div>
+      <div class="form-group">
+        <label>Setor</label>
+        <select id="filtroSetor">
+          <option value="">Todos os setores</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="filtroStatus">
+          <option value="">Todos</option>
+          <option value="aberto">Aberto</option>
+          <option value="em-tratamento">Em Tratamento</option>
+          <option value="resolvido">Resolvido</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDS DOS RELATÓRIOS -->
+  <div class="relatorios-grid no-print">
+
+    <div class="rel-card">
+      <div class="rel-card-icon">📊</div>
+      <h3>Relatório Geral</h3>
+      <p>Resumo completo com inspeções, riscos, funcionários e checklists consolidados.</p>
+      <div class="rel-card-footer">
+        <span class="rel-card-count" id="cntGeral">—</span>
+        <button class="btn-gerar" onclick="gerarRelatorio('geral')">🖨️ Gerar PDF</button>
+      </div>
+    </div>
+
+    <div class="rel-card">
+      <div class="rel-card-icon">🔍</div>
+      <h3>Relatório de Inspeções</h3>
+      <p>Lista detalhada de todas as inspeções realizadas com status e responsáveis.</p>
+      <div class="rel-card-footer">
+        <span class="rel-card-count" id="cntInspecoes">0 registros</span>
+        <button class="btn-gerar green" onclick="gerarRelatorio('inspecoes')">🖨️ Gerar PDF</button>
+      </div>
+    </div>
+
+    <div class="rel-card">
+      <div class="rel-card-icon">⚠️</div>
+      <h3>Relatório de Riscos</h3>
+      <p>Mapeamento de riscos identificados por nível de criticidade e status.</p>
+      <div class="rel-card-footer">
+        <span class="rel-card-count" id="cntRiscos">0 registros</span>
+        <button class="btn-gerar red" onclick="gerarRelatorio('riscos')">🖨️ Gerar PDF</button>
+      </div>
+    </div>
+
+    <div class="rel-card">
+      <div class="rel-card-icon">👷</div>
+      <h3>Relatório de Funcionários</h3>
+      <p>Cadastro completo de funcionários com EPIs vinculados e status atual.</p>
+      <div class="rel-card-footer">
+        <span class="rel-card-count" id="cntFuncionarios">0 registros</span>
+        <button class="btn-gerar purple" onclick="gerarRelatorio('funcionarios')">🖨️ Gerar PDF</button>
+      </div>
+    </div>
+
+    <div class="rel-card">
+      <div class="rel-card-icon">🦺</div>
+      <h3>Relatório de EPIs Vencidos</h3>
+      <p>Funcionários com equipamentos de proteção com validade expirada.</p>
+      <div class="rel-card-footer">
+        <span class="rel-card-count" id="cntEpisVenc">0 EPIs vencidos</span>
+        <button class="btn-gerar orange" onclick="gerarRelatorio('epis')">🖨️ Gerar PDF</button>
+      </div>
+    </div>
+
+    <div class="rel-card">
+      <div class="rel-card-icon">📋</div>
+      <h3>Relatório de Checklists</h3>
+      <p>Progresso de conformidade por NR com itens conformes e pendentes.</p>
+      <div class="rel-card-footer">
+        <span class="rel-card-count" id="cntChecklists">—</span>
+        <button class="btn-gerar" onclick="gerarRelatorio('checklists')">🖨️ Gerar PDF</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ÁREA DE VISUALIZAÇÃO / IMPRESSÃO -->
+  <div id="docA4" class="doc-a4"></div>
+
+</div>
+
+<script>
+var userData = localStorage.getItem('safenr_user');
+if(!userData){ window.location.href='./index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome||'Usuário';
+document.getElementById('avatarLetra').textContent = (user.nome||'U')[0].toUpperCase();
+function sair(){ localStorage.removeItem('safenr_user'); window.location.href='./index.html'; }
+
+var inspecoes   = JSON.parse(localStorage.getItem('safenr_inspecoes')||'[]');
+var riscos      = JSON.parse(localStorage.getItem('safenr_riscos')||'[]');
+var funcionarios= JSON.parse(localStorage.getItem('safenr_funcionarios')||'[]');
+
+var NRS_KEYS = ['NR-05','NR-06','NR-07','NR-09','NR-10','NR-12','NR-17','NR-23','NR-35'];
+
+function fmt(d){ if(!d) return '—'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function fmtDT(iso){ if(!iso) return '—'; return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+function hoje(){ return new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}); }
+function agora(){ return new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+function epiVencido(val){ return val && new Date(val) < new Date(); }
+
+// Atualizar contadores
+function atualizarContadores(){
+  document.getElementById('cntInspecoes').textContent   = inspecoes.length+' registros';
+  document.getElementById('cntRiscos').textContent      = riscos.length+' registros';
+  document.getElementById('cntFuncionarios').textContent= funcionarios.length+' registros';
+  var epivenc = funcionarios.filter(function(f){ return (f.epis||[]).some(function(e){ return epiVencido(e.validade); }); }).length;
+  document.getElementById('cntEpisVenc').textContent    = epivenc+' funcionário(s)';
+  document.getElementById('cntGeral').textContent       = (inspecoes.length+riscos.length+funcionarios.length)+' registros totais';
+  document.getElementById('cntChecklists').textContent  = NRS_KEYS.length+' NRs disponíveis';
+
+  // Preencher setores
+  var sel = document.getElementById('filtroSetor');
+  var setores = [...new Set([
+    ...inspecoes.map(function(i){ return i.setor||i.local||''; }),
+    ...riscos.map(function(r){ return r.setor||''; }),
+    ...funcionarios.map(function(f){ return f.setor||''; })
+  ])].filter(Boolean).sort();
+  setores.forEach(function(s){
+    var o=document.createElement('option'); o.value=s; o.textContent=s; sel.appendChild(o);
+  });
+}
+
+function filtrarPorData(lista, campoData){
+  var di = document.getElementById('filtroDataInicio').value;
+  var df = document.getElementById('filtroDataFim').value;
+  var st = document.getElementById('filtroStatus').value;
+  var se = document.getElementById('filtroSetor').value;
+  return lista.filter(function(item){
+    var d = item[campoData]||item.data||item.admissao||'';
+    if(di && d && d < di) return false;
+    if(df && d && d > df) return false;
+    if(st && item.status && item.status !== st) return false;
+    if(se && (item.setor||item.local||'') !== se) return false;
+    return true;
+  });
+}
+
+function headerDoc(titulo, subtitulo){
+  return '<div class="doc-header">'+
+    '<div class="doc-header-logo">'+
+      '<div class="logo-text">Safe<span>NR</span></div>'+
+      '<small>Gestão de Segurança do Trabalho</small>'+
+    '</div>'+
+    '<div class="doc-header-info">'+
+      '<strong>'+titulo+'</strong>'+
+      'Emitido em: '+agora()+'<br>'+
+      'Responsável: '+(user.nome||'Usuário')+
+    '</div>'+
+  '</div>'+
+  '<div class="doc-titulo">'+titulo+'</div>'+
+  '<div class="doc-subtitulo">'+subtitulo+'</div>'+
+  '<div class="doc-divider"></div>';
+}
+
+function footerDoc(){
+  return '<div class="doc-footer">'+
+    '<span>SafeNR — Gestão de Segurança do Trabalho</span>'+
+    '<span>Documento gerado em '+agora()+'</span>'+
+    '<span>Usuário: '+(user.nome||'—')+'</span>'+
+  '</div>';
+}
+
+function badgeHtml(cls, texto){
+  return '<span class="doc-badge '+cls+'">'+texto+'</span>';
+}
+
+// ===== RELATÓRIOS =====
+
+function relGeral(){
+  var insp = filtrarPorData(inspecoes,'data');
+  var risc = filtrarPorData(riscos,'data');
+  var func = filtrarPorData(funcionarios,'admissao');
+  var episVenc = funcionarios.filter(function(f){ return (f.epis||[]).some(function(e){ return epiVencido(e.validade); }); }).length;
+  var riscCrit = riscos.filter(function(r){ return r.nivel==='critico'; }).length;
+  var inspConf = inspecoes.filter(function(i){ return i.status==='concluida'||i.status==='conforme'; }).length;
+
+  var html = headerDoc('Relatório Geral','Consolidado completo do sistema SafeNR — '+hoje());
+
+  html += '<div class="doc-resumo-grid">'+
+    '<div class="doc-resumo-item"><div class="val">'+inspecoes.length+'</div><div class="lbl">Total de Inspeções</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#dc2626">'+riscos.length+'</div><div class="lbl">Riscos Mapeados</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#7c3aed">'+funcionarios.length+'</div><div class="lbl">Funcionários</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#ea580c">'+episVenc+'</div><div class="lbl">EPIs Vencidos</div></div>'+
+  '</div>';
+
+  html += '<div class="doc-obs-box">'+
+    '⚠️ <strong>Atenção:</strong> '+riscCrit+' risco(s) crítico(s) identificado(s). '+
+    inspConf+' inspeção(ões) concluída(s). '+
+    episVenc+' funcionário(s) com EPIs vencidos necessitam atenção imediata.'+
+  '</div>';
+
+  // Riscos críticos e altos
+  var riscAltos = riscos.filter(function(r){ return r.nivel==='critico'||r.nivel==='alto'; }).slice(0,10);
+  if(riscAltos.length > 0){
+    html += '<div class="doc-section-title">🚨 Riscos Críticos e Altos</div>';
+    html += '<table class="doc-table"><thead><tr><th>#</th><th>Descrição</th><th>Setor</th><th>Nível</th><th>Status</th><th>Responsável</th></tr></thead><tbody>';
+    riscAltos.forEach(function(r){
+      html += '<tr><td>#'+String(r.id).padStart(3,'0')+'</td><td>'+r.descricao+'</td><td>'+r.setor+'</td>'+
+        '<td>'+badgeHtml(r.nivel,{critico:'Crítico',alto:'Alto',medio:'Médio',baixo:'Baixo'}[r.nivel])+'</td>'+
+        '<td>'+badgeHtml(r.status,{aberto:'Aberto','em-tratamento':'Em Tratamento',resolvido:'Resolvido'}[r.status])+'</td>'+
+        '<td>'+r.responsavel+'</td></tr>';
+    });
+    html += '</tbody></table>';
+  }
+
+  // Últimas inspeções
+  var ultInsp = inspecoes.slice(-8).reverse();
+  if(ultInsp.length > 0){
+    html += '<div class="doc-section-title">🔍 Últimas Inspeções</div>';
+    html += '<table class="doc-table"><thead><tr><th>#</th><th>Título</th><th>Setor/Local</th><th>Status</th><th>Data</th><th>Responsável</th></tr></thead><tbody>';
+    ultInsp.forEach(function(i){
+      html += '<tr><td>#'+String(i.id).padStart(3,'0')+'</td><td>'+(i.titulo||i.descricao||'—')+'</td>'+
+        '<td>'+(i.setor||i.local||'—')+'</td>'+
+        '<td>'+badgeHtml(i.status||'aberto',i.status||'Aberto')+'</td>'+
+        '<td>'+fmt(i.data)+'</td><td>'+(i.responsavel||'—')+'</td></tr>';
+    });
+    html += '</tbody></table>';
+  }
+
+  html += footerDoc();
+  return html;
+}
+
+function relInspecoes(){
+  var lista = filtrarPorData(inspecoes,'data');
+  var html = headerDoc('Relatório de Inspeções','Lista completa de inspeções realizadas — '+hoje());
+
+  var total=lista.length;
+  var conc=lista.filter(function(i){ return i.status==='concluida'||i.status==='conforme'; }).length;
+  var pend=lista.filter(function(i){ return i.status==='pendente'||i.status==='aberta'; }).length;
+  var nconf=lista.filter(function(i){ return i.status==='nao-conforme'||i.status==='nao_conforme'; }).length;
+
+  html += '<div class="doc-resumo-grid">'+
+    '<div class="doc-resumo-item"><div class="val">'+total+'</div><div class="lbl">Total</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#16a34a">'+conc+'</div><div class="lbl">Concluídas</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#ca8a04">'+pend+'</div><div class="lbl">Pendentes</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#dc2626">'+nconf+'</div><div class="lbl">Não Conformes</div></div>'+
+  '</div>';
+
+  if(lista.length === 0){
+    html += '<div class="doc-obs-box">Nenhuma inspeção encontrada com os filtros aplicados.</div>';
+  } else {
+    html += '<div class="doc-section-title">🔍 Inspeções Registradas</div>';
+    html += '<table class="doc-table"><thead><tr><th>#</th><th>Título / Descrição</th><th>Setor / Local</th><th>Status</th><th>Data</th><th>Responsável</th><th>Registrado por</th></tr></thead><tbody>';
+    lista.forEach(function(i){
+      var statusLabel = {concluida:'Concluída',conforme:'Conforme',pendente:'Pendente',aberta:'Aberta','nao-conforme':'Não Conforme','nao_conforme':'Não Conforme'}[i.status]||i.status||'—';
+      var statusCls = (i.status==='concluida'||i.status==='conforme')?'conforme':(i.status==='nao-conforme'||i.status==='nao_conforme')?'nao-conforme':'aberto';
+      html += '<tr><td>#'+String(i.id).padStart(3,'0')+'</td>'+
+        '<td><strong>'+(i.titulo||i.descricao||'—')+'</strong></td>'+
+        '<td>'+(i.setor||i.local||'—')+'</td>'+
+        '<td>'+badgeHtml(statusCls,statusLabel)+'</td>'+
+        '<td>'+fmt(i.data)+'</td>'+
+        '<td>'+(i.responsavel||'—')+'</td>'+
+        '<td style="font-size:8pt;color:#666">'+(i.registradoPor||'—')+'</td></tr>';
+    });
+    html += '</tbody></table>';
+  }
+  html += footerDoc();
+  return html;
+}
+
+function relRiscos(){
+  var lista = filtrarPorData(riscos,'data');
+  var html = headerDoc('Relatório de Riscos','Mapeamento de riscos ocupacionais identificados — '+hoje());
+
+  var crit=lista.filter(function(r){ return r.nivel==='critico'; }).length;
+  var alto=lista.filter(function(r){ return r.nivel==='alto'; }).length;
+  var med=lista.filter(function(r){ return r.nivel==='medio'; }).length;
+  var baixo=lista.filter(function(r){ return r.nivel==='baixo'; }).length;
+
+  html += '<div class="doc-resumo-grid">'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#dc2626">'+crit+'</div><div class="lbl">🔴 Críticos</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#ea580c">'+alto+'</div><div class="lbl">🟠 Altos</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#ca8a04">'+med+'</div><div class="lbl">🟡 Médios</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#16a34a">'+baixo+'</div><div class="lbl">🟢 Baixos</div></div>'+
+  '</div>';
+
+  if(lista.length === 0){
+    html += '<div class="doc-obs-box">Nenhum risco encontrado com os filtros aplicados.</div>';
+  } else {
+    html += '<div class="doc-section-title">⚠️ Lista de Riscos</div>';
+    html += '<table class="doc-table"><thead><tr><th>#</th><th>Descrição</th><th>Setor</th><th>Nível</th><th>Status</th><th>Responsável</th><th>Prazo</th><th>Medidas</th></tr></thead><tbody>';
+    lista.forEach(function(r){
+      var nivelLabel={critico:'Crítico',alto:'Alto',medio:'Médio',baixo:'Baixo'}[r.nivel]||r.nivel;
+      var statusLabel={aberto:'Aberto','em-tratamento':'Em Tratamento',resolvido:'Resolvido'}[r.status]||r.status;
+      html += '<tr><td>#'+String(r.id).padStart(3,'0')+'</td>'+
+        '<td>'+r.descricao+'</td>'+
+        '<td>'+r.setor+'</td>'+
+        '<td>'+badgeHtml(r.nivel,nivelLabel)+'</td>'+
+        '<td>'+badgeHtml(r.status,statusLabel)+'</td>'+
+        '<td>'+r.responsavel+'</td>'+
+        '<td>'+fmt(r.prazo)+'</td>'+
+        '<td style="font-size:8pt;color:#555">'+(r.obs||'—')+'</td></tr>';
+    });
+    html += '</tbody></table>';
+  }
+
+  html += '<div class="doc-section-title">✍️ Assinatura do Responsável</div>';
+  html += '<div class="doc-assinatura"><div class="doc-assinatura-linha"></div><p>'+(user.nome||'Responsável pelo SESMT / CIPA')+'</p><p style="color:#aaa">Data: ___/___/______</p></div>';
+  html += footerDoc();
+  return html;
+}
+
+function relFuncionarios(){
+  var lista = filtrarPorData(funcionarios,'admissao');
+  var html = headerDoc('Relatório de Funcionários','Cadastro e EPIs dos colaboradores — '+hoje());
+
+  var ativ=lista.filter(function(f){ return f.status==='ativo'; }).length;
+  var inat=lista.filter(function(f){ return f.status==='inativo'; }).length;
+  var fer=lista.filter(function(f){ return f.status==='ferias'; }).length;
+  var afas=lista.filter(function(f){ return f.status==='afastado'; }).length;
+
+  html += '<div class="doc-resumo-grid">'+
+    '<div class="doc-resumo-item"><div class="val">'+lista.length+'</div><div class="lbl">Total</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#16a34a">'+ativ+'</div><div class="lbl">Ativos</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#ca8a04">'+fer+'</div><div class="lbl">Férias/Afastado</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#dc2626">'+inat+'</div><div class="lbl">Inativos</div></div>'+
+  '</div>';
+
+  if(lista.length === 0){
+    html += '<div class="doc-obs-box">Nenhum funcionário encontrado com os filtros aplicados.</div>';
+  } else {
+    html += '<div class="doc-section-title">👷 Lista de Funcionários</div>';
+    html += '<table class="doc-table"><thead><tr><th>#</th><th>Nome</th><th>Função</th><th>Setor</th><th>Status</th><th>Admissão</th><th>EPIs</th></tr></thead><tbody>';
+    lista.forEach(function(f){
+      var statusLabel={ativo:'Ativo',inativo:'Inativo',ferias:'Férias',afastado:'Afastado'}[f.status]||f.status;
+      var epis=f.epis||[];
+      var epiHtml = epis.length===0?'<span style="color:#aaa;font-size:8pt">Nenhum</span>':
+        epis.map(function(e){ return '<span style="font-size:7.5pt;padding:1px 5px;background:'+(epiVencido(e.validade)?'#fee2e2':'#dcfce7')+';border-radius:4px;margin:1px;display:inline-block">'+(epiVencido(e.validade)?'⚠️':'✅')+' '+e.nome+'</span>'; }).join(' ');
+      html += '<tr><td>#'+String(f.id).padStart(3,'0')+'</td>'+
+        '<td><strong>'+f.nome+'</strong>'+(f.matricula?'<br><span style="font-size:7.5pt;color:#888">Mat. '+f.matricula+'</span>':'')+'</td>'+
+        '<td>'+f.funcao+'</td>'+
+        '<td>'+f.setor+'</td>'+
+        '<td>'+badgeHtml(f.status,statusLabel)+'</td>'+
+        '<td>'+fmt(f.admissao)+'</td>'+
+        '<td>'+epiHtml+'</td></tr>';
+    });
+    html += '</tbody></table>';
+  }
+  html += footerDoc();
+  return html;
+}
+
+function relEpisVencidos(){
+  var lista = funcionarios.filter(function(f){
+    return (f.epis||[]).some(function(e){ return epiVencido(e.validade); });
+  });
+  var html = headerDoc('Relatório de EPIs Vencidos','Equipamentos de Proteção Individual com validade expirada — '+hoje());
+
+  html += '<div class="doc-obs-box">'+
+    '🚨 <strong>Atenção:</strong> Os funcionários listados abaixo possuem EPIs com validade vencida. '+
+    'É necessária substituição imediata conforme NR-06.'+
+  '</div>';
+
+  if(lista.length === 0){
+    html += '<div class="doc-obs-box" style="background:#dcfce7;border-color:#86efac">✅ <strong>Parabéns!</strong> Nenhum EPI vencido encontrado.</div>';
+  } else {
+    html += '<div class="doc-resumo-grid" style="grid-template-columns:1fr 1fr 1fr">'+
+      '<div class="doc-resumo-item"><div class="val" style="color:#dc2626">'+lista.length+'</div><div class="lbl">Funcionários Afetados</div></div>'+
+      '<div class="doc-resumo-item"><div class="val" style="color:#ea580c">'+lista.reduce(function(acc,f){ return acc+(f.epis||[]).filter(function(e){ return epiVencido(e.validade); }).length; },0)+'</div><div class="lbl">Total de EPIs Vencidos</div></div>'+
+      '<div class="doc-resumo-item"><div class="val" style="color:#ca8a04">'+funcionarios.length+'</div><div class="lbl">Total de Funcionários</div></div>'+
+    '</div>';
+    html += '<div class="doc-section-title">⚠️ Funcionários com EPIs Vencidos</div>';
+    html += '<table class="doc-table"><thead><tr><th>Funcionário</th><th>Função</th><th>Setor</th><th>EPI Vencido</th><th>Validade</th><th>Situação CA</th></tr></thead><tbody>';
+    lista.forEach(function(f){
+      var episVenc=(f.epis||[]).filter(function(e){ return epiVencido(e.validade); });
+      episVenc.forEach(function(e, idx){
+        html += '<tr>'+(idx===0?'<td rowspan="'+episVenc.length+'"><strong>'+f.nome+'</strong></td><td rowspan="'+episVenc.length+'">'+f.funcao+'</td><td rowspan="'+episVenc.length+'">'+f.setor+'</td>':'')+'<td>'+e.nome+'</td><td style="color:#dc2626;font-weight:700">'+fmt(e.validade)+'</td><td>'+badgeHtml(e.situacao||'vencido',{ok:'CA Ok',vencido:'CA Vencido','sem-ca':'Sem CA'}[e.situacao||'vencido'])+'</td></tr>';
+      });
+    });
+    html += '</tbody></table>';
+  }
+  html += '<div class="doc-section-title">✍️ Assinatura do SESMT</div>';
+  html += '<div class="doc-assinatura"><div class="doc-assinatura-linha"></div><p>'+(user.nome||'Técnico de Segurança do Trabalho')+'</p><p style="color:#aaa">Data: ___/___/______</p></div>';
+  html += footerDoc();
+  return html;
+}
+
+function relChecklists(){
+  var html = headerDoc('Relatório de Checklists NR','Percentual de conformidade por Norma Regulamentadora — '+hoje());
+  var NOMES = {'NR-05':'CIPA','NR-06':'EPI','NR-07':'PCMSO','NR-09':'Riscos Ambientais','NR-10':'Eletricidade','NR-12':'Máquinas','NR-17':'Ergonomia','NR-23':'Incêndio','NR-35':'Trabalho em Altura'};
+  var TOTAL = {'NR-05':8,'NR-06':8,'NR-07':8,'NR-09':8,'NR-10':8,'NR-12':8,'NR-17':8,'NR-23':8,'NR-35':8};
+
+  var totalOk=0, totalItens=0;
+  var linhas = NRS_KEYS.map(function(nr){
+    var saved=JSON.parse(localStorage.getItem('safenr_checklist_'+nr)||'{}');
+    var total=TOTAL[nr]||0;
+    var ok=Object.values(saved).filter(function(v){ return v==='ok'; }).length;
+    var na=Object.values(saved).filter(function(v){ return v==='na'; }).length;
+    var pend=total-ok-na;
+    var pct=total>0?Math.round(((ok+na)/total)*100):0;
+    totalOk+=ok; totalItens+=total;
+    return {nr:nr,nome:NOMES[nr],total:total,ok:ok,na:na,pend:pend,pct:pct};
+  });
+
+  var pctGeral = totalItens>0?Math.round((totalOk/totalItens)*100):0;
+
+  html += '<div class="doc-resumo-grid" style="grid-template-columns:repeat(3,1fr)">'+
+    '<div class="doc-resumo-item"><div class="val">'+NRS_KEYS.length+'</div><div class="lbl">NRs Verificadas</div></div>'+
+    '<div class="doc-resumo-item"><div class="val" style="color:#16a34a">'+pctGeral+'%</div><div class="lbl">Conformidade Geral</div></div>'+
+    '<div class="doc-resumo-item"><div class="val">'+totalItens+'</div><div class="lbl">Total de Itens</div></div>'+
+  '</div>';
+
+  html += '<div class="doc-section-title">📋 Conformidade por NR</div>';
+  html += '<table class="doc-table"><thead><tr><th>NR</th><th>Nome</th><th>Total Itens</th><th>Conformes</th><th>N/A</th><th>Pendentes</th><th>Conformidade</th></tr></thead><tbody>';
+  linhas.forEach(function(l){
+    var cor=l.pct>=80?'#16a34a':l.pct>=50?'#ca8a04':'#dc2626';
+    html += '<tr><td><strong>'+l.nr+'</strong></td><td>'+l.nome+'</td><td style="text-align:center">'+l.total+'</td>'+
+      '<td style="text-align:center;color:#16a34a;font-weight:700">'+l.ok+'</td>'+
+      '<td style="text-align:center;color:#2563eb">'+l.na+'</td>'+
+      '<td style="text-align:center;color:#dc2626">'+l.pend+'</td>'+
+      '<td style="text-align:center"><strong style="color:'+cor+'">'+l.pct+'%</strong></td></tr>';
+  });
+  html += '</tbody></table>';
+  html += footerDoc();
+  return html;
+}
+
+function gerarRelatorio(tipo){
+  var html = '';
+  if(tipo==='geral')        html = relGeral();
+  else if(tipo==='inspecoes')   html = relInspecoes();
+  else if(tipo==='riscos')      html = relRiscos();
+  else if(tipo==='funcionarios')html = relFuncionarios();
+  else if(tipo==='epis')        html = relEpisVencidos();
+  else if(tipo==='checklists')  html = relChecklists();
+
+  var doc = document.getElementById('docA4');
+  doc.innerHTML = html;
+  doc.style.display = 'block';
+
+  setTimeout(function(){
+    window.print();
+    setTimeout(function(){ doc.style.display='none'; }, 500);
+  }, 300);
+}
+
+atualizarContadores();
+</script>
+</body>
+</html>
 
