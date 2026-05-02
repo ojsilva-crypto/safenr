@@ -13,16 +13,15 @@
       font-size: 0.75rem;
       font-weight: bold;
     }
-    .badge-agendado    { background: #dbeafe; color: #1d4ed8; }
-    .badge-em_andamento{ background: #fef9c3; color: #a16207; }
-    .badge-concluido   { background: #dcfce7; color: #15803d; }
-    .badge-cancelado   { background: #fee2e2; color: #b91c1c; }
+    .badge-agendado     { background: #dbeafe; color: #1d4ed8; }
+    .badge-em_andamento { background: #fef9c3; color: #a16207; }
+    .badge-concluido    { background: #dcfce7; color: #15803d; }
+    .badge-cancelado    { background: #fee2e2; color: #b91c1c; }
+    .badge-presencial   { background: #ede9fe; color: #6d28d9; }
+    .badge-online       { background: #e0f2fe; color: #0369a1; }
+    .badge-hibrido      { background: #fce7f3; color: #9d174d; }
 
-    .badge-presencial  { background: #ede9fe; color: #6d28d9; }
-    .badge-online      { background: #e0f2fe; color: #0369a1; }
-    .badge-hibrido     { background: #fce7f3; color: #9d174d; }
-
-    .vencido { border-left: 4px solid #ef4444 !important; }
+    .vencido     { border-left: 4px solid #ef4444 !important; }
     .vence-breve { border-left: 4px solid #f59e0b !important; }
 
     .treinamento-card {
@@ -36,26 +35,14 @@
       flex-direction: column;
       gap: 0.5rem;
     }
-
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 1rem;
     }
-
-    .card-header h3 {
-      margin: 0;
-      font-size: 1.1rem;
-      color: #1e293b;
-    }
-
-    .card-badges {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-    }
-
+    .card-header h3 { margin: 0; font-size: 1.1rem; color: #1e293b; }
+    .card-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .card-info {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -63,530 +50,479 @@
       font-size: 0.88rem;
       color: #475569;
     }
-
-    .card-info span strong {
-      color: #1e293b;
-    }
-
+    .card-info span strong { color: #1e293b; }
     .card-actions {
       display: flex;
       gap: 0.5rem;
       justify-content: flex-end;
       margin-top: 0.3rem;
     }
-
     .btn-danger {
-      background: #fee2e2;
-      color: #b91c1c;
-      border: none;
-      padding: 5px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
+      background: #fee2e2; color: #b91c1c;
+      border: none; padding: 5px 12px;
+      border-radius: 6px; cursor: pointer; font-size: 0.85rem;
     }
-
     .btn-edit {
-      background: #e0f2fe;
-      color: #0369a1;
-      border: none;
-      padding: 5px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
+      background: #e0f2fe; color: #0369a1;
+      border: none; padding: 5px 12px;
+      border-radius: 6px; cursor: pointer; font-size: 0.85rem;
     }
-
-    /* Modal */
     .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 1000;
+      align-items: center; justify-content: center;
     }
     .modal-overlay.active { display: flex; }
-
     .modal {
-      background: #fff;
-      border-radius: 16px;
-      padding: 2rem;
-      width: 100%;
-      max-width: 600px;
-      max-height: 90vh;
-      overflow-y: auto;
+      background: #fff; border-radius: 16px;
+      padding: 2rem; width: 100%; max-width: 600px;
+      max-height: 90vh; overflow-y: auto;
       box-shadow: 0 20px 60px rgba(0,0,0,0.2);
     }
-
     .modal h2 { margin-top: 0; color: #1e293b; }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .form-grid .full { grid-column: 1 / -1; }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-
-    .form-group label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #374151;
-    }
-
+    .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
+    .form-group label { font-size: 0.85rem; font-weight: 600; color: #374151; }
     .form-group input,
     .form-group select,
     .form-group textarea {
-      padding: 8px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      color: #1e293b;
-      background: #f9fafb;
+      padding: 8px 12px; border: 1px solid #d1d5db;
+      border-radius: 8px; font-size: 0.9rem;
+      color: #1e293b; background: #f9fafb;
     }
-
     .form-group textarea { resize: vertical; min-height: 70px; }
-
     .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.8rem;
-      margin-top: 1.5rem;
+      display: flex; justify-content: flex-end;
+      gap: 0.8rem; margin-top: 1.5rem;
     }
-
     .filtros {
-      display: flex;
-      gap: 0.8rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      align-items: center;
+      display: flex; gap: 0.8rem;
+      margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;
     }
-
     .filtros select, .filtros input {
-      padding: 7px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      background: #fff;
+      padding: 7px 12px; border: 1px solid #d1d5db;
+      border-radius: 8px; font-size: 0.9rem; background: #fff;
     }
-
     .resumo-cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+      gap: 1rem; margin-bottom: 1.5rem;
     }
-
     .resumo-card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 1rem;
-      text-align: center;
+      background: #fff; border-radius: 10px;
+      padding: 1rem; text-align: center;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-
-    .resumo-card .numero {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #6366f1;
-    }
-
-    .resumo-card .label {
-      font-size: 0.8rem;
-      color: #64748b;
-      margin-top: 0.2rem;
-    }
+    .resumo-card .numero { font-size: 2rem; font-weight: bold; color: #6366f1; }
+    .resumo-card .label  { font-size: 0.8rem; color: #64748b; margin-top: 0.2rem; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <nav class="nav">
-      <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
-      <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
-      <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
-      <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-      <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
-      <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
-      <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
-      <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
-      <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-      <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
-      <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
-      <a class="nav-item active" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
-      <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
-    </nav>
+<div class="container">
 
-    <main class="content">
-      <header class="header">
-        <h1>🎓 Treinamentos</h1>
-        <button class="btn btn-primary" id="btnNovo">+ Novo Treinamento</button>
-      </header>
+  <!-- ✅ MENU ATUALIZADO -->
+  <nav class="nav">
+    <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item active" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
+    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
+    <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
+    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
+    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
+    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
+    <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
+    <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
+    <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
+    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
+  </nav>
 
-      <!-- Resumo -->
-      <div class="resumo-cards">
-        <div class="resumo-card">
-          <div class="numero" id="totalTreinamentos">0</div>
-          <div class="label">Total</div>
-        </div>
-        <div class="resumo-card">
-          <div class="numero" id="totalAgendados" style="color:#1d4ed8">0</div>
-          <div class="label">Agendados</div>
-        </div>
-        <div class="resumo-card">
-          <div class="numero" id="totalConcluidos" style="color:#15803d">0</div>
-          <div class="label">Concluídos</div>
-        </div>
-        <div class="resumo-card">
-          <div class="numero" id="totalVencidos" style="color:#b91c1c">0</div>
-          <div class="label">Vencidos</div>
-        </div>
-        <div class="resumo-card">
-          <div class="numero" id="totalVenceBreve" style="color:#d97706">0</div>
-          <div class="label">Vencem em 30 dias</div>
-        </div>
+  <main class="content">
+    <header class="header">
+      <h1>🎓 Treinamentos</h1>
+      <button class="btn btn-primary" id="btnNovo">+ Novo Treinamento</button>
+    </header>
+
+    <!-- Resumo -->
+    <div class="resumo-cards">
+      <div class="resumo-card">
+        <div class="numero" id="totalTreinamentos">0</div>
+        <div class="label">Total</div>
       </div>
-
-      <!-- Filtros -->
-      <div class="filtros">
-        <input type="text" id="busca" placeholder="🔍 Buscar por nome ou instrutor...">
-        <select id="filtroStatus">
-          <option value="">Todos os status</option>
-          <option value="agendado">Agendado</option>
-          <option value="em_andamento">Em andamento</option>
-          <option value="concluido">Concluído</option>
-          <option value="cancelado">Cancelado</option>
-        </select>
-        <select id="filtroModalidade">
-          <option value="">Todas as modalidades</option>
-          <option value="presencial">Presencial</option>
-          <option value="online">Online</option>
-          <option value="hibrido">Híbrido</option>
-        </select>
+      <div class="resumo-card">
+        <div class="numero" id="totalAgendados" style="color:#1d4ed8">0</div>
+        <div class="label">Agendados</div>
       </div>
-
-      <!-- Loading -->
-      <div id="loading" style="text-align:center; padding: 2rem; color: #888;">
-        ⏳ Carregando treinamentos...
+      <div class="resumo-card">
+        <div class="numero" id="totalConcluidos" style="color:#15803d">0</div>
+        <div class="label">Concluídos</div>
       </div>
-
-      <!-- Lista -->
-      <div id="listaTreinamentos"></div>
-
-      <!-- Empty state -->
-      <div class="empty-state" id="emptyState" style="display:none;">
-        <p>🎓 Nenhum treinamento encontrado</p>
+      <div class="resumo-card">
+        <div class="numero" id="totalVencidos" style="color:#b91c1c">0</div>
+        <div class="label">Vencidos</div>
       </div>
-    </main>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <h2 id="modalTitulo">➕ Novo Treinamento</h2>
-      <form id="formTreinamento">
-        <div class="form-grid">
-
-          <div class="form-group full">
-            <label>Nome do Treinamento *</label>
-            <input type="text" id="nome" placeholder="Ex: NR-35 Trabalho em Altura" required>
-          </div>
-
-          <div class="form-group full">
-            <label>Descrição</label>
-            <textarea id="descricao" placeholder="Descreva o conteúdo do treinamento..."></textarea>
-          </div>
-
-          <div class="form-group">
-            <label>Instrutor *</label>
-            <input type="text" id="instrutor" placeholder="Nome do instrutor" required>
-          </div>
-
-          <div class="form-group">
-            <label>Carga Horária (horas) *</label>
-            <input type="number" id="carga_horaria" min="1" placeholder="Ex: 8" required>
-          </div>
-
-          <div class="form-group">
-            <label>Data de Realização *</label>
-            <input type="date" id="data_realizacao" required>
-          </div>
-
-          <div class="form-group">
-            <label>Data de Validade *</label>
-            <input type="date" id="data_validade" required>
-          </div>
-
-          <div class="form-group">
-            <label>Modalidade *</label>
-            <select id="modalidade" required>
-              <option value="">Selecione...</option>
-              <option value="presencial">Presencial</option>
-              <option value="online">Online</option>
-              <option value="hibrido">Híbrido</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Status *</label>
-            <select id="status_trein" required>
-              <option value="agendado">Agendado</option>
-              <option value="em_andamento">Em andamento</option>
-              <option value="concluido">Concluído</option>
-              <option value="cancelado">Cancelado</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Local</label>
-            <input type="text" id="local" placeholder="Ex: Sala de reuniões / Online">
-          </div>
-
-          <div class="form-group">
-            <label>NR Relacionada</label>
-            <input type="text" id="nr_relacionada" placeholder="Ex: NR-6, NR-35...">
-          </div>
-
-          <div class="form-group full">
-            <label>Observações</label>
-            <textarea id="observacoes" placeholder="Informações adicionais..."></textarea>
-          </div>
-
-        </div>
-
-        <div class="modal-actions">
-          <button type="button" class="btn btn-secondary" id="btnCancelar">Cancelar</button>
-          <button type="submit" class="btn btn-primary" id="btnSalvar">💾 Salvar</button>
-        </div>
-      </form>
+      <div class="resumo-card">
+        <div class="numero" id="totalVenceBreve" style="color:#d97706">0</div>
+        <div class="label">Vencem em 30 dias</div>
+      </div>
     </div>
+
+    <!-- Filtros -->
+    <div class="filtros">
+      <input type="text" id="busca" placeholder="🔍 Buscar por nome ou instrutor...">
+      <select id="filtroStatus">
+        <option value="">Todos os status</option>
+        <option value="agendado">Agendado</option>
+        <option value="em_andamento">Em andamento</option>
+        <option value="concluido">Concluído</option>
+        <option value="cancelado">Cancelado</option>
+      </select>
+      <select id="filtroModalidade">
+        <option value="">Todas as modalidades</option>
+        <option value="presencial">Presencial</option>
+        <option value="online">Online</option>
+        <option value="hibrido">Híbrido</option>
+      </select>
+    </div>
+
+    <div id="loading" style="text-align:center; padding:2rem; color:#888;">
+      ⏳ Carregando treinamentos...
+    </div>
+
+    <div id="listaTreinamentos"></div>
+
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <p>🎓 Nenhum treinamento encontrado</p>
+    </div>
+  </main>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2 id="modalTitulo">➕ Novo Treinamento</h2>
+    <form id="formTreinamento">
+      <div class="form-grid">
+
+        <div class="form-group full">
+          <label>Nome do Treinamento *</label>
+          <input type="text" id="nome" placeholder="Ex: NR-35 Trabalho em Altura" required>
+        </div>
+
+        <div class="form-group full">
+          <label>Descrição</label>
+          <textarea id="descricao" placeholder="Descreva o conteúdo do treinamento..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Instrutor *</label>
+          <input type="text" id="instrutor" placeholder="Nome do instrutor" required>
+        </div>
+
+        <div class="form-group">
+          <label>Carga Horária (horas) *</label>
+          <input type="number" id="carga_horaria" min="1" placeholder="Ex: 8" required>
+        </div>
+
+        <div class="form-group">
+          <label>Data de Realização *</label>
+          <input type="date" id="data_realizacao" required>
+        </div>
+
+        <div class="form-group">
+          <label>Data de Validade *</label>
+          <input type="date" id="data_validade" required>
+        </div>
+
+        <div class="form-group">
+          <label>Modalidade *</label>
+          <select id="modalidade" required>
+            <option value="">Selecione...</option>
+            <option value="presencial">Presencial</option>
+            <option value="online">Online</option>
+            <option value="hibrido">Híbrido</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Status *</label>
+          <select id="status_trein" required>
+            <option value="agendado">Agendado</option>
+            <option value="em_andamento">Em andamento</option>
+            <option value="concluido">Concluído</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Local</label>
+          <input type="text" id="local" placeholder="Ex: Sala de reuniões / Online">
+        </div>
+
+        <div class="form-group">
+          <label>NR Relacionada</label>
+          <input type="text" id="nr_relacionada" placeholder="Ex: NR-6, NR-35...">
+        </div>
+
+        <div class="form-group full">
+          <label>Observações</label>
+          <textarea id="observacoes" placeholder="Informações adicionais..."></textarea>
+        </div>
+
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="btnCancelar">Cancelar</button>
+        <button type="submit" class="btn btn-primary">💾 Salvar</button>
+      </div>
+    </form>
   </div>
+</div>
 
-  <script>
-    // =============================================
-    // SUPABASE
-    // =============================================
-    const SUPABASE_URL = 'SUA_URL_AQUI'
-    const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI'
-    const { createClient } = supabase
-    const db = createClient(SUPABASE_URL, SUPABASE_KEY)
+<script>
+  // =============================================
+  // SUPABASE
+  // =============================================
+  const SUPABASE_URL = 'SUA_URL_AQUI'
+  const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI'
+  const { createClient } = supabase
+  const db = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-    let todosOsTreinamentos = []
-    let editandoId = null
+  let todosOsTreinamentos = []
+  let editandoId = null
 
-    // =============================================
-    // UTILS
-    // =============================================
-    function formatarData(dataISO) {
-      if (!dataISO) return '—'
-      const [y, m, d] = dataISO.split('-')
-      return `${d}/${m}/${y}`
-    }
+  // =============================================
+  // UTILS
+  // =============================================
+  function formatarData(dataISO) {
+    if (!dataISO) return '—'
+    const [y, m, d] = dataISO.split('-')
+    return `${d}/${m}/${y}`
+  }
 
-    function isVencido(dataValidade) {
-      return new Date(dataValidade) < new Date()
-    }
+  function isVencido(dataValidade) {
+    return new Date(dataValidade) < new Date()
+  }
 
-    function venceEm30Dias(dataValidade) {
-      const hoje = new Date()
-      const validade = new Date(dataValidade)
-      const diff = (validade - hoje) / (1000 * 60 * 60 * 24)
-      return diff >= 0 && diff <= 30
-    }
+  function venceEm30Dias(dataValidade) {
+    const hoje = new Date()
+    const validade = new Date(dataValidade)
+    const diff = (validade - hoje) / (1000 * 60 * 60 * 24)
+    return diff >= 0 && diff <= 30
+  }
 
-    // =============================================
-    // RESUMO
-    // =============================================
-    function atualizarResumo(lista) {
-      const hoje = new Date()
-      document.getElementById('totalTreinamentos').textContent = lista.length
-      document.getElementById('totalAgendados').textContent   = lista.filter(t => t.status === 'agendado').length
-      document.getElementById('totalConcluidos').textContent  = lista.filter(t => t.status === 'concluido').length
-      document.getElementById('totalVencidos').textContent    = lista.filter(t => isVencido(t.data_validade)).length
-      document.getElementById('totalVenceBreve').textContent  = lista.filter(t => venceEm30Dias(t.data_validade)).length
-    }
+  // =============================================
+  // RESUMO
+  // =============================================
+  function atualizarResumo(lista) {
+    document.getElementById('totalTreinamentos').textContent = lista.length
+    document.getElementById('totalAgendados').textContent    = lista.filter(t => t.status === 'agendado').length
+    document.getElementById('totalConcluidos').textContent   = lista.filter(t => t.status === 'concluido').length
+    document.getElementById('totalVencidos').textContent     = lista.filter(t => isVencido(t.data_validade)).length
+    document.getElementById('totalVenceBreve').textContent   = lista.filter(t => venceEm30Dias(t.data_validade)).length
+  }
 
-    // =============================================
-    // RENDERIZAR CARD
-    // =============================================
-    function renderCard(t) {
-      const lista = document.getElementById('listaTreinamentos')
-      const vencido = isVencido(t.data_validade)
-      const breveVence = venceEm30Dias(t.data_validade)
+  // =============================================
+  // RENDER CARD
+  // =============================================
+  function renderCard(t) {
+    const lista = document.getElementById('listaTreinamentos')
+    const vencido = isVencido(t.data_validade)
+    const breveVence = venceEm30Dias(t.data_validade)
 
-      const div = document.createElement('div')
-      div.className = `treinamento-card ${vencido ? 'vencido' : breveVence ? 'vence-breve' : ''}`
-      div.dataset.id = t.id
+    const div = document.createElement('div')
+    div.className = `treinamento-card ${vencido ? 'vencido' : breveVence ? 'vence-breve' : ''}`
+    div.dataset.id = t.id
 
-      div.innerHTML = `
-        <div class="card-header">
-          <h3>🎓 ${t.nome}</h3>
-          <div class="card-badges">
-            <span class="badge badge-${t.status}">${t.status.replace('_',' ')}</span>
-            <span class="badge badge-${t.modalidade}">${t.modalidade}</span>
-            ${vencido ? '<span class="badge" style="background:#fee2e2;color:#b91c1c">⛔ Vencido</span>' : ''}
-            ${breveVence ? '<span class="badge" style="background:#fef9c3;color:#a16207">⚠️ Vence em breve</span>' : ''}
-          </div>
+    div.innerHTML = `
+      <div class="card-header">
+        <h3>🎓 ${t.nome}</h3>
+        <div class="card-badges">
+          <span class="badge badge-${t.status}">${t.status.replace('_',' ')}</span>
+          <span class="badge badge-${t.modalidade}">${t.modalidade}</span>
+          ${vencido    ? '<span class="badge" style="background:#fee2e2;color:#b91c1c">⛔ Vencido</span>' : ''}
+          ${breveVence ? '<span class="badge" style="background:#fef9c3;color:#a16207">⚠️ Vence em breve</span>' : ''}
         </div>
-        <div class="card-info">
-          <span>👤 <strong>Instrutor:</strong> ${t.instrutor}</span>
-          <span>⏱️ <strong>Carga:</strong> ${t.carga_horaria}h</span>
-          <span>📅 <strong>Realização:</strong> ${formatarData(t.data_realizacao)}</span>
-          <span>📆 <strong>Validade:</strong> ${formatarData(t.data_validade)}</span>
-          ${t.local ? `<span>📍 <strong>Local:</strong> ${t.local}</span>` : ''}
-          ${t.nr_relacionada ? `<span>📖 <strong>NR:</strong> ${t.nr_relacionada}</span>` : ''}
-        </div>
-        ${t.descricao ? `<p style="font-size:0.88rem;color:#64748b;margin:0">${t.descricao}</p>` : ''}
-        ${t.observacoes ? `<p style="font-size:0.85rem;color:#94a3b8;margin:0">📝 ${t.observacoes}</p>` : ''}
-        <div class="card-actions">
-          <button class="btn-edit" onclick="abrirEdicao('${t.id}')">✏️ Editar</button>
-          <button class="btn-danger" onclick="deletarTreinamento('${t.id}')">🗑️ Excluir</button>
-        </div>
-      `
-      lista.appendChild(div)
-    }
+      </div>
+      <div class="card-info">
+        <span>👤 <strong>Instrutor:</strong> ${t.instrutor}</span>
+        <span>⏱️ <strong>Carga:</strong> ${t.carga_horaria}h</span>
+        <span>📅 <strong>Realização:</strong> ${formatarData(t.data_realizacao)}</span>
+        <span>📆 <strong>Validade:</strong> ${formatarData(t.data_validade)}</span>
+        ${t.local         ? `<span>📍 <strong>Local:</strong> ${t.local}</span>` : ''}
+        ${t.nr_relacionada? `<span>📖 <strong>NR:</strong> ${t.nr_relacionada}</span>` : ''}
+      </div>
+      ${t.descricao   ? `<p style="font-size:0.88rem;color:#64748b;margin:0">${t.descricao}</p>` : ''}
+      ${t.observacoes ? `<p style="font-size:0.85rem;color:#94a3b8;margin:0">📝 ${t.observacoes}</p>` : ''}
+      <div class="card-actions">
+        <button class="btn-edit"   onclick="abrirEdicao('${t.id}')">✏️ Editar</button>
+        <button class="btn-danger" onclick="deletarTreinamento('${t.id}')">🗑️ Excluir</button>
+      </div>
+    `
+    lista.appendChild(div)
+  }
 
-    // =============================================
-    // FILTRAR E RENDERIZAR
-    // =============================================
-    function filtrarERenderizar() {
-      const busca      = document.getElementById('busca').value.toLowerCase()
-      const status     = document.getElementById('filtroStatus').value
-      const modalidade = document.getElementById('filtroModalidade').value
+  // =============================================
+  // FILTRAR E RENDERIZAR
+  // =============================================
+  function filtrarERenderizar() {
+    const busca      = document.getElementById('busca').value.toLowerCase()
+    const status     = document.getElementById('filtroStatus').value
+    const modalidade = document.getElementById('filtroModalidade').value
 
-      document.getElementById('listaTreinamentos').innerHTML = ''
+    document.getElementById('listaTreinamentos').innerHTML = ''
 
-      const filtrados = todosOsTreinamentos.filter(t => {
-        const matchBusca = t.nome.toLowerCase().includes(busca) || t.instrutor.toLowerCase().includes(busca)
-        const matchStatus = !status || t.status === status
-        const matchMod = !modalidade || t.modalidade === modalidade
-        return matchBusca && matchStatus && matchMod
-      })
-
-      filtrados.forEach(renderCard)
-      document.getElementById('emptyState').style.display = filtrados.length === 0 ? 'block' : 'none'
-    }
-
-    // =============================================
-    // CARREGAR DO SUPABASE
-    // =============================================
-    async function carregarTreinamentos() {
-      document.getElementById('loading').style.display = 'block'
-
-      const { data, error } = await db
-        .from('treinamentos')
-        .select('*')
-        .order('data_realizacao', { ascending: false })
-
-      document.getElementById('loading').style.display = 'none'
-
-      if (error) { console.error(error); return }
-
-      todosOsTreinamentos = data
-      atualizarResumo(data)
-      filtrarERenderizar()
-    }
-
-    // =============================================
-    // ABRIR MODAL NOVO
-    // =============================================
-    document.getElementById('btnNovo').addEventListener('click', () => {
-      editandoId = null
-      document.getElementById('modalTitulo').textContent = '➕ Novo Treinamento'
-      document.getElementById('formTreinamento').reset()
-      document.getElementById('modalOverlay').classList.add('active')
+    const filtrados = todosOsTreinamentos.filter(t => {
+      const matchBusca = t.nome.toLowerCase().includes(busca) || t.instrutor.toLowerCase().includes(busca)
+      const matchStatus = !status || t.status === status
+      const matchMod = !modalidade || t.modalidade === modalidade
+      return matchBusca && matchStatus && matchMod
     })
 
-    document.getElementById('btnCancelar').addEventListener('click', () => {
-      document.getElementById('modalOverlay').classList.remove('active')
-    })
+    filtrados.forEach(renderCard)
+    document.getElementById('emptyState').style.display = filtrados.length === 0 ? 'block' : 'none'
+  }
 
-    // =============================================
-    // ABRIR MODAL EDIÇÃO
-    // =============================================
-    function abrirEdicao(id) {
-      const t = todosOsTreinamentos.find(x => x.id === id)
-      if (!t) return
+  // =============================================
+  // CARREGAR
+  // =============================================
+  async function carregarTreinamentos() {
+    document.getElementById('loading').style.display = 'block'
 
-      editandoId = id
-      document.getElementById('modalTitulo').textContent = '✏️ Editar Treinamento'
+    const { data, error } = await db
+      .from('treinamentos')
+      .select('*')
+      .order('data_realizacao', { ascending: false })
 
-      document.getElementById('nome').value           = t.nome || ''
-      document.getElementById('descricao').value      = t.descricao || ''
-      document.getElementById('instrutor').value      = t.instrutor || ''
-      document.getElementById('carga_horaria').value  = t.carga_horaria || ''
-      document.getElementById('data_realizacao').value= t.data_realizacao || ''
-      document.getElementById('data_validade').value  = t.data_validade || ''
-      document.getElementById('modalidade').value     = t.modalidade || ''
-      document.getElementById('status_trein').value   = t.status || ''
-      document.getElementById('local').value          = t.local || ''
-      document.getElementById('nr_relacionada').value = t.nr_relacionada || ''
-      document.getElementById('observacoes').value    = t.observacoes || ''
+    document.getElementById('loading').style.display = 'none'
+    if (error) { console.error(error); return }
 
-      document.getElementById('modalOverlay').classList.add('active')
+    todosOsTreinamentos = data
+    atualizarResumo(data)
+    filtrarERenderizar()
+  }
+
+  // =============================================
+  // VINCULAR VENCIMENTO NA AGENDA
+  // =============================================
+  async function vincularNaAgenda(treinamentoId, nome, dataValidade) {
+    // Remove evento anterior deste treinamento (se existir)
+    await db
+      .from('eventos')
+      .delete()
+      .eq('treinamento_id', treinamentoId)
+
+    // Cria novo evento de vencimento
+    const { error } = await db.from('eventos').insert([{
+      titulo:         `⚠️ Vencimento: ${nome}`,
+      descricao:      `O treinamento "${nome}" vence nesta data. Providencie a renovação.`,
+      data:           dataValidade,
+      tipo:           'alerta',
+      cor:            '#f59e0b',
+      treinamento_id: treinamentoId,
+      tipo_origem:    'treinamento'
+    }])
+
+    if (error) console.error('Erro ao vincular na agenda:', error)
+  }
+
+  // =============================================
+  // MODAL — ABRIR NOVO
+  // =============================================
+  document.getElementById('btnNovo').addEventListener('click', () => {
+    editandoId = null
+    document.getElementById('modalTitulo').textContent = '➕ Novo Treinamento'
+    document.getElementById('formTreinamento').reset()
+    document.getElementById('modalOverlay').classList.add('active')
+  })
+
+  document.getElementById('btnCancelar').addEventListener('click', () => {
+    document.getElementById('modalOverlay').classList.remove('active')
+  })
+
+  // =============================================
+  // MODAL — ABRIR EDIÇÃO
+  // =============================================
+  function abrirEdicao(id) {
+    const t = todosOsTreinamentos.find(x => x.id === id)
+    if (!t) return
+    editandoId = id
+    document.getElementById('modalTitulo').textContent    = '✏️ Editar Treinamento'
+    document.getElementById('nome').value                 = t.nome || ''
+    document.getElementById('descricao').value            = t.descricao || ''
+    document.getElementById('instrutor').value            = t.instrutor || ''
+    document.getElementById('carga_horaria').value        = t.carga_horaria || ''
+    document.getElementById('data_realizacao').value      = t.data_realizacao || ''
+    document.getElementById('data_validade').value        = t.data_validade || ''
+    document.getElementById('modalidade').value           = t.modalidade || ''
+    document.getElementById('status_trein').value         = t.status || ''
+    document.getElementById('local').value                = t.local || ''
+    document.getElementById('nr_relacionada').value       = t.nr_relacionada || ''
+    document.getElementById('observacoes').value          = t.observacoes || ''
+    document.getElementById('modalOverlay').classList.add('active')
+  }
+
+  // =============================================
+  // SALVAR — CRIA EVENTO NA AGENDA AUTOMATICAMENTE
+  // =============================================
+  document.getElementById('formTreinamento').addEventListener('submit', async (e) => {
+    e.preventDefault()
+
+    const nome         = document.getElementById('nome').value
+    const dataValidade = document.getElementById('data_validade').value
+
+    const payload = {
+      nome,
+      descricao:       document.getElementById('descricao').value,
+      instrutor:       document.getElementById('instrutor').value,
+      carga_horaria:   parseInt(document.getElementById('carga_horaria').value),
+      data_realizacao: document.getElementById('data_realizacao').value,
+      data_validade:   dataValidade,
+      modalidade:      document.getElementById('modalidade').value,
+      status:          document.getElementById('status_trein').value,
+      local:           document.getElementById('local').value,
+      nr_relacionada:  document.getElementById('nr_relacionada').value,
+      observacoes:     document.getElementById('observacoes').value
     }
 
-    // =============================================
-    // SALVAR (CRIAR OU EDITAR)
-    // =============================================
-    document.getElementById('formTreinamento').addEventListener('submit', async (e) => {
-      e.preventDefault()
+    let error, data
 
-      const payload = {
-        nome:            document.getElementById('nome').value,
-        descricao:       document.getElementById('descricao').value,
-        instrutor:       document.getElementById('instrutor').value,
-        carga_horaria:   parseInt(document.getElementById('carga_horaria').value),
-        data_realizacao: document.getElementById('data_realizacao').value,
-        data_validade:   document.getElementById('data_validade').value,
-        modalidade:      document.getElementById('modalidade').value,
-        status:          document.getElementById('status_trein').value,
-        local:           document.getElementById('local').value,
-        nr_relacionada:  document.getElementById('nr_relacionada').value,
-        observacoes:     document.getElementById('observacoes').value
-      }
-
-      let error
-
-      if (editandoId) {
-        ({ error } = await db.from('treinamentos').update(payload).eq('id', editandoId))
-      } else {
-        ({ error } = await db.from('treinamentos').insert([payload]))
-      }
-
-      if (error) { console.error(error); return }
-
-      document.getElementById('modalOverlay').classList.remove('active')
-      carregarTreinamentos()
-    })
-
-    // =============================================
-    // DELETAR
-    // =============================================
-    async function deletarTreinamento(id) {
-      if (!confirm('Deseja excluir este treinamento?')) return
-
-      const { error } = await db.from('treinamentos').delete().eq('id', id)
-      if (!error) carregarTreinamentos()
+    if (editandoId) {
+      // Atualiza treinamento
+      ;({ error } = await db.from('treinamentos').update(payload).eq('id', editandoId))
+      if (!error) await vincularNaAgenda(editandoId, nome, dataValidade)
+    } else {
+      // Cria treinamento
+      ;({ data, error } = await db.from('treinamentos').insert([payload]).select())
+      if (!error && data?.[0]) await vincularNaAgenda(data[0].id, nome, dataValidade)
     }
 
-    // =============================================
-    // FILTROS — EVENTOS
-    // =============================================
-    document.getElementById('busca').addEventListener('input', filtrarERenderizar)
-    document.getElementById('filtroStatus').addEventListener('change', filtrarERenderizar)
-    document.getElementById('filtroModalidade').addEventListener('change', filtrarERenderizar)
+    if (error) { console.error(error); return }
 
-    // =============================================
-    // INICIAR
-    // =============================================
+    document.getElementById('modalOverlay').classList.remove('active')
     carregarTreinamentos()
-  </script>
+  })
+
+  // =============================================
+  // DELETAR — REMOVE TAMBÉM DA AGENDA (CASCADE)
+  // =============================================
+  async function deletarTreinamento(id) {
+    if (!confirm('Deseja excluir este treinamento?\nO evento na agenda também será removido.')) return
+    const { error } = await db.from('treinamentos').delete().eq('id', id)
+    if (!error) carregarTreinamentos()
+  }
+
+  // =============================================
+  // FILTROS
+  // =============================================
+  document.getElementById('busca').addEventListener('input', filtrarERenderizar)
+  document.getElementById('filtroStatus').addEventListener('change', filtrarERenderizar)
+  document.getElementById('filtroModalidade').addEventListener('change', filtrarERenderizar)
+
+  // =============================================
+  // INICIAR
+  // =============================================
+  carregarTreinamentos()
+</script>
 </body>
 </html>
-
