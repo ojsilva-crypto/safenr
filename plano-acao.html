@@ -29,30 +29,22 @@
     .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
     .btn-novo{background:linear-gradient(135deg,#34d399,#059669);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
     .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
-
-    /* RESUMO */
     .resumo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px}
     .resumo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s}
     .resumo-card:hover{background:rgba(255,255,255,.06)}
     .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
     .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-
-    /* FILTROS */
     .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
     .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
     .filtro-btn:hover,.filtro-btn.active{background:rgba(52,211,153,.12);border-color:#34d399;color:#34d399}
     .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:260px;margin-left:auto}
     .busca-input::placeholder{color:rgba(255,255,255,.3)}
     .busca-input:focus{border-color:#34d399}
-
-    /* KANBAN */
     .kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start}
     .kanban-col{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:16px}
     .kanban-col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
     .kanban-col-header h3{font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:8px}
     .col-count{background:rgba(255,255,255,.1);border-radius:20px;padding:2px 8px;font-size:.72rem;font-weight:700}
-
-    /* CARDS KANBAN */
     .acao-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;margin-bottom:10px;transition:all .2s;cursor:pointer;border-left:3px solid transparent}
     .acao-card:hover{background:rgba(255,255,255,.07);transform:translateY(-1px)}
     .acao-card.aberto   {border-left-color:#60a5fa}
@@ -73,18 +65,12 @@
     .btn-ac{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;cursor:pointer;padding:5px 10px;font-size:.75rem;color:rgba(255,255,255,.5);transition:all .2s}
     .btn-ac:hover{background:rgba(255,255,255,.08);color:#fff}
     .kanban-empty{font-size:.8rem;color:rgba(255,255,255,.2);text-align:center;padding:20px 0}
-
-    /* PROGRESSO */
     .progress-bar{background:rgba(255,255,255,.08);border-radius:20px;height:4px;margin-top:8px;overflow:hidden}
     .progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#34d399,#059669);transition:width .4s}
-
-    /* BADGE */
     .badge{padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700}
     .badge.alta  {background:rgba(248,113,113,.2);color:#f87171}
     .badge.media {background:rgba(251,191,36,.2);color:#fbbf24}
     .badge.baixa {background:rgba(74,222,128,.2);color:#4ade80}
-
-    /* MODAL */
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
     .modal-overlay.open{display:flex}
     .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:700px;max-height:92vh;overflow-y:auto}
@@ -134,10 +120,13 @@
     <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
     <a class="nav-item" href="./ocorrencias.html"><span class="icon">🚨</span> Ocorrencias</a>
     <a class="nav-item active" href="./plano-acao.html"><span class="icon">📌</span> Plano de Acao</a>
+    <a class="nav-item" href="./documentos.html"><span class="icon">🗂️</span> Documentos SST</a>
     <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item" href="./ambientes.html"><span class="icon">🏭</span> Ambientes</a>
+    <a class="nav-item" href="./ia-sugestoes.html"><span class="icon">🤖</span> IA Sugestoes</a>
     <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
     <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
@@ -154,31 +143,29 @@
     <button class="btn-novo" onclick="abrirModal()">+ Nova Acao</button>
   </div>
 
-  <!-- RESUMO -->
   <div class="resumo-grid">
     <div class="resumo-card" onclick="filtrar('',document.getElementById('fb-todos'))">
-      <div class="rc-valor" id="cnt-total"    style="color:#e2e8f0">0</div>
+      <div class="rc-valor" id="cnt-total"     style="color:#e2e8f0">0</div>
       <div class="rc-label">Total</div>
     </div>
     <div class="resumo-card" onclick="filtrar('aberto',document.getElementById('fb-aberto'))">
-      <div class="rc-valor" id="cnt-aberto"   style="color:#60a5fa">0</div>
+      <div class="rc-valor" id="cnt-aberto"    style="color:#60a5fa">0</div>
       <div class="rc-label">Em Aberto</div>
     </div>
     <div class="resumo-card" onclick="filtrar('andamento',document.getElementById('fb-andamento'))">
-      <div class="rc-valor" id="cnt-andamento"style="color:#fbbf24">0</div>
+      <div class="rc-valor" id="cnt-andamento" style="color:#fbbf24">0</div>
       <div class="rc-label">Em Andamento</div>
     </div>
     <div class="resumo-card" onclick="filtrar('concluido',document.getElementById('fb-concluido'))">
-      <div class="rc-valor" id="cnt-concluido"style="color:#4ade80">0</div>
+      <div class="rc-valor" id="cnt-concluido" style="color:#4ade80">0</div>
       <div class="rc-label">Concluidos</div>
     </div>
     <div class="resumo-card" onclick="filtrar('atrasado',document.getElementById('fb-atrasado'))">
-      <div class="rc-valor" id="cnt-atrasado" style="color:#f87171">0</div>
+      <div class="rc-valor" id="cnt-atrasado"  style="color:#f87171">0</div>
       <div class="rc-label">Atrasados</div>
     </div>
   </div>
 
-  <!-- PROGRESSO GERAL -->
   <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:20px">
     <div style="flex:1">
       <div style="display:flex;justify-content:space-between;margin-bottom:6px">
@@ -190,18 +177,16 @@
     <div style="font-size:.78rem;color:rgba(255,255,255,.4);text-align:right;min-width:120px" id="resumoTexto"></div>
   </div>
 
-  <!-- FILTROS -->
   <div class="filtros">
-    <button class="filtro-btn active" id="fb-todos"    onclick="filtrar('',this)">Todos</button>
-    <button class="filtro-btn"        id="fb-aberto"   onclick="filtrar('aberto',this)">🔵 Aberto</button>
-    <button class="filtro-btn"        id="fb-andamento"onclick="filtrar('andamento',this)">🟡 Andamento</button>
-    <button class="filtro-btn"        id="fb-concluido"onclick="filtrar('concluido',this)">🟢 Concluido</button>
-    <button class="filtro-btn"        id="fb-atrasado" onclick="filtrar('atrasado',this)">🔴 Atrasado</button>
-    <button class="filtro-btn"        id="fb-cancelado"onclick="filtrar('cancelado',this)">⚫ Cancelado</button>
+    <button class="filtro-btn active" id="fb-todos"     onclick="filtrar('',this)">Todos</button>
+    <button class="filtro-btn"        id="fb-aberto"    onclick="filtrar('aberto',this)">🔵 Aberto</button>
+    <button class="filtro-btn"        id="fb-andamento" onclick="filtrar('andamento',this)">🟡 Andamento</button>
+    <button class="filtro-btn"        id="fb-concluido" onclick="filtrar('concluido',this)">🟢 Concluido</button>
+    <button class="filtro-btn"        id="fb-atrasado"  onclick="filtrar('atrasado',this)">🔴 Atrasado</button>
+    <button class="filtro-btn"        id="fb-cancelado" onclick="filtrar('cancelado',this)">⚫ Cancelado</button>
     <input class="busca-input" type="text" placeholder="🔎 Buscar acao..." oninput="renderizar(getLista())"/>
   </div>
 
-  <!-- KANBAN -->
   <div class="kanban" id="kanbanBoard"></div>
 </div>
 
@@ -211,7 +196,6 @@
     <h3 id="modalTitulo">📌 Nova Acao — 5W2H</h3>
     <p class="modal-subtitulo">Preencha os campos do framework 5W2H para estruturar o plano de acao</p>
 
-    <!-- 5W2H -->
     <div class="w5h2-grid">
       <div class="w5h2-item">
         <div class="w5h2-label">🔴 What <span>— O que fazer?</span></div>
@@ -243,7 +227,6 @@
       </div>
     </div>
 
-    <!-- CLASSIFICAÇÃO -->
     <div class="secao-titulo">Classificacao e Origem</div>
     <div class="form-row">
       <div class="form-group">
@@ -289,7 +272,6 @@
       </div>
     </div>
 
-    <!-- AUTO -->
     <div class="form-row">
       <div class="form-group">
         <label>Registrado por <span class="auto-tag">AUTO</span></label>
@@ -320,7 +302,6 @@
 </div>
 
 <script>
-/* ── AUTH ── */
 var userData = localStorage.getItem('safenr_user');
 if (!userData) { window.location.href = './index.html'; }
 var user = JSON.parse(userData);
@@ -328,7 +309,6 @@ document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
 document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
 function sair(){ localStorage.removeItem('safenr_user'); window.location.href='./index.html'; }
 
-/* ── DADOS ── */
 var registros   = JSON.parse(localStorage.getItem('safenr_planos') || '[]');
 var editandoId  = null;
 var filtroAtivo = '';
@@ -340,7 +320,6 @@ function fmtDT(iso){
   return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
 }
 
-/* ── STATUS DINÂMICO ── */
 function calcStatus(r){
   if(r.status==='concluido'||r.status==='cancelado') return r.status;
   if(r.quando){
@@ -356,16 +335,15 @@ function diffDias(d){
   return Math.round((new Date(d+'T00:00:00')-hoje)/86400000);
 }
 
-/* ── FILTROS ── */
 function getLista(){
   var busca=document.querySelector('.busca-input').value.toLowerCase();
   return registros.filter(function(r){
     var st=calcStatus(r);
     if(filtroAtivo && st!==filtroAtivo) return false;
     if(busca &&
-      !(r.oque  ||'').toLowerCase().includes(busca)&&
-      !(r.quem  ||'').toLowerCase().includes(busca)&&
-      !(r.onde  ||'').toLowerCase().includes(busca)) return false;
+      !(r.oque ||'').toLowerCase().includes(busca)&&
+      !(r.quem ||'').toLowerCase().includes(busca)&&
+      !(r.onde ||'').toLowerCase().includes(busca)) return false;
     return true;
   });
 }
@@ -377,30 +355,27 @@ function filtrar(s,btn){
   renderizar(getLista());
 }
 
-/* ── CONTADORES ── */
 function atualizarContadores(){
   var total=registros.length;
   var cnt={aberto:0,andamento:0,concluido:0,atrasado:0,cancelado:0};
   registros.forEach(function(r){ var s=calcStatus(r); if(cnt[s]!==undefined) cnt[s]++; });
-  document.getElementById('cnt-total').textContent    =total;
-  document.getElementById('cnt-aberto').textContent   =cnt.aberto;
-  document.getElementById('cnt-andamento').textContent=cnt.andamento;
-  document.getElementById('cnt-concluido').textContent=cnt.concluido;
-  document.getElementById('cnt-atrasado').textContent =cnt.atrasado;
-  document.getElementById('totalRegistros').textContent=total+' acao(oes)';
-  /* Progresso */
+  document.getElementById('cnt-total').textContent     = total;
+  document.getElementById('cnt-aberto').textContent    = cnt.aberto;
+  document.getElementById('cnt-andamento').textContent = cnt.andamento;
+  document.getElementById('cnt-concluido').textContent = cnt.concluido;
+  document.getElementById('cnt-atrasado').textContent  = cnt.atrasado;
+  document.getElementById('totalRegistros').textContent= total+' acao(oes)';
   var pct=total>0?Math.round((cnt.concluido/total)*100):0;
-  document.getElementById('pctGeral').textContent=pct+'%';
-  document.getElementById('barGeral').style.width=pct+'%';
-  document.getElementById('resumoTexto').innerHTML=cnt.concluido+' concluidas<br>'+cnt.atrasado+' atrasadas<br>'+cnt.cancelado+' canceladas';
+  document.getElementById('pctGeral').textContent  = pct+'%';
+  document.getElementById('barGeral').style.width  = pct+'%';
+  document.getElementById('resumoTexto').innerHTML = cnt.concluido+' concluidas<br>'+cnt.atrasado+' atrasadas<br>'+cnt.cancelado+' canceladas';
 }
 
-/* ── KANBAN ── */
 var colunas=[
-  {key:'aberto',   label:'🔵 Em Aberto',    cor:'#60a5fa'},
-  {key:'andamento',label:'🟡 Em Andamento',  cor:'#fbbf24'},
-  {key:'concluido',label:'🟢 Concluidos',    cor:'#4ade80'},
-  {key:'atrasado', label:'🔴 Atrasados',     cor:'#f87171'}
+  {key:'aberto',   label:'🔵 Em Aberto',   cor:'#60a5fa'},
+  {key:'andamento',label:'🟡 Em Andamento', cor:'#fbbf24'},
+  {key:'concluido',label:'🟢 Concluidos',   cor:'#4ade80'},
+  {key:'atrasado', label:'🔴 Atrasados',    cor:'#f87171'}
 ];
 
 function renderizar(lista){
@@ -420,22 +395,20 @@ function renderizar(lista){
         var diff =diffDias(r.quando);
         var prazoClass='prazo-ok', prazoTxt='';
         if(diff!==null){
-          if(diff<0)      { prazoClass='prazo-atrasado'; prazoTxt='⛔ '+Math.abs(diff)+' dias em atraso'; }
-          else if(diff===0){ prazoClass='prazo-breve';   prazoTxt='⚠️ Vence hoje'; }
-          else if(diff<=7) { prazoClass='prazo-breve';   prazoTxt='⚠️ Vence em '+diff+' dias'; }
-          else             { prazoClass='prazo-ok';      prazoTxt='✅ Prazo: '+fmt(r.quando); }
+          if(diff<0)       { prazoClass='prazo-atrasado'; prazoTxt='⛔ '+Math.abs(diff)+' dias em atraso'; }
+          else if(diff===0){ prazoClass='prazo-breve';    prazoTxt='⚠️ Vence hoje'; }
+          else if(diff<=7) { prazoClass='prazo-breve';    prazoTxt='⚠️ Vence em '+diff+' dias'; }
+          else             { prazoClass='prazo-ok';       prazoTxt='✅ Prazo: '+fmt(r.quando); }
         }
         html+=
           '<div class="acao-card '+st+'" onclick="ver('+r.id+')">'+
             '<div class="ac-titulo">'+r.oque+'</div>'+
-            '<div class="ac-origem">'+
-              (r.origem?'📎 '+r.origem:'')+(r.nr?' · '+r.nr:'')+
-            '</div>'+
+            '<div class="ac-origem">'+(r.origem?'📎 '+r.origem:'')+(r.nr?' · '+r.nr:'')+'</div>'+
             '<div class="ac-meta">'+
-              '<div class="ac-meta-item"><strong>'+( r.quem||'--')+'</strong>Responsavel</div>'+
-              '<div class="ac-meta-item"><strong>'+(r.onde||'--' )+'</strong>Local</div>'+
+              '<div class="ac-meta-item"><strong>'+(r.quem ||'--')+'</strong>Responsavel</div>'+
+              '<div class="ac-meta-item"><strong>'+(r.onde ||'--')+'</strong>Local</div>'+
               '<div class="ac-meta-item"><strong>'+(r.quanto||'--')+'</strong>Custo</div>'+
-              '<div class="ac-meta-item"><span class="badge '+(r.prioridade||'media')+'">'+( r.prioridade||'media')+'</span></div>'+
+              '<div class="ac-meta-item"><span class="badge '+(r.prioridade||'media')+'">'+(r.prioridade||'media')+'</span></div>'+
             '</div>'+
             (prazoTxt?'<div class="ac-prazo '+prazoClass+'">'+prazoTxt+'</div>':'')+
             '<div class="ac-acoes" onclick="event.stopPropagation()">'+
@@ -452,7 +425,6 @@ function renderizar(lista){
   });
 }
 
-/* ── MUDAR STATUS RÁPIDO ── */
 function mudarStatus(id,novoStatus){
   var idx=registros.findIndex(function(r){return r.id===id;});
   if(idx<0) return;
@@ -461,7 +433,6 @@ function mudarStatus(id,novoStatus){
   renderizar(getLista());
 }
 
-/* ── MODAL ── */
 function carregarColabs(){
   var colabs=JSON.parse(localStorage.getItem('safenr_colaboradores')||'[]');
   var dl=document.getElementById('listaColabs'); dl.innerHTML='';
@@ -470,13 +441,13 @@ function carregarColabs(){
 
 function abrirModal(id){
   editandoId=id||null;
-  document.getElementById('modalTitulo').textContent=(id?'✏️ Editar':'📌 Nova')+ ' Acao — 5W2H';
+  document.getElementById('modalTitulo').textContent=(id?'✏️ Editar':'📌 Nova')+' Acao — 5W2H';
   carregarColabs();
   ['f_oque','f_porque','f_quem','f_onde','f_como','f_quanto','f_nr','f_obs'].forEach(function(f){document.getElementById(f).value='';});
-  document.getElementById('f_quando').value   ='';
+  document.getElementById('f_quando').value    ='';
   document.getElementById('f_prioridade').value='alta';
-  document.getElementById('f_status').value   ='aberto';
-  document.getElementById('f_origem').value   ='';
+  document.getElementById('f_status').value    ='aberto';
+  document.getElementById('f_origem').value    ='';
   document.getElementById('f_regPor').value=user.nome||'Usuario';
   document.getElementById('f_regEm').value=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
   if(id){
@@ -502,8 +473,8 @@ function abrirModal(id){
 function fecharModal(){document.getElementById('modalForm').classList.remove('open');editandoId=null;}
 
 function salvar(){
-  var oque=document.getElementById('f_oque').value.trim();
-  var quem=document.getElementById('f_quem').value.trim();
+  var oque  =document.getElementById('f_oque').value.trim();
+  var quem  =document.getElementById('f_quem').value.trim();
   var quando=document.getElementById('f_quando').value;
   if(!oque||!quem||!quando){alert('Preencha: O Que, Quem e Quando.');return;}
   var dados={
@@ -527,8 +498,7 @@ function salvar(){
     var nId=registros.length>0?Math.max.apply(null,registros.map(function(r){return r.id;}))+1:1;
     registros.push(Object.assign({id:nId,registradoPor:user.nome||'Usuario',registradoEm:new Date().toISOString()},dados));
   }
-  /* Agenda: cria evento de prazo */
-  vincularAgenda(editandoId||registros[registros.length-1].id, dados.oque, dados.quando, dados.quem);
+  vincularAgenda(editandoId||registros[registros.length-1].id,dados.oque,dados.quando,dados.quem);
   salvarStorage();
   fecharModal();
   renderizar(getLista());
@@ -560,19 +530,19 @@ function ver(id){
   document.getElementById('modalVerConteudo').innerHTML=
     '<div style="background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.15);border-radius:12px;padding:16px;margin-bottom:16px">'+
       '<div style="font-size:.72rem;font-weight:800;color:#34d399;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">5W2H</div>'+
-      row('🔴 O que (What)',   r.oque    ||'--')+
-      row('🟠 Por que (Why)',  r.porque  ||'--')+
-      row('🟡 Quem (Who)',     r.quem    ||'--')+
+      row('🔴 O que (What)',   r.oque   ||'--')+
+      row('🟠 Por que (Why)',  r.porque ||'--')+
+      row('🟡 Quem (Who)',     r.quem   ||'--')+
       row('🟢 Quando (When)',  fmt(r.quando))+
-      row('🔵 Onde (Where)',   r.onde    ||'--')+
-      row('🟣 Como (How)',     r.como    ||'--')+
+      row('🔵 Onde (Where)',   r.onde   ||'--')+
+      row('🟣 Como (How)',     r.como   ||'--')+
       row('⚪ Quanto (How Much)',r.quanto||'--')+
     '</div>'+
-    row('Prioridade',  '<span class="badge '+(r.prioridade||'media')+'">'+(r.prioridade||'--')+'</span>')+
-    row('Status',      '<span style="color:'+( stCores[st]||'#888')+'">●</span> '+st)+
-    row('Origem',      r.origem||'--')+
-    row('NR',          r.nr    ||'--')+
-    row('Observacoes', r.obs   ||'--')+
+    row('Prioridade',    '<span class="badge '+(r.prioridade||'media')+'">'+(r.prioridade||'--')+'</span>')+
+    row('Status',        '<span style="color:'+(stCores[st]||'#888')+'">●</span> '+st)+
+    row('Origem',        r.origem||'--')+
+    row('NR',            r.nr    ||'--')+
+    row('Observacoes',   r.obs   ||'--')+
     row('Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+
     row('Registrado em', '<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
   document.getElementById('modalVer').classList.add('open');
@@ -583,16 +553,20 @@ function fecharVer(){document.getElementById('modalVer').classList.remove('open'
 document.getElementById('modalForm').addEventListener('click',function(e){if(e.target===this)fecharModal();});
 document.getElementById('modalVer').addEventListener('click', function(e){if(e.target===this)fecharVer();});
 
-/* ── BADGE NOTIF ── */
+/* ── BADGE NOTIFICAÇÕES ── */
 (function(){
-  var n=JSON.parse(localStorage.getItem('safenr_notificacoes')||'[]');
-  var nl=n.filter(function(x){return!x.lida;}).length;
-  var link=document.querySelector('a[href="./notificacoes.html"]');
-  if(link&&nl>0){var b=document.createElement('span');b.className='notif-badge';b.textContent=nl;link.appendChild(b);}
+  var n  = JSON.parse(localStorage.getItem('safenr_notificacoes')||'[]');
+  var nl = n.filter(function(x){ return !x.lida; }).length;
+  var link = document.querySelector('a[href="./notificacoes.html"]');
+  if (link && nl > 0) {
+    var b = document.createElement('span');
+    b.className   = 'notif-badge';
+    b.textContent = nl;
+    link.appendChild(b);
+  }
 })();
 
 renderizar(getLista());
 </script>
 </body>
 </html>
-
