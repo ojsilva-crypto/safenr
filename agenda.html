@@ -104,16 +104,18 @@
   </div>
   <nav class="nav">
     <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
+    <a class="nav-item active" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
     <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
+    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
     <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item active" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
-    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configuracoes</a>
+    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
+    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
@@ -126,14 +128,13 @@
   <div class="topbar">
     <div class="topbar-left">
       <h2>📅 Agenda de Pendencias</h2>
-      <p>Calendario integrado com Checklists, EPIs e Funcionarios</p>
+      <p>Calendario integrado com Checklists, EPIs e Colaboradores</p>
     </div>
     <button class="btn-novo" onclick="abrirModal()">+ Nova Pendencia</button>
   </div>
 
   <div class="agenda-layout">
     <div class="col-esq">
-      <!-- CALENDARIO -->
       <div class="panel">
         <div class="cal-header">
           <button class="cal-nav" onclick="mesAnterior()">&#8249;</button>
@@ -142,7 +143,6 @@
         </div>
         <div class="cal-grid" id="calGrid"></div>
       </div>
-      <!-- PROXIMOS 30 DIAS -->
       <div class="panel">
         <h4>🔔 Proximas Pendencias (30 dias)</h4>
         <div id="proximosLista"></div>
@@ -150,12 +150,10 @@
     </div>
 
     <div class="col-dir">
-      <!-- DIA SELECIONADO -->
       <div class="panel">
         <h4>📌 <span id="diaTitulo">Selecione um dia</span></h4>
         <div id="eventosDia"><div class="empty-panel">Clique em um dia do calendario.</div></div>
       </div>
-      <!-- IA EPI -->
       <div class="panel">
         <h4>🤖 IA — Gestao de EPIs</h4>
         <p style="font-size:.74rem;color:rgba(255,255,255,.3);margin-bottom:12px">Analise inteligente de frequencia de troca</p>
@@ -186,7 +184,7 @@
       </select>
     </div>
     <div class="form-group">
-      <label>Funcionario (opcional)</label>
+      <label>Colaborador (opcional)</label>
       <select id="f_funcionario">
         <option value="">-- Nenhum --</option>
       </select>
@@ -203,7 +201,6 @@
 </div>
 
 <script>
-// AUTH
 var userData = localStorage.getItem('safenr_user');
 if (!userData) { window.location.href = './index.html'; }
 var user = JSON.parse(userData);
@@ -211,7 +208,6 @@ document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
 document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
 function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
 
-// VARS
 var hoje = new Date();
 var anoAtual = hoje.getFullYear();
 var mesAtual = hoje.getMonth();
@@ -220,7 +216,6 @@ var eventos = JSON.parse(localStorage.getItem('safenr_agenda') || '[]');
 
 function salvarStorage() { localStorage.setItem('safenr_agenda', JSON.stringify(eventos)); }
 
-// IMPORTAR EPIs DOS FUNCIONARIOS AUTOMATICAMENTE
 function importarEPIs() {
   var funcs = JSON.parse(localStorage.getItem('safenr_funcionarios') || '[]');
   var ids = [];
@@ -242,7 +237,7 @@ function importarEPIs() {
         data: epi.validade,
         tipo: 'epi',
         funcionario: func.nome,
-        desc: 'Vencimento do CA do EPI ' + epi.nome + ' — Funcionario: ' + func.nome,
+        desc: 'Vencimento do CA do EPI ' + epi.nome + ' — Colaborador: ' + func.nome,
         status: 'pendente',
         auto: true
       });
@@ -252,7 +247,6 @@ function importarEPIs() {
 }
 importarEPIs();
 
-// UTILS
 function fmt(d) {
   if (!d) return '--';
   var p = d.split('-');
@@ -279,7 +273,6 @@ function getEventosDia(a, m, d) {
   return eventos.filter(function(e) { return e.data === str; });
 }
 
-// NAVEGACAO
 function mesAnterior() {
   mesAtual--;
   if (mesAtual < 0) { mesAtual = 11; anoAtual--; }
@@ -293,7 +286,6 @@ function proximoMes() {
   renderProximos();
 }
 
-// CALENDARIO
 function renderCal() {
   document.getElementById('mesAnoTitulo').textContent = fmtMes(anoAtual, mesAtual);
   var grid = document.getElementById('calGrid');
@@ -321,7 +313,6 @@ function renderCal() {
     var isHoje = (dia === hoje.getDate() && mesAtual === hoje.getMonth() && anoAtual === hoje.getFullYear());
     var isSel = diaSel && (dia === diaSel.dia && mesAtual === diaSel.mes && anoAtual === diaSel.ano);
     el.className = 'cal-dia' + (isHoje ? ' hoje' : '') + (isSel ? ' selecionado' : '');
-
     var evsDia = getEventosDia(anoAtual, mesAtual, dia);
     var html = '<div class="cal-dia-num">' + dia + '</div><div>';
     var maxPontos = 4;
@@ -333,11 +324,9 @@ function renderCal() {
     }
     html += '</div>';
     el.innerHTML = html;
-
     (function(d) {
       el.onclick = function() { selecionarDia(anoAtual, mesAtual, d); };
     })(dia);
-
     grid.appendChild(el);
   }
 
@@ -351,7 +340,6 @@ function renderCal() {
   }
 }
 
-// SELECIONAR DIA
 function selecionarDia(a, m, d) {
   diaSel = { ano: a, mes: m, dia: d };
   renderCal();
@@ -407,7 +395,6 @@ function excluirEv(btn) {
   if (diaSel) selecionarDia(diaSel.ano, diaSel.mes, diaSel.dia);
 }
 
-// PROXIMOS 30 DIAS
 function renderProximos() {
   var div = document.getElementById('proximosLista');
   var agora = new Date(); agora.setHours(0,0,0,0);
@@ -438,13 +425,12 @@ function renderProximos() {
   }
 }
 
-// IA EPI
 function renderIA() {
   var funcs = JSON.parse(localStorage.getItem('safenr_funcionarios') || '[]');
   var div = document.getElementById('iaLista');
   div.innerHTML = '';
   if (funcs.length === 0) {
-    div.innerHTML = '<div class="empty-panel">Nenhum funcionario cadastrado.<br>Cadastre funcionarios com EPIs para ativar a IA.</div>';
+    div.innerHTML = '<div class="empty-panel">Nenhum colaborador cadastrado.<br>Cadastre colaboradores com EPIs para ativar a IA.</div>';
     return;
   }
   var analises = [];
@@ -495,7 +481,7 @@ function renderIA() {
     return o[a.nivel] - o[b.nivel];
   });
   if (analises.length === 0) {
-    div.innerHTML = '<div class="empty-panel">Nenhum EPI vinculado.<br>Adicione EPIs no cadastro de funcionarios.</div>';
+    div.innerHTML = '<div class="empty-panel">Nenhum EPI vinculado.<br>Adicione EPIs no cadastro de colaboradores.</div>';
     return;
   }
   var max = 8;
@@ -518,7 +504,6 @@ function renderIA() {
   }
 }
 
-// MODAL
 function abrirModal() {
   document.getElementById('f_titulo').value = '';
   document.getElementById('f_data').value = diaSel
@@ -574,7 +559,6 @@ document.getElementById('modalForm').addEventListener('click', function(e) {
   if (e.target === this) fecharModal();
 });
 
-// INIT
 renderCal();
 renderProximos();
 renderIA();
