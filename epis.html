@@ -17,6 +17,7 @@
     .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
     .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
     .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .notif-badge{background:#f87171;color:#fff;border-radius:20px;padding:1px 7px;font-size:.65rem;font-weight:700;margin-left:auto}
     .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
     .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
     .user-info p{font-size:.82rem;font-weight:600}
@@ -39,9 +40,9 @@
     tr:last-child td{border-bottom:none}
     tr:hover td{background:rgba(255,255,255,.02)}
     .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
-    .badge.ok{background:rgba(74,222,128,.15);color:#4ade80}
+    .badge.ok     {background:rgba(74,222,128,.15);color:#4ade80}
     .badge.vencido{background:rgba(248,113,113,.15);color:#f87171}
-    .badge.avencer{background:rgba(251,191,36,.15);color:#fbbf24}
+    .badge.avencer{background:rgba(251,191,36,.15); color:#fbbf24}
     .btn-acao{background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:8px;font-size:.85rem;transition:background .2s}
     .btn-acao:hover{background:rgba(255,255,255,.08)}
     .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3)}
@@ -84,10 +85,15 @@
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
     <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
+    <a class="nav-item" href="./ocorrencias.html"><span class="icon">🚨</span> Ocorrencias</a>
+    <a class="nav-item" href="./plano-acao.html"><span class="icon">📌</span> Plano de Acao</a>
+    <a class="nav-item" href="./documentos.html"><span class="icon">🗂️</span> Documentos SST</a>
     <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item active" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item" href="./ambientes.html"><span class="icon">🏭</span> Ambientes</a>
+    <a class="nav-item" href="./ia-sugestoes.html"><span class="icon">🤖</span> IA Sugestoes</a>
     <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
     <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
@@ -203,7 +209,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
-      <button class="btn-salvar" onclick="salvar()">Salvar</button>
+      <button class="btn-salvar"   onclick="salvar()">Salvar</button>
     </div>
   </div>
 </div>
@@ -236,39 +242,32 @@ function salvarStorage() { localStorage.setItem('safenr_epis', JSON.stringify(re
 function fmt(d) {
   if (!d) return '--';
   var p = d.split('-');
-  return p[2] + '/' + p[1] + '/' + p[0];
+  return p[2]+'/'+p[1]+'/'+p[0];
 }
-
 function fmtDT(iso) {
   if (!iso) return '--';
-  return new Date(iso).toLocaleString('pt-BR', {
-    day:'2-digit', month:'2-digit', year:'numeric',
-    hour:'2-digit', minute:'2-digit'
-  });
+  return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
 }
 
 function getStatusCA(val) {
   if (!val) return 'ok';
-  var d = new Date(val + 'T00:00:00');
-  var h = new Date(); h.setHours(0,0,0,0);
+  var d    = new Date(val+'T00:00:00');
+  var h    = new Date(); h.setHours(0,0,0,0);
   var diff = (d - h) / 86400000;
-  if (diff < 0)  return 'vencido';
+  if (diff < 0)   return 'vencido';
   if (diff <= 30) return 'avencer';
   return 'ok';
 }
-
-function labelCA(s) {
-  return { ok:'CA Valido', vencido:'CA Vencido', avencer:'A Vencer' }[s] || s;
-}
+function labelCA(s) { return {ok:'CA Valido',vencido:'CA Vencido',avencer:'A Vencer'}[s]||s; }
 
 function getLista() {
   if (filtroAtivo === 'todos') return registros;
-  return registros.filter(function(r) { return getStatusCA(r.ca_validade) === filtroAtivo; });
+  return registros.filter(function(r){ return getStatusCA(r.ca_validade) === filtroAtivo; });
 }
 
 function filtrar(s, btn) {
   filtroAtivo = s;
-  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.filtro-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   renderizar(getLista());
 }
@@ -277,26 +276,26 @@ function renderizar(lista) {
   var tbody = document.getElementById('tabelaBody');
   var empty = document.getElementById('emptyState');
   tbody.innerHTML = '';
-  document.getElementById('totalRegistros').textContent = registros.length + ' registro(s)';
-  if (lista.length === 0) { empty.style.display = 'block'; return; }
+  document.getElementById('totalRegistros').textContent = registros.length+' registro(s)';
+  if (lista.length === 0) { empty.style.display='block'; return; }
   empty.style.display = 'none';
   lista.forEach(function(r) {
     var st = getStatusCA(r.ca_validade);
     var tr = document.createElement('tr');
     tr.innerHTML =
-      '<td style="color:rgba(255,255,255,.3);font-size:.8rem">#' + String(r.id).padStart(3,'0') + '</td>' +
-      '<td><strong>' + (r.nome || '--') + '</strong></td>' +
-      '<td>' + (r.tipo || '--') + '</td>' +
-      '<td>' + (r.ca || '--') + '</td>' +
-      '<td>' + fmt(r.ca_validade) + '</td>' +
-      '<td>' + (r.fornecedor || '--') + '</td>' +
-      '<td>' + (r.estoque || 0) + ' un.</td>' +
-      '<td><span class="badge ' + st + '">' + labelCA(st) + '</span></td>' +
-      '<td style="font-size:.82rem">👤 ' + (r.registradoPor || '--') + '</td>' +
-      '<td>' +
-        '<button class="btn-acao" onclick="ver(' + r.id + ')" title="Visualizar">👁️</button>' +
-        '<button class="btn-acao" onclick="editar(' + r.id + ')" title="Editar">✏️</button>' +
-        '<button class="btn-acao" onclick="excluir(' + r.id + ')" title="Excluir">🗑️</button>' +
+      '<td style="color:rgba(255,255,255,.3);font-size:.8rem">#'+String(r.id).padStart(3,'0')+'</td>'+
+      '<td><strong>'+(r.nome||'--')+'</strong></td>'+
+      '<td>'+(r.tipo||'--')+'</td>'+
+      '<td>'+(r.ca||'--')+'</td>'+
+      '<td>'+fmt(r.ca_validade)+'</td>'+
+      '<td>'+(r.fornecedor||'--')+'</td>'+
+      '<td>'+(r.estoque||0)+' un.</td>'+
+      '<td><span class="badge '+st+'">'+labelCA(st)+'</span></td>'+
+      '<td style="font-size:.82rem">👤 '+(r.registradoPor||'--')+'</td>'+
+      '<td>'+
+        '<button class="btn-acao" onclick="ver('+r.id+')"    title="Visualizar">👁️</button>'+
+        '<button class="btn-acao" onclick="editar('+r.id+')" title="Editar">✏️</button>'+
+        '<button class="btn-acao" onclick="excluir('+r.id+')"title="Excluir">🗑️</button>'+
       '</td>';
     tbody.appendChild(tr);
   });
@@ -305,58 +304,50 @@ function renderizar(lista) {
 function abrirModal(id) {
   editandoId = id || null;
   document.getElementById('modalTitulo').textContent = id ? 'Editar EPI' : 'Novo EPI';
-  ['f_nome','f_ca','f_ca_validade','f_fornecedor','f_estoque','f_valor','f_obs'].forEach(function(f) {
+  ['f_nome','f_ca','f_ca_validade','f_fornecedor','f_estoque','f_valor','f_obs'].forEach(function(f){
     document.getElementById(f).value = '';
   });
-  document.getElementById('f_tipo').value = '';
-  document.getElementById('f_regPor').value = user.nome || 'Usuario';
-  document.getElementById('f_regEm').value = new Date().toLocaleString('pt-BR', {
-    day:'2-digit', month:'2-digit', year:'numeric',
-    hour:'2-digit', minute:'2-digit', second:'2-digit'
-  });
+  document.getElementById('f_tipo').value   = '';
+  document.getElementById('f_regPor').value = user.nome||'Usuario';
+  document.getElementById('f_regEm').value  = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
   if (id) {
-    var r = registros.find(function(x) { return x.id === id; });
-    document.getElementById('f_nome').value        = r.nome || '';
-    document.getElementById('f_tipo').value        = r.tipo || '';
-    document.getElementById('f_ca').value          = r.ca || '';
-    document.getElementById('f_ca_validade').value = r.ca_validade || '';
-    document.getElementById('f_fornecedor').value  = r.fornecedor || '';
-    document.getElementById('f_estoque').value     = r.estoque || '';
-    document.getElementById('f_valor').value       = r.valor || '';
-    document.getElementById('f_obs').value         = r.obs || '';
-    document.getElementById('f_regPor').value      = r.registradoPor || user.nome;
+    var r = registros.find(function(x){ return x.id===id; });
+    document.getElementById('f_nome').value        = r.nome        ||'';
+    document.getElementById('f_tipo').value        = r.tipo        ||'';
+    document.getElementById('f_ca').value          = r.ca          ||'';
+    document.getElementById('f_ca_validade').value = r.ca_validade ||'';
+    document.getElementById('f_fornecedor').value  = r.fornecedor  ||'';
+    document.getElementById('f_estoque').value     = r.estoque     ||'';
+    document.getElementById('f_valor').value       = r.valor       ||'';
+    document.getElementById('f_obs').value         = r.obs         ||'';
+    document.getElementById('f_regPor').value      = r.registradoPor||user.nome;
     document.getElementById('f_regEm').value       = fmtDT(r.registradoEm);
   }
   document.getElementById('modalForm').classList.add('open');
 }
 
-function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId = null; }
+function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId=null; }
 
 function salvar() {
   var nome = document.getElementById('f_nome').value.trim();
   var tipo = document.getElementById('f_tipo').value;
   var ca   = document.getElementById('f_ca').value.trim();
-  if (!nome || !tipo || !ca) { alert('Preencha Nome, Tipo e Numero CA.'); return; }
+  if (!nome||!tipo||!ca) { alert('Preencha Nome, Tipo e Numero CA.'); return; }
   var dados = {
-    nome: nome, tipo: tipo, ca: ca,
+    nome:        nome, tipo:tipo, ca:ca,
     ca_validade: document.getElementById('f_ca_validade').value,
     fornecedor:  document.getElementById('f_fornecedor').value.trim(),
-    estoque:     parseInt(document.getElementById('f_estoque').value) || 0,
-    valor:       parseFloat(document.getElementById('f_valor').value) || 0,
+    estoque:     parseInt(document.getElementById('f_estoque').value)||0,
+    valor:       parseFloat(document.getElementById('f_valor').value)||0,
     obs:         document.getElementById('f_obs').value.trim()
   };
   if (editandoId) {
-    var idx = registros.findIndex(function(r) { return r.id === editandoId; });
+    var idx = registros.findIndex(function(r){ return r.id===editandoId; });
     registros[idx] = Object.assign({}, registros[idx], dados);
   } else {
     var nId = registros.length > 0
-      ? Math.max.apply(null, registros.map(function(r) { return r.id; })) + 1
-      : 1;
-    registros.push(Object.assign({
-      id: nId,
-      registradoPor: user.nome || 'Usuario',
-      registradoEm: new Date().toISOString()
-    }, dados));
+      ? Math.max.apply(null, registros.map(function(r){ return r.id; }))+1 : 1;
+    registros.push(Object.assign({id:nId, registradoPor:user.nome||'Usuario', registradoEm:new Date().toISOString()}, dados));
   }
   salvarStorage();
   fecharModal();
@@ -367,39 +358,49 @@ function editar(id) { abrirModal(id); }
 
 function excluir(id) {
   if (!confirm('Excluir este EPI?')) return;
-  registros = registros.filter(function(r) { return r.id !== id; });
+  registros = registros.filter(function(r){ return r.id!==id; });
   salvarStorage();
   renderizar(getLista());
 }
 
 function ver(id) {
-  var r  = registros.find(function(x) { return x.id === id; });
+  var r  = registros.find(function(x){ return x.id===id; });
   var st = getStatusCA(r.ca_validade);
-  function row(l, v) {
-    return '<div class="detalhe-row">' +
-      '<span class="detalhe-label">' + l + '</span>' +
-      '<span class="detalhe-valor">' + v + '</span>' +
-      '</div>';
+  function row(l,v){
+    return '<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>';
   }
   document.getElementById('modalVerConteudo').innerHTML =
-    row('Nome',          r.nome || '--') +
-    row('Tipo',          r.tipo || '--') +
-    row('Numero CA',     r.ca   || '--') +
-    row('Validade CA',   fmt(r.ca_validade)) +
-    row('Status CA',     '<span class="badge ' + st + '">' + labelCA(st) + '</span>') +
-    row('Fornecedor',    r.fornecedor || '--') +
-    row('Estoque',       (r.estoque || 0) + ' unidades') +
-    row('Valor Unitario',r.valor ? 'R$ ' + parseFloat(r.valor).toFixed(2) : '--') +
-    row('Observacoes',   r.obs || '--') +
-    row('Registrado por','<span style="color:#00d4ff">' + (r.registradoPor || '--') + '</span>') +
-    row('Registrado em', '<span style="color:#00d4ff">' + fmtDT(r.registradoEm) + '</span>');
+    row('Nome',          r.nome||'--')+
+    row('Tipo',          r.tipo||'--')+
+    row('Numero CA',     r.ca  ||'--')+
+    row('Validade CA',   fmt(r.ca_validade))+
+    row('Status CA',     '<span class="badge '+st+'">'+labelCA(st)+'</span>')+
+    row('Fornecedor',    r.fornecedor||'--')+
+    row('Estoque',       (r.estoque||0)+' unidades')+
+    row('Valor Unitario',r.valor?'R$ '+parseFloat(r.valor).toFixed(2):'--')+
+    row('Observacoes',   r.obs||'--')+
+    row('Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+
+    row('Registrado em', '<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
   document.getElementById('modalVer').classList.add('open');
 }
 
 function fecharVer() { document.getElementById('modalVer').classList.remove('open'); }
 
-document.getElementById('modalForm').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
-document.getElementById('modalVer').addEventListener('click',  function(e) { if (e.target === this) fecharVer(); });
+document.getElementById('modalForm').addEventListener('click', function(e){ if(e.target===this) fecharModal(); });
+document.getElementById('modalVer').addEventListener('click',  function(e){ if(e.target===this) fecharVer(); });
+
+/* ── BADGE NOTIFICAÇÕES ── */
+(function(){
+  var n  = JSON.parse(localStorage.getItem('safenr_notificacoes')||'[]');
+  var nl = n.filter(function(x){ return !x.lida; }).length;
+  var link = document.querySelector('a[href="./notificacoes.html"]');
+  if (link && nl > 0) {
+    var b = document.createElement('span');
+    b.className   = 'notif-badge';
+    b.textContent = nl;
+    link.appendChild(b);
+  }
+})();
 
 renderizar(getLista());
 </script>
