@@ -29,27 +29,21 @@
     .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
     .btn-novo{background:linear-gradient(135deg,#60a5fa,#2563eb);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
     .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
-
-    /* RESUMO */
     .resumo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
     .resumo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s}
     .resumo-card:hover{background:rgba(255,255,255,.06)}
     .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
     .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-
-    /* FILTROS */
     .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
     .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
     .filtro-btn:hover,.filtro-btn.active{background:rgba(96,165,250,.12);border-color:#60a5fa;color:#60a5fa}
     .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:240px;margin-left:auto}
     .busca-input::placeholder{color:rgba(255,255,255,.3)}
     .busca-input:focus{border-color:#60a5fa}
-
-    /* GRID DE DOCUMENTOS */
     .docs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
     .doc-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;transition:all .2s;border-top:3px solid #60a5fa;position:relative}
     .doc-card:hover{background:rgba(255,255,255,.06);transform:translateY(-2px)}
-    .doc-card.vencido   {border-top-color:#f87171}
+    .doc-card.vencido    {border-top-color:#f87171}
     .doc-card.vence-breve{border-top-color:#fbbf24}
     .doc-card.sem-validade{border-top-color:rgba(255,255,255,.2)}
     .doc-icon{font-size:2.2rem;margin-bottom:12px}
@@ -59,10 +53,10 @@
     .doc-info-row{font-size:.78rem;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:6px}
     .doc-info-row strong{color:rgba(255,255,255,.75)}
     .doc-validade{font-size:.8rem;font-weight:700;padding:6px 12px;border-radius:8px;text-align:center;margin-bottom:12px}
-    .val-ok      {background:rgba(74,222,128,.1); color:#4ade80;border:1px solid rgba(74,222,128,.2)}
-    .val-breve   {background:rgba(251,191,36,.1);  color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
-    .val-vencida {background:rgba(248,113,113,.1); color:#f87171;border:1px solid rgba(248,113,113,.2)}
-    .val-sem     {background:rgba(255,255,255,.04);color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.08)}
+    .val-ok     {background:rgba(74,222,128,.1); color:#4ade80;border:1px solid rgba(74,222,128,.2)}
+    .val-breve  {background:rgba(251,191,36,.1);  color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
+    .val-vencida{background:rgba(248,113,113,.1); color:#f87171;border:1px solid rgba(248,113,113,.2)}
+    .val-sem    {background:rgba(255,255,255,.04);color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.08)}
     .doc-acoes{display:flex;gap:8px;justify-content:flex-end}
     .btn-ac{background:none;border:1px solid rgba(255,255,255,.1);border-radius:8px;cursor:pointer;padding:6px 12px;font-size:.8rem;color:rgba(255,255,255,.6);transition:all .2s}
     .btn-ac:hover{background:rgba(255,255,255,.08);color:#fff}
@@ -70,8 +64,6 @@
     .doc-link:hover{background:rgba(96,165,250,.15)}
     .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3);grid-column:1/-1}
     .empty-state div{font-size:3rem;margin-bottom:12px}
-
-    /* MODAL */
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
     .modal-overlay.open{display:flex}
     .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:620px;max-height:92vh;overflow-y:auto}
@@ -86,12 +78,6 @@
     .form-group textarea{resize:vertical;min-height:80px}
     .auto-field{background:rgba(0,212,255,.06)!important;border-color:rgba(0,212,255,.2)!important;color:rgba(255,255,255,.6)!important;cursor:not-allowed!important}
     .auto-tag{font-size:.68rem;color:#00d4ff;background:rgba(0,212,255,.1);border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:600}
-    .upload-area{border:2px dashed rgba(96,165,250,.3);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(96,165,250,.03)}
-    .upload-area:hover{border-color:#60a5fa;background:rgba(96,165,250,.06)}
-    .upload-area p{font-size:.85rem;color:rgba(255,255,255,.4);margin-top:6px}
-    .upload-area .upload-icon{font-size:2rem}
-    .upload-area input[type=file]{display:none}
-    .arquivo-preview{background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:10px 14px;font-size:.82rem;color:#60a5fa;margin-top:8px;display:none}
     .secao-titulo{font-size:.78rem;font-weight:800;color:#60a5fa;text-transform:uppercase;letter-spacing:1px;margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid rgba(96,165,250,.15)}
     .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
     .btn-cancelar{padding:12px 24px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
@@ -124,6 +110,8 @@
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item" href="./ambientes.html"><span class="icon">🏭</span> Ambientes</a>
+    <a class="nav-item" href="./ia-sugestoes.html"><span class="icon">🤖</span> IA Sugestoes</a>
     <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
     <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
@@ -140,27 +128,25 @@
     <button class="btn-novo" onclick="abrirModal()">+ Novo Documento</button>
   </div>
 
-  <!-- RESUMO -->
   <div class="resumo-grid">
     <div class="resumo-card" onclick="filtrar('',document.getElementById('fb-todos'))">
-      <div class="rc-valor" id="cnt-total"  style="color:#60a5fa">0</div>
+      <div class="rc-valor" id="cnt-total"   style="color:#60a5fa">0</div>
       <div class="rc-label">Total</div>
     </div>
     <div class="resumo-card">
-      <div class="rc-valor" id="cnt-validos"style="color:#4ade80">0</div>
+      <div class="rc-valor" id="cnt-validos" style="color:#4ade80">0</div>
       <div class="rc-label">Validos</div>
     </div>
     <div class="resumo-card">
-      <div class="rc-valor" id="cnt-breve"  style="color:#fbbf24">0</div>
+      <div class="rc-valor" id="cnt-breve"   style="color:#fbbf24">0</div>
       <div class="rc-label">Vencem em 30d</div>
     </div>
     <div class="resumo-card">
-      <div class="rc-valor" id="cnt-vencido"style="color:#f87171">0</div>
+      <div class="rc-valor" id="cnt-vencido" style="color:#f87171">0</div>
       <div class="rc-label">Vencidos</div>
     </div>
   </div>
 
-  <!-- FILTROS -->
   <div class="filtros">
     <button class="filtro-btn active" id="fb-todos" onclick="filtrar('',this)">Todos</button>
     <button class="filtro-btn" onclick="filtrar('PGR',this)">PGR</button>
@@ -299,39 +285,26 @@ document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
 document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
 function sair(){ localStorage.removeItem('safenr_user'); window.location.href='./index.html'; }
 
-/* ── DADOS ── */
-var registros  = JSON.parse(localStorage.getItem('safenr_documentos') || '[]');
-var editandoId = null;
-var filtroAtivo= '';
+var registros   = JSON.parse(localStorage.getItem('safenr_documentos') || '[]');
+var editandoId  = null;
+var filtroAtivo = '';
 function salvarStorage(){ localStorage.setItem('safenr_documentos', JSON.stringify(registros)); }
 
-function fmt(d){ if(!d) return '--'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
-function fmtDT(iso){
-  if(!iso) return '--';
-  return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-}
-
+function fmt(d)  { if(!d) return '--'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function fmtDT(iso){ if(!iso) return '--'; return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
 function isVencido(d){ return d && new Date(d+'T00:00:00') < new Date(); }
-function venceEm30(d){
-  if(!d) return false;
-  var diff=(new Date(d+'T00:00:00')-new Date())/86400000;
-  return diff>=0 && diff<=30;
-}
-function diasRestantes(d){
-  if(!d) return null;
-  return Math.round((new Date(d+'T00:00:00')-new Date())/86400000);
-}
+function venceEm30(d){ if(!d) return false; var diff=(new Date(d+'T00:00:00')-new Date())/86400000; return diff>=0&&diff<=30; }
+function diasRestantes(d){ if(!d) return null; return Math.round((new Date(d+'T00:00:00')-new Date())/86400000); }
 
 var tipoIcone={
   'PGR':'📋','PCMSO':'🏥','LTCAT':'🔬','ASO':'📄','PPRA':'🌿',
   'PCMAT':'🏗️','LIP':'⚗️','APR':'🔍','OS':'📝','AET':'🪑','Outro':'📁'
 };
 
-/* ── FILTROS ── */
 function getLista(){
   var busca=document.querySelector('.busca-input').value.toLowerCase();
   return registros.filter(function(r){
-    if(filtroAtivo && r.tipo!==filtroAtivo) return false;
+    if(filtroAtivo&&r.tipo!==filtroAtivo) return false;
     if(busca&&!(r.nome||'').toLowerCase().includes(busca)&&!(r.tipo||'').toLowerCase().includes(busca)) return false;
     return true;
   });
@@ -344,16 +317,14 @@ function filtrar(s,btn){
   renderizar(getLista());
 }
 
-/* ── CONTADORES ── */
 function atualizarContadores(){
-  document.getElementById('cnt-total').textContent  = registros.length;
-  document.getElementById('cnt-validos').textContent= registros.filter(function(r){ return r.validade && !isVencido(r.validade) && !venceEm30(r.validade); }).length;
-  document.getElementById('cnt-breve').textContent  = registros.filter(function(r){ return venceEm30(r.validade); }).length;
-  document.getElementById('cnt-vencido').textContent= registros.filter(function(r){ return isVencido(r.validade); }).length;
-  document.getElementById('totalRegistros').textContent=registros.length+' documento(s)';
+  document.getElementById('cnt-total').textContent   = registros.length;
+  document.getElementById('cnt-validos').textContent = registros.filter(function(r){ return r.validade&&!isVencido(r.validade)&&!venceEm30(r.validade); }).length;
+  document.getElementById('cnt-breve').textContent   = registros.filter(function(r){ return venceEm30(r.validade); }).length;
+  document.getElementById('cnt-vencido').textContent = registros.filter(function(r){ return isVencido(r.validade); }).length;
+  document.getElementById('totalRegistros').textContent = registros.length+' documento(s)';
 }
 
-/* ── RENDERIZAR ── */
 function renderizar(lista){
   var grid=document.getElementById('docsGrid');
   grid.innerHTML='';
@@ -367,24 +338,23 @@ function renderizar(lista){
     var breve  =venceEm30(r.validade);
     var dias   =diasRestantes(r.validade);
     var cardCls='doc-card'+(vencido?' vencido':breve?' vence-breve':!r.validade?' sem-validade':'');
-    var valHtml, valCls;
-    if(!r.validade){ valHtml='Sem validade definida'; valCls='val-sem'; }
-    else if(vencido){ valHtml='⛔ Vencido em '+fmt(r.validade); valCls='val-vencida'; }
-    else if(breve)  { valHtml='⚠️ Vence em '+dias+' dias ('+fmt(r.validade)+')'; valCls='val-breve'; }
-    else            { valHtml='✅ Valido até '+fmt(r.validade)+(dias?' ('+dias+' dias)':''); valCls='val-ok'; }
-
+    var valHtml,valCls;
+    if(!r.validade)     { valHtml='Sem validade definida'; valCls='val-sem'; }
+    else if(vencido)    { valHtml='⛔ Vencido em '+fmt(r.validade); valCls='val-vencida'; }
+    else if(breve)      { valHtml='⚠️ Vence em '+dias+' dias ('+fmt(r.validade)+')'; valCls='val-breve'; }
+    else                { valHtml='✅ Valido ate '+fmt(r.validade)+(dias?' ('+dias+' dias)':''); valCls='val-ok'; }
     var stCor={vigente:'#4ade80','em-revisao':'#fbbf24',obsoleto:'#f87171'};
     var div=document.createElement('div');
     div.className=cardCls;
     div.innerHTML=
       '<div class="doc-icon">'+(tipoIcone[r.tipo]||'📁')+'</div>'+
-      '<div class="doc-tipo"><span style="color:'+(stCor[r.status]||'#888')+'">● </span>'+( r.tipo||'--')+(r.numero?' · '+r.numero:'')+'</div>'+
+      '<div class="doc-tipo"><span style="color:'+(stCor[r.status]||'#888')+'">● </span>'+(r.tipo||'--')+(r.numero?' · '+r.numero:'')+'</div>'+
       '<div class="doc-nome">'+(r.nome||'--')+'</div>'+
       '<div class="doc-info">'+
         '<div class="doc-info-row">👤 <strong>'+(r.resp||'--')+'</strong></div>'+
         '<div class="doc-info-row">📅 Emissao: <strong>'+fmt(r.emissao)+'</strong></div>'+
-        (r.setor?'<div class="doc-info-row">🏭 '+(r.setor)+'</div>':'')+
-        (r.nr   ?'<div class="doc-info-row">📖 '+(r.nr   )+'</div>':'')+
+        (r.setor?'<div class="doc-info-row">🏭 '+r.setor+'</div>':'')+
+        (r.nr   ?'<div class="doc-info-row">📖 '+r.nr+'</div>':'')+
       '</div>'+
       '<div class="doc-validade '+valCls+'">'+valHtml+'</div>'+
       (r.link?'<a class="doc-link" href="'+r.link+'" target="_blank">📎 Abrir Documento</a>':'')+
@@ -397,17 +367,16 @@ function renderizar(lista){
   });
 }
 
-/* ── MODAL ── */
 function abrirModal(id){
   editandoId=id||null;
   document.getElementById('modalTitulo').textContent=(id?'✏️ Editar':'🗂️ Novo')+' Documento SST';
   ['f_nome','f_resp','f_numero','f_nr','f_setor','f_link','f_obs'].forEach(function(f){document.getElementById(f).value='';});
-  document.getElementById('f_tipo').value   ='';
-  document.getElementById('f_status').value ='vigente';
-  document.getElementById('f_emissao').value='';
+  document.getElementById('f_tipo').value    ='';
+  document.getElementById('f_status').value  ='vigente';
+  document.getElementById('f_emissao').value ='';
   document.getElementById('f_validade').value='';
-  document.getElementById('f_regPor').value=user.nome||'Usuario';
-  document.getElementById('f_regEm').value=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('f_regPor').value  =user.nome||'Usuario';
+  document.getElementById('f_regEm').value   =new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
   if(id){
     var r=registros.find(function(x){return x.id===id;});
     document.getElementById('f_nome').value    =r.nome    ||'';
@@ -430,23 +399,22 @@ function abrirModal(id){
 function fecharModal(){document.getElementById('modalForm').classList.remove('open');editandoId=null;}
 
 function salvar(){
-  var nome=document.getElementById('f_nome').value.trim();
-  var tipo=document.getElementById('f_tipo').value;
+  var nome   =document.getElementById('f_nome').value.trim();
+  var tipo   =document.getElementById('f_tipo').value;
   var emissao=document.getElementById('f_emissao').value;
-  var resp=document.getElementById('f_resp').value.trim();
+  var resp   =document.getElementById('f_resp').value.trim();
   if(!nome||!tipo||!emissao||!resp){alert('Preencha: Nome, Tipo, Data de Emissao e Responsavel.');return;}
   var dados={
-    nome:     nome,
-    tipo:     tipo,
-    status:   document.getElementById('f_status').value,
-    emissao:  emissao,
-    validade: document.getElementById('f_validade').value,
-    resp:     resp,
-    numero:   document.getElementById('f_numero').value.trim(),
-    nr:       document.getElementById('f_nr').value.trim(),
-    setor:    document.getElementById('f_setor').value.trim(),
-    link:     document.getElementById('f_link').value.trim(),
-    obs:      document.getElementById('f_obs').value.trim()
+    nome:    nome, tipo:tipo,
+    status:  document.getElementById('f_status').value,
+    emissao: emissao,
+    validade:document.getElementById('f_validade').value,
+    resp:    resp,
+    numero:  document.getElementById('f_numero').value.trim(),
+    nr:      document.getElementById('f_nr').value.trim(),
+    setor:   document.getElementById('f_setor').value.trim(),
+    link:    document.getElementById('f_link').value.trim(),
+    obs:     document.getElementById('f_obs').value.trim()
   };
   if(editandoId){
     var idx=registros.findIndex(function(r){return r.id===editandoId;});
@@ -455,8 +423,7 @@ function salvar(){
     var nId=registros.length>0?Math.max.apply(null,registros.map(function(r){return r.id;}))+1:1;
     registros.push(Object.assign({id:nId,registradoPor:user.nome||'Usuario',registradoEm:new Date().toISOString()},dados));
   }
-  /* Alerta de vencimento na agenda */
-  if(dados.validade) vincularAgenda(editandoId||registros[registros.length-1].id, dados.nome, dados.validade);
+  if(dados.validade) vincularAgenda(editandoId||registros[registros.length-1].id,dados.nome,dados.validade);
   salvarStorage();
   fecharModal();
   renderizar(getLista());
@@ -485,17 +452,17 @@ function ver(id){
   function row(l,v){return '<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>';}
   var stCor={vigente:'#4ade80','em-revisao':'#fbbf24',obsoleto:'#f87171'};
   document.getElementById('modalVerConteudo').innerHTML=
-    row('Nome',         r.nome    ||'--')+
-    row('Tipo',         (tipoIcone[r.tipo]||'📁')+' '+(r.tipo||'--'))+
-    row('Status',       '<span style="color:'+(stCor[r.status]||'#888')+'">● '+(r.status||'--')+'</span>')+
-    row('Numero/Revisao',r.numero ||'--')+
-    row('Emissao',      fmt(r.emissao))+
-    row('Validade',     fmt(r.validade))+
-    row('Resp. Tecnico',r.resp    ||'--')+
-    row('NR Relacionada',r.nr    ||'--')+
-    row('Setor/Abrang.',r.setor  ||'--')+
-    row('Link',         r.link?'<a href="'+r.link+'" target="_blank" style="color:#60a5fa">📎 Abrir</a>':'--')+
-    row('Observacoes',  r.obs    ||'--')+
+    row('Nome',          r.nome    ||'--')+
+    row('Tipo',          (tipoIcone[r.tipo]||'📁')+' '+(r.tipo||'--'))+
+    row('Status',        '<span style="color:'+(stCor[r.status]||'#888')+'">● '+(r.status||'--')+'</span>')+
+    row('Numero/Revisao',r.numero  ||'--')+
+    row('Emissao',       fmt(r.emissao))+
+    row('Validade',      fmt(r.validade))+
+    row('Resp. Tecnico', r.resp    ||'--')+
+    row('NR Relacionada',r.nr      ||'--')+
+    row('Setor/Abrang.', r.setor   ||'--')+
+    row('Link',          r.link?'<a href="'+r.link+'" target="_blank" style="color:#60a5fa">📎 Abrir</a>':'--')+
+    row('Observacoes',   r.obs     ||'--')+
     row('Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+
     row('Registrado em', '<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
   document.getElementById('modalVer').classList.add('open');
@@ -518,4 +485,3 @@ renderizar(getLista());
 </script>
 </body>
 </html>
-
