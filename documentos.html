@@ -1,1 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SafeNR — Documentos SST</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;z-index:10}
+    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
+    .sidebar-logo h1 span{color:#00d4ff}
+    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
+    .nav{flex:1;padding:20px 0;overflow-y:auto}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
+    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .notif-badge{background:#f87171;color:#fff;border-radius:20px;padding:1px 7px;font-size:.65rem;font-weight:700;margin-left:auto}
+    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+    .user-info p{font-size:.82rem;font-weight:600}
+    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
+    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .topbar h2{font-size:1.4rem;font-weight:700}
+    .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
+    .btn-novo{background:linear-gradient(135deg,#60a5fa,#2563eb);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
+    .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
+
+    /* RESUMO */
+    .resumo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+    .resumo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s}
+    .resumo-card:hover{background:rgba(255,255,255,.06)}
+    .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
+    .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+
+    /* FILTROS */
+    .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+    .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
+    .filtro-btn:hover,.filtro-btn.active{background:rgba(96,165,250,.12);border-color:#60a5fa;color:#60a5fa}
+    .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:240px;margin-left:auto}
+    .busca-input::placeholder{color:rgba(255,255,255,.3)}
+    .busca-input:focus{border-color:#60a5fa}
+
+    /* GRID DE DOCUMENTOS */
+    .docs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .doc-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;transition:all .2s;border-top:3px solid #60a5fa;position:relative}
+    .doc-card:hover{background:rgba(255,255,255,.06);transform:translateY(-2px)}
+    .doc-card.vencido   {border-top-color:#f87171}
+    .doc-card.vence-breve{border-top-color:#fbbf24}
+    .doc-card.sem-validade{border-top-color:rgba(255,255,255,.2)}
+    .doc-icon{font-size:2.2rem;margin-bottom:12px}
+    .doc-tipo{font-size:.68rem;font-weight:800;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+    .doc-nome{font-size:.95rem;font-weight:700;margin-bottom:10px;line-height:1.3}
+    .doc-info{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+    .doc-info-row{font-size:.78rem;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:6px}
+    .doc-info-row strong{color:rgba(255,255,255,.75)}
+    .doc-validade{font-size:.8rem;font-weight:700;padding:6px 12px;border-radius:8px;text-align:center;margin-bottom:12px}
+    .val-ok      {background:rgba(74,222,128,.1); color:#4ade80;border:1px solid rgba(74,222,128,.2)}
+    .val-breve   {background:rgba(251,191,36,.1);  color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
+    .val-vencida {background:rgba(248,113,113,.1); color:#f87171;border:1px solid rgba(248,113,113,.2)}
+    .val-sem     {background:rgba(255,255,255,.04);color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.08)}
+    .doc-acoes{display:flex;gap:8px;justify-content:flex-end}
+    .btn-ac{background:none;border:1px solid rgba(255,255,255,.1);border-radius:8px;cursor:pointer;padding:6px 12px;font-size:.8rem;color:rgba(255,255,255,.6);transition:all .2s}
+    .btn-ac:hover{background:rgba(255,255,255,.08);color:#fff}
+    .doc-link{display:block;margin-bottom:10px;padding:8px 12px;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:8px;color:#60a5fa;font-size:.78rem;text-decoration:none;text-align:center;transition:all .2s}
+    .doc-link:hover{background:rgba(96,165,250,.15)}
+    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3);grid-column:1/-1}
+    .empty-state div{font-size:3rem;margin-bottom:12px}
+
+    /* MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
+    .modal-overlay.open{display:flex}
+    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:620px;max-height:92vh;overflow-y:auto}
+    .modal h3{font-size:1.2rem;font-weight:700;margin-bottom:24px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+    .form-row.full{grid-template-columns:1fr}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group label{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.55)}
+    .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;color:#fff;font-size:.9rem;outline:none;transition:border .2s;font-family:inherit}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#60a5fa}
+    .form-group select option{background:#1a2535}
+    .form-group textarea{resize:vertical;min-height:80px}
+    .auto-field{background:rgba(0,212,255,.06)!important;border-color:rgba(0,212,255,.2)!important;color:rgba(255,255,255,.6)!important;cursor:not-allowed!important}
+    .auto-tag{font-size:.68rem;color:#00d4ff;background:rgba(0,212,255,.1);border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:600}
+    .upload-area{border:2px dashed rgba(96,165,250,.3);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(96,165,250,.03)}
+    .upload-area:hover{border-color:#60a5fa;background:rgba(96,165,250,.06)}
+    .upload-area p{font-size:.85rem;color:rgba(255,255,255,.4);margin-top:6px}
+    .upload-area .upload-icon{font-size:2rem}
+    .upload-area input[type=file]{display:none}
+    .arquivo-preview{background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:10px 14px;font-size:.82rem;color:#60a5fa;margin-top:8px;display:none}
+    .secao-titulo{font-size:.78rem;font-weight:800;color:#60a5fa;text-transform:uppercase;letter-spacing:1px;margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid rgba(96,165,250,.15)}
+    .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
+    .btn-cancelar{padding:12px 24px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
+    .btn-salvar{padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#60a5fa,#2563eb);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
+    .detalhe-row{display:flex;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .detalhe-row:last-child{border-bottom:none}
+    .detalhe-label{font-size:.78rem;color:rgba(255,255,255,.4);min-width:160px;font-weight:600}
+    .detalhe-valor{font-size:.88rem;color:#fff;flex:1}
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Safe<span>NR</span></h1>
+    <p>Gestao de Seguranca do Trabalho</p>
+  </div>
+  <nav class="nav">
+    <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
+    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
+    <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
+    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
+    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
+    <a class="nav-item" href="./ocorrencias.html"><span class="icon">🚨</span> Ocorrencias</a>
+    <a class="nav-item" href="./plano-acao.html"><span class="icon">📌</span> Plano de Acao</a>
+    <a class="nav-item active" href="./documentos.html"><span class="icon">🗂️</span> Documentos SST</a>
+    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
+    <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
+    <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
+    <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
+    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="avatar" id="avatarLetra">A</div>
+    <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
+    <button class="btn-sair" onclick="sair()">✕</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div><h2>🗂️ Documentos SST</h2><span id="totalRegistros">0 documentos</span></div>
+    <button class="btn-novo" onclick="abrirModal()">+ Novo Documento</button>
+  </div>
+
+  <!-- RESUMO -->
+  <div class="resumo-grid">
+    <div class="resumo-card" onclick="filtrar('',document.getElementById('fb-todos'))">
+      <div class="rc-valor" id="cnt-total"  style="color:#60a5fa">0</div>
+      <div class="rc-label">Total</div>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-validos"style="color:#4ade80">0</div>
+      <div class="rc-label">Validos</div>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-breve"  style="color:#fbbf24">0</div>
+      <div class="rc-label">Vencem em 30d</div>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-vencido"style="color:#f87171">0</div>
+      <div class="rc-label">Vencidos</div>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <button class="filtro-btn active" id="fb-todos" onclick="filtrar('',this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('PGR',this)">PGR</button>
+    <button class="filtro-btn" onclick="filtrar('PCMSO',this)">PCMSO</button>
+    <button class="filtro-btn" onclick="filtrar('LTCAT',this)">LTCAT</button>
+    <button class="filtro-btn" onclick="filtrar('ASO',this)">ASO</button>
+    <button class="filtro-btn" onclick="filtrar('PPRA',this)">PPRA</button>
+    <button class="filtro-btn" onclick="filtrar('Outro',this)">Outros</button>
+    <input class="busca-input" type="text" placeholder="🔎 Buscar documento..." oninput="renderizar(getLista())"/>
+  </div>
+
+  <div class="docs-grid" id="docsGrid"></div>
+</div>
+
+<!-- MODAL FORM -->
+<div class="modal-overlay" id="modalForm">
+  <div class="modal">
+    <h3 id="modalTitulo">🗂️ Novo Documento SST</h3>
+
+    <div class="secao-titulo">Identificacao</div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Nome do Documento *</label>
+        <input type="text" id="f_nome" placeholder="Ex: PGR — Unidade Itajai 2025"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Tipo *</label>
+        <select id="f_tipo">
+          <option value="">Selecione</option>
+          <option value="PGR">PGR — Programa de Gerenciamento de Riscos</option>
+          <option value="PCMSO">PCMSO — Controle Medico Saude Ocupacional</option>
+          <option value="LTCAT">LTCAT — Laudo Tecnico Cond. Amb. Trabalho</option>
+          <option value="ASO">ASO — Atestado de Saude Ocupacional</option>
+          <option value="PPRA">PPRA — Prev. Riscos Ambientais</option>
+          <option value="PCMAT">PCMAT — Cond. e Meio Amb. Trabalho</option>
+          <option value="LIP">LIP — Laudo Insalubridade / Periculosidade</option>
+          <option value="APR">APR — Analise Preliminar de Riscos</option>
+          <option value="OS">OS — Ordem de Servico</option>
+          <option value="AET">AET — Analise Ergonomica do Trabalho</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="f_status">
+          <option value="vigente">Vigente</option>
+          <option value="em-revisao">Em Revisao</option>
+          <option value="obsoleto">Obsoleto</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="secao-titulo">Datas e Responsavel</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Data de Emissao *</label>
+        <input type="date" id="f_emissao"/>
+      </div>
+      <div class="form-group">
+        <label>Data de Validade</label>
+        <input type="date" id="f_validade"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Responsavel Tecnico *</label>
+        <input type="text" id="f_resp" placeholder="Nome do RT"/>
+      </div>
+      <div class="form-group">
+        <label>Numero / Revisao</label>
+        <input type="text" id="f_numero" placeholder="Ex: Rev. 03 / Doc. 2025-001"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>NR Relacionada</label>
+        <input type="text" id="f_nr" placeholder="Ex: NR-1, NR-7"/>
+      </div>
+      <div class="form-group">
+        <label>Setor / Abrangencia</label>
+        <input type="text" id="f_setor" placeholder="Ex: Toda a empresa"/>
+      </div>
+    </div>
+
+    <div class="secao-titulo">Arquivo / Link</div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Link do Documento (Google Drive, SharePoint etc.)</label>
+        <input type="url" id="f_link" placeholder="https://..."/>
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Observacoes</label>
+        <textarea id="f_obs" placeholder="Informacoes adicionais, escopo, observacoes..."></textarea>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Registrado por <span class="auto-tag">AUTO</span></label>
+        <input type="text" id="f_regPor" class="auto-field" readonly/>
+      </div>
+      <div class="form-group">
+        <label>Registrado em <span class="auto-tag">AUTO</span></label>
+        <input type="text" id="f_regEm" class="auto-field" readonly/>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-salvar"   onclick="salvar()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VER -->
+<div class="modal-overlay" id="modalVer">
+  <div class="modal">
+    <h3>🗂️ Detalhes do Documento</h3>
+    <div id="modalVerConteudo"></div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharVer()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── AUTH ── */
+var userData = localStorage.getItem('safenr_user');
+if (!userData) { window.location.href = './index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
+document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+function sair(){ localStorage.removeItem('safenr_user'); window.location.href='./index.html'; }
+
+/* ── DADOS ── */
+var registros  = JSON.parse(localStorage.getItem('safenr_documentos') || '[]');
+var editandoId = null;
+var filtroAtivo= '';
+function salvarStorage(){ localStorage.setItem('safenr_documentos', JSON.stringify(registros)); }
+
+function fmt(d){ if(!d) return '--'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function fmtDT(iso){
+  if(!iso) return '--';
+  return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+
+function isVencido(d){ return d && new Date(d+'T00:00:00') < new Date(); }
+function venceEm30(d){
+  if(!d) return false;
+  var diff=(new Date(d+'T00:00:00')-new Date())/86400000;
+  return diff>=0 && diff<=30;
+}
+function diasRestantes(d){
+  if(!d) return null;
+  return Math.round((new Date(d+'T00:00:00')-new Date())/86400000);
+}
+
+var tipoIcone={
+  'PGR':'📋','PCMSO':'🏥','LTCAT':'🔬','ASO':'📄','PPRA':'🌿',
+  'PCMAT':'🏗️','LIP':'⚗️','APR':'🔍','OS':'📝','AET':'🪑','Outro':'📁'
+};
+
+/* ── FILTROS ── */
+function getLista(){
+  var busca=document.querySelector('.busca-input').value.toLowerCase();
+  return registros.filter(function(r){
+    if(filtroAtivo && r.tipo!==filtroAtivo) return false;
+    if(busca&&!(r.nome||'').toLowerCase().includes(busca)&&!(r.tipo||'').toLowerCase().includes(busca)) return false;
+    return true;
+  });
+}
+
+function filtrar(s,btn){
+  filtroAtivo=s;
+  document.querySelectorAll('.filtro-btn').forEach(function(b){b.classList.remove('active');});
+  if(btn) btn.classList.add('active');
+  renderizar(getLista());
+}
+
+/* ── CONTADORES ── */
+function atualizarContadores(){
+  document.getElementById('cnt-total').textContent  = registros.length;
+  document.getElementById('cnt-validos').textContent= registros.filter(function(r){ return r.validade && !isVencido(r.validade) && !venceEm30(r.validade); }).length;
+  document.getElementById('cnt-breve').textContent  = registros.filter(function(r){ return venceEm30(r.validade); }).length;
+  document.getElementById('cnt-vencido').textContent= registros.filter(function(r){ return isVencido(r.validade); }).length;
+  document.getElementById('totalRegistros').textContent=registros.length+' documento(s)';
+}
+
+/* ── RENDERIZAR ── */
+function renderizar(lista){
+  var grid=document.getElementById('docsGrid');
+  grid.innerHTML='';
+  atualizarContadores();
+  if(lista.length===0){
+    grid.innerHTML='<div class="empty-state"><div>🗂️</div><p>Nenhum documento cadastrado.<br>Clique em <strong>+ Novo Documento</strong>.</p></div>';
+    return;
+  }
+  lista.forEach(function(r){
+    var vencido=isVencido(r.validade);
+    var breve  =venceEm30(r.validade);
+    var dias   =diasRestantes(r.validade);
+    var cardCls='doc-card'+(vencido?' vencido':breve?' vence-breve':!r.validade?' sem-validade':'');
+    var valHtml, valCls;
+    if(!r.validade){ valHtml='Sem validade definida'; valCls='val-sem'; }
+    else if(vencido){ valHtml='⛔ Vencido em '+fmt(r.validade); valCls='val-vencida'; }
+    else if(breve)  { valHtml='⚠️ Vence em '+dias+' dias ('+fmt(r.validade)+')'; valCls='val-breve'; }
+    else            { valHtml='✅ Valido até '+fmt(r.validade)+(dias?' ('+dias+' dias)':''); valCls='val-ok'; }
+
+    var stCor={vigente:'#4ade80','em-revisao':'#fbbf24',obsoleto:'#f87171'};
+    var div=document.createElement('div');
+    div.className=cardCls;
+    div.innerHTML=
+      '<div class="doc-icon">'+(tipoIcone[r.tipo]||'📁')+'</div>'+
+      '<div class="doc-tipo"><span style="color:'+(stCor[r.status]||'#888')+'">● </span>'+( r.tipo||'--')+(r.numero?' · '+r.numero:'')+'</div>'+
+      '<div class="doc-nome">'+(r.nome||'--')+'</div>'+
+      '<div class="doc-info">'+
+        '<div class="doc-info-row">👤 <strong>'+(r.resp||'--')+'</strong></div>'+
+        '<div class="doc-info-row">📅 Emissao: <strong>'+fmt(r.emissao)+'</strong></div>'+
+        (r.setor?'<div class="doc-info-row">🏭 '+(r.setor)+'</div>':'')+
+        (r.nr   ?'<div class="doc-info-row">📖 '+(r.nr   )+'</div>':'')+
+      '</div>'+
+      '<div class="doc-validade '+valCls+'">'+valHtml+'</div>'+
+      (r.link?'<a class="doc-link" href="'+r.link+'" target="_blank">📎 Abrir Documento</a>':'')+
+      '<div class="doc-acoes">'+
+        '<button class="btn-ac" onclick="ver('+r.id+')">👁️</button>'+
+        '<button class="btn-ac" onclick="abrirModal('+r.id+')">✏️</button>'+
+        '<button class="btn-ac" onclick="excluir('+r.id+')" style="color:#f87171">🗑️</button>'+
+      '</div>';
+    grid.appendChild(div);
+  });
+}
+
+/* ── MODAL ── */
+function abrirModal(id){
+  editandoId=id||null;
+  document.getElementById('modalTitulo').textContent=(id?'✏️ Editar':'🗂️ Novo')+' Documento SST';
+  ['f_nome','f_resp','f_numero','f_nr','f_setor','f_link','f_obs'].forEach(function(f){document.getElementById(f).value='';});
+  document.getElementById('f_tipo').value   ='';
+  document.getElementById('f_status').value ='vigente';
+  document.getElementById('f_emissao').value='';
+  document.getElementById('f_validade').value='';
+  document.getElementById('f_regPor').value=user.nome||'Usuario';
+  document.getElementById('f_regEm').value=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  if(id){
+    var r=registros.find(function(x){return x.id===id;});
+    document.getElementById('f_nome').value    =r.nome    ||'';
+    document.getElementById('f_tipo').value    =r.tipo    ||'';
+    document.getElementById('f_status').value  =r.status  ||'vigente';
+    document.getElementById('f_emissao').value =r.emissao ||'';
+    document.getElementById('f_validade').value=r.validade||'';
+    document.getElementById('f_resp').value    =r.resp    ||'';
+    document.getElementById('f_numero').value  =r.numero  ||'';
+    document.getElementById('f_nr').value      =r.nr      ||'';
+    document.getElementById('f_setor').value   =r.setor   ||'';
+    document.getElementById('f_link').value    =r.link    ||'';
+    document.getElementById('f_obs').value     =r.obs     ||'';
+    document.getElementById('f_regPor').value  =r.registradoPor||user.nome;
+    document.getElementById('f_regEm').value   =fmtDT(r.registradoEm);
+  }
+  document.getElementById('modalForm').classList.add('open');
+}
+
+function fecharModal(){document.getElementById('modalForm').classList.remove('open');editandoId=null;}
+
+function salvar(){
+  var nome=document.getElementById('f_nome').value.trim();
+  var tipo=document.getElementById('f_tipo').value;
+  var emissao=document.getElementById('f_emissao').value;
+  var resp=document.getElementById('f_resp').value.trim();
+  if(!nome||!tipo||!emissao||!resp){alert('Preencha: Nome, Tipo, Data de Emissao e Responsavel.');return;}
+  var dados={
+    nome:     nome,
+    tipo:     tipo,
+    status:   document.getElementById('f_status').value,
+    emissao:  emissao,
+    validade: document.getElementById('f_validade').value,
+    resp:     resp,
+    numero:   document.getElementById('f_numero').value.trim(),
+    nr:       document.getElementById('f_nr').value.trim(),
+    setor:    document.getElementById('f_setor').value.trim(),
+    link:     document.getElementById('f_link').value.trim(),
+    obs:      document.getElementById('f_obs').value.trim()
+  };
+  if(editandoId){
+    var idx=registros.findIndex(function(r){return r.id===editandoId;});
+    registros[idx]=Object.assign({},registros[idx],dados);
+  } else {
+    var nId=registros.length>0?Math.max.apply(null,registros.map(function(r){return r.id;}))+1:1;
+    registros.push(Object.assign({id:nId,registradoPor:user.nome||'Usuario',registradoEm:new Date().toISOString()},dados));
+  }
+  /* Alerta de vencimento na agenda */
+  if(dados.validade) vincularAgenda(editandoId||registros[registros.length-1].id, dados.nome, dados.validade);
+  salvarStorage();
+  fecharModal();
+  renderizar(getLista());
+}
+
+function vincularAgenda(docId,nome,validade){
+  var agenda=JSON.parse(localStorage.getItem('safenr_agenda')||'[]');
+  agenda=agenda.filter(function(e){return e.doc_id!==docId;});
+  var nId=agenda.length>0?Math.max.apply(null,agenda.map(function(e){return e.id||0;}))+1:1;
+  agenda.push({id:nId,doc_id:docId,titulo:'📄 Vencimento: '+nome,data:validade,tipo:'documento',status:'pendente',obs:'Documento SST vence nesta data. Providencie a renovacao.'});
+  localStorage.setItem('safenr_agenda',JSON.stringify(agenda));
+}
+
+function excluir(id){
+  if(!confirm('Excluir este documento?')) return;
+  var agenda=JSON.parse(localStorage.getItem('safenr_agenda')||'[]');
+  agenda=agenda.filter(function(e){return e.doc_id!==id;});
+  localStorage.setItem('safenr_agenda',JSON.stringify(agenda));
+  registros=registros.filter(function(r){return r.id!==id;});
+  salvarStorage();
+  renderizar(getLista());
+}
+
+function ver(id){
+  var r=registros.find(function(x){return x.id===id;});
+  function row(l,v){return '<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>';}
+  var stCor={vigente:'#4ade80','em-revisao':'#fbbf24',obsoleto:'#f87171'};
+  document.getElementById('modalVerConteudo').innerHTML=
+    row('Nome',         r.nome    ||'--')+
+    row('Tipo',         (tipoIcone[r.tipo]||'📁')+' '+(r.tipo||'--'))+
+    row('Status',       '<span style="color:'+(stCor[r.status]||'#888')+'">● '+(r.status||'--')+'</span>')+
+    row('Numero/Revisao',r.numero ||'--')+
+    row('Emissao',      fmt(r.emissao))+
+    row('Validade',     fmt(r.validade))+
+    row('Resp. Tecnico',r.resp    ||'--')+
+    row('NR Relacionada',r.nr    ||'--')+
+    row('Setor/Abrang.',r.setor  ||'--')+
+    row('Link',         r.link?'<a href="'+r.link+'" target="_blank" style="color:#60a5fa">📎 Abrir</a>':'--')+
+    row('Observacoes',  r.obs    ||'--')+
+    row('Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+
+    row('Registrado em', '<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
+  document.getElementById('modalVer').classList.add('open');
+}
+
+function fecharVer(){document.getElementById('modalVer').classList.remove('open');}
+
+document.getElementById('modalForm').addEventListener('click',function(e){if(e.target===this)fecharModal();});
+document.getElementById('modalVer').addEventListener('click', function(e){if(e.target===this)fecharVer();});
+
+/* ── BADGE NOTIF ── */
+(function(){
+  var n=JSON.parse(localStorage.getItem('safenr_notificacoes')||'[]');
+  var nl=n.filter(function(x){return!x.lida;}).length;
+  var link=document.querySelector('a[href="./notificacoes.html"]');
+  if(link&&nl>0){var b=document.createElement('span');b.className='notif-badge';b.textContent=nl;link.appendChild(b);}
+})();
+
+renderizar(getLista());
+</script>
+</body>
+</html>
 
