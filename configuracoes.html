@@ -38,7 +38,6 @@
       min-height: 100vh;
     }
 
-    /* ── SIDEBAR ── */
     .sidebar {
       width: var(--sidebar-width);
       background: var(--bg-secondary);
@@ -123,7 +122,6 @@
     .user-name  { font-size: 13px; font-weight: 600; }
     .user-role  { font-size: 11px; color: var(--text-muted); }
 
-    /* ── MAIN ── */
     .main {
       margin-left: var(--sidebar-width);
       flex: 1;
@@ -144,7 +142,6 @@
 
     .topbar-title { font-size: 20px; font-weight: 700; }
     .topbar-sub   { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-
     .topbar-actions { display: flex; gap: 10px; align-items: center; }
 
     .btn {
@@ -173,13 +170,8 @@
     .btn-warning { background: var(--accent-yellow); color: #000; }
     .btn-warning:hover { background: #d97706; }
 
-    /* ── CONTENT ── */
-    .content {
-      padding: 32px;
-      flex: 1;
-    }
+    .content { padding: 32px; flex: 1; }
 
-    /* ── TABS ── */
     .config-tabs {
       display: flex;
       gap: 4px;
@@ -207,11 +199,9 @@
     .config-tab:hover { color: var(--text-primary); background: var(--bg-hover); }
     .config-tab.active { background: var(--accent); color: #fff; }
 
-    /* ── SECTIONS ── */
     .config-section { display: none; }
     .config-section.active { display: block; }
 
-    /* ── CARDS ── */
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -234,7 +224,6 @@
 
     .card-title i { color: var(--accent); }
 
-    /* ── FORM ── */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -271,10 +260,8 @@
     }
 
     textarea { resize: vertical; min-height: 80px; }
-
     select option { background: var(--bg-card); }
 
-    /* ── LOGO UPLOAD ── */
     .logo-upload {
       display: flex; align-items: center; gap: 20px;
       padding: 20px;
@@ -302,14 +289,9 @@
     .logo-upload-info h4 { font-size: 14px; margin-bottom: 4px; }
     .logo-upload-info p  { font-size: 12px; color: var(--text-muted); }
 
-    /* ── USERS TABLE ── */
     .table-container { overflow-x: auto; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
 
     th {
       padding: 12px 16px;
@@ -371,7 +353,6 @@
     .btn-icon:hover { background: var(--bg-hover); color: var(--text-primary); }
     .btn-icon.danger:hover { background: rgba(239,68,68,0.15); color: var(--accent-red); border-color: var(--accent-red); }
 
-    /* ── TOGGLE ── */
     .toggle-row {
       display: flex; align-items: center; justify-content: space-between;
       padding: 14px 0;
@@ -379,7 +360,6 @@
     }
 
     .toggle-row:last-child { border-bottom: none; }
-
     .toggle-info h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
     .toggle-info p  { font-size: 12px; color: var(--text-muted); }
 
@@ -414,7 +394,6 @@
     .toggle input:checked + .toggle-slider { background: var(--accent); border-color: var(--accent); }
     .toggle input:checked + .toggle-slider::before { transform: translateX(20px); background: #fff; }
 
-    /* ── SECURITY ── */
     .security-item {
       display: flex; align-items: center; justify-content: space-between;
       padding: 16px 0;
@@ -440,7 +419,6 @@
     .security-text h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
     .security-text p  { font-size: 12px; color: var(--text-muted); }
 
-    /* ── BACKUP ── */
     .backup-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -458,16 +436,13 @@
     }
 
     .backup-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-
     .backup-card i { font-size: 28px; margin-bottom: 12px; display: block; }
     .backup-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
     .backup-card p  { font-size: 12px; color: var(--text-muted); }
-
     .backup-card.export i { color: var(--accent-green); }
     .backup-card.import i { color: var(--accent); }
     .backup-card.clear  i { color: var(--accent-red); }
 
-    /* ── STATS ── */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -486,7 +461,6 @@
     .stat-value { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
     .stat-label { font-size: 12px; color: var(--text-muted); }
 
-    /* ── ABOUT ── */
     .about-hero {
       background: linear-gradient(135deg, rgba(79,110,247,0.1), rgba(168,85,247,0.1));
       border: 1px solid rgba(79,110,247,0.2);
@@ -535,7 +509,6 @@
 
     .feature-item i { color: var(--accent-green); width: 16px; }
 
-    /* ── MODAL ── */
     .modal-overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.7);
@@ -587,7 +560,6 @@
       border-top: 1px solid var(--border);
     }
 
-    /* ── TOAST ── */
     .toast-container {
       position: fixed;
       bottom: 24px; right: 24px;
@@ -615,7 +587,6 @@
       to   { transform: translateX(0);   opacity: 1; }
     }
 
-    /* ── PROGRESS BAR STORAGE ── */
     .storage-bar {
       background: var(--bg-secondary);
       border-radius: 6px;
@@ -636,7 +607,6 @@
       font-size: 12px; color: var(--text-muted);
     }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .sidebar { transform: translateX(-100%); }
       .main { margin-left: 0; }
@@ -647,7 +617,6 @@
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════ SIDEBAR ═══════════════════════════════════════ -->
 <aside class="sidebar">
   <div class="sidebar-logo">
     <div class="logo-icon">🛡️</div>
@@ -659,24 +628,25 @@
 
   <nav class="sidebar-nav">
     <div class="nav-section-title">Principal</div>
-    <a href="app.html"           class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
-    <a href="inspecoes.html"     class="nav-item"><i class="fas fa-clipboard-check"></i> Inspeções</a>
-    <a href="riscos.html"        class="nav-item"><i class="fas fa-exclamation-triangle"></i> Riscos</a>
-    <a href="checklists.html"    class="nav-item"><i class="fas fa-tasks"></i> Checklists</a>
+    <a href="app.html"            class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="treinamentos.html"   class="nav-item"><i class="fas fa-graduation-cap"></i> Treinamentos</a>
+    <a href="agenda.html"         class="nav-item"><i class="fas fa-calendar-alt"></i> Agenda</a>
+    <a href="inspecoes.html"      class="nav-item"><i class="fas fa-clipboard-check"></i> Inspeções</a>
+    <a href="riscos.html"         class="nav-item"><i class="fas fa-exclamation-triangle"></i> Riscos</a>
+    <a href="checklists.html"     class="nav-item"><i class="fas fa-tasks"></i> Checklists</a>
 
     <div class="nav-section-title">Gestão</div>
-    <a href="funcionarios.html"  class="nav-item"><i class="fas fa-users"></i> Funcionários</a>
-    <a href="epis.html"          class="nav-item"><i class="fas fa-hard-hat"></i> EPIs</a>
-    <a href="agenda.html"        class="nav-item"><i class="fas fa-calendar-alt"></i> Agenda</a>
-    <a href="fotos.html"         class="nav-item"><i class="fas fa-camera"></i> Fotos</a>
+    <a href="colaboradores.html"  class="nav-item"><i class="fas fa-users"></i> Colaboradores</a>
+    <a href="epis.html"           class="nav-item"><i class="fas fa-hard-hat"></i> EPIs</a>
+    <a href="fotos.html"          class="nav-item"><i class="fas fa-camera"></i> Fotos</a>
 
     <div class="nav-section-title">Relatórios</div>
-    <a href="relatorios.html"    class="nav-item"><i class="fas fa-chart-bar"></i> Relatórios</a>
-    <a href="biblioteca.html"    class="nav-item"><i class="fas fa-book"></i> Biblioteca NRs</a>
+    <a href="relatorios.html"     class="nav-item"><i class="fas fa-chart-bar"></i> Relatórios</a>
+    <a href="biblioteca.html"     class="nav-item"><i class="fas fa-book"></i> Biblioteca NRs</a>
 
     <div class="nav-section-title">Sistema</div>
-    <a href="notificacoes.html"  class="nav-item"><i class="fas fa-bell"></i> Notificações</a>
-    <a href="configuracoes.html" class="nav-item active"><i class="fas fa-cog"></i> Configurações</a>
+    <a href="notificacoes.html"   class="nav-item"><i class="fas fa-bell"></i> Notificações</a>
+    <a href="configuracoes.html"  class="nav-item active"><i class="fas fa-cog"></i> Configurações</a>
   </nav>
 
   <div class="sidebar-footer">
@@ -690,10 +660,8 @@
   </div>
 </aside>
 
-<!-- ═══════════════════════════════════════ MAIN ═══════════════════════════════════════ -->
 <div class="main">
 
-  <!-- TOPBAR -->
   <div class="topbar">
     <div>
       <div class="topbar-title">⚙️ Configurações</div>
@@ -705,27 +673,25 @@
     </div>
   </div>
 
-  <!-- CONTENT -->
   <div class="content">
 
-    <!-- TABS -->
     <div class="config-tabs">
-      <button class="config-tab active" onclick="switchTab('empresa')">
+      <button class="config-tab active" onclick="switchTab('empresa', this)">
         <i class="fas fa-building"></i> Empresa
       </button>
-      <button class="config-tab" onclick="switchTab('usuarios')">
+      <button class="config-tab" onclick="switchTab('usuarios', this)">
         <i class="fas fa-users"></i> Usuários
       </button>
-      <button class="config-tab" onclick="switchTab('preferencias')">
+      <button class="config-tab" onclick="switchTab('preferencias', this)">
         <i class="fas fa-sliders-h"></i> Preferências
       </button>
-      <button class="config-tab" onclick="switchTab('seguranca')">
+      <button class="config-tab" onclick="switchTab('seguranca', this)">
         <i class="fas fa-shield-alt"></i> Segurança
       </button>
-      <button class="config-tab" onclick="switchTab('backup')">
+      <button class="config-tab" onclick="switchTab('backup', this)">
         <i class="fas fa-database"></i> Backup
       </button>
-      <button class="config-tab" onclick="switchTab('sobre')">
+      <button class="config-tab" onclick="switchTab('sobre', this)">
         <i class="fas fa-info-circle"></i> Sobre
       </button>
     </div>
@@ -801,7 +767,7 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Nº de Funcionários</label>
+            <label>Nº de Colaboradores</label>
             <input type="number" id="numFuncionarios" placeholder="Ex: 50" min="1">
           </div>
           <div class="form-group full">
@@ -810,7 +776,7 @@
           </div>
           <div class="form-group">
             <label>Cidade</label>
-            <input type="text" id="cidade" placeholder="Ex: Curitibanos">
+            <input type="text" id="cidade" placeholder="Ex: Itajaí">
           </div>
           <div class="form-group">
             <label>Estado</label>
@@ -839,7 +805,7 @@
         <div class="form-grid">
           <div class="form-group">
             <label>Telefone</label>
-            <input type="text" id="telefone" placeholder="(48) 00000-0000">
+            <input type="text" id="telefone" placeholder="(47) 00000-0000">
           </div>
           <div class="form-group">
             <label>E-mail</label>
@@ -856,7 +822,7 @@
         </div>
       </div>
 
-    </div><!-- /tab-empresa -->
+    </div>
 
     <!-- ═══ ABA USUÁRIOS ═══ -->
     <div id="tab-usuarios" class="config-section">
@@ -880,9 +846,7 @@
                 <th>Ações</th>
               </tr>
             </thead>
-            <tbody id="usersTableBody">
-              <!-- dinâmico -->
-            </tbody>
+            <tbody id="usersTableBody"></tbody>
           </table>
         </div>
       </div>
@@ -898,7 +862,7 @@
                 <th>Perfil</th>
                 <th>Inspeções</th>
                 <th>Riscos</th>
-                <th>Funcionários</th>
+                <th>Colaboradores</th>
                 <th>Relatórios</th>
                 <th>Configurações</th>
               </tr>
@@ -929,7 +893,7 @@
         </div>
       </div>
 
-    </div><!-- /tab-usuarios -->
+    </div>
 
     <!-- ═══ ABA PREFERÊNCIAS ═══ -->
     <div id="tab-preferencias" class="config-section">
@@ -943,50 +907,35 @@
             <h4>Vencimento de EPIs</h4>
             <p>Alertar quando EPIs estiverem próximos do vencimento (CA)</p>
           </div>
-          <label class="toggle">
-            <input type="checkbox" id="notifEPI" checked>
-            <span class="toggle-slider"></span>
-          </label>
+          <label class="toggle"><input type="checkbox" id="notifEPI" checked><span class="toggle-slider"></span></label>
         </div>
         <div class="toggle-row">
           <div class="toggle-info">
             <h4>Inspeções Atrasadas</h4>
             <p>Alertar inspeções com prazo vencido</p>
           </div>
-          <label class="toggle">
-            <input type="checkbox" id="notifInspecao" checked>
-            <span class="toggle-slider"></span>
-          </label>
+          <label class="toggle"><input type="checkbox" id="notifInspecao" checked><span class="toggle-slider"></span></label>
         </div>
         <div class="toggle-row">
           <div class="toggle-info">
             <h4>Exames Médicos</h4>
-            <p>Alertar vencimento de exames ocupacionais dos funcionários</p>
+            <p>Alertar vencimento de exames ocupacionais dos colaboradores</p>
           </div>
-          <label class="toggle">
-            <input type="checkbox" id="notifExame" checked>
-            <span class="toggle-slider"></span>
-          </label>
+          <label class="toggle"><input type="checkbox" id="notifExame" checked><span class="toggle-slider"></span></label>
         </div>
         <div class="toggle-row">
           <div class="toggle-info">
             <h4>Treinamentos</h4>
             <p>Alertar treinamentos com vencimento próximo</p>
           </div>
-          <label class="toggle">
-            <input type="checkbox" id="notifTreinamento">
-            <span class="toggle-slider"></span>
-          </label>
+          <label class="toggle"><input type="checkbox" id="notifTreinamento"><span class="toggle-slider"></span></label>
         </div>
         <div class="toggle-row">
           <div class="toggle-info">
             <h4>Relatório Semanal por E-mail</h4>
             <p>Receber resumo semanal do sistema por e-mail</p>
           </div>
-          <label class="toggle">
-            <input type="checkbox" id="notifEmail">
-            <span class="toggle-slider"></span>
-          </label>
+          <label class="toggle"><input type="checkbox" id="notifEmail"><span class="toggle-slider"></span></label>
         </div>
       </div>
 
@@ -1066,15 +1015,12 @@
               <h4>Incluir logotipo nos PDFs</h4>
               <p>Exibir logo da empresa no cabeçalho dos relatórios</p>
             </div>
-            <label class="toggle">
-              <input type="checkbox" id="logoNoPDF" checked>
-              <span class="toggle-slider"></span>
-            </label>
+            <label class="toggle"><input type="checkbox" id="logoNoPDF" checked><span class="toggle-slider"></span></label>
           </div>
         </div>
       </div>
 
-    </div><!-- /tab-preferencias -->
+    </div>
 
     <!-- ═══ ABA SEGURANÇA ═══ -->
     <div id="tab-seguranca" class="config-section">
@@ -1148,10 +1094,7 @@
               <p>Registrar ações dos usuários no sistema</p>
             </div>
           </div>
-          <label class="toggle">
-            <input type="checkbox" id="logAtividades" checked>
-            <span class="toggle-slider"></span>
-          </label>
+          <label class="toggle"><input type="checkbox" id="logAtividades" checked><span class="toggle-slider"></span></label>
         </div>
         <div class="security-item">
           <div class="security-info">
@@ -1167,7 +1110,7 @@
         </div>
       </div>
 
-    </div><!-- /tab-seguranca -->
+    </div>
 
     <!-- ═══ ABA BACKUP ═══ -->
     <div id="tab-backup" class="config-section">
@@ -1176,9 +1119,7 @@
         <div class="card-header">
           <div class="card-title"><i class="fas fa-database"></i> Armazenamento Local</div>
         </div>
-        <div id="storageStats" class="stats-grid">
-          <!-- dinâmico -->
-        </div>
+        <div id="storageStats" class="stats-grid"></div>
         <div>
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Uso do localStorage</div>
           <div class="storage-bar">
@@ -1226,7 +1167,7 @@
         </div>
       </div>
 
-    </div><!-- /tab-backup -->
+    </div>
 
     <!-- ═══ ABA SOBRE ═══ -->
     <div id="tab-sobre" class="config-section">
@@ -1247,7 +1188,7 @@
           <div class="feature-item"><i class="fas fa-check"></i> Gestão de Inspeções</div>
           <div class="feature-item"><i class="fas fa-check"></i> Matriz de Riscos</div>
           <div class="feature-item"><i class="fas fa-check"></i> Checklists por NR</div>
-          <div class="feature-item"><i class="fas fa-check"></i> Cadastro de Funcionários</div>
+          <div class="feature-item"><i class="fas fa-check"></i> Cadastro de Colaboradores</div>
           <div class="feature-item"><i class="fas fa-check"></i> Controle de EPIs</div>
           <div class="feature-item"><i class="fas fa-check"></i> Agenda Inteligente</div>
           <div class="feature-item"><i class="fas fa-check"></i> Galeria de Fotos</div>
@@ -1296,12 +1237,12 @@
         </div>
       </div>
 
-    </div><!-- /tab-sobre -->
+    </div>
 
-  </div><!-- /content -->
-</div><!-- /main -->
+  </div>
+</div>
 
-<!-- ═══════════════════════════════════════ MODAL USUÁRIO ═══════════════════════════════════════ -->
+<!-- MODAL USUÁRIO -->
 <div class="modal-overlay" id="userModal">
   <div class="modal">
     <div class="modal-header">
@@ -1352,7 +1293,7 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════ MODAL CONFIRMAR CLEAR ═══════════════════════════════════════ -->
+<!-- MODAL CONFIRMAR CLEAR -->
 <div class="modal-overlay" id="clearModal">
   <div class="modal" style="max-width:420px;text-align:center">
     <div style="font-size:48px;margin-bottom:16px">⚠️</div>
@@ -1368,20 +1309,16 @@
   </div>
 </div>
 
-<!-- TOAST CONTAINER -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- ═══════════════════════════════════════ SCRIPTS ═══════════════════════════════════════ -->
 <script>
-  // ─── CHAVES DO LOCALSTORAGE ───
   const KEYS = {
     empresa:      'safenr_empresa',
     usuarios:     'safenr_usuarios',
     prefs:        'safenr_prefs',
     seguranca:    'safenr_seguranca',
     backupHist:   'safenr_backup_history',
-    currentUser:  'safenr_current_user',
-    // dados do sistema
+    currentUser:  'safenr_user',
     inspecoes:    'safenr_inspecoes',
     riscos:       'safenr_riscos',
     funcionarios: 'safenr_funcionarios',
@@ -1391,27 +1328,26 @@
     agenda:       'safenr_agenda',
   };
 
-  // ─── INIT ───
   document.addEventListener('DOMContentLoaded', () => {
+    const u = JSON.parse(localStorage.getItem(KEYS.currentUser) || 'null');
+    if (!u) { window.location.href = 'index.html'; return; }
+    loadCurrentUser();
     loadEmpresa();
     loadUsuarios();
     loadPrefs();
     loadSeguranca();
     loadStorageStats();
     loadBackupHistory();
-    loadCurrentUser();
   });
 
-  // ─── TABS ───
-  function switchTab(tab) {
+  function switchTab(tab, btn) {
     document.querySelectorAll('.config-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.config-tab').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + tab).classList.add('active');
-    event.currentTarget.classList.add('active');
+    btn.classList.add('active');
     if (tab === 'backup') loadStorageStats();
   }
 
-  // ─── LOAD CURRENT USER ───
   function loadCurrentUser() {
     const u = JSON.parse(localStorage.getItem(KEYS.currentUser) || '{}');
     if (u.nome) {
@@ -1421,20 +1357,14 @@
     }
   }
 
-  // ─── EMPRESA ───
   function loadEmpresa() {
     const d = JSON.parse(localStorage.getItem(KEYS.empresa) || '{}');
     const fields = ['razaoSocial','nomeFantasia','cnpj','inscricaoEstadual','ramoAtividade',
                     'cnae','grauRisco','numFuncionarios','endereco','cidade','estado','cep',
                     'telefone','email','responsavelSesmt','registroProfissional',
                     'cabecalhoPDF','rodapePDF','assinaturaDigital','formatoData'];
-    fields.forEach(f => {
-      const el = document.getElementById(f);
-      if (el && d[f]) el.value = d[f];
-    });
-    if (d.logoSrc) {
-      document.getElementById('logoPreview').innerHTML = `<img src="${d.logoSrc}" alt="Logo">`;
-    }
+    fields.forEach(f => { const el = document.getElementById(f); if (el && d[f]) el.value = d[f]; });
+    if (d.logoSrc) document.getElementById('logoPreview').innerHTML = `<img src="${d.logoSrc}" alt="Logo">`;
   }
 
   function saveEmpresa() {
@@ -1443,8 +1373,7 @@
                     'cnae','grauRisco','numFuncionarios','endereco','cidade','estado','cep',
                     'telefone','email','responsavelSesmt','registroProfissional',
                     'cabecalhoPDF','rodapePDF','assinaturaDigital','formatoData'];
-    fields.forEach(f => { const el = document.getElementById(f); if(el) d[f] = el.value; });
-    // logo
+    fields.forEach(f => { const el = document.getElementById(f); if (el) d[f] = el.value; });
     const img = document.getElementById('logoPreview').querySelector('img');
     if (img) d.logoSrc = img.src;
     localStorage.setItem(KEYS.empresa, JSON.stringify(d));
@@ -1459,7 +1388,6 @@
     reader.readAsDataURL(input.files[0]);
   }
 
-  // ─── MÁSCARAS ───
   function maskCNPJ(el) {
     let v = el.value.replace(/\D/g,'').substring(0,14);
     v = v.replace(/^(\d{2})(\d)/,'$1.$2');
@@ -1475,21 +1403,20 @@
     el.value = v;
   }
 
-  // ─── USUÁRIOS ───
   let users = [];
 
   function loadUsuarios() {
     users = JSON.parse(localStorage.getItem(KEYS.usuarios) || '[]');
     if (users.length === 0) {
-      // usuário padrão
+      const u = JSON.parse(localStorage.getItem(KEYS.currentUser) || '{}');
       users = [{
-        nome: 'Administrador',
-        email: 'admin@safenr.com',
+        nome: u.nome || 'Administrador',
+        email: u.email || 'admin@safenr.com',
         perfil: 'Administrador',
         cargo: 'Administrador do Sistema',
         status: 'Ativo',
         ultimoAcesso: new Date().toLocaleDateString('pt-BR'),
-        senha: 'admin123'
+        senha: u.senha || 'admin123'
       }];
       localStorage.setItem(KEYS.usuarios, JSON.stringify(users));
     }
@@ -1497,13 +1424,13 @@
   }
 
   function renderUsers() {
-    const tbody = document.getElementById('usersTableBody');
+    const tbody  = document.getElementById('usersTableBody');
     const colors = ['#4f6ef7','#22c55e','#f59e0b','#ef4444','#a855f7','#06b6d4'];
     tbody.innerHTML = users.map((u, i) => `
       <tr>
         <td>
           <div class="user-cell">
-            <div class="user-avatar-sm" style="background:${colors[i % colors.length]}20;color:${colors[i % colors.length]}">
+            <div class="user-avatar-sm" style="background:${colors[i%colors.length]}20;color:${colors[i%colors.length]}">
               ${u.nome.charAt(0).toUpperCase()}
             </div>
             <div>
@@ -1530,24 +1457,17 @@
 
   function perfilBadge(p) {
     const map = {
-      'Administrador': 'badge-red',
-      'Técnico SST':   'badge-purple',
-      'Supervisor':    'badge-blue',
-      'Inspetor':      'badge-green',
-      'Visitante':     'badge-yellow',
+      'Administrador':'badge-red','Técnico SST':'badge-purple',
+      'Supervisor':'badge-blue','Inspetor':'badge-green','Visitante':'badge-yellow'
     };
-    return `<span class="badge ${map[p] || 'badge-blue'}">${p}</span>`;
+    return `<span class="badge ${map[p]||'badge-blue'}">${p}</span>`;
   }
 
   function openUserModal(editIdx = -1) {
-    document.getElementById('uNome').value   = '';
-    document.getElementById('uEmail').value  = '';
-    document.getElementById('uSenha').value  = '';
+    ['uNome','uEmail','uSenha','uCargo'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('uPerfil').value = '';
-    document.getElementById('uCargo').value  = '';
     document.getElementById('uStatus').value = 'Ativo';
     document.getElementById('uEditIndex').value = editIdx;
-
     if (editIdx >= 0) {
       const u = users[editIdx];
       document.getElementById('uNome').value   = u.nome;
@@ -1562,10 +1482,7 @@
     document.getElementById('userModal').classList.add('open');
   }
 
-  function closeUserModal() {
-    document.getElementById('userModal').classList.remove('open');
-  }
-
+  function closeUserModal() { document.getElementById('userModal').classList.remove('open'); }
   function editUser(i) { openUserModal(i); }
 
   function deleteUser(i) {
@@ -1585,50 +1502,34 @@
     const cargo  = document.getElementById('uCargo').value.trim();
     const status = document.getElementById('uStatus').value;
     const idx    = parseInt(document.getElementById('uEditIndex').value);
-
     if (!nome || !email || !perfil) { showToast('Preencha todos os campos obrigatórios!', 'error'); return; }
-
     const obj = { nome, email, perfil, cargo, status,
                   ultimoAcesso: new Date().toLocaleDateString('pt-BR'),
                   senha: senha || (idx >= 0 ? users[idx].senha : 'safenr123') };
-
-    if (idx >= 0) {
-      users[idx] = { ...users[idx], ...obj };
-    } else {
-      users.push(obj);
-    }
-
+    if (idx >= 0) { users[idx] = { ...users[idx], ...obj }; } else { users.push(obj); }
     localStorage.setItem(KEYS.usuarios, JSON.stringify(users));
     renderUsers();
     closeUserModal();
     showToast(idx >= 0 ? 'Usuário atualizado!' : 'Usuário criado com sucesso!', 'success');
   }
 
-  // ─── PREFERÊNCIAS ───
   function loadPrefs() {
     const p = JSON.parse(localStorage.getItem(KEYS.prefs) || '{}');
-    const toggles = ['notifEPI','notifInspecao','notifExame','notifTreinamento','notifEmail','logoNoPDF'];
-    toggles.forEach(id => {
+    ['notifEPI','notifInspecao','notifExame','notifTreinamento','notifEmail','logoNoPDF'].forEach(id => {
       if (p[id] !== undefined) document.getElementById(id).checked = p[id];
     });
-    const selects = ['diasAlertaEPI','diasAlertaExame','diasAlertaTreinamento','fusoHorario'];
-    selects.forEach(id => {
+    ['diasAlertaEPI','diasAlertaExame','diasAlertaTreinamento','fusoHorario'].forEach(id => {
       if (p[id]) document.getElementById(id).value = p[id];
     });
   }
 
   function savePrefs() {
     const p = {};
-    ['notifEPI','notifInspecao','notifExame','notifTreinamento','notifEmail','logoNoPDF'].forEach(id => {
-      p[id] = document.getElementById(id).checked;
-    });
-    ['diasAlertaEPI','diasAlertaExame','diasAlertaTreinamento','fusoHorario'].forEach(id => {
-      p[id] = document.getElementById(id).value;
-    });
+    ['notifEPI','notifInspecao','notifExame','notifTreinamento','notifEmail','logoNoPDF'].forEach(id => { p[id] = document.getElementById(id).checked; });
+    ['diasAlertaEPI','diasAlertaExame','diasAlertaTreinamento','fusoHorario'].forEach(id => { p[id] = document.getElementById(id).value; });
     localStorage.setItem(KEYS.prefs, JSON.stringify(p));
   }
 
-  // ─── SEGURANÇA ───
   function loadSeguranca() {
     const s = JSON.parse(localStorage.getItem(KEYS.seguranca) || '{}');
     if (s.sessionTimeout) document.getElementById('sessionTimeout').value = s.sessionTimeout;
@@ -1644,15 +1545,15 @@
   }
 
   function checkPasswordStrength(val) {
-    const bar   = document.getElementById('strengthBar');
-    const fill  = document.getElementById('strengthFill');
+    const bar = document.getElementById('strengthBar');
+    const fill = document.getElementById('strengthFill');
     const label = document.getElementById('strengthLabel');
     if (!val) { bar.style.display = 'none'; return; }
     bar.style.display = 'block';
     let score = 0;
-    if (val.length >= 8)        score++;
-    if (/[A-Z]/.test(val))      score++;
-    if (/[0-9]/.test(val))      score++;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
     if (/[^A-Za-z0-9]/.test(val)) score++;
     const levels = [
       { pct:'20%', color:'#ef4444', text:'Muito fraca' },
@@ -1662,29 +1563,23 @@
       { pct:'100%',color:'#10b981', text:'Muito forte' },
     ];
     const lv = levels[Math.min(score, 4)];
-    fill.style.width      = lv.pct;
+    fill.style.width = lv.pct;
     fill.style.background = lv.color;
-    label.textContent     = lv.text;
-    label.style.color     = lv.color;
+    label.textContent = lv.text;
+    label.style.color = lv.color;
   }
 
   function changePassword() {
-    const atual    = document.getElementById('senhaAtual').value;
-    const nova     = document.getElementById('novaSenha').value;
+    const atual     = document.getElementById('senhaAtual').value;
+    const nova      = document.getElementById('novaSenha').value;
     const confirmar = document.getElementById('confirmarSenha').value;
     if (!atual || !nova || !confirmar) { showToast('Preencha todos os campos de senha!', 'error'); return; }
     if (nova !== confirmar)            { showToast('As senhas não coincidem!', 'error'); return; }
     if (nova.length < 6)               { showToast('A senha deve ter no mínimo 6 caracteres!', 'error'); return; }
-    // atualiza na lista de usuários
     const cur = JSON.parse(localStorage.getItem(KEYS.currentUser) || '{}');
     const idx = users.findIndex(u => u.email === cur.email);
-    if (idx >= 0) {
-      users[idx].senha = nova;
-      localStorage.setItem(KEYS.usuarios, JSON.stringify(users));
-    }
-    document.getElementById('senhaAtual').value   = '';
-    document.getElementById('novaSenha').value    = '';
-    document.getElementById('confirmarSenha').value = '';
+    if (idx >= 0) { users[idx].senha = nova; localStorage.setItem(KEYS.usuarios, JSON.stringify(users)); }
+    ['senhaAtual','novaSenha','confirmarSenha'].forEach(id => document.getElementById(id).value = '');
     showToast('Senha atualizada com sucesso!', 'success');
   }
 
@@ -1693,34 +1588,27 @@
     window.location.href = 'index.html';
   }
 
-  // ─── BACKUP / STORAGE ───
   function loadStorageStats() {
     const dataKeys = [KEYS.inspecoes, KEYS.riscos, KEYS.funcionarios,
                       KEYS.epis, KEYS.checklists, KEYS.fotos, KEYS.agenda];
-    const labels   = ['Inspeções','Riscos','Funcionários','EPIs','Checklists','Fotos','Agenda'];
+    const labels   = ['Inspeções','Riscos','Colaboradores','EPIs','Checklists','Fotos','Agenda'];
     const colors   = ['--accent','--accent-green','--accent-purple','--accent-yellow',
                       '--accent-red','--accent','--accent-green'];
     let totalBytes = 0;
     const counts   = [];
-
     dataKeys.forEach(k => {
-      const raw  = localStorage.getItem(k) || '[]';
-      const arr  = JSON.parse(raw);
+      const raw = localStorage.getItem(k) || '[]';
+      const arr = JSON.parse(raw);
       totalBytes += raw.length * 2;
       counts.push(Array.isArray(arr) ? arr.length : 0);
     });
-
-    // também conta os de config
     [KEYS.empresa, KEYS.usuarios, KEYS.prefs, KEYS.seguranca].forEach(k => {
       totalBytes += (localStorage.getItem(k) || '').length * 2;
     });
-
     const kb  = (totalBytes / 1024).toFixed(1);
     const pct = Math.min((totalBytes / (5 * 1024 * 1024)) * 100, 100).toFixed(1);
-
     document.getElementById('storageFill').style.width = pct + '%';
     document.getElementById('storageUsed').textContent = `${kb} KB usados (${pct}%)`;
-
     const grid = document.getElementById('storageStats');
     grid.innerHTML = dataKeys.map((k, i) => `
       <div class="stat-card">
@@ -1732,31 +1620,24 @@
 
   function exportBackup() {
     const backup = {};
-    Object.values(KEYS).forEach(k => {
-      const val = localStorage.getItem(k);
-      if (val) backup[k] = JSON.parse(val);
-    });
+    Object.values(KEYS).forEach(k => { const val = localStorage.getItem(k); if (val) backup[k] = JSON.parse(val); });
     backup._meta = {
       version: '1.0.0',
       exportedAt: new Date().toISOString(),
       exportedBy: (JSON.parse(localStorage.getItem(KEYS.currentUser) || '{}')).nome || 'Sistema',
     };
-
     const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
-    a.href     = url;
+    a.href = url;
     a.download = `safenr_backup_${new Date().toISOString().slice(0,10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
-
-    // salva histórico
     const hist = JSON.parse(localStorage.getItem(KEYS.backupHist) || '[]');
     hist.unshift({ date: new Date().toLocaleString('pt-BR'), size: (JSON.stringify(backup).length / 1024).toFixed(1) + ' KB' });
     if (hist.length > 10) hist.pop();
     localStorage.setItem(KEYS.backupHist, JSON.stringify(hist));
     loadBackupHistory();
-
     showToast('Backup exportado com sucesso! 💾', 'success');
   }
 
@@ -1768,24 +1649,20 @@
         const data = JSON.parse(e.target.result);
         if (!data._meta) { showToast('Arquivo de backup inválido!', 'error'); return; }
         if (!confirm(`Restaurar backup de ${data._meta.exportedAt?.slice(0,10) || '?'}?\nIsso sobrescreverá os dados atuais.`)) return;
-        Object.entries(data).forEach(([k, v]) => {
-          if (k !== '_meta') localStorage.setItem(k, JSON.stringify(v));
-        });
+        Object.entries(data).forEach(([k, v]) => { if (k !== '_meta') localStorage.setItem(k, JSON.stringify(v)); });
         showToast('Backup restaurado com sucesso! Recarregando...', 'success');
         setTimeout(() => location.reload(), 1500);
-      } catch {
-        showToast('Erro ao ler o arquivo de backup!', 'error');
-      }
+      } catch { showToast('Erro ao ler o arquivo de backup!', 'error'); }
     };
     reader.readAsText(input.files[0]);
     input.value = '';
   }
 
-  function confirmClear()  { document.getElementById('clearModal').classList.add('open'); }
+  function confirmClear()   { document.getElementById('clearModal').classList.add('open'); }
   function closeClearModal() { document.getElementById('clearModal').classList.remove('open'); }
 
   function clearAllData() {
-    const skip = ['safenr_current_user', 'safenr_usuarios'];
+    const skip = ['safenr_user', 'safenr_usuarios'];
     Object.values(KEYS).forEach(k => { if (!skip.includes(k)) localStorage.removeItem(k); });
     closeClearModal();
     showToast('Todos os dados foram apagados!', 'info');
@@ -1815,7 +1692,6 @@
     `;
   }
 
-  // ─── SAVE ALL ───
   function saveAll() {
     saveEmpresa();
     savePrefs();
@@ -1831,7 +1707,6 @@
     showToast('Alterações descartadas.', 'info');
   }
 
-  // ─── TOAST ───
   function showToast(msg, type = 'info') {
     const icons = { success:'fa-check-circle', error:'fa-times-circle', info:'fa-info-circle' };
     const el    = document.createElement('div');
@@ -1843,3 +1718,4 @@
 </script>
 </body>
 </html>
+
