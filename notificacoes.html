@@ -17,6 +17,7 @@
     .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
     .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
     .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .notif-badge{background:#f87171;color:#fff;border-radius:20px;padding:1px 7px;font-size:.65rem;font-weight:700;margin-left:auto}
     .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
     .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
     .user-info p{font-size:.82rem;font-weight:600}
@@ -28,28 +29,21 @@
     .topbar-actions{display:flex;gap:10px;align-items:center}
     .btn-limpar{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:rgba(255,255,255,.6);font-size:.85rem;font-weight:600;padding:10px 18px;cursor:pointer;transition:all .2s}
     .btn-limpar:hover{background:rgba(255,255,255,.12)}
-
-    /* RESUMO */
     .resumo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
     .resumo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;text-align:center}
     .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
     .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-
-    /* FILTROS */
     .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
     .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
     .filtro-btn:hover,.filtro-btn.active{background:rgba(0,212,255,.1);border-color:#00d4ff;color:#00d4ff}
-
-    /* LISTA NOTIFICAÇÕES */
     .notif-lista{display:flex;flex-direction:column;gap:10px}
     .notif-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:18px 22px;display:flex;align-items:flex-start;gap:16px;transition:all .2s;border-left:4px solid transparent}
     .notif-item:hover{background:rgba(255,255,255,.05)}
     .notif-item.nao-lida{background:rgba(0,212,255,.04);border-left-color:#00d4ff}
-    .notif-item.urgente  {border-left-color:#f87171;background:rgba(248,113,113,.04)}
-    .notif-item.aviso    {border-left-color:#fbbf24;background:rgba(251,191,36,.04)}
-    .notif-item.info     {border-left-color:#00d4ff;background:rgba(0,212,255,.04)}
-    .notif-item.sucesso  {border-left-color:#4ade80;background:rgba(74,222,128,.04)}
-
+    .notif-item.urgente {border-left-color:#f87171;background:rgba(248,113,113,.04)}
+    .notif-item.aviso   {border-left-color:#fbbf24;background:rgba(251,191,36,.04)}
+    .notif-item.info    {border-left-color:#00d4ff;background:rgba(0,212,255,.04)}
+    .notif-item.sucesso {border-left-color:#4ade80;background:rgba(74,222,128,.04)}
     .notif-icone{font-size:1.6rem;flex-shrink:0;margin-top:2px}
     .notif-corpo{flex:1}
     .notif-titulo{font-size:.93rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -84,10 +78,14 @@
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
     <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
     <a class="nav-item" href="./ocorrencias.html"><span class="icon">🚨</span> Ocorrencias</a>
+    <a class="nav-item" href="./plano-acao.html"><span class="icon">📌</span> Plano de Acao</a>
+    <a class="nav-item" href="./documentos.html"><span class="icon">🗂️</span> Documentos SST</a>
     <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item" href="./ambientes.html"><span class="icon">🏭</span> Ambientes</a>
+    <a class="nav-item" href="./ia-sugestoes.html"><span class="icon">🤖</span> IA Sugestoes</a>
     <a class="nav-item active" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
     <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
@@ -107,10 +105,9 @@
     </div>
   </div>
 
-  <!-- RESUMO -->
   <div class="resumo-grid">
     <div class="resumo-card">
-      <div class="rc-valor" id="cnt-total"   style="color:#e2e8f0">0</div>
+      <div class="rc-valor" id="cnt-total"    style="color:#e2e8f0">0</div>
       <div class="rc-label">Total</div>
     </div>
     <div class="resumo-card">
@@ -122,12 +119,11 @@
       <div class="rc-label">Urgentes</div>
     </div>
     <div class="resumo-card">
-      <div class="rc-valor" id="cnt-avisos"  style="color:#fbbf24">0</div>
+      <div class="rc-valor" id="cnt-avisos"   style="color:#fbbf24">0</div>
       <div class="rc-label">Avisos</div>
     </div>
   </div>
 
-  <!-- FILTROS -->
   <div class="filtros">
     <button class="filtro-btn active" id="fn-todos"    onclick="filtrarNotif('todos',this)">Todas</button>
     <button class="filtro-btn"        id="fn-nao-lida" onclick="filtrarNotif('nao-lida',this)">🔵 Nao Lidas</button>
@@ -145,7 +141,6 @@
 </div>
 
 <script>
-/* ── AUTH ── */
 var userData = localStorage.getItem('safenr_user');
 if (!userData) { window.location.href = './index.html'; }
 var user = JSON.parse(userData);
@@ -153,80 +148,77 @@ document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
 document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
 function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
 
-/* ── MOTOR DE NOTIFICAÇÕES ── */
 var filtroAtivo = 'todos';
 
 function gerarNotificacoes() {
-  var notifs   = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
-  var lidas    = new Set(notifs.filter(function(n){ return n.lida; }).map(function(n){ return n.autoId; }));
-  var geradas  = new Set(notifs.map(function(n){ return n.autoId; }));
-  var hoje     = new Date(); hoje.setHours(0,0,0,0);
-  var novas    = [];
+  var notifs  = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
+  var lidas   = new Set(notifs.filter(function(n){ return n.lida; }).map(function(n){ return n.autoId; }));
+  var geradas = new Set(notifs.map(function(n){ return n.autoId; }));
+  var hoje    = new Date(); hoje.setHours(0,0,0,0);
+  var novas   = [];
 
-  /* ── EPIs vencendo ── */
+  /* EPIs vencendo */
   var colabs = JSON.parse(localStorage.getItem('safenr_colaboradores') || '[]');
   colabs.forEach(function(c) {
     (c.epis || []).forEach(function(epi) {
       if (!epi.validade) return;
-      var val  = new Date(epi.validade + 'T00:00:00');
+      var val  = new Date(epi.validade+'T00:00:00');
       var diff = (val - hoje) / 86400000;
-      var aid  = 'epi_' + c.id + '_' + epi.nome;
+      var aid  = 'epi_'+c.id+'_'+epi.nome;
       if (geradas.has(aid)) return;
       if (diff < 0) {
-        novas.push({ autoId: aid, tipo: 'urgente', icone: '🦺', titulo: 'EPI Vencido: ' + epi.nome, msg: 'O EPI ' + epi.nome + ' do colaborador ' + c.nome + ' venceu em ' + fmt(epi.validade) + '.', tag: 'urgente', link: './colaboradores.html', lida: lidas.has(aid), data: new Date().toISOString() });
+        novas.push({ autoId:aid, tipo:'urgente', icone:'🦺', titulo:'EPI Vencido: '+epi.nome, msg:'O EPI '+epi.nome+' do colaborador '+c.nome+' venceu em '+fmt(epi.validade)+'.', tag:'urgente', link:'./colaboradores.html', lida:lidas.has(aid), data:new Date().toISOString() });
       } else if (diff <= 30) {
-        novas.push({ autoId: aid, tipo: 'aviso', icone: '🦺', titulo: 'EPI Vence em ' + Math.round(diff) + ' dias: ' + epi.nome, msg: 'O EPI ' + epi.nome + ' do colaborador ' + c.nome + ' vence em ' + fmt(epi.validade) + '.', tag: 'aviso', link: './colaboradores.html', lida: lidas.has(aid), data: new Date().toISOString() });
+        novas.push({ autoId:aid, tipo:'aviso', icone:'🦺', titulo:'EPI Vence em '+Math.round(diff)+' dias: '+epi.nome, msg:'O EPI '+epi.nome+' do colaborador '+c.nome+' vence em '+fmt(epi.validade)+'.', tag:'aviso', link:'./colaboradores.html', lida:lidas.has(aid), data:new Date().toISOString() });
       }
     });
   });
 
-  /* ── Treinamentos vencendo ── */
+  /* Treinamentos vencendo */
   var treins = JSON.parse(localStorage.getItem('safenr_treinamentos') || '[]');
   treins.forEach(function(t) {
     if (!t.dataVal) return;
-    var val  = new Date(t.dataVal + 'T00:00:00');
+    var val  = new Date(t.dataVal+'T00:00:00');
     var diff = (val - hoje) / 86400000;
-    var aid  = 'trein_' + t.id;
+    var aid  = 'trein_'+t.id;
     if (geradas.has(aid)) return;
     if (diff < 0) {
-      novas.push({ autoId: aid, tipo: 'urgente', icone: '🎓', titulo: 'Treinamento Vencido: ' + t.nome, msg: 'O treinamento "' + t.nome + '" venceu em ' + fmt(t.dataVal) + '. Providencie a renovacao.', tag: 'urgente', link: './treinamentos.html', lida: lidas.has(aid), data: new Date().toISOString() });
+      novas.push({ autoId:aid, tipo:'urgente', icone:'🎓', titulo:'Treinamento Vencido: '+t.nome, msg:'O treinamento "'+t.nome+'" venceu em '+fmt(t.dataVal)+'. Providencie a renovacao.', tag:'urgente', link:'./treinamentos.html', lida:lidas.has(aid), data:new Date().toISOString() });
     } else if (diff <= 30) {
-      novas.push({ autoId: aid, tipo: 'aviso', icone: '🎓', titulo: 'Treinamento Vence em ' + Math.round(diff) + ' dias', msg: '"' + t.nome + '" — vence em ' + fmt(t.dataVal) + '.', tag: 'aviso', link: './treinamentos.html', lida: lidas.has(aid), data: new Date().toISOString() });
+      novas.push({ autoId:aid, tipo:'aviso', icone:'🎓', titulo:'Treinamento Vence em '+Math.round(diff)+' dias', msg:'"'+t.nome+'" — vence em '+fmt(t.dataVal)+'.', tag:'aviso', link:'./treinamentos.html', lida:lidas.has(aid), data:new Date().toISOString() });
     }
   });
 
-  /* ── Riscos críticos sem medida de controle ── */
+  /* Riscos críticos sem medida */
   var riscos = JSON.parse(localStorage.getItem('safenr_riscos') || '[]');
-  riscos.filter(function(r){ return r.nivel === 'critico' && !r.medida; }).forEach(function(r) {
-    var aid = 'risco_sem_medida_' + r.id;
+  riscos.filter(function(r){ return r.nivel==='critico' && !r.medida; }).forEach(function(r) {
+    var aid = 'risco_sem_medida_'+r.id;
     if (geradas.has(aid)) return;
-    novas.push({ autoId: aid, tipo: 'urgente', icone: '⚠️', titulo: 'Risco Critico sem Medida de Controle', msg: 'O risco "' + r.descricao + '" no setor ' + r.setor + ' esta classificado como CRITICO mas nao possui medida de controle definida.', tag: 'urgente', link: './riscos.html', lida: false, data: new Date().toISOString() });
+    novas.push({ autoId:aid, tipo:'urgente', icone:'⚠️', titulo:'Risco Critico sem Medida de Controle', msg:'O risco "'+r.descricao+'" no setor '+r.setor+' esta classificado como CRITICO mas nao possui medida de controle definida.', tag:'urgente', link:'./riscos.html', lida:false, data:new Date().toISOString() });
   });
 
-  /* ── Inspeções pendentes há mais de 30 dias ── */
+  /* Inspeções pendentes há mais de 30 dias */
   var insp = JSON.parse(localStorage.getItem('safenr_inspecoes') || '[]');
-  insp.filter(function(i){ return i.status === 'pendente'; }).forEach(function(i) {
+  insp.filter(function(i){ return i.status==='pendente'; }).forEach(function(i) {
     if (!i.data) return;
-    var d    = new Date(i.data + 'T00:00:00');
+    var d    = new Date(i.data+'T00:00:00');
     var diff = (hoje - d) / 86400000;
     if (diff < 30) return;
-    var aid = 'insp_pendente_' + i.id;
+    var aid = 'insp_pendente_'+i.id;
     if (geradas.has(aid)) return;
-    novas.push({ autoId: aid, tipo: 'aviso', icone: '🔍', titulo: 'Inspecao pendente ha ' + Math.round(diff) + ' dias', msg: '"' + (i.titulo || i.local || 'Inspecao') + '" esta pendente desde ' + fmt(i.data) + '.', tag: 'aviso', link: './inspecoes.html', lida: false, data: new Date().toISOString() });
+    novas.push({ autoId:aid, tipo:'aviso', icone:'🔍', titulo:'Inspecao pendente ha '+Math.round(diff)+' dias', msg:'"'+(i.titulo||i.local||'Inspecao')+'" esta pendente desde '+fmt(i.data)+'.', tag:'aviso', link:'./inspecoes.html', lida:false, data:new Date().toISOString() });
   });
 
-  /* ── Ocorrências sem plano de ação ── */
+  /* Ocorrências sem plano de ação */
   var ocorr = JSON.parse(localStorage.getItem('safenr_ocorrencias') || '[]');
   ocorr.filter(function(o){ return (o.tipo==='acidente'||o.tipo==='grave') && !o.acao; }).forEach(function(o) {
-    var aid = 'ocorr_sem_acao_' + o.id;
+    var aid = 'ocorr_sem_acao_'+o.id;
     if (geradas.has(aid)) return;
-    novas.push({ autoId: aid, tipo: 'urgente', icone: '🚨', titulo: 'Acidente sem Plano de Acao', msg: 'A ocorrencia de ' + o.colaborador + ' em ' + fmt(o.data) + ' nao possui medida corretiva registrada.', tag: 'urgente', link: './ocorrencias.html', lida: false, data: new Date().toISOString() });
+    novas.push({ autoId:aid, tipo:'urgente', icone:'🚨', titulo:'Acidente sem Plano de Acao', msg:'A ocorrencia de '+o.colaborador+' em '+fmt(o.data)+' nao possui medida corretiva registrada.', tag:'urgente', link:'./ocorrencias.html', lida:false, data:new Date().toISOString() });
   });
 
-  /* Merge: mantém lidas antigas + adiciona novas */
-  var final = notifs.filter(function(n){ return !novas.some(function(v){ return v.autoId === n.autoId; }); }).concat(novas);
-  /* Ordena: não lidas primeiro, depois por data */
-  final.sort(function(a, b) {
+  var final = notifs.filter(function(n){ return !novas.some(function(v){ return v.autoId===n.autoId; }); }).concat(novas);
+  final.sort(function(a,b){
     if (!a.lida && b.lida) return -1;
     if (a.lida && !b.lida) return 1;
     return new Date(b.data) - new Date(a.data);
@@ -235,7 +227,7 @@ function gerarNotificacoes() {
   return final;
 }
 
-function fmt(d) { if (!d) return '--'; var p = d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function fmt(d) { if (!d) return '--'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
 
 function filtrarNotif(tipo, btn) {
   filtroAtivo = tipo;
@@ -247,43 +239,43 @@ function filtrarNotif(tipo, btn) {
 function atualizarContadores(lista) {
   document.getElementById('cnt-total').textContent     = lista.length;
   document.getElementById('cnt-nao-lidas').textContent = lista.filter(function(n){ return !n.lida; }).length;
-  document.getElementById('cnt-urgentes').textContent  = lista.filter(function(n){ return n.tipo === 'urgente'; }).length;
-  document.getElementById('cnt-avisos').textContent    = lista.filter(function(n){ return n.tipo === 'aviso'; }).length;
+  document.getElementById('cnt-urgentes').textContent  = lista.filter(function(n){ return n.tipo==='urgente'; }).length;
+  document.getElementById('cnt-avisos').textContent    = lista.filter(function(n){ return n.tipo==='aviso'; }).length;
 }
 
 function renderizar() {
-  var todas   = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
-  var lista   = todas.filter(function(n) {
-    if (filtroAtivo === 'todos')    return true;
-    if (filtroAtivo === 'nao-lida') return !n.lida;
+  var todas = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
+  var lista = todas.filter(function(n) {
+    if (filtroAtivo==='todos')    return true;
+    if (filtroAtivo==='nao-lida') return !n.lida;
     return n.tipo === filtroAtivo;
   });
   atualizarContadores(todas);
   var container = document.getElementById('notifLista');
   var empty     = document.getElementById('emptyState');
   container.innerHTML = '';
-  if (lista.length === 0) { empty.style.display = 'block'; return; }
+  if (lista.length === 0) { empty.style.display='block'; return; }
   empty.style.display = 'none';
   lista.forEach(function(n) {
     var div = document.createElement('div');
-    div.className = 'notif-item ' + n.tipo + (n.lida ? '' : ' nao-lida');
+    div.className = 'notif-item '+n.tipo+(n.lida?'':' nao-lida');
     div.innerHTML =
-      '<div class="notif-icone">' + (n.icone || '🔔') + '</div>' +
-      '<div class="notif-corpo">' +
-        '<div class="notif-titulo">' +
-          (!n.lida ? '<span class="ponto"></span>' : '') +
-          n.titulo +
-        '</div>' +
-        '<div class="notif-msg">' + n.msg + '</div>' +
-        '<div class="notif-meta">' +
-          '<span class="tag tag-' + n.tipo + '">' + n.tipo + '</span>' +
-          '<span>' + fmtDT(n.data) + '</span>' +
-          (n.link ? '<a href="' + n.link + '" style="color:#00d4ff;font-size:.75rem">→ Ver</a>' : '') +
-        '</div>' +
-      '</div>' +
-      '<div class="notif-acoes">' +
-        (!n.lida ? '<button class="btn-notif" onclick="marcarLida(\'' + n.autoId + '\')" title="Marcar como lida">✓</button>' : '<span style="color:rgba(255,255,255,.2);font-size:.75rem;padding:6px">✓ Lida</span>') +
-        '<button class="btn-notif" onclick="removerNotif(\'' + n.autoId + '\')" title="Remover" style="color:rgba(248,113,113,.6)">✕</button>' +
+      '<div class="notif-icone">'+(n.icone||'🔔')+'</div>'+
+      '<div class="notif-corpo">'+
+        '<div class="notif-titulo">'+
+          (!n.lida?'<span class="ponto"></span>':'')+
+          n.titulo+
+        '</div>'+
+        '<div class="notif-msg">'+n.msg+'</div>'+
+        '<div class="notif-meta">'+
+          '<span class="tag tag-'+n.tipo+'">'+n.tipo+'</span>'+
+          '<span>'+fmtDT(n.data)+'</span>'+
+          (n.link?'<a href="'+n.link+'" style="color:#00d4ff;font-size:.75rem">→ Ver</a>':'')+
+        '</div>'+
+      '</div>'+
+      '<div class="notif-acoes">'+
+        (!n.lida?'<button class="btn-notif" onclick="marcarLida(\''+n.autoId+'\')" title="Marcar como lida">✓</button>':'<span style="color:rgba(255,255,255,.2);font-size:.75rem;padding:6px">✓ Lida</span>')+
+        '<button class="btn-notif" onclick="removerNotif(\''+n.autoId+'\')" title="Remover" style="color:rgba(248,113,113,.6)">✕</button>'+
       '</div>';
     container.appendChild(div);
   });
@@ -296,15 +288,15 @@ function fmtDT(iso) {
 
 function marcarLida(autoId) {
   var notifs = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
-  var idx = notifs.findIndex(function(n){ return n.autoId === autoId; });
-  if (idx >= 0) { notifs[idx].lida = true; localStorage.setItem('safenr_notificacoes', JSON.stringify(notifs)); }
+  var idx = notifs.findIndex(function(n){ return n.autoId===autoId; });
+  if (idx >= 0) { notifs[idx].lida=true; localStorage.setItem('safenr_notificacoes', JSON.stringify(notifs)); }
   renderizar();
   atualizarBadgeSidebar();
 }
 
 function marcarTodasLidas() {
   var notifs = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
-  notifs.forEach(function(n){ n.lida = true; });
+  notifs.forEach(function(n){ n.lida=true; });
   localStorage.setItem('safenr_notificacoes', JSON.stringify(notifs));
   renderizar();
   atualizarBadgeSidebar();
@@ -312,7 +304,7 @@ function marcarTodasLidas() {
 
 function removerNotif(autoId) {
   var notifs = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
-  notifs = notifs.filter(function(n){ return n.autoId !== autoId; });
+  notifs = notifs.filter(function(n){ return n.autoId!==autoId; });
   localStorage.setItem('safenr_notificacoes', JSON.stringify(notifs));
   renderizar();
   atualizarBadgeSidebar();
@@ -327,16 +319,15 @@ function limparLidas() {
 }
 
 function atualizarBadgeSidebar() {
-  var notifs  = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
-  var naoLidas= notifs.filter(function(n){ return !n.lida; }).length;
-  var link    = document.querySelector('a[href="./notificacoes.html"]');
+  var notifs   = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
+  var naoLidas = notifs.filter(function(n){ return !n.lida; }).length;
+  var link     = document.querySelector('a[href="./notificacoes.html"]');
   if (!link) return;
-  var badge   = link.querySelector('.notif-badge');
+  var badge = link.querySelector('.notif-badge');
   if (naoLidas > 0) {
     if (!badge) {
       badge = document.createElement('span');
       badge.className = 'notif-badge';
-      badge.style.cssText = 'background:#f87171;color:#fff;border-radius:20px;padding:1px 7px;font-size:.65rem;font-weight:700;margin-left:auto';
       link.appendChild(badge);
     }
     badge.textContent = naoLidas;
@@ -345,7 +336,6 @@ function atualizarBadgeSidebar() {
   }
 }
 
-/* ── INIT ── */
 gerarNotificacoes();
 renderizar();
 atualizarBadgeSidebar();
