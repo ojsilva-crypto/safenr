@@ -33,6 +33,7 @@
     .filtro-btn:hover,.filtro-btn.active{background:rgba(0,212,255,.12);border-color:#00d4ff;color:#00d4ff}
     .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:220px;margin-left:auto}
     .busca-input::placeholder{color:rgba(255,255,255,.3)}
+    .busca-input:focus{border-color:#00d4ff}
     .tabela-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
     table{width:100%;border-collapse:collapse}
     thead tr{background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.08)}
@@ -73,6 +74,7 @@
   </style>
 </head>
 <body>
+
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
@@ -80,23 +82,26 @@
   </div>
   <nav class="nav">
     <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
     <a class="nav-item active" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
+    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
     <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
-    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configuracoes</a>
+    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
+    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
     <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
-    <button class="btn-sair" onclick="sair()">X</button>
+    <button class="btn-sair" onclick="sair()">✕</button>
   </div>
 </div>
+
 <div class="main">
   <div class="topbar">
     <div><h2>🔍 Inspecoes</h2><span id="totalRegistros">0 registros</span></div>
@@ -108,39 +113,107 @@
     <button class="filtro-btn" onclick="filtrar('em-andamento',this)">Em Andamento</button>
     <button class="filtro-btn" onclick="filtrar('concluida',this)">Concluida</button>
     <button class="filtro-btn" onclick="filtrar('nao-conforme',this)">Nao Conforme</button>
-    <input class="busca-input" type="text" placeholder="Buscar..." oninput="renderizar(getLista())"/>
+    <input
+      class="busca-input"
+      type="text"
+      placeholder="🔎 Buscar..."
+      oninput="renderizar(getLista())"
+    />
   </div>
   <div class="tabela-wrap">
     <table>
-      <thead><tr><th>#</th><th>Titulo</th><th>Setor</th><th>Status</th><th>Data</th><th>Responsavel</th><th>Registrado por</th><th>Acoes</th></tr></thead>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Titulo</th>
+          <th>Setor</th>
+          <th>Status</th>
+          <th>Data</th>
+          <th>Responsavel</th>
+          <th>Registrado por</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
       <tbody id="tabelaBody"></tbody>
     </table>
-    <div class="empty-state" id="emptyState" style="display:none"><div>🔍</div><p>Nenhuma inspecao cadastrada.<br>Clique em <strong>+ Nova Inspecao</strong>.</p></div>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div>🔍</div>
+      <p>Nenhuma inspecao cadastrada.<br>Clique em <strong>+ Nova Inspecao</strong>.</p>
+    </div>
   </div>
 </div>
+
+<!-- MODAL FORM -->
 <div class="modal-overlay" id="modalForm">
   <div class="modal">
     <h3 id="modalTitulo">Nova Inspecao</h3>
-    <div class="form-row full"><div class="form-group"><label>Titulo *</label><input type="text" id="f_titulo" placeholder="Ex: Inspecao de EPI - Producao"/></div></div>
-    <div class="form-row">
-      <div class="form-group"><label>Setor *</label><input type="text" id="f_setor" placeholder="Ex: Producao"/></div>
-      <div class="form-group"><label>Data *</label><input type="date" id="f_data"/></div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Titulo *</label>
+        <input type="text" id="f_titulo" placeholder="Ex: Inspecao de EPI - Producao"/>
+      </div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Status *</label><select id="f_status"><option value="">Selecione</option><option value="pendente">Pendente</option><option value="em-andamento">Em Andamento</option><option value="concluida">Concluida</option><option value="nao-conforme">Nao Conforme</option><option value="conforme">Conforme</option></select></div>
-      <div class="form-group"><label>Responsavel</label><input type="text" id="f_resp" placeholder="Nome do responsavel"/></div>
+      <div class="form-group">
+        <label>Setor *</label>
+        <input type="text" id="f_setor" placeholder="Ex: Producao"/>
+      </div>
+      <div class="form-group">
+        <label>Data *</label>
+        <input type="date" id="f_data"/>
+      </div>
     </div>
-    <div class="form-row full"><div class="form-group"><label>Observacoes</label><textarea id="f_obs" placeholder="Descreva os detalhes da inspecao..."></textarea></div></div>
     <div class="form-row">
-      <div class="form-group"><label>Registrado por <span class="auto-tag">AUTO</span></label><input type="text" id="f_regPor" class="auto-field" readonly/></div>
-      <div class="form-group"><label>Registrado em <span class="auto-tag">AUTO</span></label><input type="text" id="f_regEm" class="auto-field" readonly/></div>
+      <div class="form-group">
+        <label>Status *</label>
+        <select id="f_status">
+          <option value="">Selecione</option>
+          <option value="pendente">Pendente</option>
+          <option value="em-andamento">Em Andamento</option>
+          <option value="concluida">Concluida</option>
+          <option value="nao-conforme">Nao Conforme</option>
+          <option value="conforme">Conforme</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Responsavel</label>
+        <input type="text" id="f_resp" placeholder="Nome do responsavel"/>
+      </div>
     </div>
-    <div class="modal-footer"><button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">Salvar</button></div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Observacoes</label>
+        <textarea id="f_obs" placeholder="Descreva os detalhes da inspecao..."></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Registrado por <span class="auto-tag">AUTO</span></label>
+        <input type="text" id="f_regPor" class="auto-field" readonly/>
+      </div>
+      <div class="form-group">
+        <label>Registrado em <span class="auto-tag">AUTO</span></label>
+        <input type="text" id="f_regEm" class="auto-field" readonly/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-salvar" onclick="salvar()">Salvar</button>
+    </div>
   </div>
 </div>
+
+<!-- MODAL VER -->
 <div class="modal-overlay" id="modalVer">
-  <div class="modal"><h3>Detalhes da Inspecao</h3><div id="modalVerConteudo"></div><div class="modal-footer"><button class="btn-cancelar" onclick="fecharVer()">Fechar</button></div></div>
+  <div class="modal">
+    <h3>Detalhes da Inspecao</h3>
+    <div id="modalVerConteudo"></div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharVer()">Fechar</button>
+    </div>
+  </div>
 </div>
+
 <script>
 var userData = localStorage.getItem('safenr_user');
 if (!userData) { window.location.href = './index.html'; }
@@ -148,71 +221,181 @@ var user = JSON.parse(userData);
 document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
 document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
 function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
-var registros = JSON.parse(localStorage.getItem('safenr_inspecoes') || '[]');
-var editandoId = null, filtroAtivo = 'todos';
+
+var registros  = JSON.parse(localStorage.getItem('safenr_inspecoes') || '[]');
+var editandoId = null;
+var filtroAtivo = 'todos';
+
 function salvarStorage() { localStorage.setItem('safenr_inspecoes', JSON.stringify(registros)); }
-function fmt(d) { if (!d) return '--'; var p = d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
-function fmtDT(iso) { if (!iso) return '--'; return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+
+function fmt(d) {
+  if (!d) return '--';
+  var p = d.split('-');
+  return p[2] + '/' + p[1] + '/' + p[0];
+}
+
+function fmtDT(iso) {
+  if (!iso) return '--';
+  return new Date(iso).toLocaleString('pt-BR', {
+    day:'2-digit', month:'2-digit', year:'numeric',
+    hour:'2-digit', minute:'2-digit'
+  });
+}
+
+var statusLabel = {
+  'pendente':     'Pendente',
+  'em-andamento': 'Em Andamento',
+  'concluida':    'Concluida',
+  'nao-conforme': 'Nao Conforme',
+  'conforme':     'Conforme'
+};
+
 function getLista() {
   var busca = document.querySelector('.busca-input').value.toLowerCase();
   return registros.filter(function(r) {
     if (filtroAtivo !== 'todos' && r.status !== filtroAtivo) return false;
-    if (busca && !(r.titulo||'').toLowerCase().includes(busca) && !(r.setor||'').toLowerCase().includes(busca)) return false;
+    if (busca &&
+        !(r.titulo||'').toLowerCase().includes(busca) &&
+        !(r.setor||'').toLowerCase().includes(busca) &&
+        !(r.responsavel||'').toLowerCase().includes(busca)) return false;
     return true;
   });
 }
-function filtrar(s, btn) { filtroAtivo = s; document.querySelectorAll('.filtro-btn').forEach(function(b){ b.classList.remove('active'); }); btn.classList.add('active'); renderizar(getLista()); }
+
+function filtrar(s, btn) {
+  filtroAtivo = s;
+  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderizar(getLista());
+}
+
 function renderizar(lista) {
-  var tbody = document.getElementById('tabelaBody'), empty = document.getElementById('emptyState');
+  var tbody = document.getElementById('tabelaBody');
+  var empty = document.getElementById('emptyState');
   tbody.innerHTML = '';
   document.getElementById('totalRegistros').textContent = registros.length + ' registro(s)';
   if (lista.length === 0) { empty.style.display = 'block'; return; }
   empty.style.display = 'none';
   lista.forEach(function(r) {
-    var tr = document.createElement('tr');
-    tr.innerHTML = '<td style="color:rgba(255,255,255,.3);font-size:.8rem">#'+String(r.id).padStart(3,'0')+'</td><td><strong>'+(r.titulo||'--')+'</strong></td><td>'+(r.setor||'--')+'</td><td><span class="badge '+(r.status||'pendente')+'">'+(r.status||'pendente')+'</span></td><td>'+fmt(r.data)+'</td><td>'+(r.responsavel||'--')+'</td><td style="font-size:.82rem">👤 '+(r.registradoPor||'--')+'</td><td><button class="btn-acao" onclick="ver('+r.id+')">👁️</button><button class="btn-acao" onclick="editar('+r.id+')">✏️</button><button class="btn-acao" onclick="excluir('+r.id+')">🗑️</button></td>';
+    var st  = r.status || 'pendente';
+    var lbl = statusLabel[st] || st;
+    var tr  = document.createElement('tr');
+    tr.innerHTML =
+      '<td style="color:rgba(255,255,255,.3);font-size:.8rem">#' + String(r.id).padStart(3,'0') + '</td>' +
+      '<td><strong>' + (r.titulo || '--') + '</strong></td>' +
+      '<td>' + (r.setor || '--') + '</td>' +
+      '<td><span class="badge ' + st + '">' + lbl + '</span></td>' +
+      '<td>' + fmt(r.data) + '</td>' +
+      '<td>' + (r.responsavel || '--') + '</td>' +
+      '<td style="font-size:.82rem">👤 ' + (r.registradoPor || '--') + '</td>' +
+      '<td>' +
+        '<button class="btn-acao" onclick="ver(' + r.id + ')" title="Visualizar">👁️</button>' +
+        '<button class="btn-acao" onclick="editar(' + r.id + ')" title="Editar">✏️</button>' +
+        '<button class="btn-acao" onclick="excluir(' + r.id + ')" title="Excluir">🗑️</button>' +
+      '</td>';
     tbody.appendChild(tr);
   });
 }
+
 function abrirModal(id) {
   editandoId = id || null;
   document.getElementById('modalTitulo').textContent = id ? 'Editar Inspecao' : 'Nova Inspecao';
-  ['f_titulo','f_setor','f_data','f_status','f_resp','f_obs'].forEach(function(f){ document.getElementById(f).value = ''; });
+  ['f_titulo','f_setor','f_data','f_resp','f_obs'].forEach(function(f) {
+    document.getElementById(f).value = '';
+  });
+  document.getElementById('f_status').value = '';
   document.getElementById('f_regPor').value = user.nome || 'Usuario';
-  document.getElementById('f_regEm').value = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('f_regEm').value  = new Date().toLocaleString('pt-BR', {
+    day:'2-digit', month:'2-digit', year:'numeric',
+    hour:'2-digit', minute:'2-digit', second:'2-digit'
+  });
   if (id) {
-    var r = registros.find(function(x){ return x.id === id; });
-    document.getElementById('f_titulo').value = r.titulo||'';
-    document.getElementById('f_setor').value = r.setor||'';
-    document.getElementById('f_data').value = r.data||'';
-    document.getElementById('f_status').value = r.status||'';
-    document.getElementById('f_resp').value = r.responsavel||'';
-    document.getElementById('f_obs').value = r.obs||'';
-    document.getElementById('f_regPor').value = r.registradoPor||user.nome;
-    document.getElementById('f_regEm').value = fmtDT(r.registradoEm);
+    var r = registros.find(function(x) { return x.id === id; });
+    document.getElementById('f_titulo').value  = r.titulo      || '';
+    document.getElementById('f_setor').value   = r.setor       || '';
+    document.getElementById('f_data').value    = r.data        || '';
+    document.getElementById('f_status').value  = r.status      || '';
+    document.getElementById('f_resp').value    = r.responsavel || '';
+    document.getElementById('f_obs').value     = r.obs         || '';
+    document.getElementById('f_regPor').value  = r.registradoPor || user.nome;
+    document.getElementById('f_regEm').value   = fmtDT(r.registradoEm);
   }
   document.getElementById('modalForm').classList.add('open');
 }
+
 function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId = null; }
+
 function salvar() {
-  var titulo = document.getElementById('f_titulo').value.trim(), setor = document.getElementById('f_setor').value.trim(), data = document.getElementById('f_data').value, status = document.getElementById('f_status').value;
-  if (!titulo || !setor || !data || !status) { alert('Preencha todos os campos obrigatorios.'); return; }
-  var dados = { titulo:titulo, setor:setor, data:data, status:status, responsavel:document.getElementById('f_resp').value.trim(), obs:document.getElementById('f_obs').value.trim() };
-  if (editandoId) { var idx = registros.findIndex(function(r){ return r.id === editandoId; }); registros[idx] = Object.assign({}, registros[idx], dados); }
-  else { var nId = registros.length > 0 ? Math.max.apply(null, registros.map(function(r){ return r.id; })) + 1 : 1; registros.push(Object.assign({id:nId, registradoPor:user.nome||'Usuario', registradoEm:new Date().toISOString()}, dados)); }
-  salvarStorage(); fecharModal(); renderizar(getLista());
+  var titulo = document.getElementById('f_titulo').value.trim();
+  var setor  = document.getElementById('f_setor').value.trim();
+  var data   = document.getElementById('f_data').value;
+  var status = document.getElementById('f_status').value;
+  if (!titulo || !setor || !data || !status) {
+    alert('Preencha todos os campos obrigatorios.');
+    return;
+  }
+  var dados = {
+    titulo:      titulo,
+    setor:       setor,
+    data:        data,
+    status:      status,
+    responsavel: document.getElementById('f_resp').value.trim(),
+    obs:         document.getElementById('f_obs').value.trim()
+  };
+  if (editandoId) {
+    var idx = registros.findIndex(function(r) { return r.id === editandoId; });
+    registros[idx] = Object.assign({}, registros[idx], dados);
+  } else {
+    var nId = registros.length > 0
+      ? Math.max.apply(null, registros.map(function(r) { return r.id; })) + 1
+      : 1;
+    registros.push(Object.assign({
+      id:            nId,
+      registradoPor: user.nome || 'Usuario',
+      registradoEm:  new Date().toISOString()
+    }, dados));
+  }
+  salvarStorage();
+  fecharModal();
+  renderizar(getLista());
 }
+
 function editar(id) { abrirModal(id); }
-function excluir(id) { if (!confirm('Excluir esta inspecao?')) return; registros = registros.filter(function(r){ return r.id !== id; }); salvarStorage(); renderizar(getLista()); }
+
+function excluir(id) {
+  if (!confirm('Excluir esta inspecao?')) return;
+  registros = registros.filter(function(r) { return r.id !== id; });
+  salvarStorage();
+  renderizar(getLista());
+}
+
 function ver(id) {
-  var r = registros.find(function(x){ return x.id === id; });
-  function row(l,v){ return '<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>'; }
-  document.getElementById('modalVerConteudo').innerHTML = row('Titulo',r.titulo||'--')+row('Setor',r.setor||'--')+row('Status','<span class="badge '+(r.status||'pendente')+'">'+(r.status||'--')+'</span>')+row('Data',fmt(r.data))+row('Responsavel',r.responsavel||'--')+row('Observacoes',r.obs||'--')+row('Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+row('Registrado em','<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
+  var r   = registros.find(function(x) { return x.id === id; });
+  var st  = r.status || 'pendente';
+  var lbl = statusLabel[st] || st;
+  function row(l, v) {
+    return '<div class="detalhe-row">' +
+      '<span class="detalhe-label">' + l + '</span>' +
+      '<span class="detalhe-valor">' + v + '</span>' +
+      '</div>';
+  }
+  document.getElementById('modalVerConteudo').innerHTML =
+    row('Titulo',        r.titulo || '--') +
+    row('Setor',         r.setor  || '--') +
+    row('Status',        '<span class="badge ' + st + '">' + lbl + '</span>') +
+    row('Data',          fmt(r.data)) +
+    row('Responsavel',   r.responsavel || '--') +
+    row('Observacoes',   r.obs || '--') +
+    row('Registrado por','<span style="color:#00d4ff">' + (r.registradoPor || '--') + '</span>') +
+    row('Registrado em', '<span style="color:#00d4ff">' + fmtDT(r.registradoEm) + '</span>');
   document.getElementById('modalVer').classList.add('open');
 }
+
 function fecharVer() { document.getElementById('modalVer').classList.remove('open'); }
-document.getElementById('modalForm').addEventListener('click', function(e){ if(e.target===this) fecharModal(); });
-document.getElementById('modalVer').addEventListener('click', function(e){ if(e.target===this) fecharVer(); });
+
+document.getElementById('modalForm').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
+document.getElementById('modalVer').addEventListener('click',  function(e) { if (e.target === this) fecharVer(); });
+
 renderizar(getLista());
 </script>
 </body>
