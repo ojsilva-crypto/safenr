@@ -22,41 +22,59 @@
     .user-info p{font-size:.82rem;font-weight:600}
     .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
     .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+
+    /* MAIN */
     .main{margin-left:240px;flex:1;padding:32px}
     .topbar{margin-bottom:28px}
     .topbar h2{font-size:1.4rem;font-weight:700}
     .topbar p{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:4px}
+
+    /* GRID */
     .rel-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
-    .rel-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px}
-    .rel-card h3{font-size:1rem;font-weight:700;margin-bottom:6px}
-    .rel-card p{font-size:.82rem;color:rgba(255,255,255,.35);margin-bottom:20px}
+
+    /* CARD */
+    .rel-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px;transition:border .2s}
+    .rel-card:hover{border-color:rgba(255,255,255,.14)}
+    .rel-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
+    .rel-card h3{font-size:1rem;font-weight:700}
+    .rel-card-desc{font-size:.82rem;color:rgba(255,255,255,.35);margin-bottom:20px;line-height:1.5}
+
     .btns-row{display:flex;gap:10px}
     .btn-gerar{flex:1;padding:12px;border-radius:10px;border:none;color:#fff;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s}
     .btn-gerar:hover{opacity:.85;transform:translateY(-1px)}
     .btn-pdf{padding:12px 16px;border-radius:10px;border:none;color:#fff;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s;background:linear-gradient(135deg,#f87171,#dc2626);white-space:nowrap}
     .btn-pdf:hover{opacity:.85;transform:translateY(-1px)}
-    .btn-azul{background:linear-gradient(135deg,#00d4ff,#0099cc)}
-    .btn-verde{background:linear-gradient(135deg,#4ade80,#16a34a)}
-    .btn-laranja{background:linear-gradient(135deg,#fb923c,#ea580c)}
-    .btn-roxo{background:linear-gradient(135deg,#a78bfa,#7c3aed)}
+
+    .btn-azul    {background:linear-gradient(135deg,#00d4ff,#0099cc)}
+    .btn-verde   {background:linear-gradient(135deg,#4ade80,#16a34a)}
+    .btn-laranja {background:linear-gradient(135deg,#fb923c,#ea580c)}
+    .btn-roxo    {background:linear-gradient(135deg,#a78bfa,#7c3aed)}
     .btn-vermelho{background:linear-gradient(135deg,#f87171,#dc2626)}
-    .btn-amarelo{background:linear-gradient(135deg,#fbbf24,#d97706);color:#000!important}
-    .resumo-box{background:rgba(255,255,255,.04);border-radius:10px;padding:16px;margin-top:16px;display:none}
+    .btn-amarelo {background:linear-gradient(135deg,#fbbf24,#d97706);color:#000!important}
+    .btn-ciano   {background:linear-gradient(135deg,#22d3ee,#0891b2)}
+
+    /* RESUMO INLINE */
+    .resumo-box{background:rgba(255,255,255,.04);border-radius:10px;padding:16px;margin-top:16px;display:none;animation:fadeIn .25s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
     .resumo-box h4{font-size:.85rem;font-weight:700;margin-bottom:10px;color:#00d4ff}
     .resumo-item{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.83rem}
     .resumo-item:last-child{border-bottom:none}
     .resumo-item span:first-child{color:rgba(255,255,255,.6)}
     .resumo-item span:last-child{font-weight:700;color:#fff}
+
     /* MODAL PDF */
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);z-index:2000;align-items:center;justify-content:center}
     .modal-overlay.open{display:flex}
-    .modal-pdf{background:#fff;color:#000;border-radius:16px;width:100%;max-width:750px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}
+    .modal-pdf{background:#fff;color:#000;border-radius:16px;width:100%;max-width:760px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}
     .modal-pdf-topo{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:2px solid #e5e7eb;background:#f9fafb;border-radius:16px 16px 0 0;position:sticky;top:0;z-index:5}
     .modal-pdf-topo h3{font-size:1rem;font-weight:700;color:#111}
     .modal-pdf-acoes{display:flex;gap:10px}
-    .btn-imprimir{background:#00a8cc;color:#fff;border:none;border-radius:8px;padding:9px 20px;cursor:pointer;font-size:.88rem;font-weight:700}
-    .btn-fechar-pdf{background:#ef4444;color:#fff;border:none;border-radius:8px;padding:9px 16px;cursor:pointer;font-size:.88rem;font-weight:700}
+    .btn-imprimir{background:#00a8cc;color:#fff;border:none;border-radius:8px;padding:9px 20px;cursor:pointer;font-size:.88rem;font-weight:700;transition:opacity .2s}
+    .btn-imprimir:hover{opacity:.85}
+    .btn-fechar-pdf{background:#ef4444;color:#fff;border:none;border-radius:8px;padding:9px 16px;cursor:pointer;font-size:.88rem;font-weight:700;transition:opacity .2s}
+    .btn-fechar-pdf:hover{opacity:.85}
     .pdf-conteudo{padding:32px;flex:1}
+
     @media print{
       body > *:not(.modal-overlay){display:none!important}
       .modal-overlay{display:block!important;position:static!important;background:none!important}
@@ -67,6 +85,8 @@
   </style>
 </head>
 <body>
+
+<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
@@ -74,84 +94,112 @@
   </div>
   <nav class="nav">
     <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
     <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
+    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
     <a class="nav-item active" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
-    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configuracoes</a>
+    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
+    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
     <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
-    <button class="btn-sair" onclick="sair()">X</button>
+    <button class="btn-sair" onclick="sair()">✕</button>
   </div>
 </div>
 
+<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <h2>📄 Relatorios</h2>
     <p>Gere, visualize e exporte relatorios em PDF</p>
   </div>
+
   <div class="rel-grid">
+
+    <!-- Inspecoes -->
     <div class="rel-card">
       <h3>🔍 Relatorio de Inspecoes</h3>
-      <p>Resumo geral de todas as inspecoes cadastradas.</p>
+      <p class="rel-card-desc">Resumo geral de todas as inspecoes cadastradas com status e responsaveis.</p>
       <div class="btns-row">
-        <button class="btn-gerar btn-azul" onclick="gerarInspecoes(false)">Ver Relatorio</button>
+        <button class="btn-gerar btn-azul" onclick="gerarInspecoes(false)">📊 Ver Resumo</button>
         <button class="btn-pdf" onclick="gerarInspecoes(true)">📥 PDF</button>
       </div>
       <div class="resumo-box" id="relInsp"></div>
     </div>
+
+    <!-- Riscos -->
     <div class="rel-card">
       <h3>⚠️ Relatorio de Riscos</h3>
-      <p>Listagem de riscos por nivel de criticidade.</p>
+      <p class="rel-card-desc">Listagem de riscos identificados por nivel de criticidade e setor.</p>
       <div class="btns-row">
-        <button class="btn-gerar btn-vermelho" onclick="gerarRiscos(false)">Ver Relatorio</button>
+        <button class="btn-gerar btn-vermelho" onclick="gerarRiscos(false)">📊 Ver Resumo</button>
         <button class="btn-pdf" onclick="gerarRiscos(true)">📥 PDF</button>
       </div>
       <div class="resumo-box" id="relRisc"></div>
     </div>
+
+    <!-- NRs -->
     <div class="rel-card">
       <h3>📋 Conformidade NRs</h3>
-      <p>Percentual de conformidade de cada NR.</p>
+      <p class="rel-card-desc">Percentual de conformidade de cada Norma Regulamentadora nos checklists.</p>
       <div class="btns-row">
-        <button class="btn-gerar btn-verde" onclick="gerarNRs(false)">Ver Relatorio</button>
+        <button class="btn-gerar btn-verde" onclick="gerarNRs(false)">📊 Ver Resumo</button>
         <button class="btn-pdf" onclick="gerarNRs(true)">📥 PDF</button>
       </div>
       <div class="resumo-box" id="relNR"></div>
     </div>
+
+    <!-- Colaboradores -->
     <div class="rel-card">
-      <h3>👷 Relatorio de Funcionarios</h3>
-      <p>Funcionarios com status e EPIs vinculados.</p>
+      <h3>👷 Relatorio de Colaboradores</h3>
+      <p class="rel-card-desc">Colaboradores com status, funcao e EPIs vinculados.</p>
       <div class="btns-row">
-        <button class="btn-gerar btn-roxo" onclick="gerarFuncionarios(false)">Ver Relatorio</button>
-        <button class="btn-pdf" onclick="gerarFuncionarios(true)">📥 PDF</button>
+        <button class="btn-gerar btn-roxo" onclick="gerarColaboradores(false)">📊 Ver Resumo</button>
+        <button class="btn-pdf" onclick="gerarColaboradores(true)">📥 PDF</button>
       </div>
       <div class="resumo-box" id="relFunc"></div>
     </div>
+
+    <!-- EPIs -->
     <div class="rel-card">
       <h3>🦺 Relatorio de EPIs</h3>
-      <p>Situacao dos EPIs e CAs validos/vencidos.</p>
+      <p class="rel-card-desc">Situacao dos EPIs cadastrados, CAs validos, vencidos e a vencer.</p>
       <div class="btns-row">
-        <button class="btn-gerar btn-laranja" onclick="gerarEPIs(false)">Ver Relatorio</button>
+        <button class="btn-gerar btn-laranja" onclick="gerarEPIs(false)">📊 Ver Resumo</button>
         <button class="btn-pdf" onclick="gerarEPIs(true)">📥 PDF</button>
       </div>
       <div class="resumo-box" id="relEPI"></div>
     </div>
+
+    <!-- Agenda -->
     <div class="rel-card">
       <h3>📅 Relatorio de Agenda</h3>
-      <p>Pendencias agendadas, concluidas e em atraso.</p>
+      <p class="rel-card-desc">Pendencias agendadas, concluidas e eventos em atraso.</p>
       <div class="btns-row">
-        <button class="btn-gerar btn-amarelo" onclick="gerarAgenda(false)">Ver Relatorio</button>
+        <button class="btn-gerar btn-amarelo" onclick="gerarAgenda(false)">📊 Ver Resumo</button>
         <button class="btn-pdf" onclick="gerarAgenda(true)">📥 PDF</button>
       </div>
       <div class="resumo-box" id="relAgenda"></div>
     </div>
+
+    <!-- Treinamentos -->
+    <div class="rel-card">
+      <h3>🎓 Relatorio de Treinamentos</h3>
+      <p class="rel-card-desc">Treinamentos realizados, pendentes e certificados a vencer.</p>
+      <div class="btns-row">
+        <button class="btn-gerar btn-ciano" onclick="gerarTreinamentos(false)">📊 Ver Resumo</button>
+        <button class="btn-pdf" onclick="gerarTreinamentos(true)">📥 PDF</button>
+      </div>
+      <div class="resumo-box" id="relTrein"></div>
+    </div>
+
   </div>
 </div>
 
@@ -162,7 +210,7 @@
       <h3 id="pdfTitulo">Relatorio</h3>
       <div class="modal-pdf-acoes">
         <button class="btn-imprimir" onclick="imprimirPDF()">🖨️ Imprimir / Salvar PDF</button>
-        <button class="btn-fechar-pdf" onclick="fecharPDF()">X Fechar</button>
+        <button class="btn-fechar-pdf" onclick="fecharPDF()">✕ Fechar</button>
       </div>
     </div>
     <div class="pdf-conteudo" id="pdfConteudo"></div>
@@ -170,6 +218,7 @@
 </div>
 
 <script>
+/* ── AUTH ── */
 var userData = localStorage.getItem('safenr_user');
 if (!userData) { window.location.href = './index.html'; }
 var user = JSON.parse(userData);
@@ -177,30 +226,38 @@ document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
 document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
 function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
 
-function fmt(d) { if (!d) return '--'; var p = d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
-function fmtDT(iso) { if (!iso) return '--'; return new Date(iso).toLocaleString('pt-BR'); }
 var agora = new Date().toLocaleString('pt-BR');
 
-// TEMPLATE HTML DO PDF
+function fmt(d) {
+  if (!d) return '--';
+  var p = d.split('-');
+  return p[2] + '/' + p[1] + '/' + p[0];
+}
+
+/* ── TEMPLATE PDF ── */
 function templatePDF(titulo, subtitulo, corpo) {
-  return '<div style="font-family:Arial,sans-serif;color:#111;max-width:700px;margin:0 auto">' +
-    '<div style="background:#0f1923;color:#fff;padding:24px 32px;border-radius:8px;margin-bottom:24px">' +
-      '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
-        '<div>' +
-          '<h1 style="font-size:1.5rem;font-weight:900;letter-spacing:2px;margin-bottom:4px">Safe<span style="color:#00d4ff">NR</span></h1>' +
-          '<p style="font-size:.75rem;color:rgba(255,255,255,.4)">Gestao de Seguranca do Trabalho</p>' +
+  return (
+    '<div style="font-family:Arial,sans-serif;color:#111;max-width:700px;margin:0 auto">' +
+      '<div style="background:#0f1923;color:#fff;padding:24px 32px;border-radius:8px;margin-bottom:24px">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+          '<div>' +
+            '<h1 style="font-size:1.5rem;font-weight:900;letter-spacing:2px;margin-bottom:4px">Safe<span style="color:#00d4ff">NR</span></h1>' +
+            '<p style="font-size:.75rem;color:rgba(255,255,255,.4)">Gestao de Seguranca do Trabalho</p>' +
+          '</div>' +
+          '<div style="text-align:right">' +
+            '<p style="font-size:.8rem;color:rgba(255,255,255,.5)">Emitido em: ' + agora + '</p>' +
+            '<p style="font-size:.8rem;color:rgba(255,255,255,.5)">Por: ' + (user.nome || 'Usuario') + '</p>' +
+          '</div>' +
         '</div>' +
-        '<div style="text-align:right">' +
-          '<p style="font-size:.8rem;color:rgba(255,255,255,.5)">Emitido em: ' + agora + '</p>' +
-          '<p style="font-size:.8rem;color:rgba(255,255,255,.5)">Por: ' + (user.nome || 'Usuario') + '</p>' +
-        '</div>' +
+        '<h2 style="font-size:1.15rem;font-weight:800;margin-top:16px;border-top:1px solid rgba(255,255,255,.15);padding-top:12px">' + titulo + '</h2>' +
+        '<p style="font-size:.82rem;color:rgba(255,255,255,.5);margin-top:4px">' + subtitulo + '</p>' +
       '</div>' +
-      '<h2 style="font-size:1.15rem;font-weight:800;margin-top:16px;border-top:1px solid rgba(255,255,255,.15);padding-top:12px">' + titulo + '</h2>' +
-      '<p style="font-size:.82rem;color:rgba(255,255,255,.5);margin-top:4px">' + subtitulo + '</p>' +
-    '</div>' +
-    corpo +
-    '<div style="text-align:center;font-size:.72rem;color:#999;margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb">Documento gerado pelo sistema SafeNR — ' + agora + '</div>' +
-  '</div>';
+      corpo +
+      '<div style="text-align:center;font-size:.72rem;color:#999;margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb">' +
+        'Documento gerado pelo sistema SafeNR — ' + agora +
+      '</div>' +
+    '</div>'
+  );
 }
 
 function tabelaHTML(colunas, linhas) {
@@ -225,28 +282,30 @@ function tabelaHTML(colunas, linhas) {
 function cardResumoHTML(itens) {
   var html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">';
   for (var i = 0; i < itens.length; i++) {
-    html += '<div style="background:#f3f4f6;border-radius:10px;padding:16px;text-align:center">' +
-      '<div style="font-size:1.6rem;font-weight:900;color:#0f1923">' + itens[i][1] + '</div>' +
-      '<div style="font-size:.78rem;color:#666;margin-top:4px">' + itens[i][0] + '</div>' +
-    '</div>';
+    html +=
+      '<div style="background:#f3f4f6;border-radius:10px;padding:16px;text-align:center">' +
+        '<div style="font-size:1.6rem;font-weight:900;color:#0f1923">' + itens[i][1] + '</div>' +
+        '<div style="font-size:.78rem;color:#666;margin-top:4px">' + itens[i][0] + '</div>' +
+      '</div>';
   }
   html += '</div>';
   return html;
 }
 
+/* ── MODAL PDF ── */
 function abrirPDF(titulo, html) {
-  document.getElementById('pdfTitulo').textContent = titulo;
-  document.getElementById('pdfConteudo').innerHTML = html;
+  document.getElementById('pdfTitulo').textContent  = titulo;
+  document.getElementById('pdfConteudo').innerHTML  = html;
   document.getElementById('modalPDF').classList.add('open');
 }
-function fecharPDF() { document.getElementById('modalPDF').classList.remove('open'); }
+function fecharPDF()   { document.getElementById('modalPDF').classList.remove('open'); }
 function imprimirPDF() { window.print(); }
 
 document.getElementById('modalPDF').addEventListener('click', function(e) {
   if (e.target === this) fecharPDF();
 });
 
-// MOSTRAR RESUMO INLINE
+/* ── RESUMO INLINE ── */
 function showBox(id, titulo, itens) {
   var box = document.getElementById(id);
   box.style.display = 'block';
@@ -257,116 +316,178 @@ function showBox(id, titulo, itens) {
   box.innerHTML = html;
 }
 
-// --- INSPECOES ---
+/* ── INSPECOES ── */
 function gerarInspecoes(pdf) {
-  var data = JSON.parse(localStorage.getItem('safenr_inspecoes') || '[]');
-  var total = data.length;
-  var concl = data.filter(function(i){ return i.status==='concluida'||i.status==='conforme'; }).length;
-  var pend = data.filter(function(i){ return i.status==='pendente'; }).length;
-  var nc = data.filter(function(i){ return i.status==='nao-conforme'; }).length;
-  var and = data.filter(function(i){ return i.status==='em-andamento'; }).length;
-  var resumo = [['Total',total],['Concluidas',concl],['Pendentes',pend],['Em Andamento',and],['Nao Conformes',nc]];
-  if (!pdf) { showBox('relInsp','Inspecoes',resumo); return; }
-  var linhas = data.length === 0 ? [['Nenhuma inspecao','--','--','--','--']] :
-    data.map(function(i){ return [i.titulo||'--', i.setor||'--', i.status||'--', fmt(i.data), i.responsavel||'--']; });
-  var corpo = cardResumoHTML(resumo) + tabelaHTML(['Titulo','Setor','Status','Data','Responsavel'], linhas);
+  var data  = JSON.parse(localStorage.getItem('safenr_inspecoes') || '[]');
+  var concl = data.filter(function(i) { return i.status === 'concluida' || i.status === 'conforme'; }).length;
+  var pend  = data.filter(function(i) { return i.status === 'pendente'; }).length;
+  var nc    = data.filter(function(i) { return i.status === 'nao-conforme'; }).length;
+  var and   = data.filter(function(i) { return i.status === 'em-andamento'; }).length;
+  var resumo = [
+    ['Total', data.length], ['Concluidas', concl], ['Pendentes', pend],
+    ['Em Andamento', and],  ['Nao Conformes', nc]
+  ];
+  if (!pdf) { showBox('relInsp', 'Inspecoes', resumo); return; }
+  var linhas = data.length === 0
+    ? [['Nenhuma inspecao cadastrada', '--', '--', '--', '--']]
+    : data.map(function(i) {
+        return [i.titulo || '--', i.setor || '--', i.status || '--', fmt(i.data), i.responsavel || '--'];
+      });
+  var corpo = cardResumoHTML(resumo) + tabelaHTML(['Titulo', 'Setor', 'Status', 'Data', 'Responsavel'], linhas);
   abrirPDF('Relatorio de Inspecoes', templatePDF('Relatorio de Inspecoes', 'Todas as inspecoes cadastradas no sistema', corpo));
 }
 
-// --- RISCOS ---
+/* ── RISCOS ── */
 function gerarRiscos(pdf) {
   var data = JSON.parse(localStorage.getItem('safenr_riscos') || '[]');
-  var total = data.length;
-  var crit = data.filter(function(r){ return r.nivel==='critico'; }).length;
-  var alto = data.filter(function(r){ return r.nivel==='alto'; }).length;
-  var med = data.filter(function(r){ return r.nivel==='medio'; }).length;
-  var bx = data.filter(function(r){ return r.nivel==='baixo'; }).length;
-  var el = data.filter(function(r){ return r.nivel==='eliminado'; }).length;
-  var resumo = [['Total',total],['Criticos',crit],['Altos',alto],['Medios',med],['Baixos',bx],['Eliminados',el]];
-  if (!pdf) { showBox('relRisc','Riscos',resumo); return; }
-  var linhas = data.length === 0 ? [['Nenhum risco','--','--','--','--']] :
-    data.map(function(r){ return [r.descricao||'--', r.tipo||'--', r.setor||'--', r.nivel||'--', r.responsavel||'--']; });
-  var corpo = cardResumoHTML(resumo) + tabelaHTML(['Descricao','Tipo','Setor','Nivel','Responsavel'], linhas);
+  var crit = data.filter(function(r) { return r.nivel === 'critico'; }).length;
+  var alto = data.filter(function(r) { return r.nivel === 'alto'; }).length;
+  var med  = data.filter(function(r) { return r.nivel === 'medio'; }).length;
+  var bx   = data.filter(function(r) { return r.nivel === 'baixo'; }).length;
+  var el   = data.filter(function(r) { return r.nivel === 'eliminado'; }).length;
+  var resumo = [
+    ['Total', data.length], ['Criticos', crit], ['Altos', alto],
+    ['Medios', med], ['Baixos', bx], ['Eliminados', el]
+  ];
+  if (!pdf) { showBox('relRisc', 'Riscos', resumo); return; }
+  var linhas = data.length === 0
+    ? [['Nenhum risco cadastrado', '--', '--', '--', '--']]
+    : data.map(function(r) {
+        return [r.descricao || '--', r.tipo || '--', r.setor || '--', r.nivel || '--', r.responsavel || '--'];
+      });
+  var corpo = cardResumoHTML(resumo) + tabelaHTML(['Descricao', 'Tipo', 'Setor', 'Nivel', 'Responsavel'], linhas);
   abrirPDF('Relatorio de Riscos', templatePDF('Relatorio de Riscos', 'Riscos identificados por nivel de criticidade', corpo));
 }
 
-// --- NRs ---
+/* ── NRs ── */
 function gerarNRs(pdf) {
-  var NRS = [{id:'NR-05',nome:'CIPA',total:8},{id:'NR-06',nome:'EPI',total:8},{id:'NR-07',nome:'PCMSO',total:8},{id:'NR-09',nome:'Riscos Amb.',total:8},{id:'NR-10',nome:'Eletricidade',total:8},{id:'NR-12',nome:'Maquinas',total:8},{id:'NR-17',nome:'Ergonomia',total:8},{id:'NR-23',nome:'Incendio',total:8},{id:'NR-35',nome:'Altura',total:8}];
-  var resumo = NRS.map(function(nr){
-    var s = JSON.parse(localStorage.getItem('safenr_checklist_'+nr.id)||'{}'), ok=0;
-    for (var k in s) { if (s[k]==='ok') ok++; }
-    return [nr.id+' '+nr.nome, Math.round((ok/nr.total)*100)+'%'];
+  var NRS = [
+    {id:'NR-05',nome:'CIPA',total:8},      {id:'NR-06',nome:'EPI',total:8},
+    {id:'NR-07',nome:'PCMSO',total:8},     {id:'NR-09',nome:'Riscos Amb.',total:8},
+    {id:'NR-10',nome:'Eletricidade',total:8},{id:'NR-12',nome:'Maquinas',total:8},
+    {id:'NR-17',nome:'Ergonomia',total:8}, {id:'NR-23',nome:'Incendio',total:8},
+    {id:'NR-35',nome:'Altura',total:8}
+  ];
+  var resumo = NRS.map(function(nr) {
+    var s = JSON.parse(localStorage.getItem('safenr_checklist_' + nr.id) || '{}'), ok = 0;
+    for (var k in s) { if (s[k] === 'ok') ok++; }
+    return [nr.id + ' ' + nr.nome, Math.round((ok / nr.total) * 100) + '%'];
   });
-  if (!pdf) { showBox('relNR','Conformidade NRs',resumo); return; }
-  var linhas = NRS.map(function(nr){
-    var s = JSON.parse(localStorage.getItem('safenr_checklist_'+nr.id)||'{}'), ok=0, nao=0, na=0;
-    for (var k in s) { if (s[k]==='ok') ok++; else if (s[k]==='nao') nao++; else na++; }
-    var pct = Math.round((ok/nr.total)*100);
-    var cor = pct>=80?'color:#16a34a':pct>=50?'color:#d97706':'color:#dc2626';
-    return [nr.id, nr.nome, ok+'/'+nr.total, '<span style="font-weight:700;'+cor+'">'+pct+'%</span>'];
+  if (!pdf) { showBox('relNR', 'Conformidade NRs', resumo); return; }
+  var linhas = NRS.map(function(nr) {
+    var s = JSON.parse(localStorage.getItem('safenr_checklist_' + nr.id) || '{}');
+    var ok = 0, nao = 0;
+    for (var k in s) { if (s[k] === 'ok') ok++; else if (s[k] === 'nao') nao++; }
+    var pct = Math.round((ok / nr.total) * 100);
+    var cor = pct >= 80 ? 'color:#16a34a' : pct >= 50 ? 'color:#d97706' : 'color:#dc2626';
+    return [nr.id, nr.nome, ok + '/' + nr.total, '<span style="font-weight:700;' + cor + '">' + pct + '%</span>'];
   });
-  var corpo = tabelaHTML(['ID','Nome','Itens OK','Conformidade'], linhas);
-  abrirPDF('Relatorio de Conformidade NRs', templatePDF('Conformidade por Norma Regulamentadora', 'Resultado dos checklists de cada NR', corpo));
+  var corpo = tabelaHTML(['ID', 'Nome', 'Itens OK', 'Conformidade'], linhas);
+  abrirPDF('Conformidade NRs', templatePDF('Conformidade por Norma Regulamentadora', 'Resultado dos checklists de cada NR', corpo));
 }
 
-// --- FUNCIONARIOS ---
-function gerarFuncionarios(pdf) {
-  var data = JSON.parse(localStorage.getItem('safenr_funcionarios') || '[]');
-  var ativos = data.filter(function(f){ return f.status==='ativo'; }).length;
-  var inativos = data.filter(function(f){ return f.status==='inativo'; }).length;
-  var ferias = data.filter(function(f){ return f.status==='ferias'; }).length;
-  var comEPI = data.filter(function(f){ return f.epis&&f.epis.length>0; }).length;
-  var resumo = [['Total',data.length],['Ativos',ativos],['Inativos',inativos],['Em Ferias',ferias],['Com EPIs',comEPI]];
-  if (!pdf) { showBox('relFunc','Funcionarios',resumo); return; }
-  var linhas = data.length === 0 ? [['Nenhum funcionario','--','--','--','--']] :
-    data.map(function(f){
-      var episNomes = (f.epis||[]).map(function(e){ return e.nome; }).join(', ') || '--';
-      return [f.nome||'--', f.cargo||'--', f.setor||'--', f.status||'--', episNomes];
-    });
-  var corpo = cardResumoHTML(resumo) + tabelaHTML(['Nome','Cargo','Setor','Status','EPIs'], linhas);
-  abrirPDF('Relatorio de Funcionarios', templatePDF('Relatorio de Funcionarios', 'Listagem completa de funcionarios e EPIs', corpo));
+/* ── COLABORADORES ── */
+function gerarColaboradores(pdf) {
+  var data    = JSON.parse(localStorage.getItem('safenr_colaboradores') || '[]');
+  var ativos  = data.filter(function(f) { return f.status === 'ativo'; }).length;
+  var inat    = data.filter(function(f) { return f.status === 'inativo'; }).length;
+  var ferias  = data.filter(function(f) { return f.status === 'ferias'; }).length;
+  var comEPI  = data.filter(function(f) { return f.epis && f.epis.length > 0; }).length;
+  var resumo  = [
+    ['Total', data.length], ['Ativos', ativos], ['Inativos', inat],
+    ['Em Ferias', ferias],  ['Com EPIs', comEPI]
+  ];
+  if (!pdf) { showBox('relFunc', 'Colaboradores', resumo); return; }
+  var linhas = data.length === 0
+    ? [['Nenhum colaborador cadastrado', '--', '--', '--', '--']]
+    : data.map(function(f) {
+        var epis = (f.epis || []).map(function(e) { return e.nome; }).join(', ') || '--';
+        return [f.nome || '--', f.cargo || '--', f.setor || '--', f.status || '--', epis];
+      });
+  var corpo = cardResumoHTML(resumo) + tabelaHTML(['Nome', 'Cargo', 'Setor', 'Status', 'EPIs'], linhas);
+  abrirPDF('Relatorio de Colaboradores', templatePDF('Relatorio de Colaboradores', 'Listagem completa de colaboradores e EPIs', corpo));
 }
 
-// --- EPIs ---
+/* ── EPIs ── */
 function gerarEPIs(pdf) {
   var data = JSON.parse(localStorage.getItem('safenr_epis') || '[]');
-  var hj = new Date(); hj.setHours(0,0,0,0);
-  var validos = data.filter(function(e){ return !e.ca_validade||new Date(e.ca_validade+'T00:00:00')>=hj; }).length;
-  var vencidos = data.filter(function(e){ return e.ca_validade&&new Date(e.ca_validade+'T00:00:00')<hj; }).length;
-  var avencer = data.filter(function(e){ if(!e.ca_validade) return false; var d=new Date(e.ca_validade+'T00:00:00'); var diff=(d-hj)/86400000; return diff>=0&&diff<=30; }).length;
-  var resumo = [['Total',data.length],['CA Validos',validos],['CA Vencidos',vencidos],['Vencem em 30d',avencer]];
-  if (!pdf) { showBox('relEPI','EPIs',resumo); return; }
-  var linhas = data.length === 0 ? [['Nenhum EPI','--','--','--','--']] :
-    data.map(function(e){
-      var hje = new Date(); hje.setHours(0,0,0,0);
-      var st = !e.ca_validade ? 'Sem validade' : new Date(e.ca_validade+'T00:00:00')<hje ? '<span style="color:#dc2626;font-weight:700">VENCIDO</span>' : 'Valido';
-      return [e.nome||'--', e.tipo||'--', e.ca||'--', fmt(e.ca_validade), st, (e.estoque||0)+' un.'];
-    });
-  var corpo = cardResumoHTML(resumo) + tabelaHTML(['Nome','Tipo','CA','Validade','Status','Estoque'], linhas);
+  var hj   = new Date(); hj.setHours(0, 0, 0, 0);
+  var validos  = data.filter(function(e) { return !e.ca_validade || new Date(e.ca_validade + 'T00:00:00') >= hj; }).length;
+  var vencidos = data.filter(function(e) { return e.ca_validade && new Date(e.ca_validade + 'T00:00:00') < hj; }).length;
+  var avencer  = data.filter(function(e) {
+    if (!e.ca_validade) return false;
+    var diff = (new Date(e.ca_validade + 'T00:00:00') - hj) / 86400000;
+    return diff >= 0 && diff <= 30;
+  }).length;
+  var resumo = [
+    ['Total', data.length], ['CA Validos', validos],
+    ['CA Vencidos', vencidos], ['Vencem em 30d', avencer]
+  ];
+  if (!pdf) { showBox('relEPI', 'EPIs', resumo); return; }
+  var linhas = data.length === 0
+    ? [['Nenhum EPI cadastrado', '--', '--', '--', '--', '--']]
+    : data.map(function(e) {
+        var hje = new Date(); hje.setHours(0, 0, 0, 0);
+        var st = !e.ca_validade ? 'Sem validade'
+          : new Date(e.ca_validade + 'T00:00:00') < hje
+            ? '<span style="color:#dc2626;font-weight:700">VENCIDO</span>'
+            : 'Valido';
+        return [e.nome || '--', e.tipo || '--', e.ca || '--', fmt(e.ca_validade), st, (e.estoque || 0) + ' un.'];
+      });
+  var corpo = cardResumoHTML(resumo) + tabelaHTML(['Nome', 'Tipo', 'CA', 'Validade', 'Status', 'Estoque'], linhas);
   abrirPDF('Relatorio de EPIs', templatePDF('Relatorio de EPIs Cadastrados', 'Situacao dos Certificados de Aprovacao', corpo));
 }
 
-// --- AGENDA ---
+/* ── AGENDA ── */
 function gerarAgenda(pdf) {
   var data = JSON.parse(localStorage.getItem('safenr_agenda') || '[]');
-  var hj = new Date(); hj.setHours(0,0,0,0);
-  var pend = data.filter(function(e){ return e.status!=='concluido'&&new Date(e.data+'T00:00:00')>=hj; }).length;
-  var atras = data.filter(function(e){ return e.status!=='concluido'&&new Date(e.data+'T00:00:00')<hj; }).length;
-  var concl = data.filter(function(e){ return e.status==='concluido'; }).length;
-  var epiEv = data.filter(function(e){ return e.tipo==='epi'; }).length;
-  var resumo = [['Total',data.length],['Pendentes',pend],['Em Atraso',atras],['Concluidos',concl],['Eventos EPI',epiEv]];
-  if (!pdf) { showBox('relAgenda','Agenda',resumo); return; }
-  var linhas = data.length === 0 ? [['Nenhum evento','--','--','--','--']] :
-    data.map(function(e){
-      var hje = new Date(); hje.setHours(0,0,0,0);
-      var stLabel = e.status==='concluido' ? '<span style="color:#16a34a;font-weight:700">Concluido</span>' :
-        new Date(e.data+'T00:00:00')<hje ? '<span style="color:#dc2626;font-weight:700">Atrasado</span>' :
-        '<span style="color:#d97706;font-weight:700">Pendente</span>';
-      return [e.titulo||'--', fmt(e.data), e.tipo||'--', e.funcionario||'--', stLabel];
-    });
-  var corpo = cardResumoHTML(resumo) + tabelaHTML(['Titulo','Data','Tipo','Funcionario','Status'], linhas);
+  var hj   = new Date(); hj.setHours(0, 0, 0, 0);
+  var pend  = data.filter(function(e) { return e.status !== 'concluido' && new Date(e.data + 'T00:00:00') >= hj; }).length;
+  var atras = data.filter(function(e) { return e.status !== 'concluido' && new Date(e.data + 'T00:00:00') < hj; }).length;
+  var concl = data.filter(function(e) { return e.status === 'concluido'; }).length;
+  var resumo = [
+    ['Total', data.length], ['Pendentes', pend],
+    ['Em Atraso', atras],   ['Concluidos', concl]
+  ];
+  if (!pdf) { showBox('relAgenda', 'Agenda', resumo); return; }
+  var linhas = data.length === 0
+    ? [['Nenhum evento cadastrado', '--', '--', '--', '--']]
+    : data.map(function(e) {
+        var hje = new Date(); hje.setHours(0, 0, 0, 0);
+        var stLabel = e.status === 'concluido'
+          ? '<span style="color:#16a34a;font-weight:700">Concluido</span>'
+          : new Date(e.data + 'T00:00:00') < hje
+            ? '<span style="color:#dc2626;font-weight:700">Atrasado</span>'
+            : '<span style="color:#d97706;font-weight:700">Pendente</span>';
+        return [e.titulo || '--', fmt(e.data), e.tipo || '--', e.funcionario || '--', stLabel];
+      });
+  var corpo = cardResumoHTML(resumo) + tabelaHTML(['Titulo', 'Data', 'Tipo', 'Funcionario', 'Status'], linhas);
   abrirPDF('Relatorio de Agenda', templatePDF('Relatorio de Pendencias — Agenda', 'Eventos agendados, concluidos e em atraso', corpo));
+}
+
+/* ── TREINAMENTOS ── */
+function gerarTreinamentos(pdf) {
+  var data     = JSON.parse(localStorage.getItem('safenr_treinamentos') || '[]');
+  var hj       = new Date(); hj.setHours(0, 0, 0, 0);
+  var concl    = data.filter(function(t) { return t.status === 'concluido'; }).length;
+  var pend     = data.filter(function(t) { return t.status === 'pendente' || t.status === 'agendado'; }).length;
+  var vencendo = data.filter(function(t) {
+    if (!t.validade) return false;
+    var diff = (new Date(t.validade + 'T00:00:00') - hj) / 86400000;
+    return diff >= 0 && diff <= 30;
+  }).length;
+  var resumo = [
+    ['Total', data.length], ['Concluidos', concl],
+    ['Pendentes', pend],    ['Cert. Vencendo', vencendo]
+  ];
+  if (!pdf) { showBox('relTrein', 'Treinamentos', resumo); return; }
+  var linhas = data.length === 0
+    ? [['Nenhum treinamento cadastrado', '--', '--', '--', '--']]
+    : data.map(function(t) {
+        return [t.titulo || '--', t.nr || '--', t.colaborador || '--', fmt(t.data), t.status || '--'];
+      });
+  var corpo = cardResumoHTML(resumo) + tabelaHTML(['Titulo', 'NR', 'Colaborador', 'Data', 'Status'], linhas);
+  abrirPDF('Relatorio de Treinamentos', templatePDF('Relatorio de Treinamentos', 'Treinamentos realizados e pendentes', corpo));
 }
 </script>
 </body>
