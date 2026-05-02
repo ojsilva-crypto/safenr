@@ -17,6 +17,7 @@
     .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
     .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
     .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .notif-badge{background:#f87171;color:#fff;border-radius:20px;padding:1px 7px;font-size:.65rem;font-weight:700;margin-left:auto}
     .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
     .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
     .user-info p{font-size:.82rem;font-weight:600}
@@ -45,10 +46,10 @@
     .empty-state{text-align:center;padding:80px 20px;color:rgba(255,255,255,.3);grid-column:1/-1}
     .empty-state div{font-size:3.5rem;margin-bottom:16px}
     .badge{padding:3px 10px;border-radius:20px;font-size:.68rem;font-weight:600}
-    .badge.inspecao{background:rgba(0,212,255,.15);color:#00d4ff}
-    .badge.risco{background:rgba(248,113,113,.15);color:#f87171}
-    .badge.epi{background:rgba(251,146,60,.15);color:#fb923c}
-    .badge.geral{background:rgba(167,139,250,.15);color:#a78bfa}
+    .badge.inspecao{background:rgba(0,212,255,.15);  color:#00d4ff}
+    .badge.risco   {background:rgba(248,113,113,.15);color:#f87171}
+    .badge.epi     {background:rgba(251,146,60,.15);  color:#fb923c}
+    .badge.geral   {background:rgba(167,139,250,.15); color:#a78bfa}
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
     .modal-overlay.open{display:flex}
     .modal-form{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:32px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto}
@@ -89,10 +90,15 @@
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
     <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
+    <a class="nav-item" href="./ocorrencias.html"><span class="icon">🚨</span> Ocorrencias</a>
+    <a class="nav-item" href="./plano-acao.html"><span class="icon">📌</span> Plano de Acao</a>
+    <a class="nav-item" href="./documentos.html"><span class="icon">🗂️</span> Documentos SST</a>
     <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item active" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item" href="./ambientes.html"><span class="icon">🏭</span> Ambientes</a>
+    <a class="nav-item" href="./ia-sugestoes.html"><span class="icon">🤖</span> IA Sugestoes</a>
     <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
     <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
@@ -154,7 +160,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn-cancelar" onclick="fecharForm()">Cancelar</button>
-      <button class="btn-salvar" onclick="salvarFoto()">Salvar</button>
+      <button class="btn-salvar"   onclick="salvarFoto()">Salvar</button>
     </div>
   </div>
 </div>
@@ -188,15 +194,12 @@ function salvarStorage() { localStorage.setItem('safenr_fotos', JSON.stringify(f
 
 function fmtDT(iso) {
   if (!iso) return '--';
-  return new Date(iso).toLocaleString('pt-BR', {
-    day:'2-digit', month:'2-digit', year:'numeric',
-    hour:'2-digit', minute:'2-digit'
-  });
+  return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
 }
 
 function filtrar(s, btn) {
   filtroAtivo = s;
-  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.filtro-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   renderizar();
 }
@@ -204,43 +207,43 @@ function filtrar(s, btn) {
 function getLista() {
   return filtroAtivo === 'todos'
     ? fotos
-    : fotos.filter(function(f) { return f.categoria === filtroAtivo; });
+    : fotos.filter(function(f){ return f.categoria === filtroAtivo; });
 }
 
 function renderizar() {
   var grid  = document.getElementById('fotosGrid');
   var lista = getLista();
-  document.getElementById('totalFotos').textContent = fotos.length + ' foto(s)';
+  document.getElementById('totalFotos').textContent = fotos.length+' foto(s)';
   grid.innerHTML = '';
 
   if (lista.length === 0) {
     grid.innerHTML =
-      '<div class="empty-state">' +
-        '<div>📷</div>' +
-        '<p>Nenhuma foto cadastrada.<br>Clique em <strong>+ Adicionar Foto</strong>.</p>' +
+      '<div class="empty-state">'+
+        '<div>📷</div>'+
+        '<p>Nenhuma foto cadastrada.<br>Clique em <strong>+ Adicionar Foto</strong>.</p>'+
       '</div>';
     return;
   }
 
-  var catLabels = { inspecao:'Inspecao', risco:'Risco', epi:'EPI', geral:'Geral' };
+  var catLabels = {inspecao:'Inspecao', risco:'Risco', epi:'EPI', geral:'Geral'};
 
   lista.forEach(function(f) {
     var div = document.createElement('div');
     div.className = 'foto-card';
     var imgHtml = f.imagem
-      ? '<img class="foto-img" src="' + f.imagem + '" alt="' + f.titulo + '"/>'
+      ? '<img class="foto-img" src="'+f.imagem+'" alt="'+f.titulo+'"/>'
       : '<div class="foto-placeholder">📷</div>';
     var catLabel = catLabels[f.categoria] || 'Geral';
     div.innerHTML =
-      imgHtml +
-      '<div class="foto-info">' +
-        '<p>' + f.titulo + '</p>' +
-        '<span>' + (f.local || '--') + ' | ' + fmtDT(f.data) + '</span>' +
-      '</div>' +
-      '<div class="foto-acoes">' +
-        '<span class="badge ' + (f.categoria || 'geral') + '">' + catLabel + '</span>' +
-        '<button class="btn-acao" onclick="verFoto(' + f.id + ')" style="margin-left:auto" title="Visualizar">👁️</button>' +
-        '<button class="btn-acao" onclick="excluir(' + f.id + ')" title="Excluir">🗑️</button>' +
+      imgHtml+
+      '<div class="foto-info">'+
+        '<p>'+f.titulo+'</p>'+
+        '<span>'+(f.local||'--')+' | '+fmtDT(f.data)+'</span>'+
+      '</div>'+
+      '<div class="foto-acoes">'+
+        '<span class="badge '+(f.categoria||'geral')+'">'+catLabel+'</span>'+
+        '<button class="btn-acao" onclick="verFoto('+f.id+')" style="margin-left:auto" title="Visualizar">👁️</button>'+
+        '<button class="btn-acao" onclick="excluir('+f.id+')" title="Excluir">🗑️</button>'+
       '</div>';
     grid.appendChild(div);
   });
@@ -252,8 +255,8 @@ function previewFoto(input) {
   var reader = new FileReader();
   reader.onload = function(e) {
     fotoBase64 = e.target.result;
-    var prev = document.getElementById('uploadPreview');
-    prev.src = fotoBase64;
+    var prev   = document.getElementById('uploadPreview');
+    prev.src   = fotoBase64;
     prev.style.display = 'block';
   };
   reader.readAsDataURL(file);
@@ -276,8 +279,7 @@ function salvarFoto() {
   var titulo = document.getElementById('f_titulo').value.trim();
   if (!titulo) { alert('Informe o titulo da foto.'); return; }
   var nId = fotos.length > 0
-    ? Math.max.apply(null, fotos.map(function(f) { return f.id; })) + 1
-    : 1;
+    ? Math.max.apply(null, fotos.map(function(f){ return f.id; }))+1 : 1;
   fotos.push({
     id:            nId,
     titulo:        titulo,
@@ -286,7 +288,7 @@ function salvarFoto() {
     desc:          document.getElementById('f_desc').value.trim(),
     imagem:        fotoBase64,
     data:          new Date().toISOString(),
-    registradoPor: user.nome || 'Usuario'
+    registradoPor: user.nome||'Usuario'
   });
   salvarStorage();
   fecharForm();
@@ -294,23 +296,23 @@ function salvarFoto() {
 }
 
 function verFoto(id) {
-  var f = fotos.find(function(x) { return x.id === id; });
+  var f      = fotos.find(function(x){ return x.id===id; });
   var verImg = document.getElementById('verImg');
-  verImg.src           = f.imagem || '';
+  verImg.src           = f.imagem||'';
   verImg.style.display = f.imagem ? 'block' : 'none';
-  function row(l, v) {
-    return '<div class="detalhe-row">' +
-      '<span class="detalhe-label">' + l + '</span>' +
-      '<span class="detalhe-valor">' + v + '</span>' +
+  function row(l,v){
+    return '<div class="detalhe-row">'+
+      '<span class="detalhe-label">'+l+'</span>'+
+      '<span class="detalhe-valor">'+v+'</span>'+
       '</div>';
   }
   document.getElementById('verConteudo').innerHTML =
-    row('Titulo',        f.titulo) +
-    row('Categoria',     f.categoria || 'Geral') +
-    row('Local',         f.local || '--') +
-    row('Descricao',     f.desc || '--') +
-    row('Registrado por','<span style="color:#00d4ff">' + (f.registradoPor || '--') + '</span>') +
-    row('Data',          '<span style="color:#00d4ff">' + fmtDT(f.data) + '</span>');
+    row('Titulo',        f.titulo)+
+    row('Categoria',     f.categoria||'Geral')+
+    row('Local',         f.local||'--')+
+    row('Descricao',     f.desc||'--')+
+    row('Registrado por','<span style="color:#00d4ff">'+(f.registradoPor||'--')+'</span>')+
+    row('Data',          '<span style="color:#00d4ff">'+fmtDT(f.data)+'</span>');
   document.getElementById('modalVer').classList.add('open');
 }
 
@@ -318,13 +320,26 @@ function fecharVer() { document.getElementById('modalVer').classList.remove('ope
 
 function excluir(id) {
   if (!confirm('Excluir esta foto?')) return;
-  fotos = fotos.filter(function(f) { return f.id !== id; });
+  fotos = fotos.filter(function(f){ return f.id!==id; });
   salvarStorage();
   renderizar();
 }
 
-document.getElementById('modalForm').addEventListener('click', function(e) { if (e.target === this) fecharForm(); });
-document.getElementById('modalVer').addEventListener('click',  function(e) { if (e.target === this) fecharVer(); });
+document.getElementById('modalForm').addEventListener('click', function(e){ if(e.target===this) fecharForm(); });
+document.getElementById('modalVer').addEventListener('click',  function(e){ if(e.target===this) fecharVer(); });
+
+/* ── BADGE NOTIFICAÇÕES ── */
+(function(){
+  var n  = JSON.parse(localStorage.getItem('safenr_notificacoes')||'[]');
+  var nl = n.filter(function(x){ return !x.lida; }).length;
+  var link = document.querySelector('a[href="./notificacoes.html"]');
+  if (link && nl > 0) {
+    var b = document.createElement('span');
+    b.className   = 'notif-badge';
+    b.textContent = nl;
+    link.appendChild(b);
+  }
+})();
 
 renderizar();
 </script>
