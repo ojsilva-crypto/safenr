@@ -1,99 +1,375 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notificações - SafeNR</title>
-  <link rel="stylesheet" href="./styles.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SafeNR — Notificacoes</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;z-index:10}
+    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
+    .sidebar-logo h1 span{color:#00d4ff}
+    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
+    .nav{flex:1;padding:20px 0;overflow-y:auto}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
+    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+    .user-info p{font-size:.82rem;font-weight:600}
+    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
+    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+
+    /* MAIN */
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .topbar h2{font-size:1.4rem;font-weight:700}
+    .topbar-right{display:flex;align-items:center;gap:12px}
+    .total-badge{background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.25);color:#00d4ff;font-size:.78rem;font-weight:700;padding:5px 14px;border-radius:20px}
+    .btn-limpar{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.25);color:#f87171;font-size:.82rem;font-weight:600;padding:9px 20px;border-radius:10px;cursor:pointer;transition:all .2s}
+    .btn-limpar:hover{background:rgba(248,113,113,.2)}
+    .btn-marcar{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);color:#4ade80;font-size:.82rem;font-weight:600;padding:9px 20px;border-radius:10px;cursor:pointer;transition:all .2s}
+    .btn-marcar:hover{background:rgba(74,222,128,.18)}
+
+    /* FILTROS */
+    .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+    .filtro-btn{padding:7px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.45);cursor:pointer;font-size:.8rem;font-weight:500;transition:all .2s}
+    .filtro-btn:hover{background:rgba(255,255,255,.05)}
+    .filtro-btn.active{border-color:#00d4ff;color:#00d4ff;background:rgba(0,212,255,.08)}
+
+    /* LISTA */
+    .lista{display:flex;flex-direction:column;gap:12px}
+
+    /* CARD NOTIFICACAO */
+    .notif-card{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);transition:all .2s;position:relative;cursor:default}
+    .notif-card:hover{background:rgba(255,255,255,.05)}
+    .notif-card.nao-lida{border-left:3px solid;background:rgba(255,255,255,.04)}
+    .notif-card.nao-lida.alerta   {border-left-color:#f87171}
+    .notif-card.nao-lida.lembrete {border-left-color:#fbbf24}
+    .notif-card.nao-lida.sucesso  {border-left-color:#4ade80}
+    .notif-card.nao-lida.info     {border-left-color:#00d4ff}
+    .notif-card.nao-lida.sistema  {border-left-color:#a78bfa}
+
+    /* Ponto de não lida */
+    .notif-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
+    .alerta   .notif-dot{background:#f87171}
+    .lembrete .notif-dot{background:#fbbf24}
+    .sucesso  .notif-dot{background:#4ade80}
+    .info     .notif-dot{background:#00d4ff}
+    .sistema  .notif-dot{background:#a78bfa}
+    .notif-card:not(.nao-lida) .notif-dot{background:rgba(255,255,255,.2)}
+
+    .notif-icone{font-size:1.5rem;flex-shrink:0;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+    .alerta   .notif-icone{background:rgba(248,113,113,.12)}
+    .lembrete .notif-icone{background:rgba(251,191,36,.12)}
+    .sucesso  .notif-icone{background:rgba(74,222,128,.12)}
+    .info     .notif-icone{background:rgba(0,212,255,.12)}
+    .sistema  .notif-icone{background:rgba(167,139,250,.12)}
+
+    .notif-corpo{flex:1;min-width:0}
+    .notif-corpo h4{font-size:.92rem;font-weight:600;margin-bottom:4px;color:#fff}
+    .notif-card:not(.nao-lida) .notif-corpo h4{color:rgba(255,255,255,.55)}
+    .notif-corpo p{font-size:.82rem;color:rgba(255,255,255,.45);line-height:1.5}
+    .notif-card:not(.nao-lida) .notif-corpo p{color:rgba(255,255,255,.3)}
+    .notif-meta{display:flex;align-items:center;gap:10px;margin-top:8px}
+    .notif-tempo{font-size:.72rem;color:rgba(255,255,255,.3)}
+    .notif-tag{font-size:.68rem;font-weight:600;padding:2px 10px;border-radius:20px}
+    .alerta   .notif-tag{background:rgba(248,113,113,.15);color:#f87171}
+    .lembrete .notif-tag{background:rgba(251,191,36,.15);color:#fbbf24}
+    .sucesso  .notif-tag{background:rgba(74,222,128,.15);color:#4ade80}
+    .info     .notif-tag{background:rgba(0,212,255,.15);color:#00d4ff}
+    .sistema  .notif-tag{background:rgba(167,139,250,.15);color:#a78bfa}
+
+    .notif-acoes{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
+    .btn-fechar{background:none;border:none;color:rgba(255,255,255,.25);cursor:pointer;font-size:.9rem;padding:4px 6px;border-radius:6px;transition:all .2s;line-height:1}
+    .btn-fechar:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)}
+    .btn-lida{background:none;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.3);cursor:pointer;font-size:.68rem;padding:4px 8px;border-radius:6px;transition:all .2s;white-space:nowrap}
+    .btn-lida:hover{border-color:rgba(74,222,128,.4);color:#4ade80}
+
+    /* EMPTY STATE */
+    .empty-state{text-align:center;padding:80px 20px;color:rgba(255,255,255,.25);display:none}
+    .empty-state div{font-size:3.5rem;margin-bottom:16px}
+    .empty-state p{font-size:.95rem}
+    .empty-state span{font-size:.82rem;color:rgba(255,255,255,.2)}
+
+    /* SEPARADOR DE DATA */
+    .data-sep{font-size:.72rem;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:1px;padding:4px 0 8px;margin-top:8px}
+
+    /* ANIMACAO */
+    @keyframes fadeOut {
+      to { opacity:0; transform:translateX(20px); max-height:0; padding:0; margin:0; border:0; overflow:hidden; }
+    }
+    .removendo { animation: fadeOut 0.3s ease forwards; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <nav class="nav">
-      <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
-      <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
-      <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
-      <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-      <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
-      <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
-      <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
-      <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
-      <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-      <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
-      <a class="nav-item active" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
-      <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
-    </nav>
 
-    <main class="content">
-      <header class="header">
-        <h1>🔔 Notificações</h1>
-        <button class="btn btn-secondary" id="limparTodas">Limpar Todas</button>
-      </header>
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Safe<span>NR</span></h1>
+    <p>Gestao de Seguranca do Trabalho</p>
+  </div>
+  <nav class="nav">
+    <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
+    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
+    <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
+    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
+    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
+    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
+    <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
+    <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
+    <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item active" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
+    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="avatar" id="avatarLetra">A</div>
+    <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
+    <button class="btn-sair" onclick="sair()">✕</button>
+  </div>
+</div>
 
-      <div class="notifications-container">
-        <!-- Notificação de alerta -->
-        <div class="notification notification-alert">
-          <span class="icon">⚠️</span>
-          <div class="notification-content">
-            <h3>Risco Detectado</h3>
-            <p>Falta de EPI identificada na inspeção de segurança do setor A</p>
-            <small>há 2 horas</small>
-          </div>
-          <button class="btn-close" onclick="this.parentElement.remove()">✕</button>
-        </div>
-
-        <!-- Notificação de lembrete -->
-        <div class="notification notification-reminder">
-          <span class="icon">📌</span>
-          <div class="notification-content">
-            <h3>Lembrete: Inspeção Pendente</h3>
-            <p>Você tem uma inspeção agendada para hoje às 14:00</p>
-            <small>há 4 horas</small>
-          </div>
-          <button class="btn-close" onclick="this.parentElement.remove()">✕</button>
-        </div>
-
-        <!-- Notificação de sucesso -->
-        <div class="notification notification-success">
-          <span class="icon">✅</span>
-          <div class="notification-content">
-            <h3>Relatório Concluído</h3>
-            <p>Seu relatório mensal de inspeções foi gerado com sucesso</p>
-            <small>há 1 dia</small>
-          </div>
-          <button class="btn-close" onclick="this.parentElement.remove()">✕</button>
-        </div>
-
-        <!-- Notificação de informação -->
-        <div class="notification notification-info">
-          <span class="icon">ℹ️</span>
-          <div class="notification-content">
-            <h3>Atualização de NR</h3>
-            <p>Nova versão da NR-6 disponível na Biblioteca de Normas</p>
-            <small>há 2 dias</small>
-          </div>
-          <button class="btn-close" onclick="this.parentElement.remove()">✕</button>
-        </div>
-      </div>
-
-      <!-- Se não houver notificações -->
-      <div class="empty-state" id="emptyState" style="display: none;">
-        <p>🎉 Nenhuma notificação no momento</p>
-      </div>
-    </main>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <h2>🔔 Notificacoes</h2>
+    </div>
+    <div class="topbar-right">
+      <span class="total-badge" id="badgeNaoLidas">0 nao lidas</span>
+      <button class="btn-marcar" onclick="marcarTodasLidas()">✔ Marcar todas como lidas</button>
+      <button class="btn-limpar" onclick="limparTodas()">🗑️ Limpar todas</button>
+    </div>
   </div>
 
-  <script>
-    document.getElementById('limparTodas').addEventListener('click', function() {
-      document.querySelectorAll('.notification').forEach(n => n.remove());
-      document.getElementById('emptyState').style.display = 'block';
-    });
+  <!-- FILTROS -->
+  <div class="filtros">
+    <button class="filtro-btn active" onclick="filtrar('todos', this)">Todas</button>
+    <button class="filtro-btn" onclick="filtrar('nao-lida', this)">Nao Lidas</button>
+    <button class="filtro-btn" onclick="filtrar('alerta', this)">⚠️ Alertas</button>
+    <button class="filtro-btn" onclick="filtrar('lembrete', this)">📌 Lembretes</button>
+    <button class="filtro-btn" onclick="filtrar('sucesso', this)">✅ Sucesso</button>
+    <button class="filtro-btn" onclick="filtrar('info', this)">ℹ️ Informacoes</button>
+    <button class="filtro-btn" onclick="filtrar('sistema', this)">⚙️ Sistema</button>
+  </div>
 
-    // Mostrar empty state se não houver notificações
-    if (document.querySelectorAll('.notification').length === 0) {
-      document.getElementById('emptyState').style.display = 'block';
-    }
-  </script>
+  <!-- LISTA -->
+  <div class="lista" id="lista"></div>
+
+  <!-- EMPTY STATE -->
+  <div class="empty-state" id="emptyState">
+    <div>🔔</div>
+    <p>Nenhuma notificacao encontrada</p>
+    <span>Quando houver novos alertas, eles aparecerao aqui.</span>
+  </div>
+</div>
+
+<script>
+/* ── AUTH ── */
+var userData = localStorage.getItem('safenr_user');
+if (!userData) { window.location.href = './index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent  = user.nome || 'Usuario';
+document.getElementById('avatarLetra').textContent  = (user.nome || 'U')[0].toUpperCase();
+function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
+
+/* ── DADOS ── */
+var STORAGE_KEY = 'safenr_notificacoes';
+
+var notificacoesDefault = [
+  {
+    id: 1, tipo: 'alerta', lida: false,
+    titulo: 'Risco Detectado',
+    texto: 'Falta de EPI identificada na inspecao de seguranca do setor de Producao.',
+    tempo: 'ha 2 horas', grupo: 'Hoje'
+  },
+  {
+    id: 2, tipo: 'lembrete', lida: false,
+    titulo: 'Lembrete: Inspecao Pendente',
+    texto: 'Voce tem uma inspecao agendada para hoje as 14:00 no setor Almoxarifado.',
+    tempo: 'ha 4 horas', grupo: 'Hoje'
+  },
+  {
+    id: 3, tipo: 'sucesso', lida: false,
+    titulo: 'Relatorio Concluido',
+    texto: 'Seu relatorio mensal de inspecoes foi gerado com sucesso e esta disponivel.',
+    tempo: 'ha 1 dia', grupo: 'Ontem'
+  },
+  {
+    id: 4, tipo: 'info', lida: true,
+    titulo: 'Atualizacao de NR',
+    texto: 'Nova versao da NR-6 disponivel na Biblioteca de Normas. Confira as mudancas.',
+    tempo: 'ha 2 dias', grupo: 'Ontem'
+  },
+  {
+    id: 5, tipo: 'alerta', lida: false,
+    titulo: 'CA de EPI Vencendo',
+    texto: 'O Certificado de Aprovacao do Capacete MSA V-Gard vence em 15 dias.',
+    tempo: 'ha 3 dias', grupo: 'Esta semana'
+  },
+  {
+    id: 6, tipo: 'sistema', lida: true,
+    titulo: 'Backup Realizado',
+    texto: 'O backup automatico dos dados foi realizado com sucesso.',
+    tempo: 'ha 5 dias', grupo: 'Esta semana'
+  },
+  {
+    id: 7, tipo: 'lembrete', lida: false,
+    titulo: 'Treinamento Agendado',
+    texto: 'Treinamento de NR-35 (Trabalho em Altura) agendado para proxima segunda-feira.',
+    tempo: 'ha 6 dias', grupo: 'Esta semana'
+  }
+];
+
+function carregarDados() {
+  var salvo = localStorage.getItem(STORAGE_KEY);
+  return salvo ? JSON.parse(salvo) : notificacoesDefault;
+}
+
+function salvarDados(dados) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+}
+
+var notificacoes = carregarDados();
+var filtroAtivo  = 'todos';
+
+/* ── ÍCONES E LABELS ── */
+var icones = {
+  alerta:   '⚠️',
+  lembrete: '📌',
+  sucesso:  '✅',
+  info:     'ℹ️',
+  sistema:  '⚙️'
+};
+
+var labels = {
+  alerta:   'Alerta',
+  lembrete: 'Lembrete',
+  sucesso:  'Sucesso',
+  info:     'Informacao',
+  sistema:  'Sistema'
+};
+
+/* ── FILTRO ── */
+function filtrar(tipo, btn) {
+  filtroAtivo = tipo;
+  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderizar();
+}
+
+/* ── RENDERIZAR ── */
+function renderizar() {
+  var lista = document.getElementById('lista');
+  var empty = document.getElementById('emptyState');
+  lista.innerHTML = '';
+
+  var dados = notificacoes.filter(function(n) {
+    if (filtroAtivo === 'nao-lida') return !n.lida;
+    if (filtroAtivo !== 'todos')    return n.tipo === filtroAtivo;
+    return true;
+  });
+
+  atualizarBadge();
+
+  if (dados.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  // Agrupar por grupo
+  var grupos = [];
+  var mapaGrupos = {};
+  dados.forEach(function(n) {
+    var g = n.grupo || 'Outros';
+    if (!mapaGrupos[g]) { mapaGrupos[g] = []; grupos.push(g); }
+    mapaGrupos[g].push(n);
+  });
+
+  grupos.forEach(function(grupo) {
+    // Separador de data
+    var sep = document.createElement('div');
+    sep.className = 'data-sep';
+    sep.textContent = grupo;
+    lista.appendChild(sep);
+
+    mapaGrupos[grupo].forEach(function(n) {
+      var card = document.createElement('div');
+      card.className = 'notif-card ' + n.tipo + (n.lida ? '' : ' nao-lida');
+      card.id = 'notif-' + n.id;
+      card.innerHTML =
+        '<div class="notif-dot"></div>' +
+        '<div class="notif-icone">' + (icones[n.tipo] || '🔔') + '</div>' +
+        '<div class="notif-corpo">' +
+          '<h4>' + n.titulo + '</h4>' +
+          '<p>' + n.texto + '</p>' +
+          '<div class="notif-meta">' +
+            '<span class="notif-tempo">' + n.tempo + '</span>' +
+            '<span class="notif-tag">' + (labels[n.tipo] || n.tipo) + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="notif-acoes">' +
+          '<button class="btn-fechar" onclick="remover(' + n.id + ')" title="Remover">✕</button>' +
+          (!n.lida
+            ? '<button class="btn-lida" onclick="marcarLida(' + n.id + ')">✔ lida</button>'
+            : '') +
+        '</div>';
+      lista.appendChild(card);
+    });
+  });
+}
+
+/* ── AÇÕES ── */
+function remover(id) {
+  var card = document.getElementById('notif-' + id);
+  if (card) {
+    card.classList.add('removendo');
+    setTimeout(function() {
+      notificacoes = notificacoes.filter(function(n) { return n.id !== id; });
+      salvarDados(notificacoes);
+      renderizar();
+    }, 280);
+  }
+}
+
+function marcarLida(id) {
+  var n = notificacoes.find(function(x) { return x.id === id; });
+  if (n) { n.lida = true; salvarDados(notificacoes); renderizar(); }
+}
+
+function marcarTodasLidas() {
+  notificacoes.forEach(function(n) { n.lida = true; });
+  salvarDados(notificacoes);
+  renderizar();
+}
+
+function limparTodas() {
+  if (!confirm('Remover todas as notificacoes?')) return;
+  notificacoes = [];
+  salvarDados(notificacoes);
+  renderizar();
+}
+
+function atualizarBadge() {
+  var naoLidas = notificacoes.filter(function(n) { return !n.lida; }).length;
+  var badge = document.getElementById('badgeNaoLidas');
+  badge.textContent = naoLidas + (naoLidas === 1 ? ' nao lida' : ' nao lidas');
+  badge.style.background = naoLidas > 0
+    ? 'rgba(248,113,113,.15)'
+    : 'rgba(0,212,255,.12)';
+  badge.style.borderColor = naoLidas > 0
+    ? 'rgba(248,113,113,.3)'
+    : 'rgba(0,212,255,.25)';
+  badge.style.color = naoLidas > 0 ? '#f87171' : '#00d4ff';
+}
+
+/* ── INIT ── */
+renderizar();
+</script>
 </body>
 </html>
-
-  
