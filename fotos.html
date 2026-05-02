@@ -75,6 +75,7 @@
   </style>
 </head>
 <body>
+
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
@@ -82,23 +83,26 @@
   </div>
   <nav class="nav">
     <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
     <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
+    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
     <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item active" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
-    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configuracoes</a>
+    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
+    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
     <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
-    <button class="btn-sair" onclick="sair()">X</button>
+    <button class="btn-sair" onclick="sair()">✕</button>
   </div>
 </div>
+
 <div class="main">
   <div class="topbar">
     <div><h2>📷 Galeria de Fotos</h2><span id="totalFotos">0 fotos</span></div>
@@ -113,6 +117,8 @@
   </div>
   <div class="fotos-grid" id="fotosGrid"></div>
 </div>
+
+<!-- MODAL FORM -->
 <div class="modal-overlay" id="modalForm">
   <div class="modal-form">
     <h3>Adicionar Foto</h3>
@@ -125,84 +131,201 @@
       </div>
       <input type="file" id="inputFoto" accept="image/*" style="display:none" onchange="previewFoto(this)"/>
     </div>
-    <div class="form-group"><label>Titulo *</label><input type="text" id="f_titulo" placeholder="Ex: Inspecao de EPIs..."/></div>
-    <div class="form-group"><label>Categoria</label><select id="f_categoria"><option value="geral">Geral</option><option value="inspecao">Inspecao</option><option value="risco">Risco</option><option value="epi">EPI</option></select></div>
-    <div class="form-group"><label>Local / Setor</label><input type="text" id="f_local" placeholder="Ex: Producao, Almoxarifado..."/></div>
-    <div class="form-group"><label>Descricao</label><textarea id="f_desc" placeholder="Descreva o que a foto registra..."></textarea></div>
-    <div class="modal-footer"><button class="btn-cancelar" onclick="fecharForm()">Cancelar</button><button class="btn-salvar" onclick="salvarFoto()">Salvar</button></div>
+    <div class="form-group">
+      <label>Titulo *</label>
+      <input type="text" id="f_titulo" placeholder="Ex: Inspecao de EPIs..."/>
+    </div>
+    <div class="form-group">
+      <label>Categoria</label>
+      <select id="f_categoria">
+        <option value="geral">Geral</option>
+        <option value="inspecao">Inspecao</option>
+        <option value="risco">Risco</option>
+        <option value="epi">EPI</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Local / Setor</label>
+      <input type="text" id="f_local" placeholder="Ex: Producao, Almoxarifado..."/>
+    </div>
+    <div class="form-group">
+      <label>Descricao</label>
+      <textarea id="f_desc" placeholder="Descreva o que a foto registra..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharForm()">Cancelar</button>
+      <button class="btn-salvar" onclick="salvarFoto()">Salvar</button>
+    </div>
   </div>
 </div>
+
+<!-- MODAL VER -->
 <div class="modal-overlay" id="modalVer">
   <div class="modal-ver">
     <div class="modal-ver-body">
       <img id="verImg" src="" alt="" style="width:100%;max-height:400px;object-fit:contain;background:#000;border-radius:12px;margin-bottom:16px"/>
       <div id="verConteudo"></div>
-      <div class="modal-footer"><button class="btn-cancelar" onclick="fecharVer()">Fechar</button></div>
+      <div class="modal-footer">
+        <button class="btn-cancelar" onclick="fecharVer()">Fechar</button>
+      </div>
     </div>
   </div>
 </div>
+
 <script>
-var userData=localStorage.getItem('safenr_user');
-if(!userData){ window.location.href='./index.html'; }
-var user=JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent=user.nome||'Usuario';
-document.getElementById('avatarLetra').textContent=(user.nome||'U')[0].toUpperCase();
-function sair(){ localStorage.removeItem('safenr_user'); window.location.href='./index.html'; }
-var fotos=JSON.parse(localStorage.getItem('safenr_fotos')||'[]');
-var filtroAtivo='todos',fotoBase64='';
-function salvarStorage(){ localStorage.setItem('safenr_fotos',JSON.stringify(fotos)); }
-function fmtDT(iso){ if(!iso) return '--'; return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
-function filtrar(s,btn){ filtroAtivo=s; document.querySelectorAll('.filtro-btn').forEach(function(b){ b.classList.remove('active'); }); btn.classList.add('active'); renderizar(); }
-function getLista(){ return filtroAtivo==='todos'?fotos:fotos.filter(function(f){ return f.categoria===filtroAtivo; }); }
-function renderizar(){
-  var grid=document.getElementById('fotosGrid'),lista=getLista();
-  document.getElementById('totalFotos').textContent=fotos.length+' foto(s)';
-  grid.innerHTML='';
-  if(lista.length===0){ grid.innerHTML='<div class="empty-state"><div>📷</div><p>Nenhuma foto cadastrada.<br>Clique em <strong>+ Adicionar Foto</strong>.</p></div>'; return; }
-  lista.forEach(function(f){
-    var div=document.createElement('div'); div.className='foto-card';
-    var imgHtml=f.imagem?'<img class="foto-img" src="'+f.imagem+'" alt="'+f.titulo+'"/>':'<div class="foto-placeholder">📷</div>';
-    var catLabel={inspecao:'Inspecao',risco:'Risco',epi:'EPI',geral:'Geral'}[f.categoria]||'Geral';
-    div.innerHTML=imgHtml+'<div class="foto-info"><p>'+f.titulo+'</p><span>'+(f.local||'--')+' | '+fmtDT(f.data)+'</span></div><div class="foto-acoes"><span class="badge '+(f.categoria||'geral')+'">'+catLabel+'</span><button class="btn-acao" onclick="verFoto('+f.id+')" style="margin-left:auto">👁️</button><button class="btn-acao" onclick="excluir('+f.id+')">🗑️</button></div>';
+var userData = localStorage.getItem('safenr_user');
+if (!userData) { window.location.href = './index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
+document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
+
+var fotos       = JSON.parse(localStorage.getItem('safenr_fotos') || '[]');
+var filtroAtivo = 'todos';
+var fotoBase64  = '';
+
+function salvarStorage() { localStorage.setItem('safenr_fotos', JSON.stringify(fotos)); }
+
+function fmtDT(iso) {
+  if (!iso) return '--';
+  return new Date(iso).toLocaleString('pt-BR', {
+    day:'2-digit', month:'2-digit', year:'numeric',
+    hour:'2-digit', minute:'2-digit'
+  });
+}
+
+function filtrar(s, btn) {
+  filtroAtivo = s;
+  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderizar();
+}
+
+function getLista() {
+  return filtroAtivo === 'todos'
+    ? fotos
+    : fotos.filter(function(f) { return f.categoria === filtroAtivo; });
+}
+
+function renderizar() {
+  var grid  = document.getElementById('fotosGrid');
+  var lista = getLista();
+  document.getElementById('totalFotos').textContent = fotos.length + ' foto(s)';
+  grid.innerHTML = '';
+
+  if (lista.length === 0) {
+    grid.innerHTML =
+      '<div class="empty-state">' +
+        '<div>📷</div>' +
+        '<p>Nenhuma foto cadastrada.<br>Clique em <strong>+ Adicionar Foto</strong>.</p>' +
+      '</div>';
+    return;
+  }
+
+  var catLabels = { inspecao:'Inspecao', risco:'Risco', epi:'EPI', geral:'Geral' };
+
+  lista.forEach(function(f) {
+    var div = document.createElement('div');
+    div.className = 'foto-card';
+    var imgHtml = f.imagem
+      ? '<img class="foto-img" src="' + f.imagem + '" alt="' + f.titulo + '"/>'
+      : '<div class="foto-placeholder">📷</div>';
+    var catLabel = catLabels[f.categoria] || 'Geral';
+    div.innerHTML =
+      imgHtml +
+      '<div class="foto-info">' +
+        '<p>' + f.titulo + '</p>' +
+        '<span>' + (f.local || '--') + ' | ' + fmtDT(f.data) + '</span>' +
+      '</div>' +
+      '<div class="foto-acoes">' +
+        '<span class="badge ' + (f.categoria || 'geral') + '">' + catLabel + '</span>' +
+        '<button class="btn-acao" onclick="verFoto(' + f.id + ')" style="margin-left:auto" title="Visualizar">👁️</button>' +
+        '<button class="btn-acao" onclick="excluir(' + f.id + ')" title="Excluir">🗑️</button>' +
+      '</div>';
     grid.appendChild(div);
   });
 }
-function previewFoto(input){
-  var file=input.files[0]; if(!file) return;
-  var reader=new FileReader();
-  reader.onload=function(e){ fotoBase64=e.target.result; var prev=document.getElementById('uploadPreview'); prev.src=fotoBase64; prev.style.display='block'; };
+
+function previewFoto(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    fotoBase64 = e.target.result;
+    var prev = document.getElementById('uploadPreview');
+    prev.src = fotoBase64;
+    prev.style.display = 'block';
+  };
   reader.readAsDataURL(file);
 }
-function abrirForm(){
-  fotoBase64='';
-  document.getElementById('f_titulo').value='';
-  document.getElementById('f_categoria').value='geral';
-  document.getElementById('f_local').value='';
-  document.getElementById('f_desc').value='';
-  document.getElementById('inputFoto').value='';
-  document.getElementById('uploadPreview').style.display='none';
+
+function abrirForm() {
+  fotoBase64 = '';
+  document.getElementById('f_titulo').value    = '';
+  document.getElementById('f_categoria').value = 'geral';
+  document.getElementById('f_local').value     = '';
+  document.getElementById('f_desc').value      = '';
+  document.getElementById('inputFoto').value   = '';
+  document.getElementById('uploadPreview').style.display = 'none';
   document.getElementById('modalForm').classList.add('open');
 }
-function fecharForm(){ document.getElementById('modalForm').classList.remove('open'); }
-function salvarFoto(){
-  var titulo=document.getElementById('f_titulo').value.trim();
-  if(!titulo){ alert('Informe o titulo da foto.'); return; }
-  var nId=fotos.length>0?Math.max.apply(null,fotos.map(function(f){ return f.id; }))+1:1;
-  fotos.push({id:nId,titulo:titulo,categoria:document.getElementById('f_categoria').value,local:document.getElementById('f_local').value.trim(),desc:document.getElementById('f_desc').value.trim(),imagem:fotoBase64,data:new Date().toISOString(),registradoPor:user.nome||'Usuario'});
-  salvarStorage(); fecharForm(); renderizar();
+
+function fecharForm() { document.getElementById('modalForm').classList.remove('open'); }
+
+function salvarFoto() {
+  var titulo = document.getElementById('f_titulo').value.trim();
+  if (!titulo) { alert('Informe o titulo da foto.'); return; }
+  var nId = fotos.length > 0
+    ? Math.max.apply(null, fotos.map(function(f) { return f.id; })) + 1
+    : 1;
+  fotos.push({
+    id:            nId,
+    titulo:        titulo,
+    categoria:     document.getElementById('f_categoria').value,
+    local:         document.getElementById('f_local').value.trim(),
+    desc:          document.getElementById('f_desc').value.trim(),
+    imagem:        fotoBase64,
+    data:          new Date().toISOString(),
+    registradoPor: user.nome || 'Usuario'
+  });
+  salvarStorage();
+  fecharForm();
+  renderizar();
 }
-function verFoto(id){
-  var f=fotos.find(function(x){ return x.id===id; });
-  document.getElementById('verImg').src=f.imagem||'';
-  document.getElementById('verImg').style.display=f.imagem?'block':'none';
-  function row(l,v){ return '<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>'; }
-  document.getElementById('verConteudo').innerHTML=row('Titulo',f.titulo)+row('Categoria',f.categoria||'Geral')+row('Local',f.local||'--')+row('Descricao',f.desc||'--')+row('Registrado por','<span style="color:#00d4ff">'+(f.registradoPor||'--')+'</span>')+row('Data','<span style="color:#00d4ff">'+fmtDT(f.data)+'</span>');
+
+function verFoto(id) {
+  var f = fotos.find(function(x) { return x.id === id; });
+  var verImg = document.getElementById('verImg');
+  verImg.src           = f.imagem || '';
+  verImg.style.display = f.imagem ? 'block' : 'none';
+  function row(l, v) {
+    return '<div class="detalhe-row">' +
+      '<span class="detalhe-label">' + l + '</span>' +
+      '<span class="detalhe-valor">' + v + '</span>' +
+      '</div>';
+  }
+  document.getElementById('verConteudo').innerHTML =
+    row('Titulo',        f.titulo) +
+    row('Categoria',     f.categoria || 'Geral') +
+    row('Local',         f.local || '--') +
+    row('Descricao',     f.desc || '--') +
+    row('Registrado por','<span style="color:#00d4ff">' + (f.registradoPor || '--') + '</span>') +
+    row('Data',          '<span style="color:#00d4ff">' + fmtDT(f.data) + '</span>');
   document.getElementById('modalVer').classList.add('open');
 }
-function fecharVer(){ document.getElementById('modalVer').classList.remove('open'); }
-function excluir(id){ if(!confirm('Excluir esta foto?')) return; fotos=fotos.filter(function(f){ return f.id!==id; }); salvarStorage(); renderizar(); }
-document.getElementById('modalForm').addEventListener('click',function(e){ if(e.target===this) fecharForm(); });
-document.getElementById('modalVer').addEventListener('click',function(e){ if(e.target===this) fecharVer(); });
+
+function fecharVer() { document.getElementById('modalVer').classList.remove('open'); }
+
+function excluir(id) {
+  if (!confirm('Excluir esta foto?')) return;
+  fotos = fotos.filter(function(f) { return f.id !== id; });
+  salvarStorage();
+  renderizar();
+}
+
+document.getElementById('modalForm').addEventListener('click', function(e) { if (e.target === this) fecharForm(); });
+document.getElementById('modalVer').addEventListener('click',  function(e) { if (e.target === this) fecharVer(); });
+
 renderizar();
 </script>
 </body>
