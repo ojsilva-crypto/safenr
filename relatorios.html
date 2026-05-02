@@ -29,31 +29,23 @@
     .topbar h2{font-size:1.4rem;font-weight:700}
     .btn-imprimir{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:rgba(255,255,255,.7);font-size:.88rem;font-weight:600;padding:10px 20px;cursor:pointer;transition:all .2s}
     .btn-imprimir:hover{background:rgba(255,255,255,.12)}
-
-    /* PERIODO */
     .periodo-bar{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
     .periodo-bar label{font-size:.8rem;color:rgba(255,255,255,.45);font-weight:600}
     .periodo-bar input,.periodo-bar select{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:9px 14px;color:#fff;font-size:.85rem;outline:none}
     .periodo-bar input:focus,.periodo-bar select:focus{border-color:#00d4ff}
     .periodo-bar select option{background:#1a2535}
     .btn-filtrar{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:8px;color:#fff;font-size:.85rem;font-weight:700;padding:10px 20px;cursor:pointer}
-
-    /* INDICADORES SST */
     .indicadores-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
     .ind-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:18px;text-align:center}
     .ind-valor{font-size:1.6rem;font-weight:900;margin-bottom:4px}
     .ind-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
     .ind-formula{font-size:.65rem;color:rgba(255,255,255,.2);font-style:italic}
-
-    /* GRÁFICOS */
     .graficos-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
     .grafico-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px}
     .grafico-card.full{grid-column:1/-1}
     .grafico-card h3{font-size:.9rem;font-weight:700;margin-bottom:20px;color:rgba(255,255,255,.8)}
     .chart-wrap{position:relative;height:220px}
     .chart-wrap.tall{height:280px}
-
-    /* TABELAS */
     .tabela-section{margin-bottom:24px}
     .tabela-section h3{font-size:.95rem;font-weight:700;margin-bottom:14px}
     .tabela-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden}
@@ -73,7 +65,6 @@
     .badge.concluido{background:rgba(74,222,128,.2);  color:#4ade80}
     .badge.pendente {background:rgba(251,191,36,.2);  color:#fbbf24}
     .badge.atrasado {background:rgba(248,113,113,.2);color:#f87171}
-
     @media print{
       .sidebar,.topbar .btn-imprimir,.periodo-bar{display:none!important}
       .main{margin-left:0!important;padding:10px!important}
@@ -105,6 +96,8 @@
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item" href="./ambientes.html"><span class="icon">🏭</span> Ambientes</a>
+    <a class="nav-item" href="./ia-sugestoes.html"><span class="icon">🤖</span> IA Sugestoes</a>
     <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
     <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
@@ -121,7 +114,6 @@
     <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir / PDF</button>
   </div>
 
-  <!-- FILTRO DE PERÍODO -->
   <div class="periodo-bar">
     <div>
       <label>De</label><br>
@@ -145,7 +137,6 @@
     <button class="btn-filtrar" onclick="gerarRelatorio()">📊 Gerar</button>
   </div>
 
-  <!-- INDICADORES SST -->
   <div class="indicadores-grid">
     <div class="ind-card">
       <div class="ind-valor" id="ind-tfa" style="color:#f87171">0,00</div>
@@ -169,7 +160,6 @@
     </div>
   </div>
 
-  <!-- GRÁFICOS -->
   <div class="graficos-grid">
     <div class="grafico-card">
       <h3>🚨 Ocorrencias por Tipo</h3>
@@ -193,7 +183,6 @@
     </div>
   </div>
 
-  <!-- TABELA OCORRÊNCIAS -->
   <div class="tabela-section">
     <h3>🚨 Ocorrencias no Periodo</h3>
     <div class="tabela-wrap">
@@ -204,7 +193,6 @@
     </div>
   </div>
 
-  <!-- TABELA RISCOS CRÍTICOS -->
   <div class="tabela-section">
     <h3>⚠️ Riscos Criticos e Altos</h3>
     <div class="tabela-wrap">
@@ -215,7 +203,6 @@
     </div>
   </div>
 
-  <!-- TABELA PLANOS ATRASADOS -->
   <div class="tabela-section">
     <h3>📌 Planos de Acao — Atrasados e Em Aberto</h3>
     <div class="tabela-wrap">
@@ -228,7 +215,6 @@
 </div>
 
 <script>
-/* ── AUTH ── */
 var userData = localStorage.getItem('safenr_user');
 if (!userData) { window.location.href = './index.html'; }
 var user = JSON.parse(userData);
@@ -241,76 +227,76 @@ var charts = {};
 function fmt(d){ if(!d) return '--'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
 
 function aplicarPeriodoRapido(){
-  var v = document.getElementById('periodoRapido').value;
+  var v=document.getElementById('periodoRapido').value;
   if(!v) return;
-  var fim   = new Date();
-  var inicio= new Date();
-  inicio.setDate(inicio.getDate() - parseInt(v));
-  document.getElementById('periodoInicio').value = inicio.toISOString().split('T')[0];
-  document.getElementById('periodoFim').value    = fim.toISOString().split('T')[0];
+  var fim   =new Date();
+  var inicio=new Date();
+  inicio.setDate(inicio.getDate()-parseInt(v));
+  document.getElementById('periodoInicio').value=inicio.toISOString().split('T')[0];
+  document.getElementById('periodoFim').value   =fim.toISOString().split('T')[0];
 }
 
 function destroyChart(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
 
 function gerarRelatorio(){
-  var inicio = document.getElementById('periodoInicio').value;
-  var fim    = document.getElementById('periodoFim').value;
-  var dtIni  = inicio ? new Date(inicio+'T00:00:00') : null;
-  var dtFim  = fim    ? new Date(fim   +'T23:59:59') : null;
+  var inicio=document.getElementById('periodoInicio').value;
+  var fim   =document.getElementById('periodoFim').value;
+  var dtIni =inicio?new Date(inicio+'T00:00:00'):null;
+  var dtFim =fim   ?new Date(fim   +'T23:59:59'):null;
 
   function noPeriodo(dataStr){
     if(!dataStr) return true;
-    var d = new Date(dataStr+'T00:00:00');
-    if(dtIni && d < dtIni) return false;
-    if(dtFim && d > dtFim) return false;
+    var d=new Date(dataStr+'T00:00:00');
+    if(dtIni&&d<dtIni) return false;
+    if(dtFim&&d>dtFim) return false;
     return true;
   }
 
-  var ocorrs = JSON.parse(localStorage.getItem('safenr_ocorrencias') || '[]').filter(function(o){ return noPeriodo(o.data); });
-  var riscos = JSON.parse(localStorage.getItem('safenr_riscos')       || '[]');
-  var treins = JSON.parse(localStorage.getItem('safenr_treinamentos') || '[]');
-  var colabs = JSON.parse(localStorage.getItem('safenr_colaboradores')|| '[]');
-  var planos = JSON.parse(localStorage.getItem('safenr_planos')       || '[]');
-  var checks = JSON.parse(localStorage.getItem('safenr_checklists')   || '[]').filter(function(c){ return noPeriodo(c.data||c.dataReal); });
+  var ocorrs=JSON.parse(localStorage.getItem('safenr_ocorrencias')||'[]').filter(function(o){return noPeriodo(o.data);});
+  var riscos=JSON.parse(localStorage.getItem('safenr_riscos')      ||'[]');
+  var treins=JSON.parse(localStorage.getItem('safenr_treinamentos')||'[]');
+  var colabs=JSON.parse(localStorage.getItem('safenr_colaboradores')||'[]');
+  var planos=JSON.parse(localStorage.getItem('safenr_planos')      ||'[]');
+  var checks=JSON.parse(localStorage.getItem('safenr_checklists')  ||'[]').filter(function(c){return noPeriodo(c.data||c.dataReal);});
 
-  /* ── INDICADORES ── */
-  var colabAtivos = colabs.filter(function(c){return c.status==='ativo';}).length;
-  var hht  = colabAtivos * 220 * 8; /* estimativa: 220 dias/ano, 8h/dia */
-  var acids= ocorrs.filter(function(o){return o.tipo==='acidente';}).length;
-  var diasP= ocorrs.reduce(function(s,o){return s+(parseInt(o.diasPerdidos)||0);},0);
-  var tfa  = hht>0 ? ((acids*1000000)/hht).toFixed(2) : '0,00';
-  var tg   = hht>0 ? ((diasP*1000000)/hht).toFixed(2) : '0,00';
-  var checkConc = checks.filter(function(c){return c.status==='concluido';}).length;
-  var confPct= checks.length>0 ? Math.round((checkConc/checks.length)*100) : 0;
+  /* INDICADORES */
+  var colabAtivos=colabs.filter(function(c){return c.status==='ativo';}).length;
+  var hht =colabAtivos*220*8;
+  var acids=ocorrs.filter(function(o){return o.tipo==='acidente';}).length;
+  var diasP=ocorrs.reduce(function(s,o){return s+(parseInt(o.diasPerdidos)||0);},0);
+  var tfa =hht>0?((acids*1000000)/hht).toFixed(2):'0,00';
+  var tg  =hht>0?((diasP*1000000)/hht).toFixed(2):'0,00';
+  var checkConc=checks.filter(function(c){return c.status==='concluido';}).length;
+  var confPct =checks.length>0?Math.round((checkConc/checks.length)*100):0;
 
-  document.getElementById('ind-tfa').textContent     = String(tfa).replace('.',',');
-  document.getElementById('ind-tg').textContent      = String(tg).replace('.',',');
-  document.getElementById('ind-diasPerd').textContent= diasP;
-  document.getElementById('ind-conf').textContent    = confPct+'%';
+  document.getElementById('ind-tfa').textContent     =String(tfa).replace('.',',');
+  document.getElementById('ind-tg').textContent      =String(tg).replace('.',',');
+  document.getElementById('ind-diasPerd').textContent=diasP;
+  document.getElementById('ind-conf').textContent    =confPct+'%';
 
-  /* ── GRÁFICO 1: Ocorrências por tipo ── */
+  /* GRÁFICO 1 */
   destroyChart('cOcorrTipo');
   var tiposO=['acidente','incidente','quase-acidente','condicao-insegura'];
   var labO  =['Acidente','Incidente','Quase-Acidente','Cond. Insegura'];
-  var valO  = tiposO.map(function(t){return ocorrs.filter(function(o){return o.tipo===t;}).length;});
+  var valO  =tiposO.map(function(t){return ocorrs.filter(function(o){return o.tipo===t;}).length;});
   charts['cOcorrTipo']=new Chart(document.getElementById('cOcorrTipo'),{
     type:'doughnut',
     data:{labels:labO,datasets:[{data:valO,backgroundColor:['#f87171','#fb923c','#fbbf24','#a78bfa'],borderColor:'#0f1923',borderWidth:3}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'rgba(255,255,255,.6)',font:{size:11},boxWidth:12}}}}
   });
 
-  /* ── GRÁFICO 2: Riscos por nível ── */
+  /* GRÁFICO 2 */
   destroyChart('cRiscosNivel');
   var niveis=['critico','alto','medio','baixo'];
   var labN  =['Critico','Alto','Medio','Baixo'];
-  var valN  = niveis.map(function(n){return riscos.filter(function(r){return r.nivel===n;}).length;});
+  var valN  =niveis.map(function(n){return riscos.filter(function(r){return r.nivel===n;}).length;});
   charts['cRiscosNivel']=new Chart(document.getElementById('cRiscosNivel'),{
     type:'bar',
     data:{labels:labN,datasets:[{label:'Qtd',data:valN,backgroundColor:['#f87171','#fb923c','#fbbf24','#4ade80'],borderRadius:8}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'rgba(255,255,255,.5)'},grid:{color:'rgba(255,255,255,.05)'}},y:{ticks:{color:'rgba(255,255,255,.5)',stepSize:1},grid:{color:'rgba(255,255,255,.05)'},beginAtZero:true}}}
   });
 
-  /* ── GRÁFICO 3: Ocorrências por mês ── */
+  /* GRÁFICO 3 */
   destroyChart('cOcorrMes');
   var agora=new Date(), meses12=[], labM=[];
   for(var i=11;i>=0;i--){
@@ -324,13 +310,13 @@ function gerarRelatorio(){
   charts['cOcorrMes']=new Chart(document.getElementById('cOcorrMes'),{
     type:'bar',
     data:{labels:labM,datasets:[
-      {label:'Acidentes', data:serAcid,backgroundColor:'rgba(248,113,113,.7)',borderRadius:6},
+      {label:'Acidentes',      data:serAcid,backgroundColor:'rgba(248,113,113,.7)',borderRadius:6},
       {label:'Incidentes/Outros',data:serInci,backgroundColor:'rgba(251,191,36,.7)',borderRadius:6}
     ]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'rgba(255,255,255,.6)',font:{size:11}}}},scales:{x:{ticks:{color:'rgba(255,255,255,.4)'},grid:{color:'rgba(255,255,255,.05)'},stacked:true},y:{ticks:{color:'rgba(255,255,255,.4)',stepSize:1},grid:{color:'rgba(255,255,255,.05)'},beginAtZero:true,stacked:true}}}
   });
 
-  /* ── GRÁFICO 4: Treinamentos por status ── */
+  /* GRÁFICO 4 */
   destroyChart('cTreinStatus');
   var stT=['concluido','agendado','em-andamento','cancelado'];
   var labT=['Concluido','Agendado','Em Andamento','Cancelado'];
@@ -341,7 +327,7 @@ function gerarRelatorio(){
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'rgba(255,255,255,.6)',font:{size:11},boxWidth:12}}}}
   });
 
-  /* ── GRÁFICO 5: Planos por status ── */
+  /* GRÁFICO 5 */
   destroyChart('cPlanos');
   function calcSt(r){
     if(r.status==='concluido'||r.status==='cancelado') return r.status;
@@ -357,7 +343,7 @@ function gerarRelatorio(){
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'rgba(255,255,255,.6)',font:{size:11},boxWidth:12}}}}
   });
 
-  /* ── TABELA OCORRÊNCIAS ── */
+  /* TABELA OCORRÊNCIAS */
   var tbody=document.getElementById('tabelaOcorr');
   tbody.innerHTML='';
   if(ocorrs.length===0){
@@ -368,8 +354,8 @@ function gerarRelatorio(){
       tr.innerHTML=
         '<td>'+fmt(o.data)+'</td>'+
         '<td><span class="badge '+(o.tipo||'')+'">'+( o.tipo||'--')+'</span></td>'+
-        '<td>'+( o.colaborador||'--')+'</td>'+
-        '<td>'+( o.setor      ||'--')+'</td>'+
+        '<td>'+(o.colaborador||'--')+'</td>'+
+        '<td>'+(o.setor      ||'--')+'</td>'+
         '<td><span class="badge '+(o.gravidade||'')+'">'+( o.gravidade||'--')+'</span></td>'+
         '<td>'+(o.cat==='sim'?'✅':'❌')+'</td>'+
         '<td style="text-align:center">'+(o.diasPerdidos||0)+'</td>';
@@ -377,7 +363,7 @@ function gerarRelatorio(){
     });
   }
 
-  /* ── TABELA RISCOS ── */
+  /* TABELA RISCOS */
   var tbRiscos=document.getElementById('tabelaRiscos');
   tbRiscos.innerHTML='';
   var riscosCA=riscos.filter(function(r){return r.nivel==='critico'||r.nivel==='alto';});
@@ -396,7 +382,7 @@ function gerarRelatorio(){
     });
   }
 
-  /* ── TABELA PLANOS ── */
+  /* TABELA PLANOS */
   var tbPlanos=document.getElementById('tabelaPlanos');
   tbPlanos.innerHTML='';
   var planosProb=planos.filter(function(p){var s=calcSt(p);return s==='aberto'||s==='atrasado'||s==='andamento';});
@@ -412,25 +398,29 @@ function gerarRelatorio(){
       var st=calcSt(p);
       var tr=document.createElement('tr');
       tr.innerHTML=
-        '<td>'+( p.oque   ||'--')+'</td>'+
-        '<td>'+( p.quem   ||'--')+'</td>'+
-        '<td>'+ fmt(p.quando)+'</td>'+
-        '<td>'+( p.origem ||'--')+'</td>'+
+        '<td>'+(p.oque   ||'--')+'</td>'+
+        '<td>'+(p.quem   ||'--')+'</td>'+
+        '<td>'+fmt(p.quando)+'</td>'+
+        '<td>'+(p.origem ||'--')+'</td>'+
         '<td><span class="badge '+st+'">'+st+'</span></td>';
       tbPlanos.appendChild(tr);
     });
   }
 }
 
-/* ── BADGE NOTIF ── */
+/* ── BADGE NOTIFICAÇÕES ── */
 (function(){
-  var n=JSON.parse(localStorage.getItem('safenr_notificacoes')||'[]');
-  var nl=n.filter(function(x){return!x.lida;}).length;
+  var n  =JSON.parse(localStorage.getItem('safenr_notificacoes')||'[]');
+  var nl =n.filter(function(x){return !x.lida;}).length;
   var link=document.querySelector('a[href="./notificacoes.html"]');
-  if(link&&nl>0){var b=document.createElement('span');b.className='notif-badge';b.textContent=nl;link.appendChild(b);}
+  if(link&&nl>0){
+    var b=document.createElement('span');
+    b.className='notif-badge';
+    b.textContent=nl;
+    link.appendChild(b);
+  }
 })();
 
-/* ── INIT ── */
 aplicarPeriodoRapido();
 gerarRelatorio();
 </script>
