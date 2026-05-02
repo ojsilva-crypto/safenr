@@ -76,19 +76,20 @@
     <h1>Safe<span>NR</span></h1>
     <p>Gestao de Seguranca do Trabalho</p>
   </div>
-<nav class="nav">
-  <a class="nav-item active" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
-  <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
-  <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
-  <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-  <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
-  <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
-  <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
-  <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
-  <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-  <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
-  <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
-  <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
+  <nav class="nav">
+    <a class="nav-item active" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
+    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
+    <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
+    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
+    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
+    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
+    <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
+    <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
+    <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
+    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
@@ -96,6 +97,7 @@
     <button class="btn-sair" onclick="sair()">X</button>
   </div>
 </div>
+
 <div class="main">
   <div class="topbar">
     <h2>🏠 Dashboard</h2>
@@ -114,10 +116,10 @@
       <div class="card-label">Riscos</div>
       <div class="card-sub" id="subRisc">0 critico(s)</div>
     </div>
-    <div class="card" onclick="window.location='./funcionarios.html'">
+    <div class="card" onclick="window.location='./colaboradores.html'">
       <div class="card-top"><span class="card-icon">👷</span><span class="card-badge badge-purple" id="badgeFunc">Total</span></div>
       <div class="card-num" id="numFunc">0</div>
-      <div class="card-label">Funcionarios</div>
+      <div class="card-label">Colaboradores</div>
       <div class="card-sub" id="subFunc">0 ativo(s)</div>
     </div>
     <div class="card" onclick="window.location='./epis.html'">
@@ -148,6 +150,7 @@
     </div>
   </div>
 </div>
+
 <script>
 var userData = localStorage.getItem('safenr_user');
 if (!userData) { window.location.href = './index.html'; }
@@ -216,7 +219,6 @@ NRS.forEach(function(nr){
 // AGENDA
 var agenda = JSON.parse(localStorage.getItem('safenr_agenda')||'[]');
 var agDiv = document.getElementById('agendaLista');
-var limite = new Date(); limite.setDate(limite.getDate()+30);
 var proximos = agenda.filter(function(e){
   if(e.status==='concluido') return false;
   var d = new Date(e.data+'T00:00:00');
@@ -263,5 +265,3 @@ else {
 </script>
 </body>
 </html>
-
-
