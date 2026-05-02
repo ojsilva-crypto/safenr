@@ -17,6 +17,7 @@
     .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
     .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
     .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .notif-badge{background:#f87171;color:#fff;border-radius:20px;padding:1px 7px;font-size:.65rem;font-weight:700;margin-left:auto}
     .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
     .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
     .user-info p{font-size:.82rem;font-weight:600}
@@ -28,8 +29,6 @@
     .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
     .btn-novo{background:linear-gradient(135deg,#f87171,#dc2626);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
     .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
-
-    /* RESUMO */
     .resumo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px}
     .resumo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s}
     .resumo-card:hover{background:rgba(255,255,255,.06)}
@@ -40,16 +39,12 @@
     .rc-incidente{color:#fb923c}
     .rc-quase    {color:#fbbf24}
     .rc-cat      {color:#a78bfa}
-
-    /* FILTROS */
     .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
     .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
     .filtro-btn:hover,.filtro-btn.active{background:rgba(248,113,113,.12);border-color:#f87171;color:#f87171}
     .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:240px;margin-left:auto}
     .busca-input::placeholder{color:rgba(255,255,255,.3)}
     .busca-input:focus{border-color:#f87171}
-
-    /* TABELA */
     .tabela-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
     table{width:100%;border-collapse:collapse}
     thead tr{background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.08)}
@@ -57,26 +52,21 @@
     td{padding:14px 18px;font-size:.87rem;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
     tr:last-child td{border-bottom:none}
     tr:hover td{background:rgba(255,255,255,.02)}
-
-    /* BADGES */
     .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700}
-    .badge.acidente       {background:rgba(248,113,113,.2);color:#f87171}
-    .badge.incidente      {background:rgba(251,146,60,.2);color:#fb923c}
-    .badge.quase-acidente {background:rgba(251,191,36,.2);color:#fbbf24}
+    .badge.acidente        {background:rgba(248,113,113,.2);color:#f87171}
+    .badge.incidente       {background:rgba(251,146,60,.2);color:#fb923c}
+    .badge.quase-acidente  {background:rgba(251,191,36,.2);color:#fbbf24}
     .badge.condicao-insegura{background:rgba(167,139,250,.2);color:#a78bfa}
-    .badge.sim  {background:rgba(248,113,113,.2);color:#f87171}
-    .badge.nao  {background:rgba(74,222,128,.2);color:#4ade80}
-    .badge.leve {background:rgba(251,191,36,.2);color:#fbbf24}
+    .badge.sim    {background:rgba(248,113,113,.2);color:#f87171}
+    .badge.nao    {background:rgba(74,222,128,.2);color:#4ade80}
+    .badge.leve   {background:rgba(251,191,36,.2);color:#fbbf24}
     .badge.moderado{background:rgba(251,146,60,.2);color:#fb923c}
-    .badge.grave{background:rgba(248,113,113,.2);color:#f87171}
-    .badge.fatal{background:rgba(139,0,0,.4);color:#fca5a5}
-
+    .badge.grave  {background:rgba(248,113,113,.2);color:#f87171}
+    .badge.fatal  {background:rgba(139,0,0,.4);color:#fca5a5}
     .btn-acao{background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:8px;font-size:.85rem;transition:background .2s}
     .btn-acao:hover{background:rgba(255,255,255,.08)}
     .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3)}
     .empty-state div{font-size:3rem;margin-bottom:12px}
-
-    /* MODAL */
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
     .modal-overlay.open{display:flex}
     .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:680px;max-height:92vh;overflow-y:auto}
@@ -120,10 +110,14 @@
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
     <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
     <a class="nav-item active" href="./ocorrencias.html"><span class="icon">🚨</span> Ocorrencias</a>
+    <a class="nav-item" href="./plano-acao.html"><span class="icon">📌</span> Plano de Acao</a>
+    <a class="nav-item" href="./documentos.html"><span class="icon">🗂️</span> Documentos SST</a>
     <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item" href="./ambientes.html"><span class="icon">🏭</span> Ambientes</a>
+    <a class="nav-item" href="./ia-sugestoes.html"><span class="icon">🤖</span> IA Sugestoes</a>
     <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
     <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
@@ -140,41 +134,38 @@
     <button class="btn-novo" onclick="abrirModal()">+ Nova Ocorrencia</button>
   </div>
 
-  <!-- RESUMO -->
   <div class="resumo-grid">
     <div class="resumo-card" onclick="filtrar('todos',document.getElementById('fb-todos'))">
-      <div class="rc-valor rc-total"    id="cnt-total">0</div>
+      <div class="rc-valor rc-total"     id="cnt-total">0</div>
       <div class="rc-label">Total</div>
     </div>
     <div class="resumo-card" onclick="filtrar('acidente',document.getElementById('fb-acidente'))">
-      <div class="rc-valor rc-acidente" id="cnt-acidente">0</div>
+      <div class="rc-valor rc-acidente"  id="cnt-acidente">0</div>
       <div class="rc-label">Acidentes</div>
     </div>
     <div class="resumo-card" onclick="filtrar('incidente',document.getElementById('fb-incidente'))">
-      <div class="rc-valor rc-incidente"id="cnt-incidente">0</div>
+      <div class="rc-valor rc-incidente" id="cnt-incidente">0</div>
       <div class="rc-label">Incidentes</div>
     </div>
     <div class="resumo-card" onclick="filtrar('quase-acidente',document.getElementById('fb-quase'))">
-      <div class="rc-valor rc-quase"    id="cnt-quase">0</div>
+      <div class="rc-valor rc-quase"     id="cnt-quase">0</div>
       <div class="rc-label">Quase-Acidentes</div>
     </div>
     <div class="resumo-card">
-      <div class="rc-valor rc-cat"      id="cnt-cat">0</div>
+      <div class="rc-valor rc-cat"       id="cnt-cat">0</div>
       <div class="rc-label">Com CAT</div>
     </div>
   </div>
 
-  <!-- FILTROS -->
   <div class="filtros">
-    <button class="filtro-btn active" id="fb-todos"    onclick="filtrar('todos',this)">Todos</button>
-    <button class="filtro-btn"        id="fb-acidente" onclick="filtrar('acidente',this)">🔴 Acidente</button>
-    <button class="filtro-btn"        id="fb-incidente"onclick="filtrar('incidente',this)">🟠 Incidente</button>
-    <button class="filtro-btn"        id="fb-quase"    onclick="filtrar('quase-acidente',this)">🟡 Quase-Acidente</button>
-    <button class="filtro-btn"        id="fb-cond"     onclick="filtrar('condicao-insegura',this)">🟣 Cond. Insegura</button>
+    <button class="filtro-btn active" id="fb-todos"     onclick="filtrar('todos',this)">Todos</button>
+    <button class="filtro-btn"        id="fb-acidente"  onclick="filtrar('acidente',this)">🔴 Acidente</button>
+    <button class="filtro-btn"        id="fb-incidente" onclick="filtrar('incidente',this)">🟠 Incidente</button>
+    <button class="filtro-btn"        id="fb-quase"     onclick="filtrar('quase-acidente',this)">🟡 Quase-Acidente</button>
+    <button class="filtro-btn"        id="fb-cond"      onclick="filtrar('condicao-insegura',this)">🟣 Cond. Insegura</button>
     <input class="busca-input" type="text" placeholder="🔎 Buscar ocorrencia..." oninput="renderizar(getLista())"/>
   </div>
 
-  <!-- TABELA -->
   <div class="tabela-wrap">
     <table>
       <thead>
@@ -209,7 +200,6 @@
       ⚠️ <strong>Atenção:</strong> Para acidentes com afastamento, a CAT deve ser emitida até o 1º dia útil após o acidente (Lei 8.213/91).
     </div>
 
-    <!-- DADOS GERAIS -->
     <div class="secao-titulo">Dados Gerais</div>
     <div class="form-row">
       <div class="form-group">
@@ -248,7 +238,6 @@
       </div>
     </div>
 
-    <!-- COLABORADOR -->
     <div class="secao-titulo">Colaborador Envolvido</div>
     <div class="form-row">
       <div class="form-group">
@@ -272,7 +261,6 @@
       </div>
     </div>
 
-    <!-- DESCRICAO -->
     <div class="secao-titulo">Descricao e Causas</div>
     <div class="form-row full">
       <div class="form-group">
@@ -293,7 +281,6 @@
       </div>
     </div>
 
-    <!-- CAT -->
     <div class="secao-titulo">CAT — Comunicacao de Acidente de Trabalho</div>
     <div class="form-row">
       <div class="form-group">
@@ -310,7 +297,6 @@
       </div>
     </div>
 
-    <!-- NR -->
     <div class="form-row">
       <div class="form-group">
         <label>NR Relacionada</label>
@@ -322,7 +308,6 @@
       </div>
     </div>
 
-    <!-- AUTO -->
     <div class="form-row">
       <div class="form-group">
         <label>Registrado por <span class="auto-tag">AUTO</span></label>
@@ -353,7 +338,6 @@
 </div>
 
 <script>
-/* ── AUTH ── */
 var userData = localStorage.getItem('safenr_user');
 if (!userData) { window.location.href = './index.html'; }
 var user = JSON.parse(userData);
@@ -361,13 +345,12 @@ document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
 document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
 function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
 
-/* ── DADOS ── */
 var registros   = JSON.parse(localStorage.getItem('safenr_ocorrencias') || '[]');
 var editandoId  = null;
 var filtroAtivo = 'todos';
 function salvarStorage() { localStorage.setItem('safenr_ocorrencias', JSON.stringify(registros)); }
 
-function fmt(d) { if (!d) return '--'; var p = d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function fmt(d) { if (!d) return '--'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
 function fmtDT(iso) {
   if (!iso) return '--';
   return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
@@ -377,11 +360,8 @@ var tipoLabel = {
   'acidente':'Acidente','incidente':'Incidente',
   'quase-acidente':'Quase-Acidente','condicao-insegura':'Cond. Insegura'
 };
-var gravLabel = {
-  'leve':'Leve','moderado':'Moderado','grave':'Grave','fatal':'Fatal'
-};
+var gravLabel = { 'leve':'Leve','moderado':'Moderado','grave':'Grave','fatal':'Fatal' };
 
-/* ── AUTOCOMPLETAR COLABORADORES ── */
 function carregarColabs() {
   var colabs = JSON.parse(localStorage.getItem('safenr_colaboradores') || '[]');
   var dl = document.getElementById('listaColabs');
@@ -393,22 +373,19 @@ function carregarColabs() {
   });
 }
 
-/* ── ALERTA CAT ── */
 function onTipoChange() {
   var tipo = document.getElementById('f_tipo').value;
-  var alerta = document.getElementById('alertaCAT');
-  alerta.classList.toggle('show', tipo === 'acidente');
+  document.getElementById('alertaCAT').classList.toggle('show', tipo==='acidente');
 }
 
-/* ── FILTROS ── */
 function getLista() {
   var busca = document.querySelector('.busca-input').value.toLowerCase();
   return registros.filter(function(r) {
-    if (filtroAtivo !== 'todos' && r.tipo !== filtroAtivo) return false;
+    if (filtroAtivo!=='todos' && r.tipo!==filtroAtivo) return false;
     if (busca &&
-        !(r.colaborador || '').toLowerCase().includes(busca) &&
-        !(r.setor       || '').toLowerCase().includes(busca) &&
-        !(r.descricao   || '').toLowerCase().includes(busca)) return false;
+        !(r.colaborador||'').toLowerCase().includes(busca) &&
+        !(r.setor||'').toLowerCase().includes(busca) &&
+        !(r.descricao||'').toLowerCase().includes(busca)) return false;
     return true;
   });
 }
@@ -420,87 +397,84 @@ function filtrar(s, btn) {
   renderizar(getLista());
 }
 
-/* ── CONTADORES ── */
 function atualizarContadores() {
-  document.getElementById('cnt-total').textContent    = registros.length;
-  document.getElementById('cnt-acidente').textContent = registros.filter(function(r){ return r.tipo === 'acidente'; }).length;
-  document.getElementById('cnt-incidente').textContent= registros.filter(function(r){ return r.tipo === 'incidente'; }).length;
-  document.getElementById('cnt-quase').textContent    = registros.filter(function(r){ return r.tipo === 'quase-acidente'; }).length;
-  document.getElementById('cnt-cat').textContent      = registros.filter(function(r){ return r.cat === 'sim'; }).length;
-  document.getElementById('totalRegistros').textContent = registros.length + ' registro(s)';
+  document.getElementById('cnt-total').textContent     = registros.length;
+  document.getElementById('cnt-acidente').textContent  = registros.filter(function(r){ return r.tipo==='acidente'; }).length;
+  document.getElementById('cnt-incidente').textContent = registros.filter(function(r){ return r.tipo==='incidente'; }).length;
+  document.getElementById('cnt-quase').textContent     = registros.filter(function(r){ return r.tipo==='quase-acidente'; }).length;
+  document.getElementById('cnt-cat').textContent       = registros.filter(function(r){ return r.cat==='sim'; }).length;
+  document.getElementById('totalRegistros').textContent= registros.length+' registro(s)';
 }
 
-/* ── RENDERIZAR ── */
 function renderizar(lista) {
   var tbody = document.getElementById('tabelaBody');
   var empty = document.getElementById('emptyState');
   tbody.innerHTML = '';
   atualizarContadores();
-  if (lista.length === 0) { empty.style.display = 'block'; return; }
+  if (lista.length === 0) { empty.style.display='block'; return; }
   empty.style.display = 'none';
   lista.forEach(function(r) {
-    var tr = document.createElement('tr');
+    var tr   = document.createElement('tr');
     var tipo = r.tipo || 'incidente';
     var grav = r.gravidade || 'leve';
     tr.innerHTML =
-      '<td style="color:rgba(255,255,255,.3);font-size:.8rem">#' + String(r.id).padStart(3,'0') + '</td>' +
-      '<td><span class="badge ' + tipo + '">' + (tipoLabel[tipo] || tipo) + '</span></td>' +
-      '<td>' + fmt(r.data) + (r.hora ? ' ' + r.hora : '') + '</td>' +
-      '<td><strong>' + (r.colaborador || '--') + '</strong><br><span style="font-size:.75rem;color:rgba(255,255,255,.4)">' + (r.cargo || '') + '</span></td>' +
-      '<td>' + (r.setor || '--') + (r.local ? '<br><span style="font-size:.75rem;color:rgba(255,255,255,.4)">' + r.local + '</span>' : '') + '</td>' +
-      '<td><span class="badge ' + grav + '">' + (gravLabel[grav] || grav) + '</span></td>' +
-      '<td><span class="badge ' + (r.cat || 'nao') + '">' + (r.cat === 'sim' ? '✅ Sim' : r.cat === 'na' ? 'N/A' : '❌ Nao') + '</span></td>' +
-      '<td style="text-align:center">' + (r.diasPerdidos || 0) + '</td>' +
-      '<td style="font-size:.82rem">👤 ' + (r.registradoPor || '--') + '</td>' +
-      '<td>' +
-        '<button class="btn-acao" onclick="ver(' + r.id + ')" title="Ver">👁️</button>' +
-        '<button class="btn-acao" onclick="abrirModal(' + r.id + ')" title="Editar">✏️</button>' +
-        '<button class="btn-acao" onclick="excluir(' + r.id + ')" title="Excluir">🗑️</button>' +
+      '<td style="color:rgba(255,255,255,.3);font-size:.8rem">#'+String(r.id).padStart(3,'0')+'</td>'+
+      '<td><span class="badge '+tipo+'">'+(tipoLabel[tipo]||tipo)+'</span></td>'+
+      '<td>'+fmt(r.data)+(r.hora?' '+r.hora:'')+'</td>'+
+      '<td><strong>'+(r.colaborador||'--')+'</strong><br><span style="font-size:.75rem;color:rgba(255,255,255,.4)">'+(r.cargo||'')+'</span></td>'+
+      '<td>'+(r.setor||'--')+(r.local?'<br><span style="font-size:.75rem;color:rgba(255,255,255,.4)">'+r.local+'</span>':'')+'</td>'+
+      '<td><span class="badge '+grav+'">'+(gravLabel[grav]||grav)+'</span></td>'+
+      '<td><span class="badge '+(r.cat||'nao')+'">'+(r.cat==='sim'?'✅ Sim':r.cat==='na'?'N/A':'❌ Nao')+'</span></td>'+
+      '<td style="text-align:center">'+(r.diasPerdidos||0)+'</td>'+
+      '<td style="font-size:.82rem">👤 '+(r.registradoPor||'--')+'</td>'+
+      '<td>'+
+        '<button class="btn-acao" onclick="ver('+r.id+')"         title="Ver">👁️</button>'+
+        '<button class="btn-acao" onclick="abrirModal('+r.id+')"  title="Editar">✏️</button>'+
+        '<button class="btn-acao" onclick="excluir('+r.id+')"     title="Excluir">🗑️</button>'+
       '</td>';
     tbody.appendChild(tr);
   });
 }
 
-/* ── MODAL ── */
 function abrirModal(id) {
   editandoId = id || null;
-  document.getElementById('modalTitulo').textContent = (id ? '✏️ Editar' : '🚨 Nova') + ' Ocorrencia';
+  document.getElementById('modalTitulo').textContent = (id?'✏️ Editar':'🚨 Nova')+' Ocorrencia';
   carregarColabs();
-  ['f_colab','f_cargo','f_setor','f_local','f_desc','f_causa','f_acao','f_numcat','f_nr','f_resp','f_dias'].forEach(function(f){ document.getElementById(f).value = ''; });
-  document.getElementById('f_tipo').value     = '';
-  document.getElementById('f_gravidade').value= '';
-  document.getElementById('f_cat').value      = 'nao';
-  document.getElementById('f_data').value     = '';
-  document.getElementById('f_hora').value     = '';
+  ['f_colab','f_cargo','f_setor','f_local','f_desc','f_causa','f_acao','f_numcat','f_nr','f_resp','f_dias'].forEach(function(f){ document.getElementById(f).value=''; });
+  document.getElementById('f_tipo').value      = '';
+  document.getElementById('f_gravidade').value = '';
+  document.getElementById('f_cat').value       = 'nao';
+  document.getElementById('f_data').value      = '';
+  document.getElementById('f_hora').value      = '';
   document.getElementById('alertaCAT').classList.remove('show');
-  document.getElementById('f_regPor').value = user.nome || 'Usuario';
+  document.getElementById('f_regPor').value = user.nome||'Usuario';
   document.getElementById('f_regEm').value  = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
   if (id) {
-    var r = registros.find(function(x){ return x.id === id; });
-    document.getElementById('f_tipo').value      = r.tipo        || '';
-    document.getElementById('f_gravidade').value = r.gravidade   || '';
-    document.getElementById('f_data').value      = r.data        || '';
-    document.getElementById('f_hora').value      = r.hora        || '';
-    document.getElementById('f_dias').value      = r.diasPerdidos|| 0;
-    document.getElementById('f_colab').value     = r.colaborador || '';
-    document.getElementById('f_cargo').value     = r.cargo       || '';
-    document.getElementById('f_setor').value     = r.setor       || '';
-    document.getElementById('f_local').value     = r.local       || '';
-    document.getElementById('f_desc').value      = r.descricao   || '';
-    document.getElementById('f_causa').value     = r.causa       || '';
-    document.getElementById('f_acao').value      = r.acao        || '';
-    document.getElementById('f_cat').value       = r.cat         || 'nao';
-    document.getElementById('f_numcat').value    = r.numCat      || '';
-    document.getElementById('f_nr').value        = r.nr          || '';
-    document.getElementById('f_resp').value      = r.responsavel || '';
-    document.getElementById('f_regPor').value    = r.registradoPor || user.nome;
+    var r = registros.find(function(x){ return x.id===id; });
+    document.getElementById('f_tipo').value      = r.tipo        ||'';
+    document.getElementById('f_gravidade').value = r.gravidade   ||'';
+    document.getElementById('f_data').value      = r.data        ||'';
+    document.getElementById('f_hora').value      = r.hora        ||'';
+    document.getElementById('f_dias').value      = r.diasPerdidos||0;
+    document.getElementById('f_colab').value     = r.colaborador ||'';
+    document.getElementById('f_cargo').value     = r.cargo       ||'';
+    document.getElementById('f_setor').value     = r.setor       ||'';
+    document.getElementById('f_local').value     = r.local       ||'';
+    document.getElementById('f_desc').value      = r.descricao   ||'';
+    document.getElementById('f_causa').value     = r.causa       ||'';
+    document.getElementById('f_acao').value      = r.acao        ||'';
+    document.getElementById('f_cat').value       = r.cat         ||'nao';
+    document.getElementById('f_numcat').value    = r.numCat      ||'';
+    document.getElementById('f_nr').value        = r.nr          ||'';
+    document.getElementById('f_resp').value      = r.responsavel ||'';
+    document.getElementById('f_regPor').value    = r.registradoPor||user.nome;
     document.getElementById('f_regEm').value     = fmtDT(r.registradoEm);
-    if (r.tipo === 'acidente') document.getElementById('alertaCAT').classList.add('show');
+    if (r.tipo==='acidente') document.getElementById('alertaCAT').classList.add('show');
   }
   document.getElementById('modalForm').classList.add('open');
 }
 
-function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId = null; }
+function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId=null; }
 
 function salvar() {
   var tipo  = document.getElementById('f_tipo').value;
@@ -509,7 +483,7 @@ function salvar() {
   var colab = document.getElementById('f_colab').value.trim();
   var setor = document.getElementById('f_setor').value.trim();
   var desc  = document.getElementById('f_desc').value.trim();
-  if (!tipo || !grav || !data || !colab || !setor || !desc) {
+  if (!tipo||!grav||!data||!colab||!setor||!desc) {
     alert('Preencha os campos obrigatorios: Tipo, Gravidade, Data, Colaborador, Setor e Descricao.');
     return;
   }
@@ -518,7 +492,7 @@ function salvar() {
     gravidade:    grav,
     data:         data,
     hora:         document.getElementById('f_hora').value,
-    diasPerdidos: parseInt(document.getElementById('f_dias').value) || 0,
+    diasPerdidos: parseInt(document.getElementById('f_dias').value)||0,
     colaborador:  colab,
     cargo:        document.getElementById('f_cargo').value.trim(),
     setor:        setor,
@@ -532,16 +506,13 @@ function salvar() {
     responsavel:  document.getElementById('f_resp').value.trim()
   };
   if (editandoId) {
-    var idx = registros.findIndex(function(r){ return r.id === editandoId; });
+    var idx = registros.findIndex(function(r){ return r.id===editandoId; });
     registros[idx] = Object.assign({}, registros[idx], dados);
   } else {
-    var nId = registros.length > 0 ? Math.max.apply(null, registros.map(function(r){ return r.id; })) + 1 : 1;
-    registros.push(Object.assign({ id: nId, registradoPor: user.nome || 'Usuario', registradoEm: new Date().toISOString() }, dados));
+    var nId = registros.length>0 ? Math.max.apply(null,registros.map(function(r){return r.id;}))+1 : 1;
+    registros.push(Object.assign({id:nId,registradoPor:user.nome||'Usuario',registradoEm:new Date().toISOString()},dados));
   }
-  /* Gera alerta na agenda se acidente com afastamento */
-  if (dados.tipo === 'acidente' && dados.diasPerdidos > 0) {
-    gerarAlertaAgenda(dados);
-  }
+  if (dados.tipo==='acidente' && dados.diasPerdidos>0) gerarAlertaAgenda(dados);
   salvarStorage();
   fecharModal();
   renderizar(getLista());
@@ -549,50 +520,50 @@ function salvar() {
 
 function gerarAlertaAgenda(dados) {
   var agenda = JSON.parse(localStorage.getItem('safenr_agenda') || '[]');
-  var nId = agenda.length > 0 ? Math.max.apply(null, agenda.map(function(e){ return e.id || 0; })) + 1 : 1;
+  var nId = agenda.length>0 ? Math.max.apply(null,agenda.map(function(e){return e.id||0;}))+1 : 1;
   agenda.push({
     id:     nId,
-    titulo: '🚨 Retorno: ' + dados.colaborador,
+    titulo: '🚨 Retorno: '+dados.colaborador,
     data:   dados.data,
     tipo:   'ocorrencia',
     status: 'pendente',
-    obs:    'Colaborador afastado por ' + dados.diasPerdidos + ' dias. Verificar retorno ao trabalho.'
+    obs:    'Colaborador afastado por '+dados.diasPerdidos+' dias. Verificar retorno ao trabalho.'
   });
   localStorage.setItem('safenr_agenda', JSON.stringify(agenda));
 }
 
 function excluir(id) {
   if (!confirm('Excluir esta ocorrencia?')) return;
-  registros = registros.filter(function(r){ return r.id !== id; });
+  registros = registros.filter(function(r){ return r.id!==id; });
   salvarStorage();
   renderizar(getLista());
 }
 
 function ver(id) {
-  var r = registros.find(function(x){ return x.id === id; });
-  function row(l, v) {
-    return '<div class="detalhe-row"><span class="detalhe-label">' + l + '</span><span class="detalhe-valor">' + v + '</span></div>';
+  var r   = registros.find(function(x){ return x.id===id; });
+  var tipo= r.tipo||'incidente';
+  var grav= r.gravidade||'leve';
+  function row(l,v){
+    return '<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>';
   }
-  var tipo = r.tipo || 'incidente';
-  var grav = r.gravidade || 'leve';
   document.getElementById('modalVerConteudo').innerHTML =
-    row('Tipo',           '<span class="badge ' + tipo + '">' + (tipoLabel[tipo]||tipo) + '</span>') +
-    row('Gravidade',      '<span class="badge ' + grav + '">' + (gravLabel[grav]||grav) + '</span>') +
-    row('Data / Hora',    fmt(r.data) + (r.hora ? ' às ' + r.hora : '')) +
-    row('Dias Perdidos',  (r.diasPerdidos || 0) + ' dias') +
-    row('Colaborador',    r.colaborador || '--') +
-    row('Cargo',          r.cargo       || '--') +
-    row('Setor',          r.setor       || '--') +
-    row('Local',          r.local       || '--') +
-    row('Descricao',      r.descricao   || '--') +
-    row('Causa Imediata', r.causa       || '--') +
-    row('Medida Corretiva',r.acao       || '--') +
-    row('CAT Emitida',    '<span class="badge ' + (r.cat||'nao') + '">' + (r.cat === 'sim' ? '✅ Sim' : r.cat === 'na' ? 'N/A' : '❌ Nao') + '</span>') +
-    row('Numero CAT',     r.numCat      || '--') +
-    row('NR Relacionada', r.nr          || '--') +
-    row('Responsavel',    r.responsavel || '--') +
-    row('Registrado por', '<span style="color:#00d4ff">' + (r.registradoPor||'--') + '</span>') +
-    row('Registrado em',  '<span style="color:#00d4ff">' + fmtDT(r.registradoEm) + '</span>');
+    row('Tipo',           '<span class="badge '+tipo+'">'+(tipoLabel[tipo]||tipo)+'</span>')+
+    row('Gravidade',      '<span class="badge '+grav+'">'+(gravLabel[grav]||grav)+'</span>')+
+    row('Data / Hora',    fmt(r.data)+(r.hora?' às '+r.hora:''))+
+    row('Dias Perdidos',  (r.diasPerdidos||0)+' dias')+
+    row('Colaborador',    r.colaborador||'--')+
+    row('Cargo',          r.cargo||'--')+
+    row('Setor',          r.setor||'--')+
+    row('Local',          r.local||'--')+
+    row('Descricao',      r.descricao||'--')+
+    row('Causa Imediata', r.causa||'--')+
+    row('Medida Corretiva',r.acao||'--')+
+    row('CAT Emitida',    '<span class="badge '+(r.cat||'nao')+'">'+(r.cat==='sim'?'✅ Sim':r.cat==='na'?'N/A':'❌ Nao')+'</span>')+
+    row('Numero CAT',     r.numCat||'--')+
+    row('NR Relacionada', r.nr||'--')+
+    row('Responsavel',    r.responsavel||'--')+
+    row('Registrado por', '<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+
+    row('Registrado em',  '<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
   document.getElementById('modalVer').classList.add('open');
 }
 
@@ -601,8 +572,20 @@ function fecharVer() { document.getElementById('modalVer').classList.remove('ope
 document.getElementById('modalForm').addEventListener('click', function(e){ if(e.target===this) fecharModal(); });
 document.getElementById('modalVer').addEventListener('click',  function(e){ if(e.target===this) fecharVer(); });
 
+/* ── BADGE NOTIFICAÇÕES ── */
+(function(){
+  var n  = JSON.parse(localStorage.getItem('safenr_notificacoes')||'[]');
+  var nl = n.filter(function(x){ return !x.lida; }).length;
+  var link = document.querySelector('a[href="./notificacoes.html"]');
+  if (link && nl > 0) {
+    var b = document.createElement('span');
+    b.className   = 'notif-badge';
+    b.textContent = nl;
+    link.appendChild(b);
+  }
+})();
+
 renderizar(getLista());
 </script>
 </body>
 </html>
-
