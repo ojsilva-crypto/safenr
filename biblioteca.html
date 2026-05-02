@@ -26,17 +26,27 @@
     .topbar{margin-bottom:28px}
     .topbar h2{font-size:1.4rem;font-weight:700}
     .topbar p{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:4px}
-    .busca-wrap{margin-bottom:24px}
-    .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 20px;color:#fff;font-size:.9rem;outline:none;width:100%;max-width:500px}
+    .filtros-wrap{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+    .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 20px;color:#fff;font-size:.9rem;outline:none;flex:1;min-width:260px;max-width:500px}
     .busca-input::placeholder{color:rgba(255,255,255,.3)}
+    .busca-input:focus{border-color:#00d4ff}
+    .filtro-btn{padding:10px 18px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);cursor:pointer;font-size:.82rem;font-weight:600;transition:all .2s}
+    .filtro-btn:hover,.filtro-btn.ativo{background:rgba(0,212,255,.12);border-color:rgba(0,212,255,.3);color:#00d4ff}
+    .contador{font-size:.8rem;color:rgba(255,255,255,.3);margin-left:auto;white-space:nowrap}
     .nr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .nr-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;cursor:pointer;transition:all .2s}
+    .nr-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column}
     .nr-card:hover{background:rgba(255,255,255,.07);border-color:rgba(0,212,255,.3);transform:translateY(-2px)}
+    .nr-card.codigo{border-color:rgba(167,139,250,.2)}
+    .nr-card.codigo:hover{border-color:rgba(167,139,250,.5);background:rgba(167,139,250,.06)}
     .nr-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-    .nr-badge{font-size:.75rem;font-weight:800;padding:4px 12px;border-radius:20px;background:rgba(0,212,255,.12);color:#00d4ff}
-    .nr-card h3{font-size:.95rem;font-weight:700;margin-bottom:6px}
-    .nr-card p{font-size:.78rem;color:rgba(255,255,255,.35);line-height:1.5;margin-bottom:14px}
-    .nr-link{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:#00d4ff;font-weight:600;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:8px;padding:7px 14px}
+    .nr-badge{font-size:.72rem;font-weight:800;padding:4px 12px;border-radius:20px;background:rgba(0,212,255,.12);color:#00d4ff}
+    .nr-badge.codigo{background:rgba(167,139,250,.15);color:#a78bfa}
+    .nr-badge.revogada{background:rgba(248,113,113,.12);color:#f87171}
+    .nr-card h3{font-size:.92rem;font-weight:700;margin-bottom:6px}
+    .nr-card p{font-size:.77rem;color:rgba(255,255,255,.35);line-height:1.5;margin-bottom:14px;flex:1}
+    .nr-link{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;color:#00d4ff;font-weight:600;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:8px;padding:7px 14px;margin-top:auto}
+    .nr-card.codigo .nr-link{color:#a78bfa;background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.2)}
+    .section-label{grid-column:1/-1;font-size:.78rem;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:2px;padding:8px 0 4px;border-bottom:1px solid rgba(255,255,255,.05);margin-bottom:4px}
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:1000;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 20px}
     .modal-overlay.open{display:flex}
     .modal{background:#0d1a26;border:1px solid rgba(255,255,255,.1);border-radius:20px;width:100%;max-width:700px;margin:auto}
@@ -46,13 +56,16 @@
     .btn-fechar{background:rgba(255,255,255,.08);border:none;color:#fff;border-radius:10px;padding:10px 14px;cursor:pointer}
     .modal-body{padding:28px 32px}
     .nr-info-box{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:12px;padding:16px 20px;margin-bottom:20px;font-size:.85rem;line-height:1.7;color:rgba(255,255,255,.8)}
+    .nr-info-box.codigo{background:rgba(167,139,250,.06);border-color:rgba(167,139,250,.2)}
     .topicos-titulo{font-size:.78rem;font-weight:700;color:#00d4ff;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
     .topico-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.86rem}
     .topico-item:last-child{border-bottom:none}
     .topico-num{color:#00d4ff;font-weight:700;min-width:28px;font-size:.8rem}
     .modal-footer{padding:20px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:12px;justify-content:flex-end}
     .btn-site{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:10px;color:#fff;font-size:.88rem;font-weight:700;padding:11px 22px;cursor:pointer;text-decoration:none;display:inline-block}
+    .btn-site.codigo{background:linear-gradient(135deg,#a78bfa,#7c3aed)}
     .btn-fechar2{padding:11px 20px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
+    .empty{color:rgba(255,255,255,.3);grid-column:1/-1;text-align:center;padding:40px;font-size:.88rem}
   </style>
 </head>
 <body>
@@ -63,16 +76,18 @@
   </div>
   <nav class="nav">
     <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
     <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./funcionarios.html"><span class="icon">👷</span> Funcionarios</a>
+    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
     <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item active" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
-    <a class="nav-item" href="#"><span class="icon">⚙️</span> Configuracoes</a>
+    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
+    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
@@ -80,67 +95,395 @@
     <button class="btn-sair" onclick="sair()">X</button>
   </div>
 </div>
+
 <div class="main">
   <div class="topbar">
     <h2>📚 Biblioteca de NRs</h2>
-    <p>Consulte as Normas Regulamentadoras do Ministerio do Trabalho</p>
+    <p>Consulte as Normas Regulamentadoras vigentes do Ministerio do Trabalho e o Codigo Civil</p>
   </div>
-  <div class="busca-wrap"><input class="busca-input" type="text" placeholder="Buscar NR por numero ou nome..." oninput="renderGrid(this.value)"/></div>
+  <div class="filtros-wrap">
+    <input class="busca-input" type="text" id="buscaInput" placeholder="Buscar por numero, nome ou descricao..." oninput="renderGrid()"/>
+    <button class="filtro-btn ativo" id="btn-todos" onclick="setFiltro('todos')">Todas</button>
+    <button class="filtro-btn" id="btn-nrs" onclick="setFiltro('nrs')">Apenas NRs</button>
+    <button class="filtro-btn" id="btn-outros" onclick="setFiltro('outros')">Legislacao</button>
+    <span class="contador" id="contador"></span>
+  </div>
   <div class="nr-grid" id="nrGrid"></div>
 </div>
+
 <div class="modal-overlay" id="modalNR">
   <div class="modal">
-    <div class="modal-header"><div><h2 id="mTitulo"></h2><p id="mDesc"></p></div><button class="btn-fechar" onclick="fecharModal()">X</button></div>
-    <div class="modal-body"><div class="nr-info-box" id="mInfo"></div><div class="topicos-titulo">Principais Topicos</div><div id="mTopicos"></div></div>
-    <div class="modal-footer"><button class="btn-fechar2" onclick="fecharModal()">Fechar</button><a id="mLink" href="#" target="_blank" class="btn-site">Ver NR Oficial</a></div>
+    <div class="modal-header">
+      <div><h2 id="mTitulo"></h2><p id="mDesc"></p></div>
+      <button class="btn-fechar" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="nr-info-box" id="mInfo"></div>
+      <div class="topicos-titulo">Principais Topicos</div>
+      <div id="mTopicos"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-fechar2" onclick="fecharModal()">Fechar</button>
+      <a id="mLink" href="#" target="_blank" class="btn-site" id="mBtnSite">Ver Documento Oficial</a>
+    </div>
   </div>
 </div>
+
 <script>
-var userData=localStorage.getItem('safenr_user');
-if(!userData){ window.location.href='./index.html'; }
-var user=JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent=user.nome||'Usuario';
-document.getElementById('avatarLetra').textContent=(user.nome||'U')[0].toUpperCase();
-function sair(){ localStorage.removeItem('safenr_user'); window.location.href='./index.html'; }
-var NRS=[
-  {id:'NR-01',nome:'Disposicoes Gerais',desc:'Estabelece o campo de aplicacao de todas as NRs e obrigacoes de empregadores e empregados.',info:'A NR-01 define as diretrizes gerais de aplicacao de todas as Normas Regulamentadoras.',topicos:['Campo de aplicacao das NRs','Obrigacoes dos empregadores e empregados','Ordens de Servico de Seguranca','Comunicacao de Acidentes do Trabalho (CAT)','Processo de consulta as NRs'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-1-nr-1'},
-  {id:'NR-04',nome:'SESMT',desc:'Servicos Especializados em Engenharia de Seguranca e em Medicina do Trabalho.',info:'A NR-04 obriga empresas a manter um SESMT com profissionais habilitados em SST.',topicos:['Dimensionamento do SESMT por grau de risco','Profissionais obrigatorios','Atribuicoes do SESMT','Registro no MTE'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-4-nr-4'},
-  {id:'NR-05',nome:'CIPA',desc:'Comissao Interna de Prevencao de Acidentes e de Assedio.',info:'A CIPA tem por objetivo prevenir acidentes e doencas do trabalho.',topicos:['Constituicao e eleicao da CIPA','Mandato e atribuicoes dos membros','Reunioes ordinarias e extraordinarias','Mapa de Riscos','Treinamento de 20 horas'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-5-nr-5'},
-  {id:'NR-06',nome:'EPI',desc:'Equipamentos de Protecao Individual.',info:'A NR-06 estabelece as regras sobre EPI: fornecimento gratuito, CA obrigatorio e treinamento.',topicos:['Certificado de Aprovacao (CA) obrigatorio','Fornecimento gratuito pelo empregador','Ficha de controle de entrega','Treinamento para uso correto','Substituicao de EPIs danificados'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-6-nr-6'},
-  {id:'NR-07',nome:'PCMSO',desc:'Programa de Controle Medico de Saude Ocupacional.',info:'O PCMSO deve ser elaborado por medico do trabalho e prever exames medicos periodicos.',topicos:['Exames admissionais, periodicos e demissionais','ASO - Atestado de Saude Ocupacional','Exames complementares por funcao','Arquivo por 20 anos','Relatorio anual do PCMSO'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-7-nr-7'},
-  {id:'NR-09',nome:'Riscos Ambientais',desc:'Avaliacao e controle de agentes fisicos, quimicos e biologicos.',info:'A NR-09 determina identificacao, avaliacao e controle dos agentes nocivos no trabalho.',topicos:['Inventario de Riscos Ambientais','Avaliacao quantitativa dos agentes','Medidas de controle hierarquicas','Relatorio Anual','Limites de Tolerancia (LT)'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-9-nr-9'},
-  {id:'NR-10',nome:'Eletricidade',desc:'Seguranca em instalacoes e servicos com eletricidade.',info:'A NR-10 estabelece requisitos para seguranca dos trabalhadores em servicos eletricos.',topicos:['Qualificacao e habilitacao dos eletricistas','Treinamento bienal NR-10','Prontuario das instalacoes eletricas','LOTO - Bloqueio e Etiquetagem','EPIs eletricos com CA'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-10-nr-10'},
-  {id:'NR-12',nome:'Maquinas e Equipamentos',desc:'Seguranca no trabalho em maquinas e equipamentos.',info:'A NR-12 define medidas de protecao para trabalhadores que operam maquinas.',topicos:['Protecoes e dispositivos de seguranca','Parada de emergencia obrigatoria','Capacitacao dos operadores','Manutencao preventiva documentada','Distancias de seguranca'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-12-nr-12'},
-  {id:'NR-15',nome:'Insalubridade',desc:'Atividades e operacoes insalubres - limites de tolerancia.',info:'A NR-15 define as atividades insalubres e os limites de tolerancia para agentes nocivos.',topicos:['Agentes fisicos: ruido, calor, frio','Agentes quimicos: poeiras, nevoas, vapores','Agentes biologicos','Adicional: 10%, 20% ou 40%','Eliminacao via EPC ou EPI'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-15-nr-15'},
-  {id:'NR-17',nome:'Ergonomia',desc:'Adaptacao do trabalho as caracteristicas dos trabalhadores.',info:'A NR-17 visa adaptar as condicoes de trabalho as caracteristicas dos trabalhadores.',topicos:['Analise Ergonomica do Trabalho (AET)','Mobiliario e postos de trabalho','Levantamento manual de peso','Pausas e descanso','Trabalho em teleatendimento'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-17-nr-17'},
-  {id:'NR-23',nome:'Protecao Contra Incendios',desc:'Prevencao e combate a incendios no ambiente de trabalho.',info:'A NR-23 estabelece medidas de protecao contra incendio e treinamento de brigada.',topicos:['Extintores - tipos, localizacao e validade','Saidas de emergencia desobstruidas','Brigada de incendio treinada','Plano de evacuacao','Hidrantes e sistemas fixos de combate'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-23-nr-23'},
-  {id:'NR-33',nome:'Espaco Confinado',desc:'Seguranca no trabalho em espacos confinados.',info:'A NR-33 define requisitos para trabalhos em espacos confinados como tanques e silos.',topicos:['Identificacao e classificacao do espaco confinado','Permissao de Entrada e Trabalho (PET)','Vigia, Supervisor e Socorrista treinados','Monitoramento da atmosfera','Resgate em espaco confinado'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-33-nr-33'},
-  {id:'NR-35',nome:'Trabalho em Altura',desc:'Requisitos minimos para realizacao de trabalho em altura com seguranca.',info:'A NR-35 define trabalho em altura como toda atividade acima de 2 metros do nivel inferior.',topicos:['Capacitacao bienal dos trabalhadores','APR - Analise Preliminar de Risco','Permissao de Trabalho (PT)','Pontos de ancoragem com 15 kN minimo','Plano de resgate obrigatorio'],link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-35-nr-35'}
-];
-function renderGrid(busca){
-  var grid=document.getElementById('nrGrid'); grid.innerHTML='';
-  var lista=NRS;
-  if(busca){ busca=busca.toLowerCase(); lista=NRS.filter(function(n){ return n.id.toLowerCase().includes(busca)||n.nome.toLowerCase().includes(busca)||n.desc.toLowerCase().includes(busca); }); }
-  if(lista.length===0){ grid.innerHTML='<p style="color:rgba(255,255,255,.3);grid-column:1/-1;text-align:center;padding:40px">Nenhuma NR encontrada.</p>'; return; }
-  lista.forEach(function(nr){
-    var div=document.createElement('div'); div.className='nr-card';
-    div.onclick=function(){ abrirModal(nr.id); };
-    div.innerHTML='<div class="nr-card-top"><span class="nr-badge">'+nr.id+'</span></div><h3>'+nr.nome+'</h3><p>'+nr.desc+'</p><span class="nr-link">Ver detalhes</span>';
-    grid.appendChild(div);
-  });
+var userData = localStorage.getItem('safenr_user');
+if (!userData) { window.location.href = './index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
+document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
+
+var filtroAtivo = 'todos';
+function setFiltro(f) {
+  filtroAtivo = f;
+  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('ativo'); });
+  document.getElementById('btn-' + f).classList.add('ativo');
+  renderGrid();
 }
-function abrirModal(nrId){
-  var nr=NRS.find(function(n){ return n.id===nrId; });
-  document.getElementById('mTitulo').textContent=nr.id+' - '+nr.nome;
-  document.getElementById('mDesc').textContent=nr.desc;
-  document.getElementById('mInfo').textContent=nr.info;
-  document.getElementById('mLink').href=nr.link;
-  var topDiv=document.getElementById('mTopicos'); topDiv.innerHTML='';
-  nr.topicos.forEach(function(t,i){ var d=document.createElement('div'); d.className='topico-item'; d.innerHTML='<span class="topico-num">'+(i+1)+'.</span><span>'+t+'</span>'; topDiv.appendChild(d); });
+
+var DOCS = [
+  // ── NRs VIGENTES ──────────────────────────────────────────────
+  {tipo:'nr', id:'NR-01', nome:'Disposicoes Gerais e Gerenciamento de Riscos',
+   desc:'Estabelece o campo de aplicacao de todas as NRs, obrigacoes de empregadores e empregados e o Gerenciamento de Riscos Ocupacionais (GRO/PGR).',
+   info:'A NR-01 (atualizada em 2022) introduziu o Programa de Gerenciamento de Riscos (PGR), substituindo o antigo PPRA. Define as diretrizes gerais de aplicacao de todas as Normas Regulamentadoras e as obrigacoes fundamentais das partes.',
+   topicos:['Campo de aplicacao das NRs','Obrigacoes dos empregadores e empregados','Programa de Gerenciamento de Riscos (PGR)','Inventario de Riscos Ocupacionais','Plano de Acao para controle de riscos','Ordens de Servico de Seguranca','Comunicacao de Acidentes (CAT)','Processo de consulta as NRs'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-1-nr-1'},
+
+  {tipo:'nr', id:'NR-02', nome:'Inspecao Previa',
+   desc:'Estabelece a obrigatoriedade de inspecao previa dos estabelecimentos antes do inicio das atividades.',
+   info:'A NR-02 determina que todo estabelecimento novo deve solicitar ao MTE a realizacao de inspecao previa, antes de iniciar suas atividades, para verificar o cumprimento das normas de seguranca e saude.',
+   topicos:['Solicitacao de inspecao previa ao MTE','Documentos necessarios para a solicitacao','Vistorias de instalacoes','Aprovacao para inicio das atividades','Penalidades por nao cumprimento'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-2-nr-2'},
+
+  {tipo:'nr', id:'NR-03', nome:'Embargo e Interdicao',
+   desc:'Procedimentos para embargo de obra e interdicao de estabelecimento, maquina ou equipamento.',
+   info:'A NR-03 define os criterios e procedimentos para que a fiscalizacao do trabalho aplique embargo (obras) ou interdicao (estabelecimentos, maquinas) quando houver risco grave e iminente.',
+   topicos:['Conceito de risco grave e iminente','Embargo de obras de construcao','Interdicao de estabelecimento ou setor','Interdicao de maquina ou equipamento','Procedimentos de recurso e levantamento','Comunicacao a autoridade competente'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-3-nr-3'},
+
+  {tipo:'nr', id:'NR-04', nome:'SESMT',
+   desc:'Servicos Especializados em Engenharia de Seguranca e em Medicina do Trabalho.',
+   info:'A NR-04 obriga empresas de determinado porte e grau de risco a manter um SESMT com profissionais habilitados: Engenheiro de Seguranca, Medico do Trabalho, Enfermeiro do Trabalho, Tecnico de Seguranca e Auxiliar de Enfermagem.',
+   topicos:['Dimensionamento do SESMT por grau de risco e numero de empregados','Profissionais obrigatorios e carga horaria','Atribuicoes dos membros do SESMT','Registro dos profissionais no MTE','Possibilidade de SESMT em conjunto','Relatorio Anual do SESMT'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-4-nr-4'},
+
+  {tipo:'nr', id:'NR-05', nome:'CIPA',
+   desc:'Comissao Interna de Prevencao de Acidentes e de Assedio.',
+   info:'A CIPA (atualizada em 2023 para incluir assedio) tem por objetivo prevenir acidentes, doencas do trabalho e situacoes de assedio moral e sexual, por meio da atuacao conjunta de representantes de empregados e empregadores.',
+   topicos:['Constituicao e eleicao da CIPA','Mandato, posse e estabilidade dos membros','Reunioes ordinarias mensais e extraordinarias','Mapa de Riscos do ambiente de trabalho','Treinamento obrigatorio de 20 horas','Investigacao de acidentes e quase-acidentes','Prevencao ao assedio moral e sexual'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-5-nr-5'},
+
+  {tipo:'nr', id:'NR-06', nome:'EPI',
+   desc:'Equipamentos de Protecao Individual — fornecimento, uso e controle.',
+   info:'A NR-06 estabelece as regras sobre EPI: define os tipos obrigatorios, exige Certificado de Aprovacao (CA) do MTE, determina o fornecimento gratuito pelo empregador e o treinamento para uso correto.',
+   topicos:['Certificado de Aprovacao (CA) obrigatorio','Fornecimento gratuito pelo empregador','Ficha de controle de entrega individual','Treinamento para uso, guarda e conservacao','Substituicao de EPIs danificados ou vencidos','Responsabilidades do empregado no uso','Lista de EPIs por categoria (Anexo I)'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-6-nr-6'},
+
+  {tipo:'nr', id:'NR-07', nome:'PCMSO',
+   desc:'Programa de Controle Medico de Saude Ocupacional.',
+   info:'O PCMSO deve ser elaborado e implementado por medico do trabalho. Preve a realizacao de exames medicos admissionais, periodicos, de retorno ao trabalho, de mudanca de funcao e demissionais.',
+   topicos:['Elaboracao por medico coordenador','Exames admissionais, periodicos e demissionais','Exame de retorno ao trabalho e mudanca de funcao','ASO — Atestado de Saude Ocupacional','Exames complementares por funcao de risco','Arquivo dos ASOs por 20 anos','Relatorio anual do PCMSO'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-7-nr-7'},
+
+  {tipo:'nr', id:'NR-08', nome:'Edificacoes',
+   desc:'Requisitos tecnicos minimos para edificacoes que abriguem atividades laborais.',
+   info:'A NR-08 estabelece os requisitos tecnicos minimos que devem ser observados nas edificacoes, para garantir conforto e seguranca aos trabalhadores.',
+   topicos:['Pisos, rampas e escadas com antiderrapante','Pé-direito minimo de 3 metros','Iluminacao e ventilacao dos ambientes','Protecao contra chuva e umidade','Sanitarios e vestiarios adequados','Manutencao das instalacoes','Acesso externo ao estabelecimento'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-8-nr-8'},
+
+  {tipo:'nr', id:'NR-09', nome:'Riscos Ambientais',
+   desc:'Avaliacao e controle de agentes fisicos, quimicos e biologicos no trabalho.',
+   info:'A NR-09 (integrada ao GRO pela NR-01/2022) determina a identificacao, avaliacao qualitativa e quantitativa, e controle dos agentes nocivos presentes nos ambientes de trabalho.',
+   topicos:['Inventario de Riscos Ambientais (IRA)','Avaliacao quantitativa: ruido, calor, quimicos','Hierarquia das medidas de controle (EPC antes de EPI)','Limites de Tolerancia — Anexos da NR-15','Relatorio Anual de Avaliacao','Comunicado ao PCMSO dos riscos encontrados','Laudos de insalubridade e periculosidade'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-9-nr-9'},
+
+  {tipo:'nr', id:'NR-10', nome:'Seguranca em Eletricidade',
+   desc:'Seguranca em instalacoes e servicos com eletricidade — qualificacao, LOTO e prontuario.',
+   info:'A NR-10 estabelece requisitos e condicoes minimas para seguranca dos trabalhadores que interagem com instalacoes eletricas e servicos com eletricidade.',
+   topicos:['Qualificacao, habilitacao e autorizacao dos eletricistas','Treinamento basico NR-10 (40h) e SEP (40h adicional)','Treinamento bienal (reciclagem)','Prontuario das instalacoes eletricas','LOTO — Bloqueio, Etiquetagem e Teste','EPIs eletricos com CA: luvas, capacete, oculos','Sinalizacao de seguranca eletrica'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-10-nr-10'},
+
+  {tipo:'nr', id:'NR-11', nome:'Transporte e Movimentacao de Materiais',
+   desc:'Seguranca na operacao de elevadores, guindastes, transportadores e equipamentos de movimentacao.',
+   info:'A NR-11 estabelece requisitos de seguranca para operacao de equipamentos de movimentacao de materiais como empilhadeiras, pontes rolantes, transportadores de correia e guindastes.',
+   topicos:['Habilitacao e treinamento dos operadores','Capacidade de carga visivel nos equipamentos','Inspecao periodica dos equipamentos','Manutencao preventiva documentada','Proibicao de transporte de pessoas em equipamentos de carga','Vias de transito desobstruidas','Sinalização de areas de movimentacao'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-11-nr-11'},
+
+  {tipo:'nr', id:'NR-12', nome:'Maquinas e Equipamentos',
+   desc:'Seguranca no trabalho em maquinas e equipamentos — protecoes, paradas e treinamento.',
+   info:'A NR-12 define medidas de protecao para garantir a saude e integridade fisica dos trabalhadores que operam, mantem e inspecionam maquinas e equipamentos.',
+   topicos:['Protecoes fixas e moveis obrigatorias','Dispositivos de parada de emergencia (cogumelo)','Distancias de seguranca (Anexo I)','Capacitacao especifica dos operadores','Manutencao preventiva com registro','Manual de instrucoes em portugues','Sinalizacao de riscos nas maquinas','Projeto de adequacao para maquinas antigas'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-12-nr-12'},
+
+  {tipo:'nr', id:'NR-13', nome:'Vasos de Pressao e Caldeiras',
+   desc:'Seguranca na operacao de caldeiras, vasos de pressao e tubulacoes industriais.',
+   info:'A NR-13 estabelece requisitos minimos para a gestao de seguranca em caldeiras a vapor, vasos de pressao, tubulacoes e tanques metalicos de armazenamento.',
+   topicos:['Categorizacao de caldeiras e vasos por pressao','Operador de caldeira habilitado e treinado','Prontuario tecnico de cada equipamento','Inspecao de seguranca inicial, periodica e extraordinaria','Valvula de seguranca e dispositivos de controle','PPCI — Plano de Prevencao e Controle de Incendio','Espaco fisico minimo ao redor das caldeiras'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-13-nr-13'},
+
+  {tipo:'nr', id:'NR-14', nome:'Fornos Industriais',
+   desc:'Requisitos de seguranca para instalacao e operacao de fornos industriais.',
+   info:'A NR-14 estabelece requisitos minimos de seguranca para a instalacao e utilizacao de fornos industriais destinados a fundicao, tratamento termico e ceramica.',
+   topicos:['Construcao e localizacao dos fornos','Protecao contra queimaduras e radiacao','Ventilacao adequada dos ambientes','Dispositivos de seguranca dos queimadores','Treinamento dos operadores','EPIs especificos para exposicao ao calor','Inspecao e manutencao periodica'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-14-nr-14'},
+
+  {tipo:'nr', id:'NR-15', nome:'Insalubridade',
+   desc:'Atividades e operacoes insalubres — limites de tolerancia e adicionais.',
+   info:'A NR-15 define as atividades insalubres, os limites de tolerancia para agentes nocivos e os percentuais de adicional de insalubridade devidos ao trabalhador.',
+   topicos:['Agentes fisicos: ruido, calor, frio, umidade, vibracao, pressoes hiperbaricas, radiacoes','Agentes quimicos: poeiras, nevoas, fumos, gases, vapores (Anexo 11)','Agentes biologicos: bacterias, virus, fungos (Anexo 14)','Adicional de 10% (minimo), 20% (medio) ou 40% (maximo)','Eliminacao via EPC ou EPI com reducao/eliminacao','Laudo de insalubridade por profissional habilitado','Periodicidade de avaliacao dos agentes'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-15-nr-15'},
+
+  {tipo:'nr', id:'NR-16', nome:'Periculosidade',
+   desc:'Atividades e operacoes perigosas — adicional de 30% sobre o salario.',
+   info:'A NR-16 define as atividades e operacoes perigosas que geram direito ao adicional de periculosidade de 30% sobre o salario base, sem acrescimos.',
+   topicos:['Atividades com explosivos e inflamaveis','Trabalho com energia eletrica (NR-10)','Atividades com radiacao ionizante','Atividades com roubos ou violencia fisica','Motociclistas (Anexo 5)','Adicional de 30% sobre o salario base','Laudo de periculosidade por engenheiro ou medico','Eliminacao do adicional por EPC comprovado'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-16-nr-16'},
+
+  {tipo:'nr', id:'NR-17', nome:'Ergonomia',
+   desc:'Adaptacao das condicoes de trabalho as caracteristicas dos trabalhadores.',
+   info:'A NR-17 visa adaptar as condicoes de trabalho as caracteristicas psicofisiologicas dos trabalhadores, promovendo conforto, seguranca e desempenho eficiente.',
+   topicos:['Analise Ergonomica do Trabalho (AET) obrigatoria','Mobiliario e postos de trabalho adequados','Levantamento manual de peso (maximo 60 kg com dois trabalhadores)','Equipamentos, ferramentas e condicoes ambientais','Pausas para descanso em atividades repetitivas','Trabalho em teleatendimento / callcenter (Anexo II)','Caixas e checkout de supermercados (Anexo I)'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-17-nr-17'},
+
+  {tipo:'nr', id:'NR-18', nome:'Construcao Civil',
+   desc:'Seguranca e saude no trabalho na industria da construcao.',
+   info:'A NR-18 estabelece diretrizes de ordem administrativa, de planejamento e organizacao, visando a implementacao de medidas de controle e sistemas preventivos na industria da construcao civil.',
+   topicos:['PCMAT — Programa de Condicoes e Meio Ambiente de Trabalho','Servicos preliminares e instalacoes sanitarias de obra','Andaimes: tipos, capacidade e travamento','Plataformas de protecao (bandejas)','Escadas, rampas e passarelas de obra','Treinamento de integracao e especifico','EPIs obrigatorios na construcao','Ordem e limpeza do canteiro'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-18-nr-18'},
+
+  {tipo:'nr', id:'NR-19', nome:'Explosivos',
+   desc:'Armazenamento, manuseio e transporte de explosivos no ambiente de trabalho.',
+   info:'A NR-19 estabelece requisitos de seguranca para as atividades que envolvem fabricacao, manuseio, armazenamento, transporte e utilizacao de explosivos.',
+   topicos:['Paioleiro habilitado e com certificado','Construcao e localizacao dos paios de explosivos','Distancias minimas de seguranca','Manuseio e transporte seguro','Controle de estoque e registro dos explosivos','EPIs especificos','Plano de emergencia para explosivos'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-19-nr-19'},
+
+  {tipo:'nr', id:'NR-20', nome:'Inflamaveis e Combustiveis',
+   desc:'Seguranca em instalacoes e servicos com inflamaveis e combustiveis liquidos e gasosos.',
+   info:'A NR-20 estabelece requisitos minimos de seguranca para a gestao das atividades que envolvem postos de abastecimento, refinarias, industrias quimicas e petroquimicas.',
+   topicos:['Classificacao dos inflamaveis e combustiveis','Armazenamento em areas classificadas','Treinamento especifico por funcao (Basico e Avancado)','Plano de Resposta a Emergencias Quimicas','Aterramento e protecao contra descargas eletrostaticas','Proibicao de chamas e equipamentos que causem ignição','Rotulagem de conformidade (GHS/ABNT)'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-20-nr-20'},
+
+  {tipo:'nr', id:'NR-21', nome:'Trabalho a Ceu Aberto',
+   desc:'Medidas de protecao para trabalhadores em atividades realizadas a ceu aberto.',
+   info:'A NR-21 estabelece requisitos minimos para protecao dos trabalhadores que exercem suas atividades a ceu aberto, garantindo abrigo, higiene e conforto.',
+   topicos:['Abrigo contra intemperies (sol, chuva, frio)','Agua potavel proxima ao posto de trabalho','Instalacoes sanitarias portateis','Protecao contra radiacao solar (EPI)','Equipamentos de uso coletivo (EPC)','Descanso em local adequado','Treinamento sobre os riscos climaticos'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-21-nr-21'},
+
+  {tipo:'nr', id:'NR-22', nome:'Seguranca e Saude Ocupacional na Mineracao',
+   desc:'Seguranca e saude dos trabalhadores nas atividades de mineracao.',
+   info:'A NR-22 estabelece os requisitos minimos de seguranca e saude para as atividades de mineracao, tanto em superficie quanto no subsolo.',
+   topicos:['PSST — Politica de Seguranca e Saude do Trabalho','Gerenciamento de riscos na mineracao','Trabalho em subsolo: ventilacao e iluminacao','Desmonte a fogo: procedimentos e distancias','Estabilidade de taludes e pilares','Treinamento especifico dos mineradores','Comunicacao e investigacao de acidentes'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-22-nr-22'},
+
+  {tipo:'nr', id:'NR-23', nome:'Protecao Contra Incendios',
+   desc:'Prevencao e combate a incendios, plano de emergencia e brigada.',
+   info:'A NR-23 estabelece medidas de protecao contra incendio, rotas de fuga, treinamento de brigada e sistemas de combate a incendio em edificacoes e areas de trabalho.',
+   topicos:['Extintores: tipo, localizacao, inspecao e validade','Saidas de emergencia desobstruidas e sinalizadas','Brigada de incendio treinada e dimensionada','Plano de evacuacao e simulacros periodicos','Hidrantes e sistemas fixos de supressao','Sinalizacao de emergencia (ABNT NBR 13434)','Instalacoes eletricas protegidas contra incendio'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-23-nr-23'},
+
+  {tipo:'nr', id:'NR-24', nome:'Condicoes Sanitarias nos Locais de Trabalho',
+   desc:'Banheiros, vestiarios, refeitorio, cozinha e alojamentos nos locais de trabalho.',
+   info:'A NR-24 define as condicoes minimas de higiene e conforto que devem ser oferecidas aos trabalhadores, incluindo instalacoes sanitarias, vestiarios, refeitorio, cozinha e alojamentos.',
+   topicos:['Instalacoes sanitarias: dimensionamento e higiene','Vestiarios com armarios individuais','Refeitorio: area minima, bancadas e condicoes higienicas','Cozinha: ventilacao, iluminacao e equipamentos','Alojamentos coletivos: espaco minimo por trabalhador','Agua potavel: quantidade e qualidade','Limpeza e manutencao diaria'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-24-nr-24'},
+
+  {tipo:'nr', id:'NR-25', nome:'Residuos Industriais',
+   desc:'Destinacao correta de residuos industriais solidos, liquidos e gasosos.',
+   info:'A NR-25 estabelece as medidas necessarias para prevencao de acidentes e doencas do trabalho na eliminacao ou destinacao dos residuos industriais.',
+   topicos:['Segregacao dos residuos na fonte','Destinacao de residuos solidos, liquidos e gasosos','Tratamento de efluentes industriais','Coleta e transporte de residuos perigosos','EPI para manuseio de residuos quimicos','Registro e controle dos residuos gerados','Conformidade com legislacao ambiental (PNRS)'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-25-nr-25'},
+
+  {tipo:'nr', id:'NR-26', nome:'Sinalizacao de Seguranca',
+   desc:'Padronizacao de cores e sinalizacao nos ambientes de trabalho.',
+   info:'A NR-26 estabelece as cores e sinais de seguranca que devem ser utilizados nos locais de trabalho para identificar riscos, equipamentos, tubulacoes e areas de emergencia.',
+   topicos:['Cores padrao para identificacao de riscos','Sinalizacao de tubulacoes industriais (ABNT NBR 6493)','Identificacao de substancias quimicas (GHS/SGA)','Placas e sinais de proibicao, advertencia e obrigacao','Sinalizacao de saidas de emergencia','Rotulagem de substancias perigosas','Demarcacao de pisos e areas de circulacao'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-26-nr-26'},
+
+  {tipo:'nr', id:'NR-28', nome:'Fiscalizacao e Penalidades',
+   desc:'Procedimentos de fiscalizacao, autuacoes e penalidades aplicaveis ao descumprimento das NRs.',
+   info:'A NR-28 define os procedimentos de fiscalizacao do trabalho e as penalidades administrativas aplicaveis ao descumprimento das Normas Regulamentadoras.',
+   topicos:['Autuacao por auto de infracao','Graduacao das multas por gravidade','Prazo para regularizacao das irregularidades','Reincidencia e agravamento das penalidades','Embargo e interdicao imediata','Recurso administrativo das autuacoes','Publicidade das autuacoes graves'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-28-nr-28'},
+
+  {tipo:'nr', id:'NR-29', nome:'Seguranca Portuaria',
+   desc:'Seguranca e saude no trabalho em operacoes portuarias aquaviarias.',
+   info:'A NR-29 estabelece as diretrizes de seguranca, higiene e saude para os trabalhadores portuarios avulsos e permanentes nas operacoes de carga, descarga e movimentacao de mercadorias.',
+   topicos:['OGMO — Orgao Gestor de Mao de Obra','SESMT Portuario e CIPA Portuaria','Treinamento especifico para trabalhadores portuarios','Cargas perigosas: procedimentos especiais','EPIs especificos para operacoes portuarias','Inspecao de equipamentos de movimentacao portuaria','Plano de auxilio mutuo para emergencias no porto'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-29-nr-29'},
+
+  {tipo:'nr', id:'NR-30', nome:'Seguranca Aquaviaria',
+   desc:'Seguranca e saude dos trabalhadores em embarcacoes mercantes e de pesca.',
+   info:'A NR-30 estabelece os requisitos minimos de seguranca e saude para os trabalhadores a bordo de embarcacoes mercantes, de pesca e embarcacoes de apoio.',
+   topicos:['Condicoes de habitabilidade a bordo','Alimentacao e agua potavel na embarcacao','SESMT ou designado de seguranca a bordo','EPIs especificos para trabalho embarcado','Plano de abandono e sobrevivencia','Treinamento em primeiros socorros a bordo','Contratos de trabalho aquaviario'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-30-nr-30'},
+
+  {tipo:'nr', id:'NR-31', nome:'Seguranca Rural',
+   desc:'Seguranca e saude no trabalho na agricultura, pecuaria e silvicultura.',
+   info:'A NR-31 estabelece os preceitos a serem observados na organizacao e no ambiente de trabalho rural, visando a prevencao de acidentes e doencas do trabalho.',
+   topicos:['PPRA Rural e mapa de riscos','Agrotoxicos: treinamento, EPI e controle medico','Operadores de maquinas agricolas habilitados','Instalacoes sanitarias e agua potavel no campo','Treinamento de integracao para trabalhadores rurais','Trabalho infantil: proibicoes e fiscalizacao','Condicoes de alojamento para trabalhadores rurais'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-31-nr-31'},
+
+  {tipo:'nr', id:'NR-32', nome:'Seguranca em Saude',
+   desc:'Seguranca e saude no trabalho em servicos de saude — hospitais, clinicas e laboratorios.',
+   info:'A NR-32 estabelece as diretrizes basicas para implementacao de medidas de protecao a seguranca e a saude dos trabalhadores dos servicos de saude.',
+   topicos:['Riscos biologicos: precaucoes padrao e especificas','Residuos de servicos de saude (PGRSS)','Quimioterapicos e gases medicinais','Radiacao ionizante em servicos de saude','Treinamento de biosseguranca','Imunizacao dos trabalhadores (hepatite B, etc.)','Acidentes com material biologico: conduta pos-exposicao'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-32-nr-32'},
+
+  {tipo:'nr', id:'NR-33', nome:'Espacos Confinados',
+   desc:'Seguranca no trabalho em espacos confinados — PET, vigia e monitoramento atmosferico.',
+   info:'A NR-33 define os requisitos minimos para identificacao de espacos confinados e o controle dos riscos existentes, de forma a garantir permanentemente a segurança e a saude dos trabalhadores.',
+   topicos:['Identificacao e sinalizacao dos espacos confinados','Permissao de Entrada e Trabalho (PET)','Supervisor de Entrada treinado e certificado','Vigia externo permanente durante o trabalho','Monitoramento continuo da atmosfera (O2, LEL, CO, H2S)','Procedimento de resgate em espaco confinado','Treinamento periodico por profissional habilitado'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-33-nr-33'},
+
+  {tipo:'nr', id:'NR-34', nome:'Construcao Naval',
+   desc:'Condicoes e meio ambiente de trabalho na industria da construcao e reparacao naval.',
+   info:'A NR-34 estabelece os requisitos minimos de seguranca e saude no trabalho a serem observados nas atividades da construcao, recuperacao, reforma, conversao e desmontagem de embarcacoes.',
+   topicos:['PCMAT Naval — planejamento das obras navais','Trabalho em espacos confinados navais','Trabalho em altura em embarcacoes','Soldagem e corte a quente em estaleiros','Remocao de tintas e tratamento de superficie','EPIs especificos para construcao naval','SESMT e CIPA nos estaleiros'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-34-nr-34'},
+
+  {tipo:'nr', id:'NR-35', nome:'Trabalho em Altura',
+   desc:'Requisitos minimos para realizacao de trabalho em altura com seguranca — acima de 2 metros.',
+   info:'A NR-35 define trabalho em altura como toda atividade executada acima de 2,00 m do nivel inferior, onde haja risco de queda. Exige planejamento, permissao e treinamento especifico.',
+   topicos:['Capacitacao bienal com reciclagem','APR — Analise Preliminar de Risco obrigatoria','Permissao de Trabalho (PT) documentada','Pontos de ancoragem com carga minima de 15 kN','Sistemas de protecao: guarda-corpo, andaimes e telas','Plano de resgate escrito e treinado','Restricoes medicas para trabalho em altura'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-35-nr-35'},
+
+  {tipo:'nr', id:'NR-36', nome:'Frigorifico e Abate',
+   desc:'Seguranca e saude no trabalho em empresas de abate e processamento de carnes.',
+   info:'A NR-36 estabelece os requisitos minimos de seguranca e saude no trabalho nas empresas de abate e processamento de carnes e derivados, destinados ao consumo humano.',
+   topicos:['Organizacao do trabalho: pausas e revezamento','Biomecânica: ferramentas e postos de trabalho','Conforto termico no trabalho em camara fria','Higiene e saude dos trabalhadores','Treinamento especifico por posto de trabalho','Adequacao ergonomica das linhas de abate','PPRA e PCMSO especificos para frigorifico'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-36-nr-36'},
+
+  {tipo:'nr', id:'NR-37', nome:'Seguranca em Plataformas de Petroleo',
+   desc:'Seguranca e saude no trabalho em plataformas de petroleo e instalacoes de apoio.',
+   info:'A NR-37 estabelece os requisitos minimos de seguranca e saude no trabalho para as atividades desenvolvidas em plataformas moveis e fixas de perfuracao e producao de petroleo e gas.',
+   topicos:['Condicoes de habitabilidade na plataforma','Sistema de gestao de SST offshore','Plano de Abandono e Evacuacao','Treinamento HUET — Evacuacao de Helicoptero em Agua','EPIs especificos para offshore','SESMT e CIPA em plataformas','Plano de Resposta a Emergencias Maritimas'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-37-nr-37'},
+
+  {tipo:'nr', id:'NR-38', nome:'Seguranca em Limpeza Urbana',
+   desc:'Seguranca e saude dos trabalhadores em atividades de limpeza urbana e manejo de residuos solidos.',
+   info:'A NR-38, publicada em 2022, estabelece os requisitos minimos de seguranca e saude para os trabalhadores de limpeza urbana, coleta de lixo e operacao de aterros.',
+   topicos:['Treinamento de integracao e especifico','EPIs obrigatorios: luvas, botas, colete e oculos','Condicoes do veiculo coletor de lixo','Pausas e organizacao do trabalho de coleta','Gestao do risco biologico nos residuos','Monitoramento da saude dos coletores','Plano de Gerenciamento de Riscos (PGR) especifico'],
+   link:'https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/norma-regulamentadora-no-38-nr-38'},
+
+  // ── LEGISLACAO ────────────────────────────────────────────────
+  {tipo:'outro', id:'CLT', nome:'Consolidacao das Leis do Trabalho',
+   desc:'Principal legislacao trabalhista do Brasil — direitos, deveres, contratos e seguranca do trabalho.',
+   info:'A CLT (Decreto-Lei n° 5.452/1943, atualizada pela Reforma Trabalhista de 2017 — Lei 13.467) e a principal lei trabalhista brasileira. No campo da seguranca do trabalho, os artigos 154 a 223 sao fundamentais.',
+   topicos:['Art. 157: Obrigacoes do empregador em SST','Art. 158: Obrigacoes do empregado em SST','Art. 166-167: Fornecimento e uso de EPIs','Art. 182-183: CIPA e comissoes de seguranca','Art. 189-192: Insalubridade e adicional','Art. 193: Periculosidade e adicional de 30%','Art. 201: Acidente do trabalho — obrigacoes','Reforma Trabalhista 2017: contratos e jornadas'],
+   link:'https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm'},
+
+  {tipo:'outro', id:'COD-CIVIL', nome:'Codigo Civil — Responsabilidade Civil',
+   desc:'Lei 10.406/2002 — responsabilidade civil do empregador por danos decorrentes de acidentes do trabalho.',
+   info:'O Codigo Civil Brasileiro (Lei 10.406/2002) complementa a legislacao trabalhista no tocante a responsabilidade civil do empregador. Os artigos 186, 187, 927 e seguintes sao essenciais para entender a responsabilizacao por danos causados a trabalhadores em acidentes de trabalho.',
+   topicos:['Art. 186: Ato ilicito e obrigacao de indenizar','Art. 187: Abuso de direito como ato ilicito','Art. 927: Obrigacao de reparar o dano causado','Art. 927 Paragrafo unico: Responsabilidade objetiva em atividades de risco','Art. 932: Responsabilidade do empregador por ato do empregado','Art. 933: Responsabilidade independente de culpa','Art. 944: Indenizacao medida pela extensao do dano','Dano moral, dano estetico e dano material em acidentes de trabalho'],
+   link:'https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm'},
+
+  {tipo:'outro', id:'LEI-8213', nome:'Lei 8.213/1991 — Acidente do Trabalho',
+   desc:'Lei de Beneficios da Previdencia Social — define acidente do trabalho, CAT, beneficios e reabilitacao.',
+   info:'A Lei 8.213/1991 dispoe sobre os Planos de Beneficios da Previdencia Social e e a principal lei que define acidente do trabalho, doenca ocupacional, CAT (Comunicacao de Acidente de Trabalho) e os beneficios previdenciarios devidos.',
+   topicos:['Art. 19: Definicao de acidente do trabalho','Art. 20: Doencas ocupacionais equiparadas a acidente','Art. 21: Acidentes equiparados (percurso, a servico)','Art. 22: Obrigacao de emitir a CAT','Art. 86: Auxilio-acidente permanente','Art. 118: Estabilidade de 12 meses apos alta do INSS','Nexo Tecnico Epidemiologico (NTEP)','FAP — Fator Acidentario de Prevencao'],
+   link:'https://www.planalto.gov.br/ccivil_03/leis/l8213cons.htm'},
+
+  {tipo:'outro', id:'CONST-88', nome:'Constituicao Federal — Art. 7° — Direitos dos Trabalhadores',
+   desc:'Artigo 7° da CF/88 — direitos fundamentais dos trabalhadores, incluindo reducao dos riscos do trabalho.',
+   info:'O artigo 7° da Constituicao Federal de 1988 estabelece os direitos fundamentais dos trabalhadores urbanos e rurais, incluindo varios dispositivos relacionados a seguranca e saude no trabalho.',
+   topicos:['Art. 7°, XXII: Reducao dos riscos inerentes ao trabalho','Art. 7°, XXIII: Adicional de insalubridade e periculosidade','Art. 7°, XXVIII: Seguro de acidente do trabalho','Art. 7°, XXXIII: Proibicao de trabalho perigoso a menores de 18 anos','Art. 7°, XV: Repouso semanal remunerado','Art. 200: Competencia do SUS em saude do trabalhador','Art. 225: Meio ambiente equilibrado — impacto no trabalho'],
+   link:'https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm'}
+];
+
+function renderGrid() {
+  var busca = document.getElementById('buscaInput').value.toLowerCase();
+  var grid = document.getElementById('nrGrid');
+  grid.innerHTML = '';
+
+  var lista = DOCS.filter(function(d) {
+    if (filtroAtivo === 'nrs' && d.tipo !== 'nr') return false;
+    if (filtroAtivo === 'outros' && d.tipo !== 'outro') return false;
+    if (busca) {
+      return d.id.toLowerCase().includes(busca) ||
+             d.nome.toLowerCase().includes(busca) ||
+             d.desc.toLowerCase().includes(busca);
+    }
+    return true;
+  });
+
+  document.getElementById('contador').textContent = lista.length + ' documento(s)';
+
+  if (lista.length === 0) {
+    grid.innerHTML = '<p class="empty">Nenhum documento encontrado.</p>';
+    return;
+  }
+
+  // Separar por tipo
+  var nrs = lista.filter(function(d) { return d.tipo === 'nr'; });
+  var outros = lista.filter(function(d) { return d.tipo === 'outro'; });
+
+  function criarCard(doc) {
+    var div = document.createElement('div');
+    div.className = 'nr-card' + (doc.tipo === 'outro' ? ' codigo' : '');
+    div.onclick = function() { abrirModal(doc.id); };
+    div.innerHTML =
+      '<div class="nr-card-top">' +
+        '<span class="nr-badge' + (doc.tipo === 'outro' ? ' codigo' : '') + '">' + doc.id + '</span>' +
+      '</div>' +
+      '<h3>' + doc.nome + '</h3>' +
+      '<p>' + doc.desc + '</p>' +
+      '<span class="nr-link">Ver detalhes ›</span>';
+    return div;
+  }
+
+  if (nrs.length > 0) {
+    if (filtroAtivo === 'todos') {
+      var label = document.createElement('div');
+      label.className = 'section-label';
+      label.textContent = '📋 Normas Regulamentadoras — MTE (' + nrs.length + ')';
+      grid.appendChild(label);
+    }
+    nrs.forEach(function(d) { grid.appendChild(criarCard(d)); });
+  }
+
+  if (outros.length > 0) {
+    if (filtroAtivo === 'todos') {
+      var label2 = document.createElement('div');
+      label2.className = 'section-label';
+      label2.textContent = '⚖️ Legislacao Complementar (' + outros.length + ')';
+      grid.appendChild(label2);
+    }
+    outros.forEach(function(d) { grid.appendChild(criarCard(d)); });
+  }
+}
+
+function abrirModal(docId) {
+  var doc = DOCS.find(function(d) { return d.id === docId; });
+  if (!doc) return;
+  document.getElementById('mTitulo').textContent = doc.id + ' — ' + doc.nome;
+  document.getElementById('mDesc').textContent = doc.desc;
+  var infoBox = document.getElementById('mInfo');
+  infoBox.textContent = doc.info;
+  infoBox.className = 'nr-info-box' + (doc.tipo === 'outro' ? ' codigo' : '');
+  document.getElementById('mLink').href = doc.link;
+  document.getElementById('mLink').className = 'btn-site' + (doc.tipo === 'outro' ? ' codigo' : '');
+  var topDiv = document.getElementById('mTopicos');
+  topDiv.innerHTML = '';
+  doc.topicos.forEach(function(t, i) {
+    var d = document.createElement('div');
+    d.className = 'topico-item';
+    d.innerHTML = '<span class="topico-num">' + (i + 1) + '.</span><span>' + t + '</span>';
+    topDiv.appendChild(d);
+  });
   document.getElementById('modalNR').classList.add('open');
 }
-function fecharModal(){ document.getElementById('modalNR').classList.remove('open'); }
-document.getElementById('modalNR').addEventListener('click',function(e){ if(e.target===this) fecharModal(); });
+
+function fecharModal() { document.getElementById('modalNR').classList.remove('open'); }
+
+document.getElementById('modalNR').addEventListener('click', function(e) {
+  if (e.target === this) fecharModal();
+});
+
 renderGrid();
 </script>
 </body>
