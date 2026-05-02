@@ -17,40 +17,30 @@
     .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
     .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
     .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .notif-badge{background:#f87171;color:#fff;border-radius:20px;padding:1px 7px;font-size:.65rem;font-weight:700;margin-left:auto}
     .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
     .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
     .user-info p{font-size:.82rem;font-weight:600}
     .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
     .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
-
-    /* MAIN */
     .main{margin-left:240px;flex:1;padding:32px}
     .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
     .topbar h2{font-size:1.4rem;font-weight:700}
     .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
     .btn-novo{background:linear-gradient(135deg,#a78bfa,#7c3aed);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
     .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
-
-    /* RESUMO */
     .resumo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
     .resumo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s}
     .resumo-card:hover{background:rgba(255,255,255,.06)}
     .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
     .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-    .rc-total  {color:#a78bfa}
-    .rc-ativo  {color:#4ade80}
-    .rc-inativo{color:#f87171}
-    .rc-ferias {color:#fbbf24}
-
-    /* FILTROS */
+    .rc-total {color:#a78bfa}.rc-ativo{color:#4ade80}.rc-inativo{color:#f87171}.rc-ferias{color:#fbbf24}
     .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
     .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
     .filtro-btn:hover,.filtro-btn.active{background:rgba(167,139,250,.12);border-color:#a78bfa;color:#a78bfa}
     .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:240px;margin-left:auto}
     .busca-input::placeholder{color:rgba(255,255,255,.3)}
     .busca-input:focus{border-color:#a78bfa}
-
-    /* CARDS */
     .cards-func{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     .func-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;transition:all .2s}
     .func-card:hover{background:rgba(255,255,255,.07);transform:translateY(-2px)}
@@ -60,8 +50,6 @@
     .func-info span{font-size:.75rem;color:rgba(255,255,255,.4)}
     .func-details{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
     .func-detail{font-size:.78rem;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:6px}
-
-    /* EPIs */
     .func-epis{margin-bottom:14px}
     .func-epis-titulo{font-size:.72rem;font-weight:700;color:#00d4ff;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
     .epi-tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:600;margin:2px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05)}
@@ -69,22 +57,15 @@
     .epi-tag.avencer{background:rgba(251,191,36,.15);border-color:#fbbf24;color:#fbbf24}
     .epi-tag.ok     {background:rgba(74,222,128,.15);border-color:#4ade80;color:#4ade80}
     .epi-tag.sem    {background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.4)}
-
     .func-acoes{display:flex;gap:8px}
     .btn-acao{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);cursor:pointer;padding:7px 14px;border-radius:8px;font-size:.8rem;color:rgba(255,255,255,.7);transition:all .2s}
     .btn-acao:hover{background:rgba(255,255,255,.12);color:#fff}
-
-    /* BADGES */
     .badge{padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:600}
     .badge.ativo  {background:rgba(74,222,128,.15);color:#4ade80}
     .badge.inativo{background:rgba(248,113,113,.15);color:#f87171}
     .badge.ferias {background:rgba(251,191,36,.15);color:#fbbf24}
-
-    /* EMPTY */
     .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3);grid-column:1/-1;display:none}
     .empty-state div{font-size:3rem;margin-bottom:12px}
-
-    /* MODAL */
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
     .modal-overlay.open{display:flex}
     .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:640px;max-height:92vh;overflow-y:auto}
@@ -106,8 +87,6 @@
     .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
     .btn-cancelar{padding:12px 24px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
     .btn-salvar{padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#a78bfa,#7c3aed);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
-
-    /* DETALHE */
     .detalhe-row{display:flex;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
     .detalhe-row:last-child{border-bottom:none}
     .detalhe-label{font-size:.78rem;color:rgba(255,255,255,.4);min-width:140px;font-weight:600}
@@ -116,7 +95,6 @@
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>Safe<span>NR</span></h1>
@@ -130,10 +108,15 @@
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
     <a class="nav-item active" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
+    <a class="nav-item" href="./ocorrencias.html"><span class="icon">🚨</span> Ocorrencias</a>
+    <a class="nav-item" href="./plano-acao.html"><span class="icon">📌</span> Plano de Acao</a>
+    <a class="nav-item" href="./documentos.html"><span class="icon">🗂️</span> Documentos SST</a>
     <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
     <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item" href="./ambientes.html"><span class="icon">🏭</span> Ambientes</a>
+    <a class="nav-item" href="./ia-sugestoes.html"><span class="icon">🤖</span> IA Sugestoes</a>
     <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
     <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
   </nav>
@@ -144,14 +127,12 @@
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div><h2>👷 Colaboradores</h2><span id="totalRegistros">0 registros</span></div>
     <button class="btn-novo" onclick="abrirModal()">+ Novo Colaborador</button>
   </div>
 
-  <!-- RESUMO -->
   <div class="resumo-grid">
     <div class="resumo-card" onclick="filtrarCard('todos')">
       <div class="rc-valor rc-total"   id="cnt-total">0</div>
@@ -171,21 +152,14 @@
     </div>
   </div>
 
-  <!-- FILTROS -->
   <div class="filtros">
-    <button class="filtro-btn active" id="fb-todos"  onclick="filtrar('todos',this)">Todos</button>
-    <button class="filtro-btn"        id="fb-ativo"  onclick="filtrar('ativo',this)">🟢 Ativos</button>
-    <button class="filtro-btn"        id="fb-inativo"onclick="filtrar('inativo',this)">🔴 Inativos</button>
-    <button class="filtro-btn"        id="fb-ferias" onclick="filtrar('ferias',this)">🟡 Ferias</button>
-    <input
-      class="busca-input"
-      type="text"
-      placeholder="🔎 Buscar colaborador..."
-      oninput="renderizar()"
-    />
+    <button class="filtro-btn active" id="fb-todos"   onclick="filtrar('todos',this)">Todos</button>
+    <button class="filtro-btn"        id="fb-ativo"   onclick="filtrar('ativo',this)">🟢 Ativos</button>
+    <button class="filtro-btn"        id="fb-inativo" onclick="filtrar('inativo',this)">🔴 Inativos</button>
+    <button class="filtro-btn"        id="fb-ferias"  onclick="filtrar('ferias',this)">🟡 Ferias</button>
+    <input class="busca-input" type="text" placeholder="🔎 Buscar colaborador..." oninput="renderizar()"/>
   </div>
 
-  <!-- CARDS -->
   <div class="cards-func" id="cardsFunc"></div>
   <div class="empty-state" id="emptyState">
     <div>👷</div>
@@ -277,9 +251,8 @@ document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
 document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
 function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
 
-/* ── DADOS ── */
-/* Migra chave antiga safenr_funcionarios → safenr_colaboradores */
-(function() {
+/* ── MIGRAÇÃO ── */
+(function(){
   var antigo = localStorage.getItem('safenr_funcionarios');
   if (antigo && !localStorage.getItem('safenr_colaboradores')) {
     localStorage.setItem('safenr_colaboradores', antigo);
@@ -292,30 +265,18 @@ var filtroAtivo = 'todos';
 
 function salvarStorage() {
   localStorage.setItem('safenr_colaboradores', JSON.stringify(registros));
-  /* Mantém compatibilidade com páginas que ainda usam a chave antiga */
-  localStorage.setItem('safenr_funcionarios', JSON.stringify(registros));
+  localStorage.setItem('safenr_funcionarios',  JSON.stringify(registros));
 }
 
-function fmt(d) {
-  if (!d) return '--';
-  var p = d.split('-');
-  return p[2] + '/' + p[1] + '/' + p[0];
-}
-
-function fmtDT(iso) {
-  if (!iso) return '--';
-  return new Date(iso).toLocaleString('pt-BR', {
-    day:'2-digit', month:'2-digit', year:'numeric',
-    hour:'2-digit', minute:'2-digit'
-  });
-}
+function fmt(d)   { if(!d) return '--'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function fmtDT(iso){ if(!iso) return '--'; return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
 
 function getStatusCA(val) {
   if (!val) return 'sem';
-  var d    = new Date(val + 'T00:00:00');
-  var hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+  var d    = new Date(val+'T00:00:00');
+  var hoje = new Date(); hoje.setHours(0,0,0,0);
   var diff = (d - hoje) / 86400000;
-  if (diff < 0)  return 'vencido';
+  if (diff < 0)   return 'vencido';
   if (diff <= 30) return 'avencer';
   return 'ok';
 }
@@ -326,24 +287,24 @@ function getLista() {
   return registros.filter(function(r) {
     if (filtroAtivo !== 'todos' && r.status !== filtroAtivo) return false;
     if (busca &&
-        !(r.nome  || '').toLowerCase().includes(busca) &&
-        !(r.cargo || '').toLowerCase().includes(busca) &&
-        !(r.setor || '').toLowerCase().includes(busca)) return false;
+        !(r.nome  ||'').toLowerCase().includes(busca) &&
+        !(r.cargo ||'').toLowerCase().includes(busca) &&
+        !(r.setor ||'').toLowerCase().includes(busca)) return false;
     return true;
   });
 }
 
 function filtrar(s, btn) {
   filtroAtivo = s;
-  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.filtro-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   renderizar();
 }
 
 function filtrarCard(s) {
   filtroAtivo = s;
-  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
-  var id = s === 'todos' ? 'fb-todos' : 'fb-' + s;
+  document.querySelectorAll('.filtro-btn').forEach(function(b){ b.classList.remove('active'); });
+  var id  = s === 'todos' ? 'fb-todos' : 'fb-'+s;
   var btn = document.getElementById(id);
   if (btn) btn.classList.add('active');
   renderizar();
@@ -351,11 +312,11 @@ function filtrarCard(s) {
 
 /* ── CONTADORES ── */
 function atualizarContadores() {
-  document.getElementById('cnt-total').textContent  = registros.length;
-  document.getElementById('cnt-ativo').textContent  = registros.filter(function(r) { return r.status === 'ativo'; }).length;
-  document.getElementById('cnt-inativo').textContent= registros.filter(function(r) { return r.status === 'inativo'; }).length;
-  document.getElementById('cnt-ferias').textContent = registros.filter(function(r) { return r.status === 'ferias'; }).length;
-  document.getElementById('totalRegistros').textContent = registros.length + ' registro(s)';
+  document.getElementById('cnt-total').textContent   = registros.length;
+  document.getElementById('cnt-ativo').textContent   = registros.filter(function(r){ return r.status==='ativo'; }).length;
+  document.getElementById('cnt-inativo').textContent = registros.filter(function(r){ return r.status==='inativo'; }).length;
+  document.getElementById('cnt-ferias').textContent  = registros.filter(function(r){ return r.status==='ferias'; }).length;
+  document.getElementById('totalRegistros').textContent = registros.length+' registro(s)';
 }
 
 /* ── RENDERIZAR ── */
@@ -370,39 +331,35 @@ function renderizar() {
   empty.style.display = 'none';
 
   lista.forEach(function(r) {
-    var epis     = r.epis || [];
+    var epis = r.epis || [];
     var episHtml = '';
     if (epis.length > 0) {
       episHtml = '<div class="func-epis"><div class="func-epis-titulo">EPIs</div>';
       epis.forEach(function(e) {
         var st    = getStatusCA(e.validade);
-        var label = e.nome + (e.validade ? ' (' + fmt(e.validade) + ')' : '');
-        episHtml += '<span class="epi-tag ' + st + '">' + label + '</span>';
+        var label = e.nome+(e.validade?' ('+fmt(e.validade)+')':'');
+        episHtml += '<span class="epi-tag '+st+'">'+label+'</span>';
       });
       episHtml += '</div>';
     }
-
     var card = document.createElement('div');
     card.className = 'func-card';
     card.innerHTML =
-      '<div class="func-card-top">' +
-        '<div class="func-avatar">' + (r.nome || '?')[0].toUpperCase() + '</div>' +
-        '<div class="func-info">' +
-          '<p>' + (r.nome  || '--') + '</p>' +
-          '<span>' + (r.cargo || '--') + '</span>' +
-        '</div>' +
-      '</div>' +
-      '<div class="func-details">' +
-        '<div class="func-detail">🏭 ' + (r.setor || '--') + '</div>' +
-        (r.admissao ? '<div class="func-detail">📅 Admissao: ' + fmt(r.admissao) + '</div>' : '') +
-        (r.tel      ? '<div class="func-detail">📞 ' + r.tel + '</div>' : '') +
-        '<div class="func-detail"><span class="badge ' + (r.status || 'ativo') + '">' + (r.status || 'ativo') + '</span></div>' +
-      '</div>' +
-      episHtml +
-      '<div class="func-acoes">' +
-        '<button class="btn-acao" onclick="ver('    + r.id + ')">👁️ Ver</button>' +
-        '<button class="btn-acao" onclick="editar(' + r.id + ')">✏️ Editar</button>' +
-        '<button class="btn-acao" onclick="excluir('+ r.id + ')">🗑️</button>' +
+      '<div class="func-card-top">'+
+        '<div class="func-avatar">'+(r.nome||'?')[0].toUpperCase()+'</div>'+
+        '<div class="func-info"><p>'+(r.nome||'--')+'</p><span>'+(r.cargo||'--')+'</span></div>'+
+      '</div>'+
+      '<div class="func-details">'+
+        '<div class="func-detail">🏭 '+(r.setor||'--')+'</div>'+
+        (r.admissao?'<div class="func-detail">📅 Admissao: '+fmt(r.admissao)+'</div>':'')+
+        (r.tel     ?'<div class="func-detail">📞 '+r.tel+'</div>':'')+
+        '<div class="func-detail"><span class="badge '+(r.status||'ativo')+'">'+(r.status||'ativo')+'</span></div>'+
+      '</div>'+
+      episHtml+
+      '<div class="func-acoes">'+
+        '<button class="btn-acao" onclick="ver('+r.id+')">👁️ Ver</button>'+
+        '<button class="btn-acao" onclick="editar('+r.id+')">✏️ Editar</button>'+
+        '<button class="btn-acao" onclick="excluir('+r.id+')">🗑️</button>'+
       '</div>';
     container.appendChild(card);
   });
@@ -414,14 +371,10 @@ function addEpiLinha(nome, validade) {
   var linha = document.createElement('div');
   linha.className = 'epi-linha';
   linha.innerHTML =
-    '<div class="form-group">' +
-      '<label>Nome do EPI</label>' +
-      '<input type="text" class="epi-nome" placeholder="Ex: Capacete" value="' + (nome || '') + '"/>' +
-    '</div>' +
-    '<div class="form-group">' +
-      '<label>Validade CA</label>' +
-      '<input type="date" class="epi-validade" value="' + (validade || '') + '"/>' +
-    '</div>' +
+    '<div class="form-group"><label>Nome do EPI</label>'+
+      '<input type="text" class="epi-nome" placeholder="Ex: Capacete" value="'+(nome||'')+'"/></div>'+
+    '<div class="form-group"><label>Validade CA</label>'+
+      '<input type="date" class="epi-validade" value="'+(validade||'')+'"/></div>'+
     '<button class="btn-rem-epi" onclick="this.parentElement.remove()">✕</button>';
   div.appendChild(linha);
 }
@@ -432,7 +385,7 @@ function getEpis() {
   linhas.forEach(function(l) {
     var n = l.querySelector('.epi-nome').value.trim();
     var v = l.querySelector('.epi-validade').value;
-    if (n) epis.push({ nome: n, validade: v });
+    if (n) epis.push({ nome:n, validade:v });
   });
   return epis;
 }
@@ -441,61 +394,49 @@ function getEpis() {
 function abrirModal(id) {
   editandoId = id || null;
   document.getElementById('modalTitulo').textContent = id ? 'Editar Colaborador' : 'Novo Colaborador';
-  ['f_nome','f_cargo','f_setor','f_admissao','f_cpf','f_tel'].forEach(function(f) {
-    document.getElementById(f).value = '';
-  });
-  document.getElementById('f_status').value   = 'ativo';
+  ['f_nome','f_cargo','f_setor','f_admissao','f_cpf','f_tel'].forEach(function(f){ document.getElementById(f).value=''; });
+  document.getElementById('f_status').value     = 'ativo';
   document.getElementById('episLinha').innerHTML = '';
-  document.getElementById('f_regPor').value = user.nome || 'Usuario';
-  document.getElementById('f_regEm').value  = new Date().toLocaleString('pt-BR', {
-    day:'2-digit', month:'2-digit', year:'numeric',
-    hour:'2-digit', minute:'2-digit', second:'2-digit'
-  });
+  document.getElementById('f_regPor').value = user.nome||'Usuario';
+  document.getElementById('f_regEm').value  = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
   if (id) {
-    var r = registros.find(function(x) { return x.id === id; });
-    document.getElementById('f_nome').value     = r.nome     || '';
-    document.getElementById('f_cargo').value    = r.cargo    || '';
-    document.getElementById('f_setor').value    = r.setor    || '';
-    document.getElementById('f_status').value   = r.status   || 'ativo';
-    document.getElementById('f_admissao').value = r.admissao || '';
-    document.getElementById('f_cpf').value      = r.cpf      || '';
-    document.getElementById('f_tel').value      = r.tel      || '';
-    document.getElementById('f_regPor').value   = r.registradoPor || user.nome;
+    var r = registros.find(function(x){ return x.id===id; });
+    document.getElementById('f_nome').value     = r.nome     ||'';
+    document.getElementById('f_cargo').value    = r.cargo    ||'';
+    document.getElementById('f_setor').value    = r.setor    ||'';
+    document.getElementById('f_status').value   = r.status   ||'ativo';
+    document.getElementById('f_admissao').value = r.admissao ||'';
+    document.getElementById('f_cpf').value      = r.cpf      ||'';
+    document.getElementById('f_tel').value      = r.tel      ||'';
+    document.getElementById('f_regPor').value   = r.registradoPor||user.nome;
     document.getElementById('f_regEm').value    = fmtDT(r.registradoEm);
-    (r.epis || []).forEach(function(e) { addEpiLinha(e.nome, e.validade); });
+    (r.epis||[]).forEach(function(e){ addEpiLinha(e.nome, e.validade); });
   }
   document.getElementById('modalForm').classList.add('open');
 }
 
-function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId = null; }
+function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId=null; }
 
 function salvar() {
   var nome  = document.getElementById('f_nome').value.trim();
   var cargo = document.getElementById('f_cargo').value.trim();
   var setor = document.getElementById('f_setor').value.trim();
-  if (!nome || !cargo || !setor) { alert('Preencha Nome, Cargo e Setor.'); return; }
+  if (!nome||!cargo||!setor) { alert('Preencha Nome, Cargo e Setor.'); return; }
   var dados = {
-    nome:      nome,
-    cargo:     cargo,
-    setor:     setor,
-    status:    document.getElementById('f_status').value,
-    admissao:  document.getElementById('f_admissao').value,
-    cpf:       document.getElementById('f_cpf').value.trim(),
-    tel:       document.getElementById('f_tel').value.trim(),
-    epis:      getEpis()
+    nome:     nome, cargo:cargo, setor:setor,
+    status:   document.getElementById('f_status').value,
+    admissao: document.getElementById('f_admissao').value,
+    cpf:      document.getElementById('f_cpf').value.trim(),
+    tel:      document.getElementById('f_tel').value.trim(),
+    epis:     getEpis()
   };
   if (editandoId) {
-    var idx = registros.findIndex(function(r) { return r.id === editandoId; });
+    var idx = registros.findIndex(function(r){ return r.id===editandoId; });
     registros[idx] = Object.assign({}, registros[idx], dados);
   } else {
     var nId = registros.length > 0
-      ? Math.max.apply(null, registros.map(function(r) { return r.id; })) + 1
-      : 1;
-    registros.push(Object.assign({
-      id:            nId,
-      registradoPor: user.nome || 'Usuario',
-      registradoEm:  new Date().toISOString()
-    }, dados));
+      ? Math.max.apply(null, registros.map(function(r){ return r.id; }))+1 : 1;
+    registros.push(Object.assign({ id:nId, registradoPor:user.nome||'Usuario', registradoEm:new Date().toISOString() }, dados));
   }
   salvarStorage();
   fecharModal();
@@ -503,30 +444,27 @@ function salvar() {
   gerarAgendaEPIs();
 }
 
-/* ── AGENDA DE EPIs ── */
+/* ── AGENDA EPIs ── */
 function gerarAgendaEPIs() {
   var agenda = JSON.parse(localStorage.getItem('safenr_agenda') || '[]');
   registros.forEach(function(f) {
-    (f.epis || []).forEach(function(epi) {
+    (f.epis||[]).forEach(function(epi) {
       if (!epi.validade) return;
-      var autoId = 'epi_' + f.id + '_' + epi.nome;
-      /* Atualiza se existir, cria se não existir */
-      var idx = agenda.findIndex(function(e) { return e.autoId === autoId; });
+      var autoId = 'epi_'+f.id+'_'+epi.nome;
+      var idx    = agenda.findIndex(function(e){ return e.autoId===autoId; });
       var evento = {
         autoId:     autoId,
-        titulo:     '🦺 Trocar EPI: ' + epi.nome,
+        titulo:     '🦺 Trocar EPI: '+epi.nome,
         data:       epi.validade,
         tipo:       'epi',
         funcionario:f.nome,
         status:     'pendente',
-        obs:        'Vencimento do CA do EPI ' + epi.nome + ' — Colaborador: ' + f.nome
+        obs:        'Vencimento do CA do EPI '+epi.nome+' — Colaborador: '+f.nome
       };
       if (idx >= 0) {
         agenda[idx] = Object.assign({}, agenda[idx], evento);
       } else {
-        evento.id = agenda.length > 0
-          ? Math.max.apply(null, agenda.map(function(e) { return e.id || 0; })) + 1
-          : 1;
+        evento.id = agenda.length > 0 ? Math.max.apply(null, agenda.map(function(e){ return e.id||0; }))+1 : 1;
         agenda.push(evento);
       }
     });
@@ -538,53 +476,59 @@ function editar(id) { abrirModal(id); }
 
 function excluir(id) {
   if (!confirm('Excluir este colaborador?')) return;
-  /* Remove eventos de EPI da agenda */
   var agenda = JSON.parse(localStorage.getItem('safenr_agenda') || '[]');
-  agenda = agenda.filter(function(e) {
-    return !(e.autoId && e.autoId.startsWith('epi_' + id + '_'));
-  });
+  agenda = agenda.filter(function(e){ return !(e.autoId && e.autoId.startsWith('epi_'+id+'_')); });
   localStorage.setItem('safenr_agenda', JSON.stringify(agenda));
-  registros = registros.filter(function(r) { return r.id !== id; });
+  registros = registros.filter(function(r){ return r.id !== id; });
   salvarStorage();
   renderizar();
 }
 
 /* ── MODAL VER ── */
 function ver(id) {
-  var r = registros.find(function(x) { return x.id === id; });
-  function row(l, v) {
-    return '<div class="detalhe-row">' +
-      '<span class="detalhe-label">' + l + '</span>' +
-      '<span class="detalhe-valor">' + v + '</span>' +
-      '</div>';
+  var r = registros.find(function(x){ return x.id===id; });
+  function row(l,v){
+    return '<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>';
   }
   var episHtml = '--';
   if (r.epis && r.epis.length > 0) {
-    episHtml = r.epis.map(function(e) {
+    episHtml = r.epis.map(function(e){
       var st = getStatusCA(e.validade);
-      return '<span class="epi-tag ' + st + '">' + e.nome + (e.validade ? ' (' + fmt(e.validade) + ')' : '') + '</span>';
+      return '<span class="epi-tag '+st+'">'+e.nome+(e.validade?' ('+fmt(e.validade)+')':'')+'</span>';
     }).join(' ');
   }
   document.getElementById('modalVerConteudo').innerHTML =
-    row('Nome',         r.nome     || '--') +
-    row('Cargo',        r.cargo    || '--') +
-    row('Setor',        r.setor    || '--') +
-    row('Status',       '<span class="badge ' + (r.status || 'ativo') + '">' + (r.status || '--') + '</span>') +
-    row('Admissao',     fmt(r.admissao)) +
-    row('CPF',          r.cpf      || '--') +
-    row('Telefone',     r.tel      || '--') +
-    row('EPIs',         episHtml) +
-    row('Registrado por','<span style="color:#00d4ff">' + (r.registradoPor || '--') + '</span>') +
-    row('Registrado em', '<span style="color:#00d4ff">' + fmtDT(r.registradoEm) + '</span>');
+    row('Nome',          r.nome||'--')+
+    row('Cargo',         r.cargo||'--')+
+    row('Setor',         r.setor||'--')+
+    row('Status',        '<span class="badge '+(r.status||'ativo')+'">'+(r.status||'--')+'</span>')+
+    row('Admissao',      fmt(r.admissao))+
+    row('CPF',           r.cpf||'--')+
+    row('Telefone',      r.tel||'--')+
+    row('EPIs',          episHtml)+
+    row('Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+
+    row('Registrado em', '<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
   document.getElementById('modalVer').classList.add('open');
 }
 
 function fecharVer() { document.getElementById('modalVer').classList.remove('open'); }
 
-document.getElementById('modalForm').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
-document.getElementById('modalVer').addEventListener('click',  function(e) { if (e.target === this) fecharVer(); });
+document.getElementById('modalForm').addEventListener('click', function(e){ if(e.target===this) fecharModal(); });
+document.getElementById('modalVer').addEventListener('click',  function(e){ if(e.target===this) fecharVer(); });
 
-/* ── INIT ── */
+/* ── BADGE NOTIFICAÇÕES ── */
+(function(){
+  var n  = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
+  var nl = n.filter(function(x){ return !x.lida; }).length;
+  var link = document.querySelector('a[href="./notificacoes.html"]');
+  if (link && nl > 0) {
+    var b = document.createElement('span');
+    b.className = 'notif-badge';
+    b.textContent = nl;
+    link.appendChild(b);
+  }
+})();
+
 renderizar();
 </script>
 </body>
