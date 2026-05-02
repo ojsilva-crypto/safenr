@@ -22,87 +22,50 @@
     .user-info p{font-size:.82rem;font-weight:600}
     .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
     .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
-
-    /* MAIN */
     .main{margin-left:240px;flex:1;padding:32px}
     .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
     .topbar h2{font-size:1.4rem;font-weight:700}
-    .topbar-right{display:flex;align-items:center;gap:12px}
-    .total-badge{background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.25);color:#00d4ff;font-size:.78rem;font-weight:700;padding:5px 14px;border-radius:20px}
-    .btn-limpar{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.25);color:#f87171;font-size:.82rem;font-weight:600;padding:9px 20px;border-radius:10px;cursor:pointer;transition:all .2s}
-    .btn-limpar:hover{background:rgba(248,113,113,.2)}
-    .btn-marcar{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);color:#4ade80;font-size:.82rem;font-weight:600;padding:9px 20px;border-radius:10px;cursor:pointer;transition:all .2s}
-    .btn-marcar:hover{background:rgba(74,222,128,.18)}
+    .topbar-actions{display:flex;gap:10px;align-items:center}
+    .btn-limpar{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:rgba(255,255,255,.6);font-size:.85rem;font-weight:600;padding:10px 18px;cursor:pointer;transition:all .2s}
+    .btn-limpar:hover{background:rgba(255,255,255,.12)}
+
+    /* RESUMO */
+    .resumo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+    .resumo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;text-align:center}
+    .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
+    .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
 
     /* FILTROS */
     .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
-    .filtro-btn{padding:7px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.45);cursor:pointer;font-size:.8rem;font-weight:500;transition:all .2s}
-    .filtro-btn:hover{background:rgba(255,255,255,.05)}
-    .filtro-btn.active{border-color:#00d4ff;color:#00d4ff;background:rgba(0,212,255,.08)}
+    .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
+    .filtro-btn:hover,.filtro-btn.active{background:rgba(0,212,255,.1);border-color:#00d4ff;color:#00d4ff}
 
-    /* LISTA */
-    .lista{display:flex;flex-direction:column;gap:12px}
+    /* LISTA NOTIFICAÇÕES */
+    .notif-lista{display:flex;flex-direction:column;gap:10px}
+    .notif-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:18px 22px;display:flex;align-items:flex-start;gap:16px;transition:all .2s;border-left:4px solid transparent}
+    .notif-item:hover{background:rgba(255,255,255,.05)}
+    .notif-item.nao-lida{background:rgba(0,212,255,.04);border-left-color:#00d4ff}
+    .notif-item.urgente  {border-left-color:#f87171;background:rgba(248,113,113,.04)}
+    .notif-item.aviso    {border-left-color:#fbbf24;background:rgba(251,191,36,.04)}
+    .notif-item.info     {border-left-color:#00d4ff;background:rgba(0,212,255,.04)}
+    .notif-item.sucesso  {border-left-color:#4ade80;background:rgba(74,222,128,.04)}
 
-    /* CARD NOTIFICACAO */
-    .notif-card{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);transition:all .2s;position:relative;cursor:default}
-    .notif-card:hover{background:rgba(255,255,255,.05)}
-    .notif-card.nao-lida{border-left:3px solid;background:rgba(255,255,255,.04)}
-    .notif-card.nao-lida.alerta   {border-left-color:#f87171}
-    .notif-card.nao-lida.lembrete {border-left-color:#fbbf24}
-    .notif-card.nao-lida.sucesso  {border-left-color:#4ade80}
-    .notif-card.nao-lida.info     {border-left-color:#00d4ff}
-    .notif-card.nao-lida.sistema  {border-left-color:#a78bfa}
-
-    /* Ponto de não lida */
-    .notif-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
-    .alerta   .notif-dot{background:#f87171}
-    .lembrete .notif-dot{background:#fbbf24}
-    .sucesso  .notif-dot{background:#4ade80}
-    .info     .notif-dot{background:#00d4ff}
-    .sistema  .notif-dot{background:#a78bfa}
-    .notif-card:not(.nao-lida) .notif-dot{background:rgba(255,255,255,.2)}
-
-    .notif-icone{font-size:1.5rem;flex-shrink:0;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center}
-    .alerta   .notif-icone{background:rgba(248,113,113,.12)}
-    .lembrete .notif-icone{background:rgba(251,191,36,.12)}
-    .sucesso  .notif-icone{background:rgba(74,222,128,.12)}
-    .info     .notif-icone{background:rgba(0,212,255,.12)}
-    .sistema  .notif-icone{background:rgba(167,139,250,.12)}
-
-    .notif-corpo{flex:1;min-width:0}
-    .notif-corpo h4{font-size:.92rem;font-weight:600;margin-bottom:4px;color:#fff}
-    .notif-card:not(.nao-lida) .notif-corpo h4{color:rgba(255,255,255,.55)}
-    .notif-corpo p{font-size:.82rem;color:rgba(255,255,255,.45);line-height:1.5}
-    .notif-card:not(.nao-lida) .notif-corpo p{color:rgba(255,255,255,.3)}
-    .notif-meta{display:flex;align-items:center;gap:10px;margin-top:8px}
-    .notif-tempo{font-size:.72rem;color:rgba(255,255,255,.3)}
-    .notif-tag{font-size:.68rem;font-weight:600;padding:2px 10px;border-radius:20px}
-    .alerta   .notif-tag{background:rgba(248,113,113,.15);color:#f87171}
-    .lembrete .notif-tag{background:rgba(251,191,36,.15);color:#fbbf24}
-    .sucesso  .notif-tag{background:rgba(74,222,128,.15);color:#4ade80}
-    .info     .notif-tag{background:rgba(0,212,255,.15);color:#00d4ff}
-    .sistema  .notif-tag{background:rgba(167,139,250,.15);color:#a78bfa}
-
-    .notif-acoes{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
-    .btn-fechar{background:none;border:none;color:rgba(255,255,255,.25);cursor:pointer;font-size:.9rem;padding:4px 6px;border-radius:6px;transition:all .2s;line-height:1}
-    .btn-fechar:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)}
-    .btn-lida{background:none;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.3);cursor:pointer;font-size:.68rem;padding:4px 8px;border-radius:6px;transition:all .2s;white-space:nowrap}
-    .btn-lida:hover{border-color:rgba(74,222,128,.4);color:#4ade80}
-
-    /* EMPTY STATE */
-    .empty-state{text-align:center;padding:80px 20px;color:rgba(255,255,255,.25);display:none}
-    .empty-state div{font-size:3.5rem;margin-bottom:16px}
-    .empty-state p{font-size:.95rem}
-    .empty-state span{font-size:.82rem;color:rgba(255,255,255,.2)}
-
-    /* SEPARADOR DE DATA */
-    .data-sep{font-size:.72rem;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:1px;padding:4px 0 8px;margin-top:8px}
-
-    /* ANIMACAO */
-    @keyframes fadeOut {
-      to { opacity:0; transform:translateX(20px); max-height:0; padding:0; margin:0; border:0; overflow:hidden; }
-    }
-    .removendo { animation: fadeOut 0.3s ease forwards; }
+    .notif-icone{font-size:1.6rem;flex-shrink:0;margin-top:2px}
+    .notif-corpo{flex:1}
+    .notif-titulo{font-size:.93rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+    .notif-titulo .ponto{width:8px;height:8px;border-radius:50%;background:#00d4ff;flex-shrink:0}
+    .notif-msg{font-size:.83rem;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:8px}
+    .notif-meta{font-size:.75rem;color:rgba(255,255,255,.3);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .notif-meta .tag{padding:2px 8px;border-radius:20px;font-size:.7rem;font-weight:600}
+    .tag-urgente{background:rgba(248,113,113,.2);color:#f87171}
+    .tag-aviso  {background:rgba(251,191,36,.2);color:#fbbf24}
+    .tag-info   {background:rgba(0,212,255,.2);color:#00d4ff}
+    .tag-sucesso{background:rgba(74,222,128,.2);color:#4ade80}
+    .notif-acoes{display:flex;gap:6px;flex-shrink:0}
+    .btn-notif{background:none;border:1px solid rgba(255,255,255,.12);border-radius:8px;cursor:pointer;padding:6px 10px;font-size:.78rem;color:rgba(255,255,255,.5);transition:all .2s}
+    .btn-notif:hover{background:rgba(255,255,255,.08);color:#fff}
+    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3)}
+    .empty-state div{font-size:3rem;margin-bottom:12px}
   </style>
 </head>
 <body>
@@ -120,6 +83,7 @@
     <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
     <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
     <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
+    <a class="nav-item" href="./ocorrencias.html"><span class="icon">🚨</span> Ocorrencias</a>
     <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
     <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
     <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
@@ -136,35 +100,47 @@
 
 <div class="main">
   <div class="topbar">
-    <div>
-      <h2>🔔 Notificacoes</h2>
+    <div><h2>🔔 Notificacoes</h2></div>
+    <div class="topbar-actions">
+      <button class="btn-limpar" onclick="marcarTodasLidas()">✅ Marcar todas como lidas</button>
+      <button class="btn-limpar" onclick="limparLidas()" style="color:rgba(248,113,113,.7);border-color:rgba(248,113,113,.2)">🗑️ Limpar lidas</button>
     </div>
-    <div class="topbar-right">
-      <span class="total-badge" id="badgeNaoLidas">0 nao lidas</span>
-      <button class="btn-marcar" onclick="marcarTodasLidas()">✔ Marcar todas como lidas</button>
-      <button class="btn-limpar" onclick="limparTodas()">🗑️ Limpar todas</button>
+  </div>
+
+  <!-- RESUMO -->
+  <div class="resumo-grid">
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-total"   style="color:#e2e8f0">0</div>
+      <div class="rc-label">Total</div>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-nao-lidas" style="color:#00d4ff">0</div>
+      <div class="rc-label">Nao Lidas</div>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-urgentes" style="color:#f87171">0</div>
+      <div class="rc-label">Urgentes</div>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-avisos"  style="color:#fbbf24">0</div>
+      <div class="rc-label">Avisos</div>
     </div>
   </div>
 
   <!-- FILTROS -->
   <div class="filtros">
-    <button class="filtro-btn active" onclick="filtrar('todos', this)">Todas</button>
-    <button class="filtro-btn" onclick="filtrar('nao-lida', this)">Nao Lidas</button>
-    <button class="filtro-btn" onclick="filtrar('alerta', this)">⚠️ Alertas</button>
-    <button class="filtro-btn" onclick="filtrar('lembrete', this)">📌 Lembretes</button>
-    <button class="filtro-btn" onclick="filtrar('sucesso', this)">✅ Sucesso</button>
-    <button class="filtro-btn" onclick="filtrar('info', this)">ℹ️ Informacoes</button>
-    <button class="filtro-btn" onclick="filtrar('sistema', this)">⚙️ Sistema</button>
+    <button class="filtro-btn active" id="fn-todos"    onclick="filtrarNotif('todos',this)">Todas</button>
+    <button class="filtro-btn"        id="fn-nao-lida" onclick="filtrarNotif('nao-lida',this)">🔵 Nao Lidas</button>
+    <button class="filtro-btn"        id="fn-urgente"  onclick="filtrarNotif('urgente',this)">🔴 Urgentes</button>
+    <button class="filtro-btn"        id="fn-aviso"    onclick="filtrarNotif('aviso',this)">🟡 Avisos</button>
+    <button class="filtro-btn"        id="fn-info"     onclick="filtrarNotif('info',this)">🔷 Info</button>
+    <button class="filtro-btn"        id="fn-sucesso"  onclick="filtrarNotif('sucesso',this)">🟢 Sucesso</button>
   </div>
 
-  <!-- LISTA -->
-  <div class="lista" id="lista"></div>
-
-  <!-- EMPTY STATE -->
-  <div class="empty-state" id="emptyState">
+  <div class="notif-lista" id="notifLista"></div>
+  <div class="empty-state" id="emptyState" style="display:none">
     <div>🔔</div>
-    <p>Nenhuma notificacao encontrada</p>
-    <span>Quando houver novos alertas, eles aparecerao aqui.</span>
+    <p>Nenhuma notificacao encontrada.</p>
   </div>
 </div>
 
@@ -173,203 +149,206 @@
 var userData = localStorage.getItem('safenr_user');
 if (!userData) { window.location.href = './index.html'; }
 var user = JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent  = user.nome || 'Usuario';
-document.getElementById('avatarLetra').textContent  = (user.nome || 'U')[0].toUpperCase();
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
+document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
 function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
 
-/* ── DADOS ── */
-var STORAGE_KEY = 'safenr_notificacoes';
+/* ── MOTOR DE NOTIFICAÇÕES ── */
+var filtroAtivo = 'todos';
 
-var notificacoesDefault = [
-  {
-    id: 1, tipo: 'alerta', lida: false,
-    titulo: 'Risco Detectado',
-    texto: 'Falta de EPI identificada na inspecao de seguranca do setor de Producao.',
-    tempo: 'ha 2 horas', grupo: 'Hoje'
-  },
-  {
-    id: 2, tipo: 'lembrete', lida: false,
-    titulo: 'Lembrete: Inspecao Pendente',
-    texto: 'Voce tem uma inspecao agendada para hoje as 14:00 no setor Almoxarifado.',
-    tempo: 'ha 4 horas', grupo: 'Hoje'
-  },
-  {
-    id: 3, tipo: 'sucesso', lida: false,
-    titulo: 'Relatorio Concluido',
-    texto: 'Seu relatorio mensal de inspecoes foi gerado com sucesso e esta disponivel.',
-    tempo: 'ha 1 dia', grupo: 'Ontem'
-  },
-  {
-    id: 4, tipo: 'info', lida: true,
-    titulo: 'Atualizacao de NR',
-    texto: 'Nova versao da NR-6 disponivel na Biblioteca de Normas. Confira as mudancas.',
-    tempo: 'ha 2 dias', grupo: 'Ontem'
-  },
-  {
-    id: 5, tipo: 'alerta', lida: false,
-    titulo: 'CA de EPI Vencendo',
-    texto: 'O Certificado de Aprovacao do Capacete MSA V-Gard vence em 15 dias.',
-    tempo: 'ha 3 dias', grupo: 'Esta semana'
-  },
-  {
-    id: 6, tipo: 'sistema', lida: true,
-    titulo: 'Backup Realizado',
-    texto: 'O backup automatico dos dados foi realizado com sucesso.',
-    tempo: 'ha 5 dias', grupo: 'Esta semana'
-  },
-  {
-    id: 7, tipo: 'lembrete', lida: false,
-    titulo: 'Treinamento Agendado',
-    texto: 'Treinamento de NR-35 (Trabalho em Altura) agendado para proxima segunda-feira.',
-    tempo: 'ha 6 dias', grupo: 'Esta semana'
-  }
-];
+function gerarNotificacoes() {
+  var notifs   = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
+  var lidas    = new Set(notifs.filter(function(n){ return n.lida; }).map(function(n){ return n.autoId; }));
+  var geradas  = new Set(notifs.map(function(n){ return n.autoId; }));
+  var hoje     = new Date(); hoje.setHours(0,0,0,0);
+  var novas    = [];
 
-function carregarDados() {
-  var salvo = localStorage.getItem(STORAGE_KEY);
-  return salvo ? JSON.parse(salvo) : notificacoesDefault;
+  /* ── EPIs vencendo ── */
+  var colabs = JSON.parse(localStorage.getItem('safenr_colaboradores') || '[]');
+  colabs.forEach(function(c) {
+    (c.epis || []).forEach(function(epi) {
+      if (!epi.validade) return;
+      var val  = new Date(epi.validade + 'T00:00:00');
+      var diff = (val - hoje) / 86400000;
+      var aid  = 'epi_' + c.id + '_' + epi.nome;
+      if (geradas.has(aid)) return;
+      if (diff < 0) {
+        novas.push({ autoId: aid, tipo: 'urgente', icone: '🦺', titulo: 'EPI Vencido: ' + epi.nome, msg: 'O EPI ' + epi.nome + ' do colaborador ' + c.nome + ' venceu em ' + fmt(epi.validade) + '.', tag: 'urgente', link: './colaboradores.html', lida: lidas.has(aid), data: new Date().toISOString() });
+      } else if (diff <= 30) {
+        novas.push({ autoId: aid, tipo: 'aviso', icone: '🦺', titulo: 'EPI Vence em ' + Math.round(diff) + ' dias: ' + epi.nome, msg: 'O EPI ' + epi.nome + ' do colaborador ' + c.nome + ' vence em ' + fmt(epi.validade) + '.', tag: 'aviso', link: './colaboradores.html', lida: lidas.has(aid), data: new Date().toISOString() });
+      }
+    });
+  });
+
+  /* ── Treinamentos vencendo ── */
+  var treins = JSON.parse(localStorage.getItem('safenr_treinamentos') || '[]');
+  treins.forEach(function(t) {
+    if (!t.dataVal) return;
+    var val  = new Date(t.dataVal + 'T00:00:00');
+    var diff = (val - hoje) / 86400000;
+    var aid  = 'trein_' + t.id;
+    if (geradas.has(aid)) return;
+    if (diff < 0) {
+      novas.push({ autoId: aid, tipo: 'urgente', icone: '🎓', titulo: 'Treinamento Vencido: ' + t.nome, msg: 'O treinamento "' + t.nome + '" venceu em ' + fmt(t.dataVal) + '. Providencie a renovacao.', tag: 'urgente', link: './treinamentos.html', lida: lidas.has(aid), data: new Date().toISOString() });
+    } else if (diff <= 30) {
+      novas.push({ autoId: aid, tipo: 'aviso', icone: '🎓', titulo: 'Treinamento Vence em ' + Math.round(diff) + ' dias', msg: '"' + t.nome + '" — vence em ' + fmt(t.dataVal) + '.', tag: 'aviso', link: './treinamentos.html', lida: lidas.has(aid), data: new Date().toISOString() });
+    }
+  });
+
+  /* ── Riscos críticos sem medida de controle ── */
+  var riscos = JSON.parse(localStorage.getItem('safenr_riscos') || '[]');
+  riscos.filter(function(r){ return r.nivel === 'critico' && !r.medida; }).forEach(function(r) {
+    var aid = 'risco_sem_medida_' + r.id;
+    if (geradas.has(aid)) return;
+    novas.push({ autoId: aid, tipo: 'urgente', icone: '⚠️', titulo: 'Risco Critico sem Medida de Controle', msg: 'O risco "' + r.descricao + '" no setor ' + r.setor + ' esta classificado como CRITICO mas nao possui medida de controle definida.', tag: 'urgente', link: './riscos.html', lida: false, data: new Date().toISOString() });
+  });
+
+  /* ── Inspeções pendentes há mais de 30 dias ── */
+  var insp = JSON.parse(localStorage.getItem('safenr_inspecoes') || '[]');
+  insp.filter(function(i){ return i.status === 'pendente'; }).forEach(function(i) {
+    if (!i.data) return;
+    var d    = new Date(i.data + 'T00:00:00');
+    var diff = (hoje - d) / 86400000;
+    if (diff < 30) return;
+    var aid = 'insp_pendente_' + i.id;
+    if (geradas.has(aid)) return;
+    novas.push({ autoId: aid, tipo: 'aviso', icone: '🔍', titulo: 'Inspecao pendente ha ' + Math.round(diff) + ' dias', msg: '"' + (i.titulo || i.local || 'Inspecao') + '" esta pendente desde ' + fmt(i.data) + '.', tag: 'aviso', link: './inspecoes.html', lida: false, data: new Date().toISOString() });
+  });
+
+  /* ── Ocorrências sem plano de ação ── */
+  var ocorr = JSON.parse(localStorage.getItem('safenr_ocorrencias') || '[]');
+  ocorr.filter(function(o){ return (o.tipo==='acidente'||o.tipo==='grave') && !o.acao; }).forEach(function(o) {
+    var aid = 'ocorr_sem_acao_' + o.id;
+    if (geradas.has(aid)) return;
+    novas.push({ autoId: aid, tipo: 'urgente', icone: '🚨', titulo: 'Acidente sem Plano de Acao', msg: 'A ocorrencia de ' + o.colaborador + ' em ' + fmt(o.data) + ' nao possui medida corretiva registrada.', tag: 'urgente', link: './ocorrencias.html', lida: false, data: new Date().toISOString() });
+  });
+
+  /* Merge: mantém lidas antigas + adiciona novas */
+  var final = notifs.filter(function(n){ return !novas.some(function(v){ return v.autoId === n.autoId; }); }).concat(novas);
+  /* Ordena: não lidas primeiro, depois por data */
+  final.sort(function(a, b) {
+    if (!a.lida && b.lida) return -1;
+    if (a.lida && !b.lida) return 1;
+    return new Date(b.data) - new Date(a.data);
+  });
+  localStorage.setItem('safenr_notificacoes', JSON.stringify(final));
+  return final;
 }
 
-function salvarDados(dados) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
-}
+function fmt(d) { if (!d) return '--'; var p = d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
 
-var notificacoes = carregarDados();
-var filtroAtivo  = 'todos';
-
-/* ── ÍCONES E LABELS ── */
-var icones = {
-  alerta:   '⚠️',
-  lembrete: '📌',
-  sucesso:  '✅',
-  info:     'ℹ️',
-  sistema:  '⚙️'
-};
-
-var labels = {
-  alerta:   'Alerta',
-  lembrete: 'Lembrete',
-  sucesso:  'Sucesso',
-  info:     'Informacao',
-  sistema:  'Sistema'
-};
-
-/* ── FILTRO ── */
-function filtrar(tipo, btn) {
+function filtrarNotif(tipo, btn) {
   filtroAtivo = tipo;
-  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.filtro-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   renderizar();
 }
 
-/* ── RENDERIZAR ── */
+function atualizarContadores(lista) {
+  document.getElementById('cnt-total').textContent     = lista.length;
+  document.getElementById('cnt-nao-lidas').textContent = lista.filter(function(n){ return !n.lida; }).length;
+  document.getElementById('cnt-urgentes').textContent  = lista.filter(function(n){ return n.tipo === 'urgente'; }).length;
+  document.getElementById('cnt-avisos').textContent    = lista.filter(function(n){ return n.tipo === 'aviso'; }).length;
+}
+
 function renderizar() {
-  var lista = document.getElementById('lista');
-  var empty = document.getElementById('emptyState');
-  lista.innerHTML = '';
-
-  var dados = notificacoes.filter(function(n) {
+  var todas   = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
+  var lista   = todas.filter(function(n) {
+    if (filtroAtivo === 'todos')    return true;
     if (filtroAtivo === 'nao-lida') return !n.lida;
-    if (filtroAtivo !== 'todos')    return n.tipo === filtroAtivo;
-    return true;
+    return n.tipo === filtroAtivo;
   });
-
-  atualizarBadge();
-
-  if (dados.length === 0) {
-    empty.style.display = 'block';
-    return;
-  }
+  atualizarContadores(todas);
+  var container = document.getElementById('notifLista');
+  var empty     = document.getElementById('emptyState');
+  container.innerHTML = '';
+  if (lista.length === 0) { empty.style.display = 'block'; return; }
   empty.style.display = 'none';
-
-  // Agrupar por grupo
-  var grupos = [];
-  var mapaGrupos = {};
-  dados.forEach(function(n) {
-    var g = n.grupo || 'Outros';
-    if (!mapaGrupos[g]) { mapaGrupos[g] = []; grupos.push(g); }
-    mapaGrupos[g].push(n);
-  });
-
-  grupos.forEach(function(grupo) {
-    // Separador de data
-    var sep = document.createElement('div');
-    sep.className = 'data-sep';
-    sep.textContent = grupo;
-    lista.appendChild(sep);
-
-    mapaGrupos[grupo].forEach(function(n) {
-      var card = document.createElement('div');
-      card.className = 'notif-card ' + n.tipo + (n.lida ? '' : ' nao-lida');
-      card.id = 'notif-' + n.id;
-      card.innerHTML =
-        '<div class="notif-dot"></div>' +
-        '<div class="notif-icone">' + (icones[n.tipo] || '🔔') + '</div>' +
-        '<div class="notif-corpo">' +
-          '<h4>' + n.titulo + '</h4>' +
-          '<p>' + n.texto + '</p>' +
-          '<div class="notif-meta">' +
-            '<span class="notif-tempo">' + n.tempo + '</span>' +
-            '<span class="notif-tag">' + (labels[n.tipo] || n.tipo) + '</span>' +
-          '</div>' +
+  lista.forEach(function(n) {
+    var div = document.createElement('div');
+    div.className = 'notif-item ' + n.tipo + (n.lida ? '' : ' nao-lida');
+    div.innerHTML =
+      '<div class="notif-icone">' + (n.icone || '🔔') + '</div>' +
+      '<div class="notif-corpo">' +
+        '<div class="notif-titulo">' +
+          (!n.lida ? '<span class="ponto"></span>' : '') +
+          n.titulo +
         '</div>' +
-        '<div class="notif-acoes">' +
-          '<button class="btn-fechar" onclick="remover(' + n.id + ')" title="Remover">✕</button>' +
-          (!n.lida
-            ? '<button class="btn-lida" onclick="marcarLida(' + n.id + ')">✔ lida</button>'
-            : '') +
-        '</div>';
-      lista.appendChild(card);
-    });
+        '<div class="notif-msg">' + n.msg + '</div>' +
+        '<div class="notif-meta">' +
+          '<span class="tag tag-' + n.tipo + '">' + n.tipo + '</span>' +
+          '<span>' + fmtDT(n.data) + '</span>' +
+          (n.link ? '<a href="' + n.link + '" style="color:#00d4ff;font-size:.75rem">→ Ver</a>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="notif-acoes">' +
+        (!n.lida ? '<button class="btn-notif" onclick="marcarLida(\'' + n.autoId + '\')" title="Marcar como lida">✓</button>' : '<span style="color:rgba(255,255,255,.2);font-size:.75rem;padding:6px">✓ Lida</span>') +
+        '<button class="btn-notif" onclick="removerNotif(\'' + n.autoId + '\')" title="Remover" style="color:rgba(248,113,113,.6)">✕</button>' +
+      '</div>';
+    container.appendChild(div);
   });
 }
 
-/* ── AÇÕES ── */
-function remover(id) {
-  var card = document.getElementById('notif-' + id);
-  if (card) {
-    card.classList.add('removendo');
-    setTimeout(function() {
-      notificacoes = notificacoes.filter(function(n) { return n.id !== id; });
-      salvarDados(notificacoes);
-      renderizar();
-    }, 280);
-  }
+function fmtDT(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
 }
 
-function marcarLida(id) {
-  var n = notificacoes.find(function(x) { return x.id === id; });
-  if (n) { n.lida = true; salvarDados(notificacoes); renderizar(); }
+function marcarLida(autoId) {
+  var notifs = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
+  var idx = notifs.findIndex(function(n){ return n.autoId === autoId; });
+  if (idx >= 0) { notifs[idx].lida = true; localStorage.setItem('safenr_notificacoes', JSON.stringify(notifs)); }
+  renderizar();
+  atualizarBadgeSidebar();
 }
 
 function marcarTodasLidas() {
-  notificacoes.forEach(function(n) { n.lida = true; });
-  salvarDados(notificacoes);
+  var notifs = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
+  notifs.forEach(function(n){ n.lida = true; });
+  localStorage.setItem('safenr_notificacoes', JSON.stringify(notifs));
+  renderizar();
+  atualizarBadgeSidebar();
+}
+
+function removerNotif(autoId) {
+  var notifs = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
+  notifs = notifs.filter(function(n){ return n.autoId !== autoId; });
+  localStorage.setItem('safenr_notificacoes', JSON.stringify(notifs));
+  renderizar();
+  atualizarBadgeSidebar();
+}
+
+function limparLidas() {
+  if (!confirm('Remover todas as notificacoes ja lidas?')) return;
+  var notifs = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
+  notifs = notifs.filter(function(n){ return !n.lida; });
+  localStorage.setItem('safenr_notificacoes', JSON.stringify(notifs));
   renderizar();
 }
 
-function limparTodas() {
-  if (!confirm('Remover todas as notificacoes?')) return;
-  notificacoes = [];
-  salvarDados(notificacoes);
-  renderizar();
-}
-
-function atualizarBadge() {
-  var naoLidas = notificacoes.filter(function(n) { return !n.lida; }).length;
-  var badge = document.getElementById('badgeNaoLidas');
-  badge.textContent = naoLidas + (naoLidas === 1 ? ' nao lida' : ' nao lidas');
-  badge.style.background = naoLidas > 0
-    ? 'rgba(248,113,113,.15)'
-    : 'rgba(0,212,255,.12)';
-  badge.style.borderColor = naoLidas > 0
-    ? 'rgba(248,113,113,.3)'
-    : 'rgba(0,212,255,.25)';
-  badge.style.color = naoLidas > 0 ? '#f87171' : '#00d4ff';
+function atualizarBadgeSidebar() {
+  var notifs  = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
+  var naoLidas= notifs.filter(function(n){ return !n.lida; }).length;
+  var link    = document.querySelector('a[href="./notificacoes.html"]');
+  if (!link) return;
+  var badge   = link.querySelector('.notif-badge');
+  if (naoLidas > 0) {
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'notif-badge';
+      badge.style.cssText = 'background:#f87171;color:#fff;border-radius:20px;padding:1px 7px;font-size:.65rem;font-weight:700;margin-left:auto';
+      link.appendChild(badge);
+    }
+    badge.textContent = naoLidas;
+  } else if (badge) {
+    badge.remove();
+  }
 }
 
 /* ── INIT ── */
+gerarNotificacoes();
 renderizar();
+atualizarBadgeSidebar();
 </script>
 </body>
 </html>
