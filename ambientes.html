@@ -1,1 +1,505 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SafeNR — Ambientes</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;z-index:10}
+    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
+    .sidebar-logo h1 span{color:#00d4ff}
+    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
+    .nav{flex:1;padding:20px 0;overflow-y:auto}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
+    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
+    .notif-badge{background:#f87171;color:#fff;border-radius:20px;padding:1px 7px;font-size:.65rem;font-weight:700;margin-left:auto}
+    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+    .user-info p{font-size:.82rem;font-weight:600}
+    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
+    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .topbar h2{font-size:1.4rem;font-weight:700}
+    .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
+    .btn-novo{background:linear-gradient(135deg,#22d3ee,#0891b2);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
+    .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
+
+    /* RESUMO */
+    .resumo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+    .resumo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;text-align:center;transition:all .2s}
+    .resumo-card:hover{background:rgba(255,255,255,.06)}
+    .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
+    .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+
+    /* FILTROS */
+    .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+    .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
+    .filtro-btn:hover,.filtro-btn.active{background:rgba(34,211,238,.12);border-color:#22d3ee;color:#22d3ee}
+    .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:240px;margin-left:auto}
+    .busca-input::placeholder{color:rgba(255,255,255,.3)}
+    .busca-input:focus{border-color:#22d3ee}
+
+    /* CARDS */
+    .amb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+    .amb-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;transition:all .2s}
+    .amb-card:hover{background:rgba(255,255,255,.06);transform:translateY(-2px)}
+    .amb-card-header{padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:flex-start;gap:14px}
+    .amb-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#22d3ee,#0891b2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+    .amb-header-info{flex:1}
+    .amb-nome{font-size:.95rem;font-weight:700;margin-bottom:3px}
+    .amb-local{font-size:.75rem;color:rgba(255,255,255,.4)}
+    .amb-card-body{padding:14px 20px}
+    .amb-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+    .amb-stat{text-align:center;background:rgba(255,255,255,.04);border-radius:8px;padding:8px}
+    .amb-stat-val{font-size:1.1rem;font-weight:800;margin-bottom:2px}
+    .amb-stat-lab{font-size:.65rem;color:rgba(255,255,255,.35);font-weight:600;text-transform:uppercase}
+    .sec-titulo{font-size:.7rem;font-weight:800;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+    .tags-wrap{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+    .tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:600;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:rgba(255,255,255,.6)}
+    .tag.risco-fisico   {background:rgba(251,146,60,.12);border-color:#fb923c;color:#fb923c}
+    .tag.risco-quimico  {background:rgba(167,139,250,.12);border-color:#a78bfa;color:#a78bfa}
+    .tag.risco-biologico{background:rgba(74,222,128,.12);border-color:#4ade80;color:#4ade80}
+    .tag.risco-ergonomico{background:rgba(251,191,36,.12);border-color:#fbbf24;color:#fbbf24}
+    .tag.risco-acidente {background:rgba(248,113,113,.12);border-color:#f87171;color:#f87171}
+    .tag.epi-tag        {background:rgba(34,211,238,.08);border-color:#22d3ee;color:#22d3ee}
+    .amb-acoes{display:flex;gap:8px;padding:0 20px 16px}
+    .btn-ac{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);cursor:pointer;padding:7px 14px;border-radius:8px;font-size:.8rem;color:rgba(255,255,255,.6);transition:all .2s;flex:1;text-align:center}
+    .btn-ac:hover{background:rgba(255,255,255,.1);color:#fff}
+    .nivel-badge{padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700}
+    .nivel-badge.critico  {background:rgba(248,113,113,.2);color:#f87171}
+    .nivel-badge.alto     {background:rgba(251,146,60,.2);color:#fb923c}
+    .nivel-badge.medio    {background:rgba(251,191,36,.2);color:#fbbf24}
+    .nivel-badge.baixo    {background:rgba(74,222,128,.2);color:#4ade80}
+    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3);grid-column:1/-1}
+    .empty-state div{font-size:3rem;margin-bottom:12px}
+
+    /* MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
+    .modal-overlay.open{display:flex}
+    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:680px;max-height:92vh;overflow-y:auto}
+    .modal h3{font-size:1.2rem;font-weight:700;margin-bottom:24px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+    .form-row.full{grid-template-columns:1fr}
+    .form-row.tri{grid-template-columns:1fr 1fr 1fr}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group label{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.55)}
+    .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;color:#fff;font-size:.9rem;outline:none;transition:border .2s;font-family:inherit;width:100%}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#22d3ee}
+    .form-group select option{background:#1a2535}
+    .form-group textarea{resize:vertical;min-height:70px}
+    .auto-field{background:rgba(0,212,255,.06)!important;border-color:rgba(0,212,255,.2)!important;color:rgba(255,255,255,.6)!important;cursor:not-allowed!important}
+    .auto-tag{font-size:.68rem;color:#00d4ff;background:rgba(0,212,255,.1);border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:600}
+    .secao-titulo{font-size:.78rem;font-weight:800;color:#22d3ee;text-transform:uppercase;letter-spacing:1px;margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid rgba(34,211,238,.15)}
+    .check-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
+    .check-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;cursor:pointer;transition:all .2s}
+    .check-item:hover{background:rgba(255,255,255,.07)}
+    .check-item input[type=checkbox]{accent-color:#22d3ee;width:15px;height:15px;cursor:pointer}
+    .check-item label{font-size:.8rem;cursor:pointer;flex:1}
+    .tag-linha{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:8px;align-items:end}
+    .btn-add-tag{background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.25);color:#22d3ee;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.82rem;font-weight:600;transition:all .2s;width:100%;margin-top:4px}
+    .btn-add-tag:hover{background:rgba(34,211,238,.22)}
+    .btn-rem{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);color:#f87171;border-radius:8px;padding:10px;cursor:pointer;font-size:.85rem}
+    .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
+    .btn-cancelar{padding:12px 24px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
+    .btn-salvar{padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#22d3ee,#0891b2);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
+    .detalhe-row{display:flex;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .detalhe-row:last-child{border-bottom:none}
+    .detalhe-label{font-size:.78rem;color:rgba(255,255,255,.4);min-width:160px;font-weight:600}
+    .detalhe-valor{font-size:.88rem;color:#fff;flex:1}
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Safe<span>NR</span></h1>
+    <p>Gestao de Seguranca do Trabalho</p>
+  </div>
+  <nav class="nav">
+    <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
+    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
+    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
+    <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
+    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
+    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
+    <a class="nav-item" href="./ocorrencias.html"><span class="icon">🚨</span> Ocorrencias</a>
+    <a class="nav-item" href="./plano-acao.html"><span class="icon">📌</span> Plano de Acao</a>
+    <a class="nav-item" href="./documentos.html"><span class="icon">🗂️</span> Documentos SST</a>
+    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
+    <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
+    <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
+    <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a class="nav-item active" href="./ambientes.html"><span class="icon">🏭</span> Ambientes</a>
+    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
+    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="avatar" id="avatarLetra">A</div>
+    <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
+    <button class="btn-sair" onclick="sair()">✕</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div><h2>🏭 Ambientes / Setores</h2><span id="totalRegistros">0 ambientes</span></div>
+    <button class="btn-novo" onclick="abrirModal()">+ Novo Ambiente</button>
+  </div>
+
+  <div class="resumo-grid">
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-total"  style="color:#22d3ee">0</div>
+      <div class="rc-label">Total</div>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-critico"style="color:#f87171">0</div>
+      <div class="rc-label">Risco Critico</div>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-colabs" style="color:#a78bfa">0</div>
+      <div class="rc-label">Colaboradores</div>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-epis"   style="color:#fbbf24">0</div>
+      <div class="rc-label">EPIs Vinculados</div>
+    </div>
+  </div>
+
+  <div class="filtros">
+    <button class="filtro-btn active" id="fb-todos"onclick="filtrar('',this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('critico',this)">🔴 Critico</button>
+    <button class="filtro-btn" onclick="filtrar('alto',this)">🟠 Alto</button>
+    <button class="filtro-btn" onclick="filtrar('medio',this)">🟡 Medio</button>
+    <button class="filtro-btn" onclick="filtrar('baixo',this)">🟢 Baixo</button>
+    <input class="busca-input" type="text" placeholder="🔎 Buscar ambiente..." oninput="renderizar(getLista())"/>
+  </div>
+
+  <div class="amb-grid" id="ambGrid"></div>
+</div>
+
+<!-- MODAL FORM -->
+<div class="modal-overlay" id="modalForm">
+  <div class="modal">
+    <h3 id="modalTitulo">🏭 Novo Ambiente / Setor</h3>
+
+    <div class="secao-titulo">Identificacao</div>
+    <div class="form-row full">
+      <div class="form-group"><label>Nome do Ambiente / Setor *</label><input type="text" id="f_nome" placeholder="Ex: Linha de Producao 1, Almoxarifado..."/></div>
+    </div>
+    <div class="form-row tri">
+      <div class="form-group">
+        <label>Tipo</label>
+        <select id="f_tipo">
+          <option value="producao">Producao</option>
+          <option value="administrativo">Administrativo</option>
+          <option value="almoxarifado">Almoxarifado</option>
+          <option value="manutencao">Manutencao</option>
+          <option value="laboratorio">Laboratorio</option>
+          <option value="externo">Area Externa</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Nivel de Risco Geral *</label>
+        <select id="f_nivel">
+          <option value="baixo">Baixo</option>
+          <option value="medio">Medio</option>
+          <option value="alto">Alto</option>
+          <option value="critico">Critico</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>N° Colaboradores</label>
+        <input type="number" id="f_nColabs" min="0" placeholder="0"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Responsavel pelo Setor</label><input type="text" id="f_resp" placeholder="Nome do responsavel" list="listaColabs"/><datalist id="listaColabs"></datalist></div>
+      <div class="form-group"><label>Localizacao / Bloco</label><input type="text" id="f_local" placeholder="Ex: Bloco A, Predio 2"/></div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group"><label>Descricao das Atividades</label><textarea id="f_desc" placeholder="Descreva as principais atividades realizadas neste ambiente..."></textarea></div>
+    </div>
+
+    <div class="secao-titulo">Agentes de Risco Presentes</div>
+    <div class="check-grid" id="checkRiscos">
+      <div class="check-item"><input type="checkbox" id="r_ruido"     /><label for="r_ruido"     >🔊 Ruido</label></div>
+      <div class="check-item"><input type="checkbox" id="r_calor"     /><label for="r_calor"     >🌡️ Calor</label></div>
+      <div class="check-item"><input type="checkbox" id="r_vibracao"  /><label for="r_vibracao"  >〰️ Vibracao</label></div>
+      <div class="check-item"><input type="checkbox" id="r_poeira"    /><label for="r_poeira"    >🌫️ Poeira</label></div>
+      <div class="check-item"><input type="checkbox" id="r_quimico"   /><label for="r_quimico"   >⚗️ Quimicos</label></div>
+      <div class="check-item"><input type="checkbox" id="r_biologico" /><label for="r_biologico" >🦠 Biologico</label></div>
+      <div class="check-item"><input type="checkbox" id="r_altura"    /><label for="r_altura"    >🧗 Altura</label></div>
+      <div class="check-item"><input type="checkbox" id="r_eletrico"  /><label for="r_eletrico"  >⚡ Eletrico</label></div>
+      <div class="check-item"><input type="checkbox" id="r_ergonomico"/><label for="r_ergonomico">🪑 Ergonomico</label></div>
+      <div class="check-item"><input type="checkbox" id="r_incendio"  /><label for="r_incendio"  >🔥 Incendio</label></div>
+      <div class="check-item"><input type="checkbox" id="r_maquinas"  /><label for="r_maquinas"  >⚙️ Maquinas</label></div>
+      <div class="check-item"><input type="checkbox" id="r_pressao"   /><label for="r_pressao"   >🔵 Pressao</label></div>
+    </div>
+
+    <div class="secao-titulo">EPIs Obrigatorios para este Ambiente</div>
+    <div id="episLinhas"></div>
+    <button class="btn-add-tag" onclick="addEpiLinha()">+ Adicionar EPI Obrigatorio</button>
+
+    <div class="secao-titulo">NRs Aplicaveis</div>
+    <div class="check-grid" id="checkNRs">
+      <div class="check-item"><input type="checkbox" id="nr1" /><label for="nr1" >NR-1 Geral</label></div>
+      <div class="check-item"><input type="checkbox" id="nr4" /><label for="nr4" >NR-4 SESMT</label></div>
+      <div class="check-item"><input type="checkbox" id="nr5" /><label for="nr5" >NR-5 CIPA</label></div>
+      <div class="check-item"><input type="checkbox" id="nr6" /><label for="nr6" >NR-6 EPI</label></div>
+      <div class="check-item"><input type="checkbox" id="nr7" /><label for="nr7" >NR-7 PCMSO</label></div>
+      <div class="check-item"><input type="checkbox" id="nr9" /><label for="nr9" >NR-9 Riscos Amb.</label></div>
+      <div class="check-item"><input type="checkbox" id="nr10"/><label for="nr10">NR-10 Eletrica</label></div>
+      <div class="check-item"><input type="checkbox" id="nr11"/><label for="nr11">NR-11 Transporte</label></div>
+      <div class="check-item"><input type="checkbox" id="nr12"/><label for="nr12">NR-12 Maquinas</label></div>
+      <div class="check-item"><input type="checkbox" id="nr15"/><label for="nr15">NR-15 Insalub.</label></div>
+      <div class="check-item"><input type="checkbox" id="nr17"/><label for="nr17">NR-17 Ergonomia</label></div>
+      <div class="check-item"><input type="checkbox" id="nr35"/><label for="nr35">NR-35 Altura</label></div>
+    </div>
+
+    <div class="form-row" style="margin-top:20px">
+      <div class="form-group"><label>Registrado por <span class="auto-tag">AUTO</span></label><input type="text" id="f_regPor" class="auto-field" readonly/></div>
+      <div class="form-group"><label>Registrado em <span class="auto-tag">AUTO</span></label><input type="text" id="f_regEm" class="auto-field" readonly/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-salvar"   onclick="salvar()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VER -->
+<div class="modal-overlay" id="modalVer">
+  <div class="modal">
+    <h3>🏭 Detalhes do Ambiente</h3>
+    <div id="modalVerConteudo"></div>
+    <div class="modal-footer"><button class="btn-cancelar" onclick="fecharVer()">Fechar</button></div>
+  </div>
+</div>
+
+<script>
+var userData=localStorage.getItem('safenr_user');
+if(!userData){window.location.href='./index.html';}
+var user=JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent=user.nome||'Usuario';
+document.getElementById('avatarLetra').textContent=(user.nome||'U')[0].toUpperCase();
+function sair(){localStorage.removeItem('safenr_user');window.location.href='./index.html';}
+
+var registros  =JSON.parse(localStorage.getItem('safenr_ambientes')||'[]');
+var editandoId =null;
+var filtroAtivo='';
+function salvarStorage(){localStorage.setItem('safenr_ambientes',JSON.stringify(registros));}
+
+var RISCOS_IDS=['ruido','calor','vibracao','poeira','quimico','biologico','altura','eletrico','ergonomico','incendio','maquinas','pressao'];
+var NRS_IDS   =['nr1','nr4','nr5','nr6','nr7','nr9','nr10','nr11','nr12','nr15','nr17','nr35'];
+
+function fmt(d){if(!d)return'--';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function fmtDT(iso){if(!iso)return'--';return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
+
+function getLista(){
+  var busca=document.querySelector('.busca-input').value.toLowerCase();
+  return registros.filter(function(r){
+    if(filtroAtivo&&r.nivel!==filtroAtivo)return false;
+    if(busca&&!(r.nome||'').toLowerCase().includes(busca)&&!(r.local||'').toLowerCase().includes(busca))return false;
+    return true;
+  });
+}
+
+function filtrar(s,btn){
+  filtroAtivo=s;
+  document.querySelectorAll('.filtro-btn').forEach(function(b){b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  renderizar(getLista());
+}
+
+function atualizarContadores(){
+  document.getElementById('cnt-total').textContent  =registros.length;
+  document.getElementById('cnt-critico').textContent=registros.filter(function(r){return r.nivel==='critico';}).length;
+  var totalColabs=registros.reduce(function(s,r){return s+(parseInt(r.nColabs)||0);},0);
+  document.getElementById('cnt-colabs').textContent =totalColabs;
+  var totalEpis=registros.reduce(function(s,r){return s+(r.epis||[]).length;},0);
+  document.getElementById('cnt-epis').textContent   =totalEpis;
+  document.getElementById('totalRegistros').textContent=registros.length+' ambiente(s)';
+}
+
+var nivelCor={critico:'#f87171',alto:'#fb923c',medio:'#fbbf24',baixo:'#4ade80'};
+var tipoIcone={producao:'🏭',administrativo:'🏢',almoxarifado:'📦',manutencao:'🔧',laboratorio:'🔬',externo:'🌳',outro:'🏗️'};
+
+function renderizar(lista){
+  var grid=document.getElementById('ambGrid');
+  grid.innerHTML='';
+  atualizarContadores();
+  if(lista.length===0){
+    grid.innerHTML='<div class="empty-state"><div>🏭</div><p>Nenhum ambiente cadastrado.<br>Clique em <strong>+ Novo Ambiente</strong>.</p></div>';
+    return;
+  }
+  lista.forEach(function(r){
+    var riscos=r.riscos||[];
+    var epis  =r.epis  ||[];
+    var nrs   =r.nrs   ||[];
+    var riscosHtml=riscos.length>0?riscos.map(function(rk){return'<span class="tag">'+rk+'</span>';}).join(''):'<span style="color:rgba(255,255,255,.2);font-size:.75rem">Nenhum mapeado</span>';
+    var episHtml  =epis.length>0  ?epis.map(function(e){return'<span class="tag epi-tag">🦺 '+e+'</span>';}).join(''):'<span style="color:rgba(255,255,255,.2);font-size:.75rem">Nenhum definido</span>';
+    var div=document.createElement('div');
+    div.className='amb-card';
+    div.innerHTML=
+      '<div class="amb-card-header">'+
+        '<div class="amb-icon">'+(tipoIcone[r.tipo]||'🏭')+'</div>'+
+        '<div class="amb-header-info">'+
+          '<div class="amb-nome">'+(r.nome||'--')+'</div>'+
+          '<div class="amb-local">'+(r.local||r.tipo||'--')+'</div>'+
+        '</div>'+
+        '<span class="nivel-badge '+(r.nivel||'baixo')+'">'+(r.nivel||'baixo')+'</span>'+
+      '</div>'+
+      '<div class="amb-card-body">'+
+        '<div class="amb-stat-row">'+
+          '<div class="amb-stat"><div class="amb-stat-val" style="color:#a78bfa">'+(r.nColabs||0)+'</div><div class="amb-stat-lab">Colabs</div></div>'+
+          '<div class="amb-stat"><div class="amb-stat-val" style="color:#f87171">'+riscos.length+'</div><div class="amb-stat-lab">Agentes</div></div>'+
+          '<div class="amb-stat"><div class="amb-stat-val" style="color:#22d3ee">'+epis.length+'</div><div class="amb-stat-lab">EPIs</div></div>'+
+        '</div>'+
+        (r.resp?'<div style="font-size:.76rem;color:rgba(255,255,255,.4);margin-bottom:10px">👤 Resp: <strong style="color:rgba(255,255,255,.6)">'+(r.resp)+'</strong></div>':'')+
+        '<div class="sec-titulo">Agentes de Risco</div>'+
+        '<div class="tags-wrap">'+(riscosHtml)+'</div>'+
+        '<div class="sec-titulo">EPIs Obrigatorios</div>'+
+        '<div class="tags-wrap">'+(episHtml  )+'</div>'+
+        (nrs.length>0?'<div class="sec-titulo">NRs</div><div class="tags-wrap">'+nrs.map(function(n){return'<span class="tag">'+n+'</span>';}).join('')+'</div>':'')+
+      '</div>'+
+      '<div class="amb-acoes">'+
+        '<button class="btn-ac" onclick="ver('+r.id+')">👁️ Ver</button>'+
+        '<button class="btn-ac" onclick="abrirModal('+r.id+')">✏️ Editar</button>'+
+        '<button class="btn-ac" onclick="excluir('+r.id+')" style="color:#f87171">🗑️</button>'+
+      '</div>';
+    grid.appendChild(div);
+  });
+}
+
+function addEpiLinha(val){
+  var div=document.getElementById('episLinhas');
+  var l=document.createElement('div');l.className='tag-linha';
+  l.innerHTML='<div class="form-group"><input type="text" class="epi-item" placeholder="Ex: Capacete, Luva de Corte..." value="'+(val||'')+'"/></div><button class="btn-rem" onclick="this.parentElement.remove()">✕</button>';
+  div.appendChild(l);
+}
+
+function getEpisForm(){return Array.from(document.querySelectorAll('#episLinhas .epi-item')).map(function(i){return i.value.trim();}).filter(Boolean);}
+
+function carregarColabs(){
+  var colabs=JSON.parse(localStorage.getItem('safenr_colaboradores')||'[]');
+  var dl=document.getElementById('listaColabs');dl.innerHTML='';
+  colabs.forEach(function(c){var o=document.createElement('option');o.value=c.nome;dl.appendChild(o);});
+}
+
+function abrirModal(id){
+  editandoId=id||null;
+  document.getElementById('modalTitulo').textContent=(id?'✏️ Editar':'🏭 Novo')+' Ambiente / Setor';
+  carregarColabs();
+  ['f_nome','f_resp','f_local','f_desc','f_nColabs'].forEach(function(f){document.getElementById(f).value='';});
+  document.getElementById('f_tipo').value ='producao';
+  document.getElementById('f_nivel').value='medio';
+  RISCOS_IDS.forEach(function(id){document.getElementById('r_'+id).checked=false;});
+  NRS_IDS.forEach(function(id){document.getElementById(id).checked=false;});
+  document.getElementById('episLinhas').innerHTML='';
+  document.getElementById('f_regPor').value=user.nome||'Usuario';
+  document.getElementById('f_regEm').value=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  if(id){
+    var r=registros.find(function(x){return x.id===id;});
+    document.getElementById('f_nome').value   =r.nome   ||'';
+    document.getElementById('f_tipo').value   =r.tipo   ||'producao';
+    document.getElementById('f_nivel').value  =r.nivel  ||'medio';
+    document.getElementById('f_nColabs').value=r.nColabs||0;
+    document.getElementById('f_resp').value   =r.resp   ||'';
+    document.getElementById('f_local').value  =r.local  ||'';
+    document.getElementById('f_desc').value   =r.desc   ||'';
+    (r.riscos||[]).forEach(function(rk){
+      var chk=document.getElementById('r_'+rk.toLowerCase().replace(/\s+/g,'').replace('ç','c').replace('ã','a'));
+      if(chk)chk.checked=true;
+    });
+    (r.nrs||[]).forEach(function(nr){
+      var id2=nr.toLowerCase().replace('-','').replace(' ','');
+      var chk=document.getElementById(id2);
+      if(chk)chk.checked=true;
+    });
+    (r.epis||[]).forEach(function(e){addEpiLinha(e);});
+    document.getElementById('f_regPor').value=r.registradoPor||user.nome;
+    document.getElementById('f_regEm').value =fmtDT(r.registradoEm);
+  }
+  document.getElementById('modalForm').classList.add('open');
+}
+
+function fecharModal(){document.getElementById('modalForm').classList.remove('open');editandoId=null;}
+
+function salvar(){
+  var nome=document.getElementById('f_nome').value.trim();
+  if(!nome){alert('Informe o nome do ambiente.');return;}
+  var riscos=RISCOS_IDS.filter(function(id){return document.getElementById('r_'+id).checked;})
+    .map(function(id){return document.getElementById('r_'+id).nextElementSibling.textContent.trim();});
+  var nrs=NRS_IDS.filter(function(id){return document.getElementById(id).checked;})
+    .map(function(id){return document.getElementById(id).nextElementSibling.textContent.trim();});
+  var dados={
+    nome:    nome,
+    tipo:    document.getElementById('f_tipo').value,
+    nivel:   document.getElementById('f_nivel').value,
+    nColabs: parseInt(document.getElementById('f_nColabs').value)||0,
+    resp:    document.getElementById('f_resp').value.trim(),
+    local:   document.getElementById('f_local').value.trim(),
+    desc:    document.getElementById('f_desc').value.trim(),
+    riscos:  riscos,
+    epis:    getEpisForm(),
+    nrs:     nrs
+  };
+  if(editandoId){
+    var idx=registros.findIndex(function(r){return r.id===editandoId;});
+    registros[idx]=Object.assign({},registros[idx],dados);
+  } else {
+    var nId=registros.length>0?Math.max.apply(null,registros.map(function(r){return r.id;}))+1:1;
+    registros.push(Object.assign({id:nId,registradoPor:user.nome||'Usuario',registradoEm:new Date().toISOString()},dados));
+  }
+  salvarStorage();fecharModal();renderizar(getLista());
+}
+
+function excluir(id){
+  if(!confirm('Excluir este ambiente?'))return;
+  registros=registros.filter(function(r){return r.id!==id;});
+  salvarStorage();renderizar(getLista());
+}
+
+function ver(id){
+  var r=registros.find(function(x){return x.id===id;});
+  function row(l,v){return'<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>';}
+  document.getElementById('modalVerConteudo').innerHTML=
+    row('Nome',         r.nome  ||'--')+
+    row('Tipo',         (tipoIcone[r.tipo]||'🏭')+' '+(r.tipo||'--'))+
+    row('Nivel de Risco','<span class="nivel-badge '+(r.nivel||'baixo')+'">'+(r.nivel||'--')+'</span>')+
+    row('N° Colaboradores',r.nColabs||0)+
+    row('Responsavel',  r.resp  ||'--')+
+    row('Localizacao',  r.local ||'--')+
+    row('Descricao',    r.desc  ||'--')+
+    row('Agentes de Risco',(r.riscos&&r.riscos.length>0?r.riscos.map(function(x){return'<span class="tag">'+x+'</span>';}).join(' '):'--'))+
+    row('EPIs Obrigatorios',(r.epis&&r.epis.length>0?r.epis.map(function(x){return'<span class="tag epi-tag">🦺 '+x+'</span>';}).join(' '):'--'))+
+    row('NRs Aplicaveis',(r.nrs&&r.nrs.length>0?r.nrs.join(', '):'--'))+
+    row('Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+
+    row('Registrado em', '<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
+  document.getElementById('modalVer').classList.add('open');
+}
+
+function fecharVer(){document.getElementById('modalVer').classList.remove('open');}
+document.getElementById('modalForm').addEventListener('click',function(e){if(e.target===this)fecharModal();});
+document.getElementById('modalVer').addEventListener('click', function(e){if(e.target===this)fecharVer();});
+
+(function(){
+  var n=JSON.parse(localStorage.getItem('safenr_notificacoes')||'[]');
+  var nl=n.filter(function(x){return!x.lida;}).length;
+  var link=document.querySelector('a[href="./notificacoes.html"]');
+  if(link&&nl>0){var b=document.createElement('span');b.className='notif-badge';b.textContent=nl;link.appendChild(b);}
+})();
+
+renderizar(getLista());
+</script>
+</body>
+</html>
