@@ -1,442 +1,406 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SafeNR — Login</title>
-  <link rel="manifest" href="manifest.json" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json"/>
+  <meta name="theme-color" content="#0f1923"/>
+  <link rel="apple-touch-icon" href="./icons/icon-192.png"/>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
+    /* Fundo animado */
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(0,212,255,.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(99,102,241,.06) 0%,transparent 60%);pointer-events:none}
 
-    /* Círculos decorativos de fundo */
-    body::before {
-      content: '';
-      position: absolute;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
-      top: -150px; left: -150px;
-      border-radius: 50%;
-      pointer-events: none;
-    }
+    .login-wrap{width:100%;max-width:440px}
 
-    body::after {
-      content: '';
-      position: absolute;
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(0,153,204,0.06) 0%, transparent 70%);
-      bottom: -100px; right: -100px;
-      border-radius: 50%;
-      pointer-events: none;
-    }
+    /* Logo */
+    .logo-area{text-align:center;margin-bottom:36px}
+    .logo-area h1{font-size:2.8rem;font-weight:900;letter-spacing:3px}
+    .logo-area h1 span{color:#00d4ff}
+    .logo-area p{font-size:.85rem;color:rgba(255,255,255,.35);margin-top:6px;letter-spacing:.5px}
 
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.12);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 24px;
-      padding: 48px 40px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
-      position: relative;
-      z-index: 1;
-      animation: fadeUp 0.5s ease;
-    }
+    /* Card */
+    .login-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:36px;backdrop-filter:blur(10px)}
+    .login-card h2{font-size:1.1rem;font-weight:700;margin-bottom:6px}
+    .login-card p.sub{font-size:.8rem;color:rgba(255,255,255,.35);margin-bottom:28px}
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    /* Perfil selector */
+    .perfil-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+    .perfil-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 8px;cursor:pointer;text-align:center;transition:all .2s;color:rgba(255,255,255,.5)}
+    .perfil-btn:hover{background:rgba(0,212,255,.08);border-color:rgba(0,212,255,.2);color:#fff}
+    .perfil-btn.selected{background:rgba(0,212,255,.12);border-color:rgba(0,212,255,.4);color:#00d4ff}
+    .perfil-btn .picon{font-size:1.6rem;margin-bottom:6px}
+    .perfil-btn .pnome{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+    .perfil-btn .pdesc{font-size:.65rem;opacity:.6;margin-top:2px}
 
-    /* ── LOGO ── */
-    .logo {
-      text-align: center;
-      margin-bottom: 36px;
-    }
+    /* Inputs */
+    .form-group{margin-bottom:16px}
+    .form-group label{display:block;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:7px;letter-spacing:.3px}
+    .form-group input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:13px 16px;color:#fff;font-size:.9rem;outline:none;transition:all .2s}
+    .form-group input:focus{border-color:rgba(0,212,255,.4);background:rgba(0,212,255,.05);box-shadow:0 0 0 3px rgba(0,212,255,.07)}
+    .form-group input::placeholder{color:rgba(255,255,255,.2)}
 
-    .logo-icon {
-      width: 60px; height: 60px;
-      background: linear-gradient(135deg, #00d4ff, #0099cc);
-      border-radius: 16px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px;
-      margin: 0 auto 16px;
-      box-shadow: 0 8px 24px rgba(0,212,255,0.3);
-    }
+    /* Empresa input */
+    .empresa-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-    .logo h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: 3px;
-    }
+    /* Botão entrar */
+    .btn-entrar{width:100%;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:12px;color:#0f1923;font-size:1rem;font-weight:800;padding:15px;cursor:pointer;transition:all .2s;margin-top:8px;letter-spacing:.3px}
+    .btn-entrar:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,255,.25)}
+    .btn-entrar:active{transform:translateY(0)}
+    .btn-entrar:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
-    .logo h1 span { color: #00d4ff; }
+    /* Divisor */
+    .divisor{display:flex;align-items:center;gap:12px;margin:20px 0;color:rgba(255,255,255,.2);font-size:.78rem}
+    .divisor::before,.divisor::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
 
-    .logo p {
-      color: rgba(255,255,255,0.4);
-      font-size: 0.8rem;
-      margin-top: 6px;
-      letter-spacing: 0.3px;
-    }
+    /* Criar conta */
+    .btn-criar{width:100%;background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:12px;color:rgba(255,255,255,.5);font-size:.88rem;font-weight:600;padding:13px;cursor:pointer;transition:all .2s}
+    .btn-criar:hover{border-color:rgba(255,255,255,.25);color:#fff}
 
-    /* ── FORM ── */
-    .form-group { margin-bottom: 18px; }
+    /* Erro / sucesso */
+    .msg-erro{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:10px;padding:10px 14px;font-size:.82rem;color:#f87171;margin-bottom:16px;display:none}
+    .msg-erro.show{display:block}
+    .msg-ok{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);border-radius:10px;padding:10px 14px;font-size:.82rem;color:#4ade80;margin-bottom:16px;display:none}
+    .msg-ok.show{display:block}
 
-    label {
-      display: block;
-      color: rgba(255,255,255,0.6);
-      font-size: 0.78rem;
-      margin-bottom: 8px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    /* Modo cadastro */
+    .campo-extra{display:none}
+    .campo-extra.show{display:block}
 
-    .input-wrap {
-      position: relative;
-    }
-
-    .input-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 16px;
-      opacity: 0.4;
-      pointer-events: none;
-    }
-
-    input {
-      width: 100%;
-      padding: 13px 14px 13px 42px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 10px;
-      color: #fff;
-      font-size: 0.92rem;
-      outline: none;
-      transition: all 0.25s;
-      font-family: inherit;
-    }
-
-    input:focus {
-      border-color: #00d4ff;
-      background: rgba(0,212,255,0.06);
-      box-shadow: 0 0 0 3px rgba(0,212,255,0.12);
-    }
-
-    input::placeholder { color: rgba(255,255,255,0.25); }
-
-    /* Toggle senha */
-    .toggle-senha {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: rgba(255,255,255,0.35);
-      cursor: pointer;
-      font-size: 16px;
-      padding: 0;
-      transition: color 0.2s;
-    }
-
-    .toggle-senha:hover { color: rgba(255,255,255,0.7); }
-
-    /* ── BOTÃO ── */
-    .btn-login {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #00d4ff, #0099cc);
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 0.92rem;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 10px;
-      letter-spacing: 1.5px;
-      transition: all 0.25s;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      box-shadow: 0 4px 16px rgba(0,212,255,0.25);
-    }
-
-    .btn-login:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(0,212,255,0.35);
-    }
-
-    .btn-login:active { transform: translateY(0); }
-
-    .btn-login:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
+    /* Permissões badge */
+    .perms-info{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.75rem;color:rgba(255,255,255,.4);line-height:1.6}
+    .perms-info strong{color:rgba(255,255,255,.6)}
 
     /* Spinner */
-    .spinner {
-      width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: none;
-    }
+    .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(15,25,35,.4);border-top-color:#0f1923;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    /* Rodapé */
+    .login-footer{text-align:center;margin-top:24px;font-size:.72rem;color:rgba(255,255,255,.2)}
 
-    /* ── ERRO / SUCESSO ── */
-    .alerta {
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 0.82rem;
-      text-align: center;
-      margin-top: 16px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .alerta.erro {
-      background: rgba(255,80,80,0.12);
-      border: 1px solid rgba(255,80,80,0.3);
-      color: #ff7b7b;
-    }
-
-    .alerta.sucesso {
-      background: rgba(74,222,128,0.12);
-      border: 1px solid rgba(74,222,128,0.3);
-      color: #4ade80;
-    }
-
-    /* ── CREDENCIAIS DEMO ── */
-    .demo-box {
-      margin-top: 20px;
-      background: rgba(0,212,255,0.06);
-      border: 1px solid rgba(0,212,255,0.15);
-      border-radius: 10px;
-      padding: 12px 16px;
-    }
-
-    .demo-box p {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.35);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 600;
-    }
-
-    .demo-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 5px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      cursor: pointer;
-      transition: background 0.15s;
-      border-radius: 4px;
-      padding: 5px 4px;
-    }
-
-    .demo-item:last-child { border-bottom: none; }
-    .demo-item:hover { background: rgba(0,212,255,0.08); }
-
-    .demo-item span {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.5);
-    }
-
-    .demo-item strong {
-      font-size: 0.75rem;
-      color: #00d4ff;
-    }
-
-    .demo-item .demo-hint {
-      font-size: 0.68rem;
-      color: rgba(255,255,255,0.2);
-    }
-
-    /* ── RODAPÉ ── */
-    .versao {
-      text-align: center;
-      color: rgba(255,255,255,0.2);
-      font-size: 0.7rem;
-      margin-top: 24px;
-    }
+    /* Instalar PWA banner */
+    .pwa-banner{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:12px 16px;margin-bottom:20px;display:none;align-items:center;gap:12px;cursor:pointer}
+    .pwa-banner.show{display:flex}
+    .pwa-banner p{font-size:.78rem;color:rgba(255,255,255,.6);flex:1}
+    .pwa-banner button{background:rgba(99,102,241,.3);border:none;border-radius:8px;color:#a5b4fc;font-size:.75rem;font-weight:700;padding:6px 12px;cursor:pointer;white-space:nowrap}
   </style>
 </head>
 <body>
 
-<div class="card">
+<div class="login-wrap">
 
-  <!-- LOGO -->
-  <div class="logo">
-    <div class="logo-icon">🛡️</div>
+  <!-- Logo -->
+  <div class="logo-area">
     <h1>Safe<span>NR</span></h1>
-    <p>Sistema de Gestão de Segurança do Trabalho</p>
+    <p>Gestao de Seguranca do Trabalho</p>
   </div>
 
-  <!-- FORM -->
-  <div class="form-group">
-    <label>E-mail</label>
-    <div class="input-wrap">
-      <span class="input-icon">✉️</span>
-      <input
-        type="email"
-        id="email"
-        placeholder="seu@email.com"
-        autocomplete="email"
-        onkeydown="if(event.key==='Enter') fazerLogin()"
-      />
-    </div>
+  <!-- Banner instalar PWA -->
+  <div class="pwa-banner" id="pwaBanner">
+    <span style="font-size:1.4rem">📱</span>
+    <p>Instale o SafeNR como app no seu dispositivo</p>
+    <button onclick="instalarPWA()">Instalar</button>
   </div>
 
-  <div class="form-group">
-    <label>Senha</label>
-    <div class="input-wrap">
-      <span class="input-icon">🔒</span>
-      <input
-        type="password"
-        id="senha"
-        placeholder="••••••••"
-        autocomplete="current-password"
-        onkeydown="if(event.key==='Enter') fazerLogin()"
-      />
-      <button class="toggle-senha" onclick="toggleSenha()" title="Mostrar/ocultar senha" type="button">👁️</button>
+  <!-- Card login -->
+  <div class="login-card">
+    <h2>Bem-vindo de volta 👋</h2>
+    <p class="sub">Selecione seu perfil e acesse o sistema</p>
+
+    <!-- Seletor de perfil -->
+    <div class="perfil-grid" id="perfilGrid">
+      <div class="perfil-btn selected" data-perfil="admin" onclick="selecionarPerfil('admin',this)">
+        <div class="picon">👑</div>
+        <div class="pnome">Admin</div>
+        <div class="pdesc">Acesso total</div>
+      </div>
+      <div class="perfil-btn" data-perfil="tecnico" onclick="selecionarPerfil('tecnico',this)">
+        <div class="picon">🦺</div>
+        <div class="pnome">Tecnico</div>
+        <div class="pdesc">SST / SESMT</div>
+      </div>
+      <div class="perfil-btn" data-perfil="gestor" onclick="selecionarPerfil('gestor',this)">
+        <div class="picon">📊</div>
+        <div class="pnome">Gestor</div>
+        <div class="pdesc">Somente leitura</div>
+      </div>
     </div>
+
+    <!-- Info de permissões -->
+    <div class="perms-info" id="permsInfo">
+      <strong>👑 Administrador:</strong> Acesso completo a todos os modulos, configuracoes e exportacoes.
+    </div>
+
+    <!-- Mensagens -->
+    <div class="msg-erro" id="msgErro"></div>
+    <div class="msg-ok"   id="msgOk"></div>
+
+    <!-- Formulário -->
+    <form id="loginForm" onsubmit="return false">
+
+      <!-- Campos extras (cadastro) -->
+      <div class="campo-extra" id="campoNome">
+        <div class="form-group">
+          <label>SEU NOME COMPLETO</label>
+          <input type="text" id="inputNome" placeholder="Ex: Carlos Silva"/>
+        </div>
+      </div>
+      <div class="campo-extra empresa-row" id="campoEmpresa">
+        <div class="form-group">
+          <label>EMPRESA</label>
+          <input type="text" id="inputEmpresa" placeholder="Nome da empresa"/>
+        </div>
+        <div class="form-group">
+          <label>CNPJ (opcional)</label>
+          <input type="text" id="inputCNPJ" placeholder="00.000.000/0001-00" maxlength="18"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>E-MAIL</label>
+        <input type="email" id="inputEmail" placeholder="seu@email.com" required/>
+      </div>
+      <div class="form-group">
+        <label>SENHA</label>
+        <input type="password" id="inputSenha" placeholder="Minimo 6 caracteres" required/>
+      </div>
+
+      <button class="btn-entrar" id="btnEntrar" onclick="fazerLogin()">
+        Entrar no SafeNR
+      </button>
+
+      <div class="divisor">ou</div>
+
+      <button class="btn-criar" id="btnCriar" onclick="toggleCadastro()">
+        Criar nova conta
+      </button>
+    </form>
   </div>
 
-  <button class="btn-login" id="btnLogin" onclick="fazerLogin()">
-    <div class="spinner" id="spinner"></div>
-    <span id="btnTexto">🔐 ENTRAR</span>
-  </button>
-
-  <!-- ALERTAS -->
-  <div class="alerta erro"   id="alertaErro">❌ E-mail ou senha incorretos.</div>
-  <div class="alerta sucesso" id="alertaSucesso">✅ Login realizado! Redirecionando...</div>
-
-  <!-- CREDENCIAIS DEMO -->
-  <div class="demo-box">
-    <p>🔑 Acesso rápido (demo)</p>
-    <div class="demo-item" onclick="preencherLogin('admin@safenr.com.br','safenr2026')" title="Clique para preencher">
-      <span>admin@safenr.com.br</span>
-      <strong>Administrador</strong>
-      <span class="demo-hint">↩ clique</span>
-    </div>
-    <div class="demo-item" onclick="preencherLogin('odair@safenr.com.br','safenr2026')" title="Clique para preencher">
-      <span>odair@safenr.com.br</span>
-      <strong>Odair Silva</strong>
-      <span class="demo-hint">↩ clique</span>
-    </div>
+  <div class="login-footer">
+    SafeNR v2.0 — Gestao de Seguranca do Trabalho<br/>
+    Fase 2: Multi-usuario · PWA · Nuvem
   </div>
-
-  <div class="versao">SafeNR v1.0 © 2026 — Gestão de Segurança do Trabalho</div>
 </div>
 
 <script>
-  // Redireciona se já estiver logado
-  if (localStorage.getItem('safenr_user') || sessionStorage.getItem('safenr_user')) {
-    window.location.href = './app.html';
+/* ══════════════════════════════════════════════════
+   CONFIGURAÇÃO SUPABASE
+   ══════════════════════════════════════════════════ */
+var SUPABASE_URL      = 'https://SEU_PROJETO.supabase.co';
+var SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_AQUI';
+var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ══════════════════════════════════════════════════
+   PERMISSÕES POR PERFIL
+   ══════════════════════════════════════════════════ */
+var PERMISSOES = {
+  admin: {
+    label: '👑 Administrador',
+    desc:  'Acesso completo a todos os modulos, configuracoes e exportacoes.',
+    modulos: ['*'],
+    podeEditar: true,
+    podeExcluir: true,
+    podeExportar: true,
+    podeConfigurar: true
+  },
+  tecnico: {
+    label: '🦺 Tecnico SST',
+    desc:  'Pode criar e editar registros de SST. Sem acesso a configuracoes e financeiro.',
+    modulos: ['treinamentos','inspecoes','riscos','checklists','ocorrencias','epis','ambientes','plano-acao','documentos','relatorios','biblioteca','fotos','notificacoes'],
+    podeEditar: true,
+    podeExcluir: false,
+    podeExportar: true,
+    podeConfigurar: false
+  },
+  gestor: {
+    label: '📊 Gestor',
+    desc:  'Somente visualizacao e exportacao de relatorios. Sem permissao de edicao.',
+    modulos: ['relatorios','agenda','colaboradores','ocorrencias','treinamentos'],
+    podeEditar: false,
+    podeExcluir: false,
+    podeExportar: true,
+    podeConfigurar: false
   }
+};
 
-  // Usuários cadastrados (base local demo)
-  var usuarios = [
-    { email: 'admin@safenr.com.br', senha: 'safenr2026', nome: 'Administrador', perfil: 'Administrador' },
-    { email: 'odair@safenr.com.br', senha: 'safenr2026', nome: 'Odair Silva',   perfil: 'Técnico SST'   }
-  ];
+var perfilSelecionado = 'admin';
+var modoCadastro = false;
 
-  function fazerLogin() {
-    var email = document.getElementById('email').value.trim().toLowerCase();
-    var senha = document.getElementById('senha').value;
-    var btn   = document.getElementById('btnLogin');
-    var spin  = document.getElementById('spinner');
-    var texto = document.getElementById('btnTexto');
+/* ── Selecionar perfil ── */
+function selecionarPerfil(perfil, el) {
+  perfilSelecionado = perfil;
+  document.querySelectorAll('.perfil-btn').forEach(function(b){ b.classList.remove('selected'); });
+  el.classList.add('selected');
+  var p = PERMISSOES[perfil];
+  document.getElementById('permsInfo').innerHTML =
+    '<strong>' + p.label + ':</strong> ' + p.desc;
+}
 
-    ocultarAlertas();
+/* ── Toggle cadastro / login ── */
+function toggleCadastro() {
+  modoCadastro = !modoCadastro;
+  var extras = ['campoNome', 'campoEmpresa'];
+  extras.forEach(function(id){
+    document.getElementById(id).classList.toggle('show', modoCadastro);
+  });
+  document.getElementById('btnEntrar').textContent = modoCadastro ? 'Criar Conta' : 'Entrar no SafeNR';
+  document.getElementById('btnCriar').textContent  = modoCadastro ? 'Ja tenho conta' : 'Criar nova conta';
+  document.getElementById('btnEntrar').onclick = modoCadastro ? criarConta : fazerLogin;
+  limparMsgs();
+}
 
-    if (!email || !senha) {
-      mostrarAlerta('erro', '⚠️ Preencha e-mail e senha.');
-      return;
-    }
+/* ── Mensagens ── */
+function showErro(msg) {
+  var el = document.getElementById('msgErro');
+  el.textContent = msg; el.classList.add('show');
+  document.getElementById('msgOk').classList.remove('show');
+}
+function showOk(msg) {
+  var el = document.getElementById('msgOk');
+  el.textContent = msg; el.classList.add('show');
+  document.getElementById('msgErro').classList.remove('show');
+}
+function limparMsgs() {
+  document.getElementById('msgErro').classList.remove('show');
+  document.getElementById('msgOk').classList.remove('show');
+}
 
-    // Verifica também usuários cadastrados em Configurações
-    var usuariosSalvos = JSON.parse(localStorage.getItem('safenr_usuarios') || '[]');
-    var todosUsuarios  = usuarios.concat(usuariosSalvos);
+/* ── Loading ── */
+function setLoading(on) {
+  var btn = document.getElementById('btnEntrar');
+  btn.disabled = on;
+  btn.innerHTML = on
+    ? '<span class="spinner"></span> Aguarde...'
+    : (modoCadastro ? 'Criar Conta' : 'Entrar no SafeNR');
+}
 
-    var user = todosUsuarios.find(function(u) {
-      return u.email.toLowerCase() === email && u.senha === senha;
+/* ══════════════════════════════════════════════════
+   LOGIN
+   ══════════════════════════════════════════════════ */
+async function fazerLogin() {
+  limparMsgs();
+  var email = document.getElementById('inputEmail').value.trim();
+  var senha = document.getElementById('inputSenha').value;
+  if (!email || !senha) { showErro('Preencha e-mail e senha.'); return; }
+
+  setLoading(true);
+  try {
+    var { data, error } = await sb.auth.signInWithPassword({ email: email, password: senha });
+    if (error) throw error;
+
+    /* Busca perfil salvo no banco */
+    var { data: perfil } = await sb
+      .from('usuarios')
+      .select('*')
+      .eq('user_id', data.user.id)
+      .single();
+
+    var userData = {
+      id:        data.user.id,
+      email:     data.user.email,
+      nome:      perfil ? perfil.nome      : email.split('@')[0],
+      empresa:   perfil ? perfil.empresa   : 'Demo',
+      empresaId: perfil ? perfil.empresa_id: data.user.id,
+      perfil:    perfil ? perfil.perfil    : perfilSelecionado,
+      perms:     PERMISSOES[perfil ? perfil.perfil : perfilSelecionado]
+    };
+
+    localStorage.setItem('safenr_user', JSON.stringify(userData));
+    showOk('✅ Login realizado! Redirecionando...');
+    setTimeout(function(){ window.location.href = './app.html'; }, 900);
+  } catch (e) {
+    showErro('❌ ' + (e.message || 'Erro ao fazer login'));
+    setLoading(false);
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   CRIAR CONTA
+   ══════════════════════════════════════════════════ */
+async function criarConta() {
+  limparMsgs();
+  var nome    = document.getElementById('inputNome').value.trim();
+  var empresa = document.getElementById('inputEmpresa').value.trim();
+  var email   = document.getElementById('inputEmail').value.trim();
+  var senha   = document.getElementById('inputSenha').value;
+
+  if (!nome)    { showErro('Informe seu nome.');         return; }
+  if (!empresa) { showErro('Informe o nome da empresa.'); return; }
+  if (!email)   { showErro('Informe o e-mail.');          return; }
+  if (senha.length < 6) { showErro('Senha minima de 6 caracteres.'); return; }
+
+  setLoading(true);
+  try {
+    /* 1. Cria auth no Supabase */
+    var { data, error } = await sb.auth.signUp({ email: email, password: senha });
+    if (error) throw error;
+
+    /* 2. Salva perfil na tabela usuarios */
+    var empresaId = 'emp_' + Date.now();
+    await sb.from('usuarios').insert({
+      user_id:    data.user.id,
+      nome:       nome,
+      email:      email,
+      empresa:    empresa,
+      empresa_id: empresaId,
+      perfil:     perfilSelecionado,
+      cnpj:       document.getElementById('inputCNPJ').value.trim() || null
     });
 
-    // Loading
-    btn.disabled      = true;
-    spin.style.display = 'block';
-    texto.textContent  = 'Entrando...';
-
-    setTimeout(function() {
-      if (user) {
-        // Salva sessão
-        var sessao = { nome: user.nome, email: user.email, perfil: user.perfil || 'Usuário' };
-        localStorage.setItem('safenr_user', JSON.stringify(sessao));
-        mostrarAlerta('sucesso', '✅ Login realizado! Redirecionando...');
-        setTimeout(function() { window.location.href = './app.html'; }, 1000);
-      } else {
-        btn.disabled       = false;
-        spin.style.display = 'none';
-        texto.textContent  = '🔐 ENTRAR';
-        mostrarAlerta('erro', '❌ E-mail ou senha incorretos.');
-        document.getElementById('senha').value = '';
-        document.getElementById('senha').focus();
-      }
-    }, 700);
+    showOk('✅ Conta criada! Verifique seu e-mail para confirmar o cadastro.');
+    setLoading(false);
+  } catch (e) {
+    showErro('❌ ' + (e.message || 'Erro ao criar conta'));
+    setLoading(false);
   }
+}
 
-  function preencherLogin(email, senha) {
-    document.getElementById('email').value = email;
-    document.getElementById('senha').value = senha;
-    document.getElementById('email').focus();
-    ocultarAlertas();
-  }
+/* ══════════════════════════════════════════════════
+   PWA — Instalar
+   ══════════════════════════════════════════════════ */
+var deferredPrompt = null;
 
-  function toggleSenha() {
-    var input = document.getElementById('senha');
-    input.type = input.type === 'password' ? 'text' : 'password';
-  }
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('pwaBanner').classList.add('show');
+});
 
-  function mostrarAlerta(tipo, msg) {
-    var el = document.getElementById(tipo === 'erro' ? 'alertaErro' : 'alertaSucesso');
-    el.textContent    = msg;
-    el.style.display  = 'flex';
+async function instalarPWA() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  var { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    document.getElementById('pwaBanner').classList.remove('show');
   }
+  deferredPrompt = null;
+}
 
-  function ocultarAlertas() {
-    document.getElementById('alertaErro').style.display    = 'none';
-    document.getElementById('alertaSucesso').style.display = 'none';
+/* ── Registrar Service Worker ── */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js')
+    .then(function(reg){ console.log('[SafeNR PWA] SW registrado:', reg.scope); })
+    .catch(function(e){ console.warn('[SafeNR PWA] SW falhou:', e); });
+}
+
+/* ── Verificar se já está logado ── */
+(async function() {
+  var { data } = await sb.auth.getSession();
+  if (data.session) {
+    var cached = localStorage.getItem('safenr_user');
+    if (cached) { window.location.href = './app.html'; }
   }
+})();
 </script>
-
 </body>
 </html>
