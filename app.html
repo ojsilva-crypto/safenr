@@ -4,16 +4,23 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SafeNR — Dashboard</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json"/>
+  <meta name="theme-color" content="#0f1923"/>
+  <link rel="apple-touch-icon" href="./icons/icon-192.png"/>
+
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 
   <!-- FASE 1: Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- FASE 1: jsPDF para exportação PDF -->
+  <!-- FASE 1: jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
-  <!-- FASE 1: SheetJS para exportação Excel -->
+  <!-- FASE 1: SheetJS -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 
   <style>
@@ -35,11 +42,15 @@
     .user-info p{font-size:.82rem;font-weight:600}
     .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
     .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
+
+    /* FASE 2: Badge de perfil */
+    .perfil-badge{display:inline-block;background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:2px 10px;font-size:.65rem;font-weight:700;color:#00d4ff;margin-top:3px}
+
     .main{margin-left:240px;flex:1;padding:32px}
     .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
     .topbar-left h2{font-size:1.4rem;font-weight:700;margin-bottom:2px}
     .topbar-left p{font-size:.85rem;color:rgba(255,255,255,.35)}
-    .topbar-right{display:flex;gap:10px}
+    .topbar-right{display:flex;gap:10px;flex-wrap:wrap}
     .btn-atualizar{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:10px;color:#00d4ff;font-size:.85rem;font-weight:600;padding:10px 18px;cursor:pointer;transition:all .2s}
     .btn-atualizar:hover{background:rgba(0,212,255,.2)}
 
@@ -49,7 +60,7 @@
     .btn-export-xls{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);border-radius:10px;color:#4ade80;font-size:.85rem;font-weight:600;padding:10px 18px;cursor:pointer;transition:all .2s}
     .btn-export-xls:hover{background:rgba(74,222,128,.22)}
 
-    /* FASE 1: Toast de sincronização */
+    /* FASE 1: Toast */
     .sync-toast{position:fixed;bottom:28px;right:28px;background:#1e293b;border:1px solid rgba(0,212,255,.25);border-radius:12px;padding:12px 20px;font-size:.82rem;color:#00d4ff;display:flex;align-items:center;gap:10px;z-index:9999;opacity:0;transform:translateY(12px);transition:all .35s;pointer-events:none}
     .sync-toast.show{opacity:1;transform:translateY(0)}
     .sync-dot{width:8px;height:8px;border-radius:50%;background:#00d4ff;animation:pulse 1.2s infinite}
@@ -139,7 +150,11 @@
   </nav>
   <div class="sidebar-user">
     <div class="avatar" id="avatarLetra">A</div>
-    <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
+    <div class="user-info">
+      <p id="nomeUsuario">Usuario</p>
+      <!-- FASE 2: Badge de perfil -->
+      <span class="perfil-badge" id="perfilBadge">👑 Admin</span>
+    </div>
     <button class="btn-sair" onclick="sair()">✕</button>
   </div>
 </div>
@@ -151,10 +166,10 @@
       <h2>🏠 Dashboard</h2>
       <p id="dataHoje"></p>
     </div>
-    <!-- FASE 1: Botões de exportação adicionados -->
+    <!-- FASE 1 + 2: Botões com controle de permissão -->
     <div class="topbar-right">
-      <button class="btn-export-pdf" onclick="exportarPDF()">📄 Exportar PDF</button>
-      <button class="btn-export-xls" onclick="exportarExcel()">📊 Exportar Excel</button>
+      <button class="btn-export-pdf" onclick="exportarPDF()" data-requer="exportar">📄 Exportar PDF</button>
+      <button class="btn-export-xls" onclick="exportarExcel()" data-requer="exportar">📊 Exportar Excel</button>
       <button class="btn-atualizar"  onclick="inicializar()">🔄 Atualizar</button>
     </div>
   </div>
@@ -208,9 +223,7 @@
 
 <script>
 /* ══════════════════════════════════════════════════
-   FASE 1 — CONFIGURAÇÃO SUPABASE
-   ➜ Substitua SUPABASE_URL e SUPABASE_ANON_KEY
-     pelos valores do seu projeto em supabase.com
+   CONFIGURAÇÃO SUPABASE — FASE 1
    ══════════════════════════════════════════════════ */
 var SUPABASE_URL      = 'https://SEU_PROJETO.supabase.co';
 var SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_AQUI';
@@ -223,7 +236,9 @@ function getSupabase() {
   return _supabase;
 }
 
-/* ── TOAST ── */
+/* ══════════════════════════════════════════════════
+   TOAST — FASE 1
+   ══════════════════════════════════════════════════ */
 function showToast(msg, dur) {
   var t = document.getElementById('syncToast');
   document.getElementById('syncMsg').textContent = msg || 'Sincronizando...';
@@ -232,12 +247,9 @@ function showToast(msg, dur) {
 }
 
 /* ══════════════════════════════════════════════════
-   FASE 1 — CAMADA DE DADOS (localStorage → Supabase)
-   Cada função tenta Supabase; se falhar, cai no
-   localStorage como fallback (modo offline).
+   CAMADA DE DADOS — FASE 1
+   localStorage → Supabase com fallback offline
    ══════════════════════════════════════════════════ */
-
-/* Mapeamento: chave localStorage ↔ tabela Supabase */
 var TABELAS = {
   safenr_colaboradores : 'colaboradores',
   safenr_treinamentos  : 'treinamentos',
@@ -252,7 +264,6 @@ var TABELAS = {
   safenr_notificacoes  : 'notificacoes'
 };
 
-/* Leitura assíncrona: tenta Supabase, fallback localStorage */
 async function getData(chave) {
   var tabela = TABELAS[chave];
   if (!tabela) return JSON.parse(localStorage.getItem(chave) || '[]');
@@ -264,7 +275,6 @@ async function getData(chave) {
       .select('*')
       .eq('empresa_id', userData.empresaId || 'demo');
     if (error) throw error;
-    /* Atualiza cache local */
     localStorage.setItem(chave, JSON.stringify(data || []));
     return data || [];
   } catch (e) {
@@ -273,15 +283,13 @@ async function getData(chave) {
   }
 }
 
-/* Gravação assíncrona: salva no Supabase + atualiza localStorage */
 async function saveData(chave, payload) {
   var tabela = TABELAS[chave];
-  localStorage.setItem(chave, JSON.stringify(payload)); /* cache imediato */
+  localStorage.setItem(chave, JSON.stringify(payload));
   if (!tabela) return;
   try {
     var sb = getSupabase();
     var userData = JSON.parse(localStorage.getItem('safenr_user') || '{}');
-    /* Upsert completo da lista (estratégia simples para MVP) */
     var registros = payload.map(function(item) {
       return Object.assign({}, item, { empresa_id: userData.empresaId || 'demo' });
     });
@@ -295,138 +303,312 @@ async function saveData(chave, payload) {
 }
 
 /* ══════════════════════════════════════════════════
-   FASE 1 — EXPORTAÇÃO PDF (jsPDF + autoTable)
+   AUTH — FASE 1 + 2
+   ══════════════════════════════════════════════════ */
+var userData = localStorage.getItem('safenr_user');
+if (!userData) { window.location.href = './index.html'; }
+var user = JSON.parse(userData);
+document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
+document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+
+function sair() {
+  /* Faz logout no Supabase Auth também */
+  try { getSupabase().auth.signOut(); } catch(e) {}
+  localStorage.removeItem('safenr_user');
+  window.location.href = './index.html';
+}
+
+/* ══════════════════════════════════════════════════
+   CONTROLE DE PERFIS E PERMISSÕES — FASE 2
+   ══════════════════════════════════════════════════ */
+var PERMISSOES = {
+  admin:   { podeEditar:true,  podeExcluir:true,  podeExportar:true,  podeConfigurar:true  },
+  tecnico: { podeEditar:true,  podeExcluir:false, podeExportar:true,  podeConfigurar:false },
+  gestor:  { podeEditar:false, podeExcluir:false, podeExportar:true,  podeConfigurar:false }
+};
+
+function aplicarPermissoes() {
+  var perfil = user.perfil || 'admin';
+  var perms  = PERMISSOES[perfil] || PERMISSOES.admin;
+
+  /* Badge de perfil na sidebar */
+  var labels = { admin:'👑 Admin', tecnico:'🦺 Tecnico', gestor:'📊 Gestor' };
+  var badge  = document.getElementById('perfilBadge');
+  if (badge) badge.textContent = labels[perfil] || perfil;
+
+  /* Oculta exportação se não permitido */
+  if (!perms.podeExportar) {
+    document.querySelectorAll('[data-requer="exportar"]').forEach(function(el){ el.style.display='none'; });
+  }
+
+  /* Opacidade no link de configurações */
+  if (!perms.podeConfigurar) {
+    var linkConfig = document.querySelector('a[href="./configuracoes.html"]');
+    if (linkConfig) { linkConfig.style.opacity='0.3'; linkConfig.style.pointerEvents='none'; }
+  }
+
+  /* Restringe itens do menu por perfil */
+  var ACESSO = {
+    admin:   ['*'],
+    tecnico: ['treinamentos','agenda','inspecoes','riscos','checklists','colaboradores',
+              'ocorrencias','plano-acao','documentos','relatorios','epis','biblioteca',
+              'fotos','ambientes','ia-sugestoes','notificacoes'],
+    gestor:  ['relatorios','agenda','colaboradores','ocorrencias','treinamentos','notificacoes']
+  };
+  var permitidos = ACESSO[perfil] || ['*'];
+  if (!permitidos.includes('*')) {
+    document.querySelectorAll('.nav-item[href]').forEach(function(link) {
+      var href   = link.getAttribute('href').replace('./', '').replace('.html', '');
+      var pagina = href.split('/').pop();
+      if (pagina !== 'app' && !permitidos.includes(pagina)) {
+        link.style.opacity      = '0.2';
+        link.style.pointerEvents = 'none';
+      }
+    });
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   NOTIFICAÇÕES POR E-MAIL — FASE 2
+   ══════════════════════════════════════════════════ */
+async function enviarEmailNotificacao(para, assunto, corpo) {
+  try {
+    var sb = getSupabase();
+    var { error } = await sb.functions.invoke('enviar-email', {
+      body: { para: para, assunto: assunto, corpo: corpo, sistema: 'SafeNR' }
+    });
+    if (error) throw error;
+    return true;
+  } catch (e) {
+    console.warn('[SafeNR] Falha ao enviar email:', e.message);
+    return false;
+  }
+}
+
+async function verificarVencimentosEmail() {
+  if (!user.email) return;
+
+  var colabs = await getData('safenr_colaboradores');
+  var treins = await getData('safenr_treinamentos');
+  var docs   = await getData('safenr_documentos');
+  var alertas = [];
+
+  var episVencidos = 0;
+  colabs.forEach(function(c){
+    (c.epis||[]).forEach(function(e){ if(isVencido(e.validade)) episVencidos++; });
+  });
+  if (episVencidos > 0) alertas.push('🦺 ' + episVencidos + ' EPI(s) com validade vencida');
+
+  var trVenc = treins.filter(function(t){ return isVencido(t.dataVal); }).length;
+  if (trVenc > 0) alertas.push('🎓 ' + trVenc + ' treinamento(s) com certificado vencido');
+
+  var docsVenc = docs.filter(function(d){ return isVencido(d.validade); }).length;
+  if (docsVenc > 0) alertas.push('🗂️ ' + docsVenc + ' documento(s) SST vencido(s)');
+
+  var trBreve = treins.filter(function(t){ return venceEm30(t.dataVal); }).length;
+  if (trBreve > 0) alertas.push('⚠️ ' + trBreve + ' treinamento(s) vencem em 30 dias');
+
+  if (alertas.length === 0) return;
+
+  var ultimoEnvio = localStorage.getItem('safenr_ultimo_email_alerta');
+  var hoje = new Date().toISOString().split('T')[0];
+  if (ultimoEnvio === hoje) return;
+
+  var corpo = [
+    '<div style="font-family:Segoe UI,sans-serif;max-width:600px;margin:0 auto;background:#0f1923;color:#fff;border-radius:16px;overflow:hidden">',
+    '<div style="background:linear-gradient(135deg,#00d4ff,#0099cc);padding:24px;text-align:center">',
+    '<h1 style="margin:0;font-size:1.8rem;font-weight:900;color:#0f1923">Safe<span>NR</span></h1>',
+    '<p style="margin:4px 0 0;color:rgba(15,25,35,.7);font-size:.85rem">Gestao de Seguranca do Trabalho</p>',
+    '</div>',
+    '<div style="padding:28px">',
+    '<h2 style="color:#00d4ff;margin-bottom:8px">⚠️ Alertas do Dia</h2>',
+    '<p style="color:rgba(255,255,255,.6);margin-bottom:20px">Ola, <strong style="color:#fff">' + (user.nome||'usuario') + '</strong>! Os itens abaixo precisam de atencao:</p>',
+    '<ul style="margin:0;padding-left:20px">',
+    alertas.map(function(a){ return '<li style="margin:10px 0;color:rgba(255,255,255,.8)">' + a + '</li>'; }).join(''),
+    '</ul>',
+    '<div style="margin-top:28px;text-align:center">',
+    '<a href="' + window.location.origin + '/app.html" style="background:linear-gradient(135deg,#00d4ff,#0099cc);color:#0f1923;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:800;display:inline-block">Acessar SafeNR</a>',
+    '</div>',
+    '</div>',
+    '<div style="background:rgba(255,255,255,.03);padding:16px;text-align:center;font-size:.75rem;color:rgba(255,255,255,.25)">',
+    'SafeNR — Gestao de Seguranca do Trabalho | ' + new Date().toLocaleDateString('pt-BR'),
+    '</div></div>'
+  ].join('');
+
+  var enviado = await enviarEmailNotificacao(
+    user.email,
+    '⚠️ SafeNR — ' + alertas.length + ' alerta(s) de seguranca',
+    corpo
+  );
+  if (enviado) {
+    localStorage.setItem('safenr_ultimo_email_alerta', hoje);
+    showToast('📧 Resumo de alertas enviado por e-mail');
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   PWA — SERVICE WORKER + PUSH — FASE 2
+   ══════════════════════════════════════════════════ */
+async function registrarPWA() {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    var reg = await navigator.serviceWorker.register('./sw.js');
+    console.log('[SafeNR PWA] SW ativo:', reg.scope);
+
+    navigator.serviceWorker.addEventListener('message', function(e) {
+      if (e.data && e.data.tipo === 'SYNC_SOLICITADA') { inicializar(); }
+    });
+
+    if ('Notification' in window && Notification.permission === 'default') {
+      var perm = await Notification.requestPermission();
+      if (perm === 'granted') showToast('🔔 Notificacoes push ativadas!');
+    }
+  } catch (e) {
+    console.warn('[SafeNR PWA] SW falhou:', e);
+  }
+}
+
+function notificarPushLocal(titulo, corpo, url) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  navigator.serviceWorker.getRegistration().then(function(reg) {
+    if (!reg) return;
+    reg.showNotification(titulo, {
+      body:    corpo,
+      icon:    './icons/icon-192.png',
+      badge:   './icons/icon-72.png',
+      vibrate: [200, 100, 200],
+      data:    { url: url || './app.html' }
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   EXPORTAÇÃO PDF — FASE 1
    ══════════════════════════════════════════════════ */
 async function exportarPDF() {
+  /* Verifica permissão */
+  var perms = PERMISSOES[user.perfil||'admin'] || PERMISSOES.admin;
+  if (!perms.podeExportar) { showToast('❌ Sem permissao para exportar'); return; }
+
   showToast('📄 Gerando PDF...');
   var { jsPDF } = window.jspdf;
-  var doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  var doc  = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
   var hoje = new Date().toLocaleDateString('pt-BR');
-  var userData = JSON.parse(localStorage.getItem('safenr_user') || '{}');
 
-  /* ── Cabeçalho ── */
-  doc.setFillColor(15, 25, 35);
-  doc.rect(0, 0, 210, 40, 'F');
-  doc.setTextColor(0, 212, 255);
-  doc.setFontSize(22); doc.setFont('helvetica', 'bold');
-  doc.text('SafeNR', 14, 18);
-  doc.setFontSize(10); doc.setFont('helvetica', 'normal');
-  doc.setTextColor(180, 180, 180);
-  doc.text('Relatorio Geral de Seguranca do Trabalho', 14, 26);
-  doc.text('Empresa: ' + (userData.empresa || 'Demo') + '   |   Gerado em: ' + hoje, 14, 33);
+  /* Cabeçalho */
+  doc.setFillColor(15,25,35);
+  doc.rect(0,0,210,40,'F');
+  doc.setTextColor(0,212,255);
+  doc.setFontSize(22); doc.setFont('helvetica','bold');
+  doc.text('SafeNR',14,18);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.setTextColor(180,180,180);
+  doc.text('Relatorio Geral de Seguranca do Trabalho',14,26);
+  doc.text('Empresa: '+(user.empresa||'Demo')+'   |   Gerado em: '+hoje,14,33);
 
-  var colabs   = await getData('safenr_colaboradores');
-  var ocorrs   = await getData('safenr_ocorrencias');
-  var treins   = await getData('safenr_treinamentos');
-  var riscos   = await getData('safenr_riscos');
-  var score    = calcularScoreIA_sync(colabs, treins, riscos, ocorrs, await getData('safenr_inspecoes'), await getData('safenr_documentos'));
+  var colabs = await getData('safenr_colaboradores');
+  var ocorrs = await getData('safenr_ocorrencias');
+  var treins = await getData('safenr_treinamentos');
+  var riscos = await getData('safenr_riscos');
+  var insp   = await getData('safenr_inspecoes');
+  var docs   = await getData('safenr_documentos');
+  var score  = calcularScoreIA_sync(colabs,treins,riscos,ocorrs,insp,docs);
 
-  /* ── KPIs resumo ── */
-  doc.setTextColor(40, 40, 40);
-  doc.setFontSize(13); doc.setFont('helvetica', 'bold');
-  doc.setTextColor(255,255,255);
-  doc.text('Resumo Executivo', 14, 50);
-
-  var kpis = [
-    ['Colaboradores', colabs.length],
-    ['Ocorrencias',   ocorrs.length],
-    ['Treinamentos',  treins.length],
-    ['Riscos',        riscos.length],
-    ['Score IA SST',  score + '/100']
-  ];
-
+  /* KPIs resumo */
+  doc.setFontSize(13); doc.setFont('helvetica','bold');
+  doc.setTextColor(30,30,30);
+  doc.text('Resumo Executivo',14,50);
   doc.autoTable({
-    startY: 54,
-    head: [['Indicador', 'Total']],
-    body: kpis,
-    theme: 'grid',
-    headStyles: { fillColor: [0, 153, 204], textColor: 255, fontStyle: 'bold' },
-    alternateRowStyles: { fillColor: [240, 248, 255] },
-    styles: { fontSize: 10 }
+    startY:55,
+    head:[['Indicador','Total']],
+    body:[
+      ['Colaboradores', colabs.length],
+      ['Ocorrencias',   ocorrs.length],
+      ['Treinamentos',  treins.length],
+      ['Riscos',        riscos.length],
+      ['Score IA SST',  score+'/100']
+    ],
+    theme:'grid',
+    headStyles:{ fillColor:[0,153,204], textColor:255, fontStyle:'bold' },
+    alternateRowStyles:{ fillColor:[240,248,255] },
+    styles:{ fontSize:10 }
   });
 
-  /* ── Ocorrências ── */
+  /* Ocorrências */
   if (ocorrs.length > 0) {
     doc.addPage();
-    doc.setFontSize(13); doc.setFont('helvetica', 'bold');
-    doc.setTextColor(30, 30, 30);
-    doc.text('Ocorrencias Registradas', 14, 20);
+    doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.setTextColor(30,30,30);
+    doc.text('Ocorrencias Registradas',14,20);
     doc.autoTable({
-      startY: 26,
-      head: [['Data', 'Tipo', 'Colaborador', 'Setor', 'Descricao']],
-      body: ocorrs.map(function(o) {
-        return [
-          o.data || '--',
-          o.tipo || '--',
-          o.colaborador || '--',
-          o.setor || '--',
-          (o.descricao || '--').substring(0, 60)
-        ];
+      startY:26,
+      head:[['Data','Tipo','Colaborador','Setor','Descricao']],
+      body:ocorrs.map(function(o){
+        return [o.data||'--', o.tipo||'--', o.colaborador||'--', o.setor||'--', (o.descricao||'--').substring(0,60)];
       }),
-      theme: 'striped',
-      headStyles: { fillColor: [220, 38, 38], textColor: 255, fontStyle: 'bold' },
-      styles: { fontSize: 9 }
+      theme:'striped',
+      headStyles:{ fillColor:[220,38,38], textColor:255, fontStyle:'bold' },
+      styles:{ fontSize:9 }
     });
   }
 
-  /* ── Treinamentos ── */
+  /* Treinamentos */
   if (treins.length > 0) {
     doc.addPage();
-    doc.setFontSize(13); doc.setFont('helvetica', 'bold');
-    doc.setTextColor(30, 30, 30);
-    doc.text('Treinamentos', 14, 20);
+    doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.setTextColor(30,30,30);
+    doc.text('Treinamentos',14,20);
     doc.autoTable({
-      startY: 26,
-      head: [['Treinamento', 'Colaborador', 'Data Real', 'Validade', 'Status']],
-      body: treins.map(function(t) {
-        return [
-          t.nome || '--',
-          t.colaborador || '--',
-          t.dataReal || '--',
-          t.dataVal || '--',
-          t.status || '--'
-        ];
+      startY:26,
+      head:[['Treinamento','Colaborador','Data Real','Validade','Status']],
+      body:treins.map(function(t){
+        return [t.nome||'--', t.colaborador||'--', t.dataReal||'--', t.dataVal||'--', t.status||'--'];
       }),
-      theme: 'striped',
-      headStyles: { fillColor: [22, 163, 74], textColor: 255, fontStyle: 'bold' },
-      styles: { fontSize: 9 }
+      theme:'striped',
+      headStyles:{ fillColor:[22,163,74], textColor:255, fontStyle:'bold' },
+      styles:{ fontSize:9 }
     });
   }
 
-  /* ── Rodapé ── */
+  /* Rodapé em todas as páginas */
   var totalPages = doc.internal.getNumberOfPages();
-  for (var i = 1; i <= totalPages; i++) {
+  for (var i=1; i<=totalPages; i++) {
     doc.setPage(i);
     doc.setFontSize(8); doc.setTextColor(150);
-    doc.text('SafeNR — Gestao de Seguranca do Trabalho | Pagina ' + i + ' de ' + totalPages, 14, 290);
+    doc.text('SafeNR — Gestao de Seguranca do Trabalho | Pagina '+i+' de '+totalPages, 14, 290);
   }
 
-  doc.save('SafeNR_Relatorio_' + hoje.replace(/\//g,'-') + '.pdf');
+  doc.save('SafeNR_Relatorio_'+hoje.replace(/\//g,'-')+'.pdf');
   showToast('✅ PDF gerado com sucesso!');
 }
 
 /* ══════════════════════════════════════════════════
-   FASE 1 — EXPORTAÇÃO EXCEL (SheetJS)
+   EXPORTAÇÃO EXCEL — FASE 1
    ══════════════════════════════════════════════════ */
 async function exportarExcel() {
+  var perms = PERMISSOES[user.perfil||'admin'] || PERMISSOES.admin;
+  if (!perms.podeExportar) { showToast('❌ Sem permissao para exportar'); return; }
+
   showToast('📊 Gerando Excel...');
   var XLSX = window.XLSX;
   var wb   = XLSX.utils.book_new();
   var hoje = new Date().toLocaleDateString('pt-BR');
 
-  var colabs  = await getData('safenr_colaboradores');
-  var ocorrs  = await getData('safenr_ocorrencias');
-  var treins  = await getData('safenr_treinamentos');
-  var riscos  = await getData('safenr_riscos');
-  var insp    = await getData('safenr_inspecoes');
-  var docs    = await getData('safenr_documentos');
-  var planos  = await getData('safenr_planos');
+  var colabs = await getData('safenr_colaboradores');
+  var ocorrs = await getData('safenr_ocorrencias');
+  var treins = await getData('safenr_treinamentos');
+  var riscos = await getData('safenr_riscos');
+  var insp   = await getData('safenr_inspecoes');
+  var docs   = await getData('safenr_documentos');
+  var planos = await getData('safenr_planos');
+  var score  = calcularScoreIA_sync(colabs,treins,riscos,ocorrs,insp,docs);
 
-  /* ── Aba: Resumo ── */
-  var score = calcularScoreIA_sync(colabs, treins, riscos, ocorrs, insp, docs);
-  var resumo = [
+  /* Aba Resumo */
+  var wsResumo = XLSX.utils.aoa_to_sheet([
     ['SafeNR — Relatorio Geral', ''],
     ['Gerado em:', hoje],
+    ['Empresa:', user.empresa||'Demo'],
+    ['Perfil:', user.perfil||'admin'],
     ['', ''],
     ['Indicador', 'Total'],
     ['Colaboradores',  colabs.length],
@@ -436,104 +618,86 @@ async function exportarExcel() {
     ['Inspecoes',      insp.length],
     ['Documentos SST', docs.length],
     ['Planos de Acao', planos.length],
-    ['Score IA SST',   score + '/100']
-  ];
-  var wsResumo = XLSX.utils.aoa_to_sheet(resumo);
+    ['Score IA SST',   score+'/100']
+  ]);
   XLSX.utils.book_append_sheet(wb, wsResumo, 'Resumo');
 
-  /* ── Aba: Colaboradores ── */
+  /* Aba Colaboradores */
   if (colabs.length > 0) {
-    var wsColabs = XLSX.utils.json_to_sheet(colabs.map(function(c) {
-      return { Nome: c.nome||'--', Cargo: c.cargo||'--', Setor: c.setor||'--', Status: c.status||'--', Admissao: c.admissao||'--' };
-    }));
-    XLSX.utils.book_append_sheet(wb, wsColabs, 'Colaboradores');
+    XLSX.utils.book_append_sheet(wb,
+      XLSX.utils.json_to_sheet(colabs.map(function(c){
+        return { Nome:c.nome||'--', Cargo:c.cargo||'--', Setor:c.setor||'--', Status:c.status||'--', Admissao:c.admissao||'--' };
+      })), 'Colaboradores');
   }
 
-  /* ── Aba: Ocorrências ── */
+  /* Aba Ocorrências */
   if (ocorrs.length > 0) {
-    var wsOcorr = XLSX.utils.json_to_sheet(ocorrs.map(function(o) {
-      return { Data: o.data||'--', Tipo: o.tipo||'--', Colaborador: o.colaborador||'--', Setor: o.setor||'--', Descricao: o.descricao||'--', Acao: o.acao||'--' };
-    }));
-    XLSX.utils.book_append_sheet(wb, wsOcorr, 'Ocorrencias');
+    XLSX.utils.book_append_sheet(wb,
+      XLSX.utils.json_to_sheet(ocorrs.map(function(o){
+        return { Data:o.data||'--', Tipo:o.tipo||'--', Colaborador:o.colaborador||'--', Setor:o.setor||'--', Descricao:o.descricao||'--', Acao:o.acao||'--' };
+      })), 'Ocorrencias');
   }
 
-  /* ── Aba: Treinamentos ── */
+  /* Aba Treinamentos */
   if (treins.length > 0) {
-    var wsTrein = XLSX.utils.json_to_sheet(treins.map(function(t) {
-      return { Treinamento: t.nome||'--', Colaborador: t.colaborador||'--', DataReal: t.dataReal||'--', Validade: t.dataVal||'--', Status: t.status||'--' };
-    }));
-    XLSX.utils.book_append_sheet(wb, wsTrein, 'Treinamentos');
+    XLSX.utils.book_append_sheet(wb,
+      XLSX.utils.json_to_sheet(treins.map(function(t){
+        return { Treinamento:t.nome||'--', Colaborador:t.colaborador||'--', DataReal:t.dataReal||'--', Validade:t.dataVal||'--', Status:t.status||'--' };
+      })), 'Treinamentos');
   }
 
-  /* ── Aba: Riscos ── */
+  /* Aba Riscos */
   if (riscos.length > 0) {
-    var wsRiscos = XLSX.utils.json_to_sheet(riscos.map(function(r) {
-      return { Risco: r.nome||'--', Nivel: r.nivel||'--', Setor: r.setor||'--', Medida: r.medida||'--' };
-    }));
-    XLSX.utils.book_append_sheet(wb, wsRiscos, 'Riscos');
+    XLSX.utils.book_append_sheet(wb,
+      XLSX.utils.json_to_sheet(riscos.map(function(r){
+        return { Risco:r.nome||'--', Nivel:r.nivel||'--', Setor:r.setor||'--', Medida:r.medida||'--' };
+      })), 'Riscos');
   }
 
-  /* ── Aba: Planos de Ação ── */
+  /* Aba Planos de Ação */
   if (planos.length > 0) {
-    var wsPlanos = XLSX.utils.json_to_sheet(planos.map(function(p) {
-      return { Acao: p.acao||'--', Responsavel: p.responsavel||'--', Prazo: p.quando||'--', Status: p.status||'--' };
-    }));
-    XLSX.utils.book_append_sheet(wb, wsPlanos, 'Planos de Acao');
+    XLSX.utils.book_append_sheet(wb,
+      XLSX.utils.json_to_sheet(planos.map(function(p){
+        return { Acao:p.acao||'--', Responsavel:p.responsavel||'--', Prazo:p.quando||'--', Status:p.status||'--' };
+      })), 'Planos de Acao');
   }
 
-  XLSX.writeFile(wb, 'SafeNR_Relatorio_' + hoje.replace(/\//g,'-') + '.xlsx');
+  XLSX.writeFile(wb, 'SafeNR_Relatorio_'+hoje.replace(/\//g,'-')+'.xlsx');
   showToast('✅ Excel gerado com sucesso!');
 }
 
 /* ══════════════════════════════════════════════════
-   AUTH
+   UTILITÁRIOS
    ══════════════════════════════════════════════════ */
-var userData = localStorage.getItem('safenr_user');
-if (!userData) { window.location.href = './index.html'; }
-var user = JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
-document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
-function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
-
 var chartInstances = {};
-
-function fmt(d) { if (!d) return '--'; var p = d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function fmt(d){ if(!d) return '--'; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
 function isVencido(d)  { return d && new Date(d+'T00:00:00') < new Date(); }
 function venceEm30(d)  { if(!d) return false; var diff=(new Date(d+'T00:00:00')-new Date())/86400000; return diff>=0&&diff<=30; }
 
 /* ══════════════════════════════════════════════════
-   SCORE IA — versão síncrona (recebe arrays prontos)
+   SCORE IA — versão síncrona
    ══════════════════════════════════════════════════ */
-function calcularScoreIA_sync(colabs, treins, riscos, ocorrs, insp, docs) {
-  var pontos = 0;
+function calcularScoreIA_sync(colabs,treins,riscos,ocorrs,insp,docs) {
+  var pontos=0;
   var episTotal=0, episVenc=0;
   colabs.forEach(function(c){ (c.epis||[]).forEach(function(e){ episTotal++; if(isVencido(e.validade)) episVenc++; }); });
   pontos += episTotal>0 ? Math.round(20*(1-episVenc/episTotal)) : 20;
   var trVenc=treins.filter(function(t){return isVencido(t.dataVal);}).length;
   pontos += treins.length>0 ? Math.max(0,Math.round(20*(1-trVenc/treins.length))) : 20;
   var rCrit=riscos.filter(function(r){return r.nivel==='critico';}).length;
-  pontos += Math.min(20, Math.max(0, 20-rCrit*3));
+  pontos += Math.min(20,Math.max(0,20-rCrit*3));
   var docsVenc=docs.filter(function(d){return isVencido(d.validade);}).length;
   pontos += docs.length>0 ? Math.max(0,Math.round(15*(1-docsVenc/docs.length))) : 10;
   var ocSemAcao=ocorrs.filter(function(o){return o.tipo==='acidente'&&!o.acao;}).length;
-  pontos += Math.min(15, Math.max(0, 15-ocSemAcao*3));
+  pontos += Math.min(15,Math.max(0,15-ocSemAcao*3));
   var inspConc=insp.filter(function(i){return i.status==='concluido'||i.status==='aprovado';}).length;
   pontos += insp.length>0 ? Math.round(10*(inspConc/insp.length)) : 10;
-  return Math.min(100, Math.round(pontos));
+  return Math.min(100,Math.round(pontos));
 }
 
-/* Versão assíncrona para o dashboard */
-async function calcularScoreIA() {
-  var colabs = await getData('safenr_colaboradores');
-  var treins = await getData('safenr_treinamentos');
-  var riscos = await getData('safenr_riscos');
-  var docs   = await getData('safenr_documentos');
-  var ocorrs = await getData('safenr_ocorrencias');
-  var insp   = await getData('safenr_inspecoes');
-  return calcularScoreIA_sync(colabs, treins, riscos, ocorrs, insp, docs);
-}
-
-/* ── BADGE NOTIFICAÇÕES ── */
+/* ══════════════════════════════════════════════════
+   BADGE NOTIFICAÇÕES
+   ══════════════════════════════════════════════════ */
 async function atualizarBadgeNotif() {
   var notifs   = await getData('safenr_notificacoes');
   var naoLidas = notifs.filter(function(n){ return !n.lida; }).length;
@@ -541,15 +705,17 @@ async function atualizarBadgeNotif() {
   if (!link) return;
   var badge = link.querySelector('.notif-badge');
   if (naoLidas > 0) {
-    if (!badge) { badge = document.createElement('span'); badge.className = 'notif-badge'; link.appendChild(badge); }
-    badge.textContent = naoLidas > 99 ? '99+' : naoLidas;
+    if (!badge) { badge=document.createElement('span'); badge.className='notif-badge'; link.appendChild(badge); }
+    badge.textContent = naoLidas>99?'99+':naoLidas;
   } else if (badge) { badge.remove(); }
 }
 
-/* ── KPIs ── */
+/* ══════════════════════════════════════════════════
+   KPIs
+   ══════════════════════════════════════════════════ */
 async function calcularKPIs() {
   showToast('🔄 Carregando dados...', 1800);
-  var hoje   = new Date(); hoje.setHours(0,0,0,0);
+  var hoje = new Date(); hoje.setHours(0,0,0,0);
 
   var colabs    = await getData('safenr_colaboradores');
   var ocorrs    = await getData('safenr_ocorrencias');
@@ -579,7 +745,7 @@ async function calcularKPIs() {
   /* Treinamentos */
   var treinVenc = treins.filter(function(t){ return isVencido(t.dataVal); }).length;
   document.getElementById('kpi-trein').textContent     = treins.length;
-  document.getElementById('kpi-trein-sub').textContent = treinVenc>0 ? treinVenc+' vencidos ⚠️' : 'Todos OK ✅';
+  document.getElementById('kpi-trein-sub').textContent = treinVenc>0?treinVenc+' vencidos ⚠️':'Todos OK ✅';
 
   /* Riscos */
   var riscoCrit = riscos.filter(function(r){ return r.nivel==='critico'; }).length;
@@ -597,7 +763,7 @@ async function calcularKPIs() {
     (c.epis||[]).forEach(function(e){ if(isVencido(e.validade)||venceEm30(e.validade)) episVencendo++; });
   });
   document.getElementById('kpi-epis').textContent     = episVencendo;
-  document.getElementById('kpi-epis-sub').textContent = episVencendo>0 ? 'Requer atencao' : 'Todos OK ✅';
+  document.getElementById('kpi-epis-sub').textContent = episVencendo>0?'Requer atencao':'Todos OK ✅';
 
   /* Checklists */
   var checkPend = checks.filter(function(c){ return c.status==='pendente'||!c.status; }).length;
@@ -620,91 +786,108 @@ async function calcularKPIs() {
     return p.status!=='concluido'&&p.status!=='cancelado'&&p.quando&&new Date(p.quando+'T00:00:00')<hoje;
   }).length;
   document.getElementById('kpi-planos').textContent     = planos.length;
-  document.getElementById('kpi-planos-sub').textContent = planosAtrasados>0 ? planosAtrasados+' atrasados ⚠️' : 'Todos em dia ✅';
+  document.getElementById('kpi-planos-sub').textContent = planosAtrasados>0?planosAtrasados+' atrasados ⚠️':'Todos em dia ✅';
 
   /* Documentos SST */
   var docsVenc = docs.filter(function(d){ return isVencido(d.validade); }).length;
   document.getElementById('kpi-docs').textContent     = docs.length;
-  document.getElementById('kpi-docs-sub').textContent = docsVenc>0 ? docsVenc+' vencidos ⚠️' : 'Todos OK ✅';
+  document.getElementById('kpi-docs-sub').textContent = docsVenc>0?docsVenc+' vencidos ⚠️':'Todos OK ✅';
 
   /* Ambientes */
   var ambCrit = ambientes.filter(function(a){ return a.nivel==='critico'; }).length;
   document.getElementById('kpi-ambientes').textContent     = ambientes.length;
-  document.getElementById('kpi-ambientes-sub').textContent = ambCrit>0 ? ambCrit+' criticos' : 'Mapeados ✅';
+  document.getElementById('kpi-ambientes-sub').textContent = ambCrit>0?ambCrit+' criticos':'Mapeados ✅';
 
   /* Score IA */
-  var score    = calcularScoreIA_sync(colabs, treins, riscos, ocorrs, insp, docs);
+  var score    = calcularScoreIA_sync(colabs,treins,riscos,ocorrs,insp,docs);
   var scoreCor = score>=85?'#4ade80':score>=70?'#fbbf24':score>=50?'#fb923c':'#f87171';
-  document.getElementById('kpi-ia-score').textContent     = score;
-  document.getElementById('kpi-ia-score').style.color     = scoreCor;
-  document.getElementById('kpi-ia-sub').textContent       = score>=80 ? 'Conformidade boa ✅' : 'Verificar sugestoes';
-  document.getElementById('iaBannerScore').textContent    = 'Score SST: ' + score + '/100';
-  document.getElementById('iaBannerScore').style.color    = scoreCor;
+  document.getElementById('kpi-ia-score').textContent  = score;
+  document.getElementById('kpi-ia-score').style.color  = scoreCor;
+  document.getElementById('kpi-ia-sub').textContent    = score>=80?'Conformidade boa ✅':'Verificar sugestoes';
+  document.getElementById('iaBannerScore').textContent = 'Score SST: '+score+'/100';
+  document.getElementById('iaBannerScore').style.color = scoreCor;
 
-  return { colabs, ocorrs, treins, riscos, insp, agenda, episVencendo, treinVenc: treinVenc, riscoCrit: riscoCrit, planos, docs };
+  return { colabs, ocorrs, treins, riscos, insp, agenda, episVencendo, treinVenc, riscoCrit, planos, docs };
 }
 
-/* ── ALERTAS ── */
+/* ══════════════════════════════════════════════════
+   ALERTAS
+   ══════════════════════════════════════════════════ */
 function calcularAlertas(dados) {
-  var alertas = [];
+  var alertas=[];
   var episVencidos=0;
   dados.colabs.forEach(function(c){ (c.epis||[]).forEach(function(e){ if(isVencido(e.validade)) episVencidos++; }); });
-  if (episVencidos>0)        alertas.push({ urgente:true,  icone:'🦺', titulo:episVencidos+' EPI(s) Vencido(s)',              desc:'Requer substituicao imediata',  link:'./colaboradores.html' });
-  if (dados.treinVenc>0)     alertas.push({ urgente:true,  icone:'🎓', titulo:dados.treinVenc+' Treinamento(s) Vencido(s)',   desc:'Certificados expirados',        link:'./treinamentos.html' });
-  if (dados.riscoCrit>0)     alertas.push({ urgente:true,  icone:'⚠️', titulo:dados.riscoCrit+' Risco(s) Critico(s)',         desc:'Requer acao imediata',          link:'./riscos.html' });
-  var ocSemAcao = dados.ocorrs.filter(function(o){ return o.tipo==='acidente'&&!o.acao; }).length;
-  if (ocSemAcao>0)           alertas.push({ urgente:true,  icone:'🚨', titulo:ocSemAcao+' Acidente(s) sem Plano de Acao',     desc:'Investigacao pendente',         link:'./ocorrencias.html' });
-  var docsVenc = dados.docs.filter(function(d){ return isVencido(d.validade); }).length;
-  if (docsVenc>0)            alertas.push({ urgente:true,  icone:'🗂️', titulo:docsVenc+' Documento(s) SST Vencido(s)',         desc:'Renovacao necessaria',          link:'./documentos.html' });
-  var hoje=new Date(); hoje.setHours(0,0,0,0);
-  var planosAtrasados = dados.planos.filter(function(p){
-    return p.status!=='concluido'&&p.status!=='cancelado'&&p.quando&&new Date(p.quando+'T00:00:00')<hoje;
+  if (episVencidos>0)    alertas.push({urgente:true, icone:'🦺',titulo:episVencidos+' EPI(s) Vencido(s)',              desc:'Requer substituicao imediata', link:'./colaboradores.html'});
+  if (dados.treinVenc>0) alertas.push({urgente:true, icone:'🎓',titulo:dados.treinVenc+' Treinamento(s) Vencido(s)',   desc:'Certificados expirados',       link:'./treinamentos.html'});
+  if (dados.riscoCrit>0) alertas.push({urgente:true, icone:'⚠️',titulo:dados.riscoCrit+' Risco(s) Critico(s)',         desc:'Requer acao imediata',         link:'./riscos.html'});
+  var ocSemAcao=dados.ocorrs.filter(function(o){return o.tipo==='acidente'&&!o.acao;}).length;
+  if (ocSemAcao>0)       alertas.push({urgente:true, icone:'🚨',titulo:ocSemAcao+' Acidente(s) sem Plano de Acao',     desc:'Investigacao pendente',        link:'./ocorrencias.html'});
+  var docsVenc=dados.docs.filter(function(d){return isVencido(d.validade);}).length;
+  if (docsVenc>0)        alertas.push({urgente:true, icone:'🗂️',titulo:docsVenc+' Documento(s) SST Vencido(s)',         desc:'Renovacao necessaria',         link:'./documentos.html'});
+  var hoje2=new Date(); hoje2.setHours(0,0,0,0);
+  var planosAtrasados=dados.planos.filter(function(p){
+    return p.status!=='concluido'&&p.status!=='cancelado'&&p.quando&&new Date(p.quando+'T00:00:00')<hoje2;
   }).length;
-  if (planosAtrasados>0)     alertas.push({ urgente:true,  icone:'📌', titulo:planosAtrasados+' Plano(s) de Acao Atrasado(s)', desc:'Prazos vencidos no 5W2H',      link:'./plano-acao.html' });
+  if (planosAtrasados>0) alertas.push({urgente:true, icone:'📌',titulo:planosAtrasados+' Plano(s) de Acao Atrasado(s)',desc:'Prazos vencidos no 5W2H',      link:'./plano-acao.html'});
   var episBreve=0;
   dados.colabs.forEach(function(c){ (c.epis||[]).forEach(function(e){ if(venceEm30(e.validade)) episBreve++; }); });
-  if (episBreve>0)           alertas.push({ urgente:false, icone:'🦺', titulo:episBreve+' EPI(s) Vencem em 30 dias',            desc:'Planejar substituicao',         link:'./colaboradores.html' });
-  var trBreve = dados.treins.filter(function(t){ return venceEm30(t.dataVal); }).length;
-  if (trBreve>0)             alertas.push({ urgente:false, icone:'🎓', titulo:trBreve+' Treinamento(s) Vencem em 30 dias',      desc:'Agendar renovacao',            link:'./treinamentos.html' });
+  if (episBreve>0)       alertas.push({urgente:false,icone:'🦺',titulo:episBreve+' EPI(s) Vencem em 30 dias',           desc:'Planejar substituicao',        link:'./colaboradores.html'});
+  var trBreve=dados.treins.filter(function(t){return venceEm30(t.dataVal);}).length;
+  if (trBreve>0)         alertas.push({urgente:false,icone:'🎓',titulo:trBreve+' Treinamento(s) Vencem em 30 dias',     desc:'Agendar renovacao',            link:'./treinamentos.html'});
 
-  var grid = document.getElementById('alertasGrid');
-  grid.innerHTML = '';
-  if (alertas.length === 0) {
-    grid.innerHTML = '<div class="alerta-card amarelo"><div class="alerta-icone">✅</div><div class="alerta-texto"><p>Nenhum alerta critico</p><span>Todos os indicadores OK</span></div></div>';
+  /* Dispara push local para alertas urgentes */
+  var urgentes = alertas.filter(function(a){ return a.urgente; });
+  if (urgentes.length > 0) {
+    notificarPushLocal(
+      '⚠️ SafeNR — '+urgentes.length+' alerta(s) critico(s)',
+      urgentes.map(function(a){ return a.titulo; }).join('\n'),
+      './app.html'
+    );
+  }
+
+  var grid=document.getElementById('alertasGrid');
+  grid.innerHTML='';
+  if (alertas.length===0) {
+    grid.innerHTML='<div class="alerta-card amarelo"><div class="alerta-icone">✅</div><div class="alerta-texto"><p>Nenhum alerta critico</p><span>Todos os indicadores OK</span></div></div>';
     return;
   }
-  alertas.slice(0,6).forEach(function(a) {
-    var div = document.createElement('div');
-    div.className = 'alerta-card'+(a.urgente?'':' amarelo');
-    div.innerHTML = '<div class="alerta-icone">'+a.icone+'</div><div class="alerta-texto"><p>'+a.titulo+'</p><span>'+a.desc+'</span></div><a href="'+a.link+'">Ver →</a>';
+  alertas.slice(0,6).forEach(function(a){
+    var div=document.createElement('div');
+    div.className='alerta-card'+(a.urgente?'':' amarelo');
+    div.innerHTML='<div class="alerta-icone">'+a.icone+'</div><div class="alerta-texto"><p>'+a.titulo+'</p><span>'+a.desc+'</span></div><a href="'+a.link+'">Ver →</a>';
     grid.appendChild(div);
   });
 }
 
-/* ── GRÁFICOS ── */
-function destroyChart(id) { if(chartInstances[id]){ chartInstances[id].destroy(); delete chartInstances[id]; } }
+/* ══════════════════════════════════════════════════
+   GRÁFICOS
+   ══════════════════════════════════════════════════ */
+function destroyChart(id){ if(chartInstances[id]){ chartInstances[id].destroy(); delete chartInstances[id]; } }
 
 function renderGraficos(dados) {
+  /* Riscos — Doughnut */
   destroyChart('chartRiscos');
-  var niveis  =['critico','alto','medio','baixo','eliminado'];
-  var coresR  =['#f87171','#fb923c','#fbbf24','#4ade80','rgba(255,255,255,.2)'];
-  var valoresR= niveis.map(function(n){ return dados.riscos.filter(function(r){ return r.nivel===n; }).length; });
-  chartInstances['chartRiscos'] = new Chart(document.getElementById('chartRiscos'),{
+  var valoresR=['critico','alto','medio','baixo','eliminado'].map(function(n){
+    return dados.riscos.filter(function(r){return r.nivel===n;}).length;
+  });
+  chartInstances['chartRiscos']=new Chart(document.getElementById('chartRiscos'),{
     type:'doughnut',
-    data:{ labels:['Critico','Alto','Medio','Baixo','Eliminado'], datasets:[{ data:valoresR, backgroundColor:coresR, borderColor:'#0f1923', borderWidth:3 }] },
-    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'right', labels:{ color:'rgba(255,255,255,.6)', font:{size:11}, boxWidth:12 } } } }
+    data:{labels:['Critico','Alto','Medio','Baixo','Eliminado'],datasets:[{data:valoresR,backgroundColor:['#f87171','#fb923c','#fbbf24','#4ade80','rgba(255,255,255,.2)'],borderColor:'#0f1923',borderWidth:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'rgba(255,255,255,.6)',font:{size:11},boxWidth:12}}}}
   });
 
+  /* Ocorrências — Doughnut */
   destroyChart('chartOcorr');
-  var tipos   =['acidente','incidente','quase-acidente','condicao-insegura'];
-  var coresO  =['#f87171','#fb923c','#fbbf24','#a78bfa'];
-  var valoresO= tipos.map(function(t){ return dados.ocorrs.filter(function(o){ return o.tipo===t; }).length; });
-  chartInstances['chartOcorr'] = new Chart(document.getElementById('chartOcorr'),{
+  var valoresO=['acidente','incidente','quase-acidente','condicao-insegura'].map(function(t){
+    return dados.ocorrs.filter(function(o){return o.tipo===t;}).length;
+  });
+  chartInstances['chartOcorr']=new Chart(document.getElementById('chartOcorr'),{
     type:'doughnut',
-    data:{ labels:['Acidente','Incidente','Quase-Acidente','Cond. Insegura'], datasets:[{ data:valoresO, backgroundColor:coresO, borderColor:'#0f1923', borderWidth:3 }] },
-    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'right', labels:{ color:'rgba(255,255,255,.6)', font:{size:11}, boxWidth:12 } } } }
+    data:{labels:['Acidente','Incidente','Quase-Acidente','Cond. Insegura'],datasets:[{data:valoresO,backgroundColor:['#f87171','#fb923c','#fbbf24','#a78bfa'],borderColor:'#0f1923',borderWidth:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'rgba(255,255,255,.6)',font:{size:11},boxWidth:12}}}}
   });
 
+  /* Treinamentos — Barras */
   destroyChart('chartTrein');
   var hojeT=new Date(), meses=[], labMeses=[];
   for(var i=5;i>=0;i--){
@@ -712,26 +895,28 @@ function renderGraficos(dados) {
     meses.push({m:d.getMonth(),y:d.getFullYear()});
     labMeses.push(d.toLocaleString('pt-BR',{month:'short',year:'2-digit'}));
   }
-  var concl=meses.map(function(m){ return dados.treins.filter(function(t){ if(!t.dataReal) return false; var d=new Date(t.dataReal); return d.getMonth()===m.m&&d.getFullYear()===m.y&&t.status==='concluido'; }).length; });
-  var agend=meses.map(function(m){ return dados.treins.filter(function(t){ if(!t.dataReal) return false; var d=new Date(t.dataReal); return d.getMonth()===m.m&&d.getFullYear()===m.y&&t.status==='agendado'; }).length; });
-  chartInstances['chartTrein'] = new Chart(document.getElementById('chartTrein'),{
+  var concl=meses.map(function(m){ return dados.treins.filter(function(t){ if(!t.dataReal)return false; var d=new Date(t.dataReal); return d.getMonth()===m.m&&d.getFullYear()===m.y&&t.status==='concluido'; }).length; });
+  var agend=meses.map(function(m){ return dados.treins.filter(function(t){ if(!t.dataReal)return false; var d=new Date(t.dataReal); return d.getMonth()===m.m&&d.getFullYear()===m.y&&t.status==='agendado'; }).length; });
+  chartInstances['chartTrein']=new Chart(document.getElementById('chartTrein'),{
     type:'bar',
-    data:{ labels:labMeses, datasets:[
-      { label:'Concluidos', data:concl, backgroundColor:'rgba(74,222,128,.7)', borderRadius:6 },
-      { label:'Agendados',  data:agend, backgroundColor:'rgba(96,165,250,.7)',  borderRadius:6 }
+    data:{labels:labMeses,datasets:[
+      {label:'Concluidos',data:concl,backgroundColor:'rgba(74,222,128,.7)',borderRadius:6},
+      {label:'Agendados', data:agend,backgroundColor:'rgba(96,165,250,.7)', borderRadius:6}
     ]},
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{ labels:{ color:'rgba(255,255,255,.6)',font:{size:11} } } },
-      scales:{ x:{ ticks:{color:'rgba(255,255,255,.4)'}, grid:{color:'rgba(255,255,255,.05)'} }, y:{ ticks:{color:'rgba(255,255,255,.4)',stepSize:1}, grid:{color:'rgba(255,255,255,.05)'}, beginAtZero:true } }
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'rgba(255,255,255,.6)',font:{size:11}}}},
+      scales:{x:{ticks:{color:'rgba(255,255,255,.4)'},grid:{color:'rgba(255,255,255,.05)'}},y:{ticks:{color:'rgba(255,255,255,.4)',stepSize:1},grid:{color:'rgba(255,255,255,.05)'},beginAtZero:true}}
     }
   });
 }
 
-/* ── ATIVIDADE RECENTE ── */
+/* ══════════════════════════════════════════════════
+   ATIVIDADE RECENTE
+   ══════════════════════════════════════════════════ */
 function renderAtividade(dados) {
-  var listaOcorr = document.getElementById('listaOcorr');
-  var ult5 = dados.ocorrs.slice().sort(function(a,b){ return new Date(b.registradoEm||0)-new Date(a.registradoEm||0); }).slice(0,5);
-  listaOcorr.innerHTML = '';
+  var listaOcorr=document.getElementById('listaOcorr');
+  var ult5=dados.ocorrs.slice().sort(function(a,b){return new Date(b.registradoEm||0)-new Date(a.registradoEm||0);}).slice(0,5);
+  listaOcorr.innerHTML='';
   if(ult5.length===0){ listaOcorr.innerHTML='<p class="empty-ativ">Nenhuma ocorrencia registrada</p>'; }
   else {
     var cores={'acidente':'#f87171','incidente':'#fb923c','quase-acidente':'#fbbf24','condicao-insegura':'#a78bfa'};
@@ -742,10 +927,10 @@ function renderAtividade(dados) {
     });
   }
 
-  var listaAg = document.getElementById('listaAgenda');
-  var hojeStr = new Date().toISOString().split('T')[0];
-  var prox5   = dados.agenda.filter(function(e){ return e.data>=hojeStr; }).sort(function(a,b){ return a.data.localeCompare(b.data); }).slice(0,5);
-  listaAg.innerHTML = '';
+  var listaAg=document.getElementById('listaAgenda');
+  var hojeStr=new Date().toISOString().split('T')[0];
+  var prox5=dados.agenda.filter(function(e){return e.data>=hojeStr;}).sort(function(a,b){return a.data.localeCompare(b.data);}).slice(0,5);
+  listaAg.innerHTML='';
   if(prox5.length===0){ listaAg.innerHTML='<p class="empty-ativ">Nenhum evento proximo</p>'; }
   else {
     prox5.forEach(function(e){
@@ -756,14 +941,20 @@ function renderAtividade(dados) {
   }
 }
 
-/* ── DATA ── */
+/* ══════════════════════════════════════════════════
+   DATA
+   ══════════════════════════════════════════════════ */
 function atualizarData() {
-  document.getElementById('dataHoje').textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  document.getElementById('dataHoje').textContent =
+    new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
 }
 
-/* ── INICIALIZAR ── */
+/* ══════════════════════════════════════════════════
+   INICIALIZAR
+   ══════════════════════════════════════════════════ */
 async function inicializar() {
   atualizarData();
+  aplicarPermissoes();
   var dados = await calcularKPIs();
   calcularAlertas(dados);
   renderGraficos(dados);
@@ -771,7 +962,10 @@ async function inicializar() {
   await atualizarBadgeNotif();
 }
 
+/* ── Executa ao carregar ── */
 inicializar();
+registrarPWA();
+setTimeout(verificarVencimentosEmail, 3000);
 </script>
 </body>
 </html>
