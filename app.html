@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SafeNR — Sistema Unificado</title>
+  <title>SafeNR — Sistema de Segurança do Trabalho</title>
 
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#0f1923" />
@@ -16,130 +16,198 @@
   <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Segoe UI',sans-serif; background:#0f1923; color:#fff; display:flex; min-height:100vh; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
+    :root {
+      --bg:       #0f1923;
+      --bg2:      #0a1520;
+      --bg3:      #111c28;
+      --border:   rgba(255,255,255,.07);
+      --text:     #fff;
+      --muted:    rgba(255,255,255,.45);
+      --accent:   #00d4ff;
+      --accent2:  #0099cc;
+      --green:    #4ade80;
+      --yellow:   #fbbf24;
+      --red:      #f87171;
+      --orange:   #fb923c;
+      --purple:   #a78bfa;
+      --blue:     #60a5fa;
+    }
+
+    html { scroll-behavior:smooth; }
+
+    body {
+      font-family:'Segoe UI', system-ui, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      display:flex;
+      min-height:100vh;
+      line-height:1.5;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:6px; }
+
+    /* ══════════════ SIDEBAR ══════════════ */
     .sidebar {
       width:240px;
-      background:#0a1520;
-      border-right:1px solid rgba(255,255,255,.07);
+      background:var(--bg2);
+      border-right:1px solid var(--border);
       display:flex;
       flex-direction:column;
-      padding:24px 0;
+      padding:0;
       position:fixed;
+      top:0; left:0;
       height:100vh;
-      z-index:10;
+      z-index:100;
+      transition:transform .28s ease;
     }
 
     .sidebar-logo {
       text-align:center;
-      padding:0 24px 28px;
-      border-bottom:1px solid rgba(255,255,255,.07);
+      padding:22px 24px 20px;
+      border-bottom:1px solid var(--border);
+      flex-shrink:0;
     }
 
     .sidebar-logo h1 {
-      font-size:1.6rem;
-      font-weight:800;
+      font-size:1.55rem;
+      font-weight:900;
       letter-spacing:2px;
     }
 
-    .sidebar-logo h1 span { color:#00d4ff; }
+    .sidebar-logo h1 span { color:var(--accent); }
 
     .sidebar-logo p {
-      font-size:.7rem;
-      color:rgba(255,255,255,.35);
+      font-size:.68rem;
+      color:var(--muted);
       margin-top:2px;
+      letter-spacing:.5px;
     }
 
     .nav {
       flex:1;
-      padding:20px 0;
+      padding:12px 0;
       overflow-y:auto;
+    }
+
+    .nav-section {
+      font-size:.65rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      color:rgba(255,255,255,.2);
+      padding:14px 20px 4px;
     }
 
     .nav-item {
       display:flex;
       align-items:center;
-      gap:12px;
-      padding:13px 24px;
+      gap:11px;
+      padding:11px 20px;
       cursor:pointer;
-      color:rgba(255,255,255,.55);
-      font-size:.9rem;
+      color:var(--muted);
+      font-size:.875rem;
       font-weight:500;
-      transition:all .2s;
+      transition:all .18s;
       border-left:3px solid transparent;
       text-decoration:none;
+      user-select:none;
     }
 
     .nav-item:hover {
-      color:#fff;
+      color:var(--text);
       background:rgba(255,255,255,.04);
     }
 
     .nav-item.active {
-      color:#00d4ff;
-      border-left-color:#00d4ff;
-      background:rgba(0,212,255,.06);
+      color:var(--accent);
+      border-left-color:var(--accent);
+      background:rgba(0,212,255,.07);
+      font-weight:600;
     }
 
     .nav-item .icon {
-      font-size:1.1rem;
-      width:20px;
+      font-size:1rem;
+      width:18px;
       text-align:center;
+      flex-shrink:0;
     }
 
-    .sidebar-user {
-      padding:16px 24px;
-      border-top:1px solid rgba(255,255,255,.07);
+    .nav-badge {
+      background:var(--red);
+      color:#fff;
+      border-radius:20px;
+      padding:1px 7px;
+      font-size:.62rem;
+      font-weight:700;
+      margin-left:auto;
+    }
+
+    .sidebar-footer {
+      padding:14px 20px;
+      border-top:1px solid var(--border);
       display:flex;
       align-items:center;
-      gap:12px;
+      gap:10px;
+      flex-shrink:0;
     }
 
     .avatar {
-      width:36px;
-      height:36px;
-      background:linear-gradient(135deg,#00d4ff,#0099cc);
+      width:34px;
+      height:34px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
       border-radius:50%;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-weight:700;
-      font-size:.85rem;
+      font-weight:800;
+      font-size:.82rem;
+      flex-shrink:0;
     }
 
-    .user-info p { font-size:.82rem; font-weight:600; }
+    .user-info { flex:1; min-width:0; }
+    .user-info p { font-size:.82rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
     .perfil-badge {
       display:inline-block;
-      background:rgba(0,212,255,.12);
+      background:rgba(0,212,255,.1);
       border:1px solid rgba(0,212,255,.2);
       border-radius:20px;
-      padding:2px 10px;
-      font-size:.65rem;
+      padding:1px 8px;
+      font-size:.62rem;
       font-weight:700;
-      color:#00d4ff;
-      margin-top:3px;
+      color:var(--accent);
+      margin-top:2px;
     }
 
     .btn-sair {
       background:none;
       border:none;
-      color:rgba(255,80,80,.7);
+      color:rgba(248,113,113,.6);
       cursor:pointer;
-      font-size:.8rem;
-      margin-left:auto;
+      font-size:.78rem;
+      padding:4px;
+      flex-shrink:0;
+      transition:color .18s;
     }
 
+    .btn-sair:hover { color:var(--red); }
+
+    /* ══════════════ MAIN ══════════════ */
     .main {
       margin-left:240px;
       flex:1;
-      padding:32px;
+      padding:28px 32px;
+      min-width:0;
     }
 
     .topbar {
       display:flex;
-      align-items:center;
+      align-items:flex-start;
       justify-content:space-between;
       margin-bottom:24px;
       gap:16px;
@@ -147,1545 +215,2207 @@
     }
 
     .topbar-left h2 {
-      font-size:1.4rem;
-      font-weight:700;
+      font-size:1.35rem;
+      font-weight:800;
       margin-bottom:2px;
     }
 
     .topbar-left p {
-      font-size:.85rem;
-      color:rgba(255,255,255,.35);
+      font-size:.82rem;
+      color:var(--muted);
     }
 
     .topbar-right {
       display:flex;
-      gap:10px;
+      gap:8px;
       flex-wrap:wrap;
+      align-items:center;
     }
 
+    /* ══════════════ BOTÕES ══════════════ */
     .btn {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
       border-radius:10px;
-      font-size:.85rem;
+      font-size:.83rem;
       font-weight:600;
-      padding:10px 18px;
+      padding:9px 16px;
       cursor:pointer;
-      transition:all .2s;
+      transition:all .18s;
       border:1px solid transparent;
+      white-space:nowrap;
+      text-decoration:none;
     }
 
-    .btn-atualizar {
-      background:rgba(0,212,255,.1);
-      border-color:rgba(0,212,255,.2);
-      color:#00d4ff;
-    }
+    .btn:disabled { opacity:.45; cursor:not-allowed; }
 
-    .btn-atualizar:hover { background:rgba(0,212,255,.2); }
+    .btn-primary  { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:var(--bg); border:none; }
+    .btn-primary:hover { filter:brightness(1.08); }
 
-    .btn-export-pdf {
-      background:rgba(248,113,113,.1);
-      border-color:rgba(248,113,113,.25);
-      color:#f87171;
-    }
+    .btn-outline  { background:rgba(0,212,255,.08); border-color:rgba(0,212,255,.2); color:var(--accent); }
+    .btn-outline:hover { background:rgba(0,212,255,.15); }
 
-    .btn-export-pdf:hover { background:rgba(248,113,113,.22); }
+    .btn-danger   { background:rgba(248,113,113,.1); border-color:rgba(248,113,113,.22); color:var(--red); }
+    .btn-danger:hover { background:rgba(248,113,113,.18); }
 
-    .btn-export-xls {
-      background:rgba(74,222,128,.1);
-      border-color:rgba(74,222,128,.25);
-      color:#4ade80;
-    }
+    .btn-success  { background:rgba(74,222,128,.1); border-color:rgba(74,222,128,.22); color:var(--green); }
+    .btn-success:hover { background:rgba(74,222,128,.18); }
 
-    .btn-export-xls:hover { background:rgba(74,222,128,.22); }
+    .btn-warn     { background:rgba(251,191,36,.1); border-color:rgba(251,191,36,.22); color:var(--yellow); }
+    .btn-warn:hover { background:rgba(251,191,36,.18); }
 
-    .btn-primary {
-      background:linear-gradient(135deg,#00d4ff,#0099cc);
-      color:#0f1923;
-      border:none;
-    }
+    .btn-sm { padding:6px 12px; font-size:.78rem; }
 
-    .btn-primary:hover { filter:brightness(1.05); }
-
-    .btn-danger {
-      background:rgba(248,113,113,.12);
-      border-color:rgba(248,113,113,.25);
-      color:#f87171;
-    }
-
-    .btn-danger:hover { background:rgba(248,113,113,.2); }
-
+    /* ══════════════ TOAST ══════════════ */
     .sync-toast {
       position:fixed;
-      bottom:28px;
-      right:28px;
-      background:#1e293b;
-      border:1px solid rgba(0,212,255,.25);
+      bottom:24px;
+      right:24px;
+      background:#1a2840;
+      border:1px solid rgba(0,212,255,.22);
       border-radius:12px;
-      padding:12px 20px;
+      padding:11px 18px;
       font-size:.82rem;
-      color:#00d4ff;
+      color:var(--accent);
       display:flex;
       align-items:center;
       gap:10px;
       z-index:9999;
       opacity:0;
-      transform:translateY(12px);
-      transition:all .35s;
+      transform:translateY(10px);
+      transition:all .32s cubic-bezier(.4,0,.2,1);
       pointer-events:none;
+      max-width:320px;
     }
 
-    .sync-toast.show {
-      opacity:1;
-      transform:translateY(0);
-    }
+    .sync-toast.show { opacity:1; transform:translateY(0); }
 
     .sync-dot {
       width:8px;
       height:8px;
       border-radius:50%;
-      background:#00d4ff;
+      background:var(--accent);
       animation:pulse 1.2s infinite;
+      flex-shrink:0;
     }
 
-    @keyframes pulse {
-      0%,100% { opacity:1; }
-      50% { opacity:.3; }
-    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
 
-    .tela { display:none; }
+    /* ══════════════ TELAS ══════════════ */
+    .tela { display:none; animation:fadeIn .22s ease; }
     .tela.active { display:block; }
 
+    @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+    /* ══════════════ CARDS ══════════════ */
     .card {
       background:rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.07);
+      border:1px solid var(--border);
       border-radius:16px;
-      padding:20px;
+      padding:22px;
       margin-bottom:20px;
     }
 
-    .section-title {
-      font-size:1rem;
+    .card-title {
+      font-size:.92rem;
       font-weight:700;
-      margin-bottom:14px;
-      color:rgba(255,255,255,.9);
+      color:rgba(255,255,255,.88);
+      margin-bottom:16px;
+      display:flex;
+      align-items:center;
+      gap:8px;
     }
 
-    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-    .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-    .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    /* ══════════════ GRID ══════════════ */
+    .g2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .g4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
 
+    /* ══════════════ KPI ══════════════ */
     .kpi-card {
       background:rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.07);
+      border:1px solid var(--border);
       border-radius:14px;
-      padding:20px;
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+      transition:transform .18s, background .18s;
+      cursor:default;
     }
 
-    .kpi-icon { font-size:1.8rem; margin-bottom:8px; }
+    .kpi-card::before {
+      content:'';
+      position:absolute;
+      top:0; left:0; right:0;
+      height:3px;
+      border-radius:14px 14px 0 0;
+    }
+
+    .kpi-card.blue::before   { background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+    .kpi-card.green::before  { background:linear-gradient(90deg,var(--green),#16a34a); }
+    .kpi-card.red::before    { background:linear-gradient(90deg,var(--red),#dc2626); }
+    .kpi-card.yellow::before { background:linear-gradient(90deg,var(--yellow),#d97706); }
+    .kpi-card.purple::before { background:linear-gradient(90deg,var(--purple),#7c3aed); }
+    .kpi-card.orange::before { background:linear-gradient(90deg,var(--orange),#ea580c); }
+
+    .kpi-icon  { font-size:1.7rem; margin-bottom:8px; }
     .kpi-valor { font-size:2rem; font-weight:900; line-height:1; margin-bottom:4px; }
-    .kpi-label { font-size:.75rem; color:rgba(255,255,255,.4); font-weight:600; text-transform:uppercase; }
-    .kpi-sub { font-size:.72rem; margin-top:6px; font-weight:600; }
+    .kpi-label { font-size:.7rem; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.6px; }
+    .kpi-sub   { font-size:.72rem; margin-top:5px; font-weight:600; }
 
-    .chart-wrap { position:relative; height:260px; }
-
-    .form-grid {
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:14px;
-      margin-bottom:14px;
+    /* ══════════════ BADGES ══════════════ */
+    .badge {
+      display:inline-flex;
+      align-items:center;
+      padding:3px 10px;
+      border-radius:999px;
+      font-size:.72rem;
+      font-weight:700;
+      white-space:nowrap;
     }
 
-    .form-grid-3 {
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:14px;
-      margin-bottom:14px;
-    }
+    .badge-green  { background:rgba(74,222,128,.12);  color:var(--green);  border:1px solid rgba(74,222,128,.25); }
+    .badge-red    { background:rgba(248,113,113,.12); color:var(--red);    border:1px solid rgba(248,113,113,.25); }
+    .badge-yellow { background:rgba(251,191,36,.12);  color:var(--yellow); border:1px solid rgba(251,191,36,.25); }
+    .badge-blue   { background:rgba(96,165,250,.12);  color:var(--blue);   border:1px solid rgba(96,165,250,.25); }
+    .badge-purple { background:rgba(167,139,250,.12); color:var(--purple); border:1px solid rgba(167,139,250,.25); }
+    .badge-orange { background:rgba(251,146,60,.12);  color:var(--orange); border:1px solid rgba(251,146,60,.25); }
+    .badge-gray   { background:rgba(255,255,255,.06); color:var(--muted);  border:1px solid var(--border); }
+
+    /* ══════════════ FORMULÁRIOS ══════════════ */
+    .fg  { display:grid; grid-template-columns:1fr 1fr;     gap:14px; }
+    .fg3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .fg4 { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+    .fg-full { grid-column:1/-1; }
+
+    .field { display:flex; flex-direction:column; gap:6px; }
 
     label {
-      display:block;
-      font-size:.82rem;
-      color:rgba(255,255,255,.7);
-      margin-bottom:6px;
+      font-size:.8rem;
+      font-weight:600;
+      color:rgba(255,255,255,.65);
     }
 
     input, select, textarea {
       width:100%;
-      background:#111c28;
-      border:1px solid rgba(255,255,255,.08);
-      color:#fff;
+      background:var(--bg3);
+      border:1px solid rgba(255,255,255,.09);
+      color:var(--text);
       border-radius:10px;
-      padding:10px 12px;
-      font-size:.9rem;
+      padding:9px 12px;
+      font-size:.88rem;
       outline:none;
+      transition:border-color .18s;
+      font-family:inherit;
     }
 
-    textarea {
-      min-height:100px;
-      resize:vertical;
+    input:focus, select:focus, textarea:focus {
+      border-color:rgba(0,212,255,.35);
     }
+
+    textarea { min-height:90px; resize:vertical; }
 
     .form-actions {
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      margin-top:8px;
+      margin-top:14px;
+      padding-top:14px;
+      border-top:1px solid var(--border);
     }
 
-    table {
-      width:100%;
-      border-collapse:collapse;
-      margin-top:10px;
-    }
-
-    table th, table td {
-      text-align:left;
-      padding:12px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      font-size:.85rem;
-      vertical-align:top;
-    }
-
-    table th {
-      color:#00d4ff;
-      font-weight:700;
-    }
-
-    .empty-box {
-      padding:18px;
-      border:1px dashed rgba(255,255,255,.12);
-      border-radius:12px;
-      color:rgba(255,255,255,.5);
-      text-align:center;
-    }
-
-    .badge {
-      display:inline-block;
-      padding:4px 10px;
-      border-radius:999px;
-      font-size:.72rem;
-      font-weight:700;
-    }
-
-    .badge-green { background:rgba(74,222,128,.12); color:#4ade80; border:1px solid rgba(74,222,128,.2); }
-    .badge-yellow { background:rgba(251,191,36,.12); color:#fbbf24; border:1px solid rgba(251,191,36,.2); }
-    .badge-red { background:rgba(248,113,113,.12); color:#f87171; border:1px solid rgba(248,113,113,.2); }
-    .badge-blue { background:rgba(0,212,255,.12); color:#00d4ff; border:1px solid rgba(0,212,255,.2); }
-    .badge-purple { background:rgba(167,139,250,.12); color:#a78bfa; border:1px solid rgba(167,139,250,.2); }
-
+    /* ══════════════ TOOLBAR ══════════════ */
     .toolbar {
       display:flex;
       gap:10px;
       flex-wrap:wrap;
       margin-bottom:14px;
+      align-items:center;
     }
 
-    .toolbar input, .toolbar select {
-      max-width:260px;
+    .toolbar input  { max-width:280px; }
+    .toolbar select { max-width:200px; }
+
+    /* ══════════════ TABELAS ══════════════ */
+    .table-wrap { overflow-x:auto; }
+
+    table {
+      width:100%;
+      border-collapse:collapse;
     }
 
-    @media (max-width: 1200px) {
-      .grid-4, .grid-3, .grid-2, .form-grid, .form-grid-3 {
-        grid-template-columns:1fr;
-      }
+    table th {
+      text-align:left;
+      padding:10px 12px;
+      border-bottom:1px solid rgba(255,255,255,.1);
+      font-size:.75rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      color:var(--accent);
+      white-space:nowrap;
+    }
+
+    table td {
+      padding:11px 12px;
+      border-bottom:1px solid var(--border);
+      font-size:.84rem;
+      vertical-align:middle;
+    }
+
+    table tr:last-child td { border-bottom:none; }
+
+    table tr:hover td { background:rgba(255,255,255,.025); }
+
+    .empty-box {
+      padding:28px;
+      text-align:center;
+      color:var(--muted);
+      font-size:.85rem;
+      border:1px dashed rgba(255,255,255,.1);
+      border-radius:12px;
+    }
+
+    /* ══════════════ CHART ══════════════ */
+    .chart-wrap { position:relative; height:260px; }
+    .chart-wrap-sm { position:relative; height:200px; }
+
+    /* ══════════════ ALERTAS ══════════════ */
+    .alertas-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+
+    .alerta-card {
+      background:rgba(248,113,113,.06);
+      border:1px solid rgba(248,113,113,.18);
+      border-radius:12px;
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .alerta-card.warn {
+      background:rgba(251,191,36,.06);
+      border-color:rgba(251,191,36,.18);
+    }
+
+    .alerta-card.ok {
+      background:rgba(74,222,128,.06);
+      border-color:rgba(74,222,128,.18);
+    }
+
+    .alerta-icone { font-size:1.4rem; flex-shrink:0; }
+
+    .alerta-texto p { font-size:.82rem; font-weight:700; margin-bottom:2px; }
+    .alerta-texto span { font-size:.75rem; color:var(--muted); }
+
+    /* ══════════════ IA BANNER ══════════════ */
+    .ia-banner {
+      background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(168,85,247,.07));
+      border:1px solid rgba(99,102,241,.18);
+      border-radius:14px;
+      padding:14px 20px;
+      margin-bottom:20px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .ia-banner-icon { font-size:1.8rem; flex-shrink:0; }
+    .ia-banner-info h4 { font-size:.9rem; font-weight:700; color:#a5b4fc; margin-bottom:2px; }
+    .ia-banner-info p { font-size:.76rem; color:var(--muted); }
+
+    .ia-score {
+      background:rgba(99,102,241,.2);
+      border:1px solid rgba(99,102,241,.3);
+      border-radius:20px;
+      padding:5px 14px;
+      font-size:.88rem;
+      font-weight:900;
+      color:#a5b4fc;
+      flex-shrink:0;
+      margin-left:auto;
+    }
+
+    /* ══════════════ ATIVIDADE ══════════════ */
+    .ativ-item {
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:9px 0;
+      border-bottom:1px solid var(--border);
+    }
+
+    .ativ-item:last-child { border-bottom:none; }
+
+    .ativ-dot {
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      flex-shrink:0;
+      margin-top:5px;
+    }
+
+    .ativ-txt { font-size:.83rem; color:rgba(255,255,255,.72); flex:1; line-height:1.45; }
+    .ativ-data { font-size:.72rem; color:var(--muted); white-space:nowrap; }
+
+    /* ══════════════ CHECKLIST ITENS ══════════════ */
+    .checklist-item {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 0;
+      border-bottom:1px solid var(--border);
+    }
+
+    .checklist-item:last-child { border-bottom:none; }
+
+    .checklist-item input[type="checkbox"] {
+      width:18px;
+      height:18px;
+      cursor:pointer;
+      accent-color:var(--accent);
+      flex-shrink:0;
+    }
+
+    /* ══════════════ PROGRESS BAR ══════════════ */
+    .progress-bar-wrap {
+      background:rgba(255,255,255,.07);
+      border-radius:999px;
+      height:8px;
+      overflow:hidden;
+      margin-top:6px;
+    }
+
+    .progress-bar-fill {
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      transition:width .4s ease;
+    }
+
+    /* ══════════════ RESPONSIVE ══════════════ */
+    @media (max-width:1200px) {
+      .g4, .fg4 { grid-template-columns:repeat(2,1fr); }
+    }
+
+    @media (max-width:900px) {
+      .g3, .fg3  { grid-template-columns:1fr 1fr; }
+      .alertas-grid { grid-template-columns:1fr 1fr; }
+    }
+
+    @media (max-width:700px) {
+      .sidebar { transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .main { margin-left:0; padding:20px 16px; }
+      .g2,.g3,.g4,.fg,.fg3,.fg4 { grid-template-columns:1fr; }
+      .alertas-grid { grid-template-columns:1fr; }
+      .topbar { flex-direction:column; }
     }
   </style>
 </head>
 <body>
-  <div class="sync-toast" id="syncToast">
-    <div class="sync-dot"></div>
-    <span id="syncMsg">Sincronizando...</span>
+
+<!-- ── TOAST ── -->
+<div class="sync-toast" id="syncToast">
+  <div class="sync-dot"></div>
+  <span id="syncMsg">Sincronizando...</span>
+</div>
+
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <h1>Safe<span>NR</span></h1>
+    <p>Gestão de Segurança do Trabalho</p>
   </div>
 
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <h1>Safe<span>NR</span></h1>
-      <p>Gestão de Segurança do Trabalho</p>
+  <nav class="nav" id="navMenu">
+    <div class="nav-section">Principal</div>
+    <a href="#" class="nav-item active" data-tela="dashboard"><span class="icon">🏠</span> Dashboard</a>
+
+    <div class="nav-section">Pessoas</div>
+    <a href="#" class="nav-item" data-tela="colaboradores"><span class="icon">👷</span> Colaboradores</a>
+    <a href="#" class="nav-item" data-tela="treinamentos"><span class="icon">🎓</span> Treinamentos</a>
+    <a href="#" class="nav-item" data-tela="epis"><span class="icon">🦺</span> EPIs</a>
+
+    <div class="nav-section">Operacional</div>
+    <a href="#" class="nav-item" data-tela="agenda"><span class="icon">📅</span> Agenda</a>
+    <a href="#" class="nav-item" data-tela="inspecoes"><span class="icon">🔍</span> Inspeções</a>
+    <a href="#" class="nav-item" data-tela="checklists"><span class="icon">📋</span> Checklists</a>
+    <a href="#" class="nav-item" data-tela="ocorrencias"><span class="icon">🚨</span> Ocorrências</a>
+    <a href="#" class="nav-item" data-tela="plano-acao"><span class="icon">📌</span> Plano de Ação</a>
+
+    <div class="nav-section">Gestão</div>
+    <a href="#" class="nav-item" data-tela="riscos"><span class="icon">⚠️</span> Riscos</a>
+    <a href="#" class="nav-item" data-tela="ambientes"><span class="icon">🏭</span> Ambientes</a>
+    <a href="#" class="nav-item" data-tela="documentos"><span class="icon">🗂️</span> Documentos SST</a>
+
+    <div class="nav-section">Análise</div>
+    <a href="#" class="nav-item" data-tela="relatorios"><span class="icon">📄</span> Relatórios</a>
+    <a href="#" class="nav-item" data-tela="ia-sugestoes"><span class="icon">🤖</span> IA Sugestões</a>
+
+    <div class="nav-section">Sistema</div>
+    <a href="#" class="nav-item" data-tela="biblioteca"><span class="icon">📚</span> Biblioteca NRs</a>
+    <a href="#" class="nav-item" data-tela="fotos"><span class="icon">📷</span> Galeria de Fotos</a>
+    <a href="#" class="nav-item" data-tela="notificacoes"><span class="icon">🔔</span> Notificações</a>
+    <a href="#" class="nav-item" data-tela="configuracoes"><span class="icon">⚙️</span> Configurações</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="avatar" id="avatarLetra">A</div>
+    <div class="user-info">
+      <p id="nomeUsuario">Usuário</p>
+      <span class="perfil-badge" id="perfilBadge">👑 Admin</span>
+    </div>
+    <button class="btn-sair" onclick="sair()" title="Sair">✕</button>
+  </div>
+</aside>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h2 id="tituloTela">🏠 Dashboard</h2>
+      <p id="dataHoje"></p>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-danger"   onclick="exportarPDF()"   data-requer="exportar">📄 PDF</button>
+      <button class="btn btn-success"  onclick="exportarExcel()" data-requer="exportar">📊 Excel</button>
+      <button class="btn btn-outline"  onclick="inicializarTelaAtual()">🔄 Atualizar</button>
+    </div>
+  </div>
+
+  <!-- ══ DASHBOARD ══ -->
+  <section class="tela active" id="tela-dashboard">
+
+    <div class="ia-banner">
+      <div class="ia-banner-icon">🤖</div>
+      <div class="ia-banner-info">
+        <h4>SafeNR IA — Análise Inteligente</h4>
+        <p>Analisa todos os módulos em tempo real e gera o score de conformidade SST</p>
+      </div>
+      <div class="ia-score" id="iaBannerScore">Score: --</div>
     </div>
 
-    <nav class="nav" id="navMenu">
-      <a href="#" class="nav-item active" data-tela="dashboard"><span class="icon">🏠</span> Dashboard</a>
-      <a href="#" class="nav-item" data-tela="colaboradores"><span class="icon">👷</span> Colaboradores</a>
-      <a href="#" class="nav-item" data-tela="treinamentos"><span class="icon">🎓</span> Treinamentos</a>
-      <a href="#" class="nav-item" data-tela="agenda"><span class="icon">📅</span> Agenda</a>
-      <a href="#" class="nav-item" data-tela="ocorrencias"><span class="icon">🚨</span> Ocorrências</a>
-      <a href="#" class="nav-item" data-tela="inspecoes"><span class="icon">🔍</span> Inspeções</a>
-      <a href="#" class="nav-item" data-tela="riscos"><span class="icon">⚠️</span> Riscos</a>
-      <a href="#" class="nav-item" data-tela="checklists"><span class="icon">📋</span> Checklists</a>
-      <a href="#" class="nav-item" data-tela="plano-acao"><span class="icon">📌</span> Plano de Ação</a>
-      <a href="#" class="nav-item" data-tela="documentos"><span class="icon">🗂️</span> Documentos SST</a>
-      <a href="#" class="nav-item" data-tela="relatorios"><span class="icon">📄</span> Relatórios</a>
-      <a href="#" class="nav-item" data-tela="epis"><span class="icon">🦺</span> Cadastro EPIs</a>
-      <a href="#" class="nav-item" data-tela="biblioteca"><span class="icon">📚</span> Biblioteca NRs</a>
-      <a href="#" class="nav-item" data-tela="fotos"><span class="icon">📷</span> Galeria de Fotos</a>
-      <a href="#" class="nav-item" data-tela="ambientes"><span class="icon">🏭</span> Ambientes</a>
-      <a href="#" class="nav-item" data-tela="ia-sugestoes"><span class="icon">🤖</span> IA Sugestões</a>
-      <a href="#" class="nav-item" data-tela="notificacoes"><span class="icon">🔔</span> Notificações</a>
-      <a href="#" class="nav-item" data-tela="configuracoes"><span class="icon">⚙️</span> Configurações</a>
-    </nav>
-
-    <div class="sidebar-user">
-      <div class="avatar" id="avatarLetra">A</div>
-      <div class="user-info">
-        <p id="nomeUsuario">Usuário</p>
-        <span class="perfil-badge" id="perfilBadge">👑 Admin</span>
+    <div class="g4" style="margin-bottom:20px">
+      <div class="kpi-card blue">
+        <div class="kpi-icon">👷</div>
+        <div class="kpi-valor" id="kpi-colab">0</div>
+        <div class="kpi-label">Colaboradores</div>
+        <div class="kpi-sub" id="kpi-colab-sub"></div>
       </div>
-      <button class="btn-sair" onclick="sair()">✕</button>
+      <div class="kpi-card red">
+        <div class="kpi-icon">🚨</div>
+        <div class="kpi-valor" id="kpi-ocorr">0</div>
+        <div class="kpi-label">Ocorrências</div>
+        <div class="kpi-sub" id="kpi-ocorr-sub"></div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-icon">🎓</div>
+        <div class="kpi-valor" id="kpi-trein">0</div>
+        <div class="kpi-label">Treinamentos</div>
+        <div class="kpi-sub" id="kpi-trein-sub"></div>
+      </div>
+      <div class="kpi-card yellow">
+        <div class="kpi-icon">⚠️</div>
+        <div class="kpi-valor" id="kpi-riscos">0</div>
+        <div class="kpi-label">Riscos</div>
+        <div class="kpi-sub" id="kpi-riscos-sub"></div>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-icon">🔍</div>
+        <div class="kpi-valor" id="kpi-insp">0</div>
+        <div class="kpi-label">Inspeções</div>
+        <div class="kpi-sub" id="kpi-insp-sub"></div>
+      </div>
+      <div class="kpi-card orange">
+        <div class="kpi-icon">📋</div>
+        <div class="kpi-valor" id="kpi-check">0</div>
+        <div class="kpi-label">Checklists</div>
+        <div class="kpi-sub" id="kpi-check-sub"></div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-icon">📅</div>
+        <div class="kpi-valor" id="kpi-agenda">0</div>
+        <div class="kpi-label">Eventos Hoje</div>
+        <div class="kpi-sub" id="kpi-agenda-sub"></div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-icon">📌</div>
+        <div class="kpi-valor" id="kpi-planos">0</div>
+        <div class="kpi-label">Planos de Ação</div>
+        <div class="kpi-sub" id="kpi-planos-sub"></div>
+      </div>
     </div>
-  </aside>
 
-  <main class="main">
-    <div class="topbar">
-      <div class="topbar-left">
-        <h2 id="tituloTela">🏠 Dashboard</h2>
-        <p id="dataHoje"></p>
-      </div>
-      <div class="topbar-right">
-        <button class="btn btn-export-pdf" onclick="exportarPDF()" data-requer="exportar">📄 Exportar PDF</button>
-        <button class="btn btn-export-xls" onclick="exportarExcel()" data-requer="exportar">📊 Exportar Excel</button>
-        <button class="btn btn-atualizar" onclick="inicializarTelaAtual()">🔄 Atualizar</button>
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-title">🔴 Alertas Críticos</div>
+      <div class="alertas-grid" id="alertasGrid">
+        <div class="alerta-card ok">
+          <div class="alerta-icone">✅</div>
+          <div class="alerta-texto"><p>Sem alertas críticos</p><span>Todos os indicadores OK</span></div>
+        </div>
       </div>
     </div>
 
-    <section class="tela active" id="tela-dashboard">
+    <div class="g2">
       <div class="card">
-        <div class="section-title">📊 Indicadores principais</div>
-        <div class="grid-4">
-          <div class="kpi-card">
-            <div class="kpi-icon">👷</div>
-            <div class="kpi-valor" id="kpi-colab">0</div>
-            <div class="kpi-label">Colaboradores</div>
-            <div class="kpi-sub" id="kpi-colab-sub"></div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-icon">🚨</div>
-            <div class="kpi-valor" id="kpi-ocorr">0</div>
-            <div class="kpi-label">Ocorrências</div>
-            <div class="kpi-sub" id="kpi-ocorr-sub"></div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-icon">🎓</div>
-            <div class="kpi-valor" id="kpi-trein">0</div>
-            <div class="kpi-label">Treinamentos</div>
-            <div class="kpi-sub" id="kpi-trein-sub"></div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-icon">📅</div>
-            <div class="kpi-valor" id="kpi-agenda">0</div>
-            <div class="kpi-label">Eventos Hoje</div>
-            <div class="kpi-sub" id="kpi-agenda-sub"></div>
-          </div>
-        </div>
+        <div class="card-title">🚨 Ocorrências por tipo</div>
+        <div class="chart-wrap"><canvas id="chartOcorr"></canvas></div>
       </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="section-title">⚠️ Ocorrências por tipo</div>
-          <div class="chart-wrap">
-            <canvas id="chartOcorr"></canvas>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="section-title">🎓 Treinamentos por status</div>
-          <div class="chart-wrap">
-            <canvas id="chartTrein"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="section-title">🕐 Últimas ocorrências</div>
-          <div id="dashboardUltimasOcorrencias"></div>
-        </div>
-
-        <div class="card">
-          <div class="section-title">📅 Próximos eventos</div>
-          <div id="dashboardProximosEventos"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="tela" id="tela-colaboradores">
       <div class="card">
-        <div class="section-title">👷 Cadastro de Colaboradores</div>
-
-        <div class="form-grid">
-          <div>
-            <label>Nome</label>
-            <input type="text" id="colabNome" />
-          </div>
-          <div>
-            <label>Cargo</label>
-            <input type="text" id="colabCargo" />
-          </div>
-          <div>
-            <label>Setor</label>
-            <input type="text" id="colabSetor" />
-          </div>
-          <div>
-            <label>Status</label>
-            <select id="colabStatus">
-              <option value="ativo">Ativo</option>
-              <option value="inativo">Inativo</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-actions">
-          <button class="btn btn-primary" onclick="adicionarColaborador()">Salvar colaborador</button>
-        </div>
+        <div class="card-title">⚠️ Riscos por nível</div>
+        <div class="chart-wrap"><canvas id="chartRiscos"></canvas></div>
       </div>
+    </div>
 
+    <div class="g2">
       <div class="card">
-        <div class="section-title">📋 Lista de colaboradores</div>
-        <div class="toolbar">
-          <input type="text" id="filtroColaborador" placeholder="Buscar por nome, cargo ou setor" oninput="carregarColaboradores()" />
-        </div>
+        <div class="card-title">🕐 Últimas ocorrências</div>
+        <div id="dashUltimasOcorr"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📅 Próximos eventos</div>
+        <div id="dashProximosEventos"></div>
+      </div>
+    </div>
+  </section>
 
-        <table id="tabelaColaboradores">
+  <!-- ══ COLABORADORES ══ -->
+  <section class="tela" id="tela-colaboradores">
+    <div class="card">
+      <div class="card-title">➕ Cadastrar colaborador</div>
+      <div class="fg">
+        <div class="field"><label>Nome *</label><input type="text" id="colabNome" placeholder="Nome completo" /></div>
+        <div class="field"><label>Cargo</label><input type="text" id="colabCargo" placeholder="Ex: Operador de Máquina" /></div>
+        <div class="field"><label>Setor</label><input type="text" id="colabSetor" placeholder="Ex: Produção" /></div>
+        <div class="field"><label>Data de admissão</label><input type="date" id="colabAdmissao" /></div>
+        <div class="field"><label>Status</label>
+          <select id="colabStatus">
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+            <option value="afastado">Afastado</option>
+          </select>
+        </div>
+        <div class="field"><label>Contato</label><input type="text" id="colabContato" placeholder="Telefone ou e-mail" /></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="adicionarColaborador()">💾 Salvar colaborador</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">👷 Lista de colaboradores</div>
+      <div class="toolbar">
+        <input type="text" id="filtroColab" placeholder="🔍 Buscar por nome, cargo ou setor" oninput="carregarColaboradores()" />
+        <select id="filtroStatusColab" onchange="carregarColaboradores()">
+          <option value="">Todos os status</option>
+          <option value="ativo">Ativo</option>
+          <option value="inativo">Inativo</option>
+          <option value="afastado">Afastado</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
           <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Cargo</th>
-              <th>Setor</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
+            <tr><th>Nome</th><th>Cargo</th><th>Setor</th><th>Admissão</th><th>Status</th><th>Ações</th></tr>
           </thead>
-          <tbody></tbody>
+          <tbody id="tbodyColaboradores"></tbody>
         </table>
-        <div id="vazioColaboradores" class="empty-box" style="display:none;">Nenhum colaborador cadastrado.</div>
       </div>
-    </section>
+      <div id="vazioColaboradores" class="empty-box" style="display:none">Nenhum colaborador encontrado.</div>
+    </div>
+  </section>
 
-    <section class="tela" id="tela-treinamentos">
-      <div class="card">
-        <div class="section-title">🎓 Cadastro de Treinamentos</div>
-
-        <div class="form-grid-3">
-          <div>
-            <label>Treinamento</label>
-            <input type="text" id="treinNome" />
-          </div>
-          <div>
-            <label>Colaborador</label>
-            <input type="text" id="treinColaborador" />
-          </div>
-          <div>
-            <label>Status</label>
-            <select id="treinStatus">
-              <option value="agendado">Agendado</option>
-              <option value="concluido">Concluído</option>
-              <option value="vencido">Vencido</option>
-            </select>
-          </div>
-          <div>
-            <label>Data realização</label>
-            <input type="date" id="treinDataReal" />
-          </div>
-          <div>
-            <label>Validade</label>
-            <input type="date" id="treinDataVal" />
-          </div>
-          <div>
-            <label>Observação</label>
-            <input type="text" id="treinObs" />
-          </div>
-        </div>
-
-        <div class="form-actions">
-          <button class="btn btn-primary" onclick="adicionarTreinamento()">Salvar treinamento</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="section-title">📋 Lista de treinamentos</div>
-        <div class="toolbar">
-          <input type="text" id="filtroTreinamento" placeholder="Buscar treinamento ou colaborador" oninput="carregarTreinamentos()" />
-          <select id="filtroStatusTreinamento" onchange="carregarTreinamentos()">
-            <option value="">Todos os status</option>
+  <!-- ══ TREINAMENTOS ══ -->
+  <section class="tela" id="tela-treinamentos">
+    <div class="card">
+      <div class="card-title">➕ Cadastrar treinamento</div>
+      <div class="fg3">
+        <div class="field"><label>Treinamento *</label><input type="text" id="treinNome" placeholder="Ex: NR-35 Trabalho em Altura" /></div>
+        <div class="field"><label>Colaborador *</label><input type="text" id="treinColab" placeholder="Nome do colaborador" /></div>
+        <div class="field"><label>Status</label>
+          <select id="treinStatus">
             <option value="agendado">Agendado</option>
             <option value="concluido">Concluído</option>
             <option value="vencido">Vencido</option>
+            <option value="cancelado">Cancelado</option>
           </select>
         </div>
+        <div class="field"><label>Data realização</label><input type="date" id="treinDataReal" /></div>
+        <div class="field"><label>Validade</label><input type="date" id="treinDataVal" /></div>
+        <div class="field"><label>Carga horária (h)</label><input type="number" id="treinCarga" min="1" placeholder="Ex: 8" /></div>
+        <div class="field fg-full"><label>Observação</label><input type="text" id="treinObs" placeholder="Informações adicionais" /></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="adicionarTreinamento()">💾 Salvar treinamento</button>
+      </div>
+    </div>
 
-        <table id="tabelaTreinamentos">
+    <div class="card">
+      <div class="card-title">🎓 Lista de treinamentos</div>
+      <div class="toolbar">
+        <input type="text" id="filtroTrein" placeholder="🔍 Buscar treinamento ou colaborador" oninput="carregarTreinamentos()" />
+        <select id="filtroStatusTrein" onchange="carregarTreinamentos()">
+          <option value="">Todos os status</option>
+          <option value="agendado">Agendado</option>
+          <option value="concluido">Concluído</option>
+          <option value="vencido">Vencido</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
           <thead>
-            <tr>
-              <th>Treinamento</th>
-              <th>Colaborador</th>
-              <th>Data realização</th>
-              <th>Validade</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
+            <tr><th>Treinamento</th><th>Colaborador</th><th>Realização</th><th>Validade</th><th>C.H.</th><th>Status</th><th>Ações</th></tr>
           </thead>
-          <tbody></tbody>
+          <tbody id="tbodyTreinamentos"></tbody>
         </table>
-        <div id="vazioTreinamentos" class="empty-box" style="display:none;">Nenhum treinamento cadastrado.</div>
       </div>
-    </section>
+      <div id="vazioTreinamentos" class="empty-box" style="display:none">Nenhum treinamento encontrado.</div>
+    </div>
+  </section>
 
-    <section class="tela" id="tela-agenda">
-      <div class="card">
-        <div class="section-title">📅 Cadastro de Eventos na Agenda</div>
-
-        <div class="form-grid-3">
-          <div>
-            <label>Título</label>
-            <input type="text" id="agendaTitulo" />
-          </div>
-          <div>
-            <label>Data</label>
-            <input type="date" id="agendaData" />
-          </div>
-          <div>
-            <label>Tipo</label>
-            <select id="agendaTipo">
-              <option value="treinamento">Treinamento</option>
-              <option value="inspecao">Inspeção</option>
-              <option value="reuniao">Reunião</option>
-              <option value="vencimento">Vencimento</option>
-              <option value="outro">Outro</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label>Descrição</label>
-          <textarea id="agendaDescricao"></textarea>
-        </div>
-
-        <div class="form-actions">
-          <button class="btn btn-primary" onclick="adicionarEventoAgenda()">Salvar evento</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="section-title">📋 Lista da agenda</div>
-
-        <div class="toolbar">
-          <input type="text" id="filtroAgenda" placeholder="Buscar por título ou descrição" oninput="carregarAgenda()" />
-          <select id="filtroTipoAgenda" onchange="carregarAgenda()">
-            <option value="">Todos os tipos</option>
+  <!-- ══ AGENDA ══ -->
+  <section class="tela" id="tela-agenda">
+    <div class="card">
+      <div class="card-title">➕ Cadastrar evento</div>
+      <div class="fg3">
+        <div class="field"><label>Título *</label><input type="text" id="agendaTitulo" placeholder="Ex: Inspeção mensal de EPIs" /></div>
+        <div class="field"><label>Data *</label><input type="date" id="agendaData" /></div>
+        <div class="field"><label>Tipo</label>
+          <select id="agendaTipo">
             <option value="treinamento">Treinamento</option>
             <option value="inspecao">Inspeção</option>
             <option value="reuniao">Reunião</option>
             <option value="vencimento">Vencimento</option>
+            <option value="auditoria">Auditoria</option>
             <option value="outro">Outro</option>
           </select>
         </div>
+        <div class="field"><label>Responsável</label><input type="text" id="agendaResponsavel" placeholder="Nome do responsável" /></div>
+        <div class="field"><label>Local</label><input type="text" id="agendaLocal" placeholder="Ex: Sala de treinamento" /></div>
+        <div class="field fg-full"><label>Descrição</label><textarea id="agendaDesc" placeholder="Detalhes do evento..."></textarea></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="adicionarAgenda()">💾 Salvar evento</button>
+      </div>
+    </div>
 
-        <table id="tabelaAgenda">
+    <div class="card">
+      <div class="card-title">📅 Lista de eventos</div>
+      <div class="toolbar">
+        <input type="text" id="filtroAgenda" placeholder="🔍 Buscar evento" oninput="carregarAgenda()" />
+        <select id="filtroTipoAgenda" onchange="carregarAgenda()">
+          <option value="">Todos os tipos</option>
+          <option value="treinamento">Treinamento</option>
+          <option value="inspecao">Inspeção</option>
+          <option value="reuniao">Reunião</option>
+          <option value="vencimento">Vencimento</option>
+          <option value="auditoria">Auditoria</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
           <thead>
-            <tr>
-              <th>Data</th>
-              <th>Título</th>
-              <th>Tipo</th>
-              <th>Descrição</th>
-              <th>Ações</th>
-            </tr>
+            <tr><th>Data</th><th>Título</th><th>Tipo</th><th>Responsável</th><th>Local</th><th>Ações</th></tr>
           </thead>
-          <tbody></tbody>
+          <tbody id="tbodyAgenda"></tbody>
         </table>
-        <div id="vazioAgenda" class="empty-box" style="display:none;">Nenhum evento cadastrado.</div>
       </div>
-    </section>
+      <div id="vazioAgenda" class="empty-box" style="display:none">Nenhum evento encontrado.</div>
+    </div>
+  </section>
 
-    <section class="tela" id="tela-ocorrencias">
-      <div class="card">
-        <div class="section-title">🚨 Cadastro de Ocorrências</div>
-
-        <div class="form-grid-3">
-          <div>
-            <label>Data</label>
-            <input type="date" id="ocorrData" />
-          </div>
-          <div>
-            <label>Tipo</label>
-            <select id="ocorrTipo">
-              <option value="acidente">Acidente</option>
-              <option value="incidente">Incidente</option>
-              <option value="quase-acidente">Quase-acidente</option>
-              <option value="condicao-insegura">Condição insegura</option>
-            </select>
-          </div>
-          <div>
-            <label>Colaborador</label>
-            <input type="text" id="ocorrColaborador" />
-          </div>
-          <div>
-            <label>Setor</label>
-            <input type="text" id="ocorrSetor" />
-          </div>
-          <div>
-            <label>Ação corretiva</label>
-            <input type="text" id="ocorrAcao" />
-          </div>
-          <div>
-            <label>Responsável</label>
-            <input type="text" id="ocorrResponsavel" />
-          </div>
-        </div>
-
-        <div>
-          <label>Descrição</label>
-          <textarea id="ocorrDescricao"></textarea>
-        </div>
-
-        <div class="form-actions">
-          <button class="btn btn-primary" onclick="adicionarOcorrencia()">Salvar ocorrência</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="section-title">📋 Lista de ocorrências</div>
-
-        <div class="toolbar">
-          <input type="text" id="filtroOcorrencia" placeholder="Buscar ocorrência" oninput="carregarOcorrencias()" />
-          <select id="filtroTipoOcorrencia" onchange="carregarOcorrencias()">
-            <option value="">Todos os tipos</option>
+  <!-- ══ OCORRÊNCIAS ══ -->
+  <section class="tela" id="tela-ocorrencias">
+    <div class="card">
+      <div class="card-title">➕ Registrar ocorrência</div>
+      <div class="fg3">
+        <div class="field"><label>Data *</label><input type="date" id="ocorrData" /></div>
+        <div class="field"><label>Tipo *</label>
+          <select id="ocorrTipo">
             <option value="acidente">Acidente</option>
             <option value="incidente">Incidente</option>
             <option value="quase-acidente">Quase-acidente</option>
             <option value="condicao-insegura">Condição insegura</option>
           </select>
         </div>
-
-        <table id="tabelaOcorrencias">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Tipo</th>
-              <th>Colaborador</th>
-              <th>Setor</th>
-              <th>Descrição</th>
-              <th>Ação</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <div id="vazioOcorrencias" class="empty-box" style="display:none;">Nenhuma ocorrência cadastrada.</div>
+        <div class="field"><label>Colaborador</label><input type="text" id="ocorrColab" placeholder="Nome do colaborador" /></div>
+        <div class="field"><label>Setor</label><input type="text" id="ocorrSetor" placeholder="Ex: Almoxarifado" /></div>
+        <div class="field"><label>Ação corretiva</label><input type="text" id="ocorrAcao" placeholder="Medida tomada" /></div>
+        <div class="field"><label>Responsável</label><input type="text" id="ocorrResp" placeholder="Responsável pela ação" /></div>
+        <div class="field fg-full"><label>Descrição *</label><textarea id="ocorrDesc" placeholder="Descreva o que ocorreu..."></textarea></div>
       </div>
-    </section>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="adicionarOcorrencia()">💾 Salvar ocorrência</button>
+      </div>
+    </div>
 
-    <section class="tela" id="tela-inspecoes"><div class="card"><div class="section-title">🔍 Inspeções</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-    <section class="tela" id="tela-riscos"><div class="card"><div class="section-title">⚠️ Riscos</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-    <section class="tela" id="tela-checklists"><div class="card"><div class="section-title">📋 Checklists</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-    <section class="tela" id="tela-plano-acao"><div class="card"><div class="section-title">📌 Plano de Ação</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-    <section class="tela" id="tela-documentos"><div class="card"><div class="section-title">🗂️ Documentos SST</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-    <section class="tela" id="tela-relatorios"><div class="card"><div class="section-title">📄 Relatórios</div><div class="empty-box">Use os botões de exportação no topo.</div></div></section>
-    <section class="tela" id="tela-epis"><div class="card"><div class="section-title">🦺 Cadastro EPIs</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-    <section class="tela" id="tela-biblioteca"><div class="card"><div class="section-title">📚 Biblioteca NRs</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-    <section class="tela" id="tela-fotos"><div class="card"><div class="section-title">📷 Galeria de Fotos</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-    <section class="tela" id="tela-ambientes"><div class="card"><div class="section-title">🏭 Ambientes</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-    <section class="tela" id="tela-ia-sugestoes"><div class="card"><div class="section-title">🤖 IA Sugestões</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-    <section class="tela" id="tela-notificacoes"><div class="card"><div class="section-title">🔔 Notificações</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-    <section class="tela" id="tela-configuracoes"><div class="card"><div class="section-title">⚙️ Configurações</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
-  </main>
+    <div class="card">
+      <div class="card-title">🚨 Lista de ocorrências</div>
+      <div class="toolbar">
+        <input type="text" id="filtroOcorr" placeholder="🔍 Buscar ocorrência" oninput="carregarOcorrencias()" />
+        <select id="filtroTipoOcorr" onchange="carregarOcorrencias()">
+          <option value="">Todos os tipos</option>
+          <option value="acidente">Acidente</option>
+          <option value="incidente">Incidente</option>
+          <option value="quase-acidente">Quase-acidente</option>
+          <option value="condicao-insegura">Condição insegura</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Data</th><th>Tipo</th><th>Colaborador</th><th>Setor</th><th>Descrição</th><th>Ação</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="tbodyOcorrencias"></tbody>
+        </table>
+      </div>
+      <div id="vazioOcorrencias" class="empty-box" style="display:none">Nenhuma ocorrência encontrada.</div>
+    </div>
+  </section>
 
-  <script>
-    var SUPABASE_URL = 'https://SEU_PROJETO.supabase.co';
-    var SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_AQUI';
-    var _supabase = null;
-    var chartInstances = {};
-    var telaAtual = 'dashboard';
+  <!-- ══ RISCOS ══ -->
+  <section class="tela" id="tela-riscos">
+    <div class="card">
+      <div class="card-title">➕ Cadastrar risco</div>
+      <div class="fg3">
+        <div class="field"><label>Risco *</label><input type="text" id="riscoNome" placeholder="Ex: Exposição a produto químico" /></div>
+        <div class="field"><label>Setor</label><input type="text" id="riscoSetor" placeholder="Setor afetado" /></div>
+        <div class="field"><label>Nível</label>
+          <select id="riscoNivel">
+            <option value="critico">Crítico</option>
+            <option value="alto">Alto</option>
+            <option value="medio">Médio</option>
+            <option value="baixo">Baixo</option>
+          </select>
+        </div>
+        <div class="field"><label>Tipo de risco</label>
+          <select id="riscoTipo">
+            <option value="fisico">Físico</option>
+            <option value="quimico">Químico</option>
+            <option value="biologico">Biológico</option>
+            <option value="ergonomico">Ergonômico</option>
+            <option value="acidente">Acidente</option>
+          </select>
+        </div>
+        <div class="field"><label>Responsável</label><input type="text" id="riscoResp" placeholder="Nome do responsável" /></div>
+        <div class="field"><label>Prazo controle</label><input type="date" id="riscoPrazo" /></div>
+        <div class="field fg-full"><label>Medida de controle</label><textarea id="riscoMedida" placeholder="Descreva a medida de controle prevista..."></textarea></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="adicionarRisco()">💾 Salvar risco</button>
+      </div>
+    </div>
 
-    var TABELAS = {
-      safenr_colaboradores : 'colaboradores',
-      safenr_treinamentos  : 'treinamentos',
-      safenr_riscos        : 'riscos',
-      safenr_ocorrencias   : 'ocorrencias',
-      safenr_inspecoes     : 'inspecoes',
-      safenr_checklists    : 'checklists',
-      safenr_agenda        : 'agenda',
-      safenr_planos        : 'planos',
-      safenr_documentos    : 'documentos',
-      safenr_ambientes     : 'ambientes',
-      safenr_notificacoes  : 'notificacoes'
-    };
+    <div class="card">
+      <div class="card-title">⚠️ Matriz de riscos</div>
+      <div class="toolbar">
+        <input type="text" id="filtroRisco" placeholder="🔍 Buscar risco ou setor" oninput="carregarRiscos()" />
+        <select id="filtroNivelRisco" onchange="carregarRiscos()">
+          <option value="">Todos os níveis</option>
+          <option value="critico">Crítico</option>
+          <option value="alto">Alto</option>
+          <option value="medio">Médio</option>
+          <option value="baixo">Baixo</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Risco</th><th>Tipo</th><th>Setor</th><th>Nível</th><th>Medida de controle</th><th>Prazo</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="tbodyRiscos"></tbody>
+        </table>
+      </div>
+      <div id="vazioRiscos" class="empty-box" style="display:none">Nenhum risco cadastrado.</div>
+    </div>
+  </section>
 
-    var PERMISSOES = {
-      admin:   { podeEditar:true,  podeExcluir:true,  podeExportar:true,  podeConfigurar:true  },
-      tecnico: { podeEditar:true,  podeExcluir:false, podeExportar:true,  podeConfigurar:false },
-      gestor:  { podeEditar:false, podeExcluir:false, podeExportar:true,  podeConfigurar:false }
-    };
+  <!-- ══ INSPEÇÕES ══ -->
+  <section class="tela" id="tela-inspecoes">
+    <div class="card">
+      <div class="card-title">➕ Cadastrar inspeção</div>
+      <div class="fg3">
+        <div class="field"><label>Título *</label><input type="text" id="inspTitulo" placeholder="Ex: Inspeção de EPI" /></div>
+        <div class="field"><label>Data *</label><input type="date" id="inspData" /></div>
+        <div class="field"><label>Status</label>
+          <select id="inspStatus">
+            <option value="pendente">Pendente</option>
+            <option value="em-andamento">Em andamento</option>
+            <option value="concluido">Concluído</option>
+            <option value="aprovado">Aprovado</option>
+            <option value="reprovado">Reprovado</option>
+          </select>
+        </div>
+        <div class="field"><label>Inspetor</label><input type="text" id="inspInspetor" placeholder="Nome do inspetor" /></div>
+        <div class="field"><label>Área / Setor</label><input type="text" id="inspArea" placeholder="Área inspecionada" /></div>
+        <div class="field"><label>Próxima inspeção</label><input type="date" id="inspProxima" /></div>
+        <div class="field fg-full"><label>Observações</label><textarea id="inspObs" placeholder="Descreva os achados da inspeção..."></textarea></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="adicionarInspecao()">💾 Salvar inspeção</button>
+      </div>
+    </div>
 
-    function getSupabase() {
-      if (!_supabase) {
-        _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
-      return _supabase;
-    }
+    <div class="card">
+      <div class="card-title">🔍 Lista de inspeções</div>
+      <div class="toolbar">
+        <input type="text" id="filtroInsp" placeholder="🔍 Buscar inspeção" oninput="carregarInspecoes()" />
+        <select id="filtroStatusInsp" onchange="carregarInspecoes()">
+          <option value="">Todos os status</option>
+          <option value="pendente">Pendente</option>
+          <option value="em-andamento">Em andamento</option>
+          <option value="concluido">Concluído</option>
+          <option value="aprovado">Aprovado</option>
+          <option value="reprovado">Reprovado</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Título</th><th>Data</th><th>Inspetor</th><th>Área</th><th>Próxima</th><th>Status</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="tbodyInspecoes"></tbody>
+        </table>
+      </div>
+      <div id="vazioInspecoes" class="empty-box" style="display:none">Nenhuma inspeção encontrada.</div>
+    </div>
+  </section>
 
-    function showToast(msg, dur) {
-      var t = document.getElementById('syncToast');
-      document.getElementById('syncMsg').textContent = msg || 'Sincronizando...';
-      t.classList.add('show');
-      setTimeout(function(){ t.classList.remove('show'); }, dur || 2500);
-    }
+  <!-- ══ CHECKLISTS ══ -->
+  <section class="tela" id="tela-checklists">
+    <div class="card">
+      <div class="card-title">➕ Criar checklist</div>
+      <div class="fg">
+        <div class="field"><label>Título *</label><input type="text" id="checkTitulo" placeholder="Ex: Checklist diário de segurança" /></div>
+        <div class="field"><label>Responsável</label><input type="text" id="checkResp" placeholder="Nome do responsável" /></div>
+        <div class="field"><label>Setor / Área</label><input type="text" id="checkArea" placeholder="Setor de aplicação" /></div>
+        <div class="field"><label>Data</label><input type="date" id="checkData" /></div>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label>Itens do checklist (um por linha)</label>
+        <textarea id="checkItens" placeholder="Ex:&#10;EPI disponível e em condições de uso&#10;Sinalização de segurança visível&#10;Extintores verificados"></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="adicionarChecklist()">💾 Salvar checklist</button>
+      </div>
+    </div>
 
-    async function getData(chave) {
-      var tabela = TABELAS[chave];
-      if (!tabela) return JSON.parse(localStorage.getItem(chave) || '[]');
+    <div class="card">
+      <div class="card-title">📋 Checklists cadastrados</div>
+      <div class="toolbar">
+        <input type="text" id="filtroCheck" placeholder="🔍 Buscar checklist" oninput="carregarChecklists()" />
+      </div>
+      <div id="checklistsLista"></div>
+      <div id="vazioChecklists" class="empty-box" style="display:none">Nenhum checklist encontrado.</div>
+    </div>
+  </section>
 
-      try {
-        var sb = getSupabase();
-        var userData = JSON.parse(localStorage.getItem('safenr_user') || '{}');
-        var resposta = await sb.from(tabela).select('*').eq('empresa_id', userData.empresaId || 'demo');
-        if (resposta.error) throw resposta.error;
-        localStorage.setItem(chave, JSON.stringify(resposta.data || []));
-        return resposta.data || [];
-      } catch (e) {
-        console.warn('[SafeNR] Usando cache local:', e.message);
-        return JSON.parse(localStorage.getItem(chave) || '[]');
-      }
-    }
+  <!-- ══ PLANO DE AÇÃO ══ -->
+  <section class="tela" id="tela-plano-acao">
+    <div class="card">
+      <div class="card-title">➕ Cadastrar ação — Metodologia 5W2H</div>
+      <div class="fg3">
+        <div class="field"><label>O quê? (What) *</label><input type="text" id="planoOque" placeholder="Ação a ser realizada" /></div>
+        <div class="field"><label>Por quê? (Why)</label><input type="text" id="planoPorque" placeholder="Justificativa da ação" /></div>
+        <div class="field"><label>Quem? (Who)</label><input type="text" id="planoQuem" placeholder="Responsável" /></div>
+        <div class="field"><label>Quando? (When)</label><input type="date" id="planoQuando" /></div>
+        <div class="field"><label>Onde? (Where)</label><input type="text" id="planoOnde" placeholder="Local de execução" /></div>
+        <div class="field"><label>Como? (How)</label><input type="text" id="planoComo" placeholder="Método de execução" /></div>
+        <div class="field"><label>Custo? (How much)</label><input type="text" id="planoQuanto" placeholder="Ex: R$ 500,00" /></div>
+        <div class="field"><label>Status</label>
+          <select id="planoStatus">
+            <option value="aberto">Aberto</option>
+            <option value="em-andamento">Em andamento</option>
+            <option value="concluido">Concluído</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+        <div class="field"><label>Prioridade</label>
+          <select id="planoPrioridade">
+            <option value="alta">Alta</option>
+            <option value="media">Média</option>
+            <option value="baixa">Baixa</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="adicionarPlano()">💾 Salvar ação</button>
+      </div>
+    </div>
 
-    async function saveData(chave, payload) {
-      var tabela = TABELAS[chave];
-      localStorage.setItem(chave, JSON.stringify(payload));
-      if (!tabela) return;
+    <div class="card">
+      <div class="card-title">📌 Planos de ação — 5W2H</div>
+      <div class="toolbar">
+        <input type="text" id="filtroPlano" placeholder="🔍 Buscar ação ou responsável" oninput="carregarPlanos()" />
+        <select id="filtroStatusPlano" onchange="carregarPlanos()">
+          <option value="">Todos os status</option>
+          <option value="aberto">Aberto</option>
+          <option value="em-andamento">Em andamento</option>
+          <option value="concluido">Concluído</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Ação</th><th>Responsável</th><th>Prazo</th><th>Local</th><th>Prioridade</th><th>Status</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="tbodyPlanos"></tbody>
+        </table>
+      </div>
+      <div id="vazioPlanos" class="empty-box" style="display:none">Nenhuma ação cadastrada.</div>
+    </div>
+  </section>
 
-      try {
-        var sb = getSupabase();
-        var userData = JSON.parse(localStorage.getItem('safenr_user') || '{}');
-        var registros = payload.map(function(item) {
-          return Object.assign({}, item, {
-            empresa_id: userData.empresaId || 'demo'
-          });
-        });
-        var resposta = await sb.from(tabela).upsert(registros, { onConflict: 'id' });
-        if (resposta.error) throw resposta.error;
-        showToast('✅ Dados sincronizados na nuvem');
-      } catch (e) {
-        console.warn('[SafeNR] Salvo localmente:', e.message);
-        showToast('⚠️ Salvo localmente (offline)');
-      }
-    }
+  <!-- ══ DOCUMENTOS SST ══ -->
+  <section class="tela" id="tela-documentos">
+    <div class="card">
+      <div class="card-title">➕ Cadastrar documento SST</div>
+      <div class="fg3">
+        <div class="field"><label>Título *</label><input type="text" id="docTitulo" placeholder="Ex: PPRA — Programa de Prevenção de Riscos" /></div>
+        <div class="field"><label>Tipo</label>
+          <select id="docTipo">
+            <option value="ppra">PPRA</option>
+            <option value="pcmso">PCMSO</option>
+            <option value="ltcat">LTCAT</option>
+            <option value="pgr">PGR</option>
+            <option value="pcmat">PCMAT</option>
+            <option value="laudo">Laudo Técnico</option>
+            <option value="procedimento">Procedimento</option>
+            <option value="instrucao">Instrução de Trabalho</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+        <div class="field"><label>Número / Revisão</label><input type="text" id="docNumero" placeholder="Ex: REV-03" /></div>
+        <div class="field"><label>Data emissão</label><input type="date" id="docEmissao" /></div>
+        <div class="field"><label>Validade</label><input type="date" id="docValidade" /></div>
+        <div class="field"><label>Responsável técnico</label><input type="text" id="docResp" placeholder="Nome e CREA/CRM" /></div>
+        <div class="field fg-full"><label>Observações</label><textarea id="docObs" placeholder="Informações sobre o documento..."></textarea></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="adicionarDocumento()">💾 Salvar documento</button>
+      </div>
+    </div>
 
-    function sair() {
-      try { getSupabase().auth.signOut(); } catch(e) {}
-      localStorage.removeItem('safenr_user');
-      window.location.href = './index.html';
-    }
+    <div class="card">
+      <div class="card-title">🗂️ Documentos SST cadastrados</div>
+      <div class="toolbar">
+        <input type="text" id="filtroDoc" placeholder="🔍 Buscar documento" oninput="carregarDocumentos()" />
+        <select id="filtroTipoDoc" onchange="carregarDocumentos()">
+          <option value="">Todos os tipos</option>
+          <option value="ppra">PPRA</option>
+          <option value="pcmso">PCMSO</option>
+          <option value="ltcat">LTCAT</option>
+          <option value="pgr">PGR</option>
+          <option value="pcmat">PCMAT</option>
+          <option value="laudo">Laudo Técnico</option>
+          <option value="procedimento">Procedimento</option>
+          <option value="instrucao">Instrução de Trabalho</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Título</th><th>Tipo</th><th>Revisão</th><th>Emissão</th><th>Validade</th><th>Responsável</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="tbodyDocumentos"></tbody>
+        </table>
+      </div>
+      <div id="vazioDocumentos" class="empty-box" style="display:none">Nenhum documento encontrado.</div>
+    </div>
+  </section>
 
-    function atualizarData() {
-      document.getElementById('dataHoje').textContent =
-        new Date().toLocaleDateString('pt-BR', {
-          weekday:'long',
-          day:'2-digit',
-          month:'long',
-          year:'numeric'
-        });
-    }
+  <!-- ══ TELAS PLACEHOLDER ══ -->
+  <section class="tela" id="tela-epis">
+    <div class="card"><div class="card-title">🦺 EPIs</div><div class="empty-box">Módulo EPIs — disponível na próxima versão.</div></div>
+  </section>
+  <section class="tela" id="tela-ambientes">
+    <div class="card"><div class="card-title">🏭 Ambientes</div><div class="empty-box">Módulo Ambientes — disponível na próxima versão.</div></div>
+  </section>
+  <section class="tela" id="tela-relatorios">
+    <div class="card"><div class="card-title">📄 Relatórios</div><div class="empty-box">Use os botões PDF e Excel no topo da tela para exportar os dados.</div></div>
+  </section>
+  <section class="tela" id="tela-ia-sugestoes">
+    <div class="card"><div class="card-title">🤖 IA Sugestões</div><div class="empty-box">Módulo IA Sugestões — disponível na próxima versão.</div></div>
+  </section>
+  <section class="tela" id="tela-biblioteca">
+    <div class="card"><div class="card-title">📚 Biblioteca NRs</div><div class="empty-box">Módulo Biblioteca NRs — disponível na próxima versão.</div></div>
+  </section>
+  <section class="tela" id="tela-fotos">
+    <div class="card"><div class="card-title">📷 Galeria de Fotos</div><div class="empty-box">Módulo Galeria — disponível na próxima versão.</div></div>
+  </section>
+  <section class="tela" id="tela-notificacoes">
+    <div class="card"><div class="card-title">🔔 Notificações</div><div class="empty-box">Módulo Notificações — disponível na próxima versão.</div></div>
+  </section>
+  <section class="tela" id="tela-configuracoes">
+    <div class="card"><div class="card-title">⚙️ Configurações</div><div class="empty-box">Módulo Configurações — disponível na próxima versão.</div></div>
+  </section>
 
-    function aplicarPermissoes() {
-      var user = JSON.parse(localStorage.getItem('safenr_user') || '{}');
-      var perfil = user.perfil || 'admin';
-      var perms = PERMISSOES[perfil] || PERMISSOES.admin;
+</main>
 
-      document.getElementById('nomeUsuario').textContent = user.nome || 'Usuário';
-      document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
+<!-- ══════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════ -->
+<script>
+'use strict';
 
-      var labels = { admin:'👑 Admin', tecnico:'🦺 Técnico', gestor:'📊 Gestor' };
-      document.getElementById('perfilBadge').textContent = labels[perfil] || perfil;
+/* ── CONFIGURAÇÃO ── */
+var SUPABASE_URL      = 'https://SEU_PROJETO.supabase.co';
+var SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_AQUI';
 
-      document.querySelectorAll('[data-requer="exportar"]').forEach(function(el) {
-        el.style.display = perms.podeExportar ? '' : 'none';
-      });
+var _supabase       = null;
+var chartInstances  = {};
+var telaAtual       = 'dashboard';
 
-      var cfg = document.querySelector('[data-tela="configuracoes"]');
-      if (cfg) {
-        cfg.style.opacity = perms.podeConfigurar ? '1' : '0.3';
-        cfg.style.pointerEvents = perms.podeConfigurar ? '' : 'none';
-      }
-    }
+var TABELAS = {
+  safenr_colaboradores : 'colaboradores',
+  safenr_treinamentos  : 'treinamentos',
+  safenr_riscos        : 'riscos',
+  safenr_ocorrencias   : 'ocorrencias',
+  safenr_inspecoes     : 'inspecoes',
+  safenr_checklists    : 'checklists',
+  safenr_agenda        : 'agenda',
+  safenr_planos        : 'planos',
+  safenr_documentos    : 'documentos',
+  safenr_ambientes     : 'ambientes',
+  safenr_notificacoes  : 'notificacoes'
+};
 
-    function mostrarTela(nome) {
-      telaAtual = nome;
+var PERMISSOES = {
+  admin:   { podeEditar:true,  podeExcluir:true,  podeExportar:true,  podeConfigurar:true  },
+  tecnico: { podeEditar:true,  podeExcluir:false, podeExportar:true,  podeConfigurar:false },
+  gestor:  { podeEditar:false, podeExcluir:false, podeExportar:true,  podeConfigurar:false }
+};
 
-      document.querySelectorAll('.tela').forEach(function(t) {
-        t.classList.remove('active');
-      });
+/* ── SUPABASE ── */
+function getSupabase() {
+  if (!_supabase) {
+    _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+  return _supabase;
+}
 
-      document.querySelectorAll('.nav-item').forEach(function(link) {
-        link.classList.remove('active');
-      });
+/* ── TOAST ── */
+var _toastTimer = null;
+function showToast(msg, dur) {
+  var t   = document.getElementById('syncToast');
+  var txt = document.getElementById('syncMsg');
+  if (!t || !txt) return;
+  txt.textContent = msg || 'Aguarde...';
+  t.classList.add('show');
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ t.classList.remove('show'); }, dur || 2500);
+}
 
-      var secao = document.getElementById('tela-' + nome);
-      if (secao) secao.classList.add('active');
+/* ── DADOS ── */
+async function getData(chave) {
+  var tabela   = TABELAS[chave];
+  var cache    = JSON.parse(localStorage.getItem(chave) || '[]');
+  if (!tabela) return cache;
 
-      var nav = document.querySelector('.nav-item[data-tela="' + nome + '"]');
-      if (nav) nav.classList.add('active');
+  try {
+    var sb       = getSupabase();
+    var userData = getUser();
+    var { data, error } = await sb
+      .from(tabela)
+      .select('*')
+      .eq('empresa_id', userData.empresaId || 'demo');
+    if (error) throw error;
+    localStorage.setItem(chave, JSON.stringify(data || []));
+    return data || [];
+  } catch (e) {
+    console.warn('[SafeNR] Offline — usando cache local:', e.message);
+    return cache;
+  }
+}
 
-      var titulo = nav ? nav.textContent.trim() : nome;
-      document.getElementById('tituloTela').textContent = titulo;
+async function saveData(chave, payload) {
+  localStorage.setItem(chave, JSON.stringify(payload));
+  var tabela = TABELAS[chave];
+  if (!tabela) return;
 
-      inicializarTelaAtual();
-    }
+  try {
+    var sb       = getSupabase();
+    var userData = getUser();
+    var registros = payload.map(function(item) {
+      return Object.assign({}, item, { empresa_id: userData.empresaId || 'demo' });
+    });
+    var { error } = await sb.from(tabela).upsert(registros, { onConflict: 'id' });
+    if (error) throw error;
+    showToast('✅ Dados sincronizados na nuvem');
+  } catch (e) {
+    console.warn('[SafeNR] Salvo somente local:', e.message);
+    showToast('⚠️ Salvo localmente (sem conexão)');
+  }
+}
 
-    function destroyChart(id) {
-      if (chartInstances[id]) {
-        chartInstances[id].destroy();
-        delete chartInstances[id];
-      }
-    }
+/* ── USUÁRIO / AUTH ── */
+function getUser() {
+  return JSON.parse(localStorage.getItem('safenr_user') || '{}');
+}
 
-    function fmt(d) {
-      if (!d) return '--';
-      var p = d.split('-');
-      return p[2] + '/' + p[1] + '/' + p[0];
-    }
+function sair() {
+  try { getSupabase().auth.signOut(); } catch(e) {}
+  localStorage.removeItem('safenr_user');
+  window.location.href = './index.html';
+}
 
-    function isVencido(d) {
-      return d && new Date(d + 'T00:00:00') < new Date();
-    }
+/* ── PERMISSÕES ── */
+function aplicarPermissoes() {
+  var user   = getUser();
+  var perfil = user.perfil || 'admin';
+  var perms  = PERMISSOES[perfil] || PERMISSOES.admin;
+  var labels = { admin:'👑 Admin', tecnico:'🦺 Técnico', gestor:'📊 Gestor' };
 
-    function venceEm30(d) {
-      if (!d) return false;
-      var diff = (new Date(d + 'T00:00:00') - new Date()) / 86400000;
-      return diff >= 0 && diff <= 30;
-    }
+  setEl('nomeUsuario', user.nome || 'Usuário');
+  setEl('avatarLetra', (user.nome || 'U')[0].toUpperCase());
+  setEl('perfilBadge', labels[perfil] || perfil);
 
-    function badgeStatus(status) {
-      var s = (status || '').toLowerCase();
-      if (s === 'ativo' || s === 'concluido') return '<span class="badge badge-green">' + status + '</span>';
-      if (s === 'agendado') return '<span class="badge badge-blue">' + status + '</span>';
-      if (s === 'vencido' || s === 'inativo') return '<span class="badge badge-red">' + status + '</span>';
-      return '<span class="badge badge-yellow">' + (status || '--') + '</span>';
-    }
+  document.querySelectorAll('[data-requer="exportar"]').forEach(function(el) {
+    el.style.display = perms.podeExportar ? '' : 'none';
+  });
 
-    function calcularScoreIA_sync(colabs, treins, riscos, ocorrs, insp, docs) {
-      var pontos = 0;
-      var episTotal = 0, episVenc = 0;
+  var cfg = document.querySelector('[data-tela="configuracoes"]');
+  if (cfg) {
+    cfg.style.opacity       = perms.podeConfigurar ? '1' : '0.3';
+    cfg.style.pointerEvents = perms.podeConfigurar ? '' : 'none';
+  }
+}
 
-      colabs.forEach(function(c) {
-        (c.epis || []).forEach(function(e) {
-          episTotal++;
-          if (isVencido(e.validade)) episVenc++;
-        });
-      });
+/* ── UTILITÁRIOS ── */
+function gerarId() {
+  return (window.crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : 'id-' + Date.now() + '-' + Math.floor(Math.random() * 1e6);
+}
 
-      pontos += episTotal > 0 ? Math.round(20 * (1 - episVenc / episTotal)) : 20;
+function setEl(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
 
-      var trVenc = treins.filter(function(t){ return isVencido(t.dataVal); }).length;
-      pontos += treins.length > 0 ? Math.max(0, Math.round(20 * (1 - trVenc / treins.length))) : 20;
+function valEl(id) {
+  var el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
 
-      var rCrit = riscos.filter(function(r){ return r.nivel === 'critico'; }).length;
-      pontos += Math.min(20, Math.max(0, 20 - rCrit * 3));
+function clearEl(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.value = val !== undefined ? val : '';
+}
 
-      var docsVenc = docs.filter(function(d){ return isVencido(d.validade); }).length;
-      pontos += docs.length > 0 ? Math.max(0, Math.round(15 * (1 - docsVenc / docs.length))) : 10;
+function fmt(d) {
+  if (!d) return '—';
+  var p = d.split('-');
+  return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : d;
+}
 
-      var ocSemAcao = ocorrs.filter(function(o){ return o.tipo === 'acidente' && !o.acao; }).length;
-      pontos += Math.min(15, Math.max(0, 15 - ocSemAcao * 3));
+function isVencido(d) {
+  return !!d && new Date(d + 'T00:00:00') < new Date();
+}
 
-      var inspConc = insp.filter(function(i){ return i.status === 'concluido' || i.status === 'aprovado'; }).length;
-      pontos += insp.length > 0 ? Math.round(10 * (inspConc / insp.length)) : 10;
+function venceEm30(d) {
+  if (!d) return false;
+  var diff = (new Date(d + 'T00:00:00') - new Date()) / 86400000;
+  return diff >= 0 && diff <= 30;
+}
 
-      return Math.min(100, Math.round(pontos));
-    }
+function truncate(str, max) {
+  if (!str) return '—';
+  return str.length > max ? str.substring(0, max) + '…' : str;
+}
 
-    function gerarId() {
-      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-      return 'id-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
-    }
+function destroyChart(id) {
+  if (chartInstances[id]) {
+    chartInstances[id].destroy();
+    delete chartInstances[id];
+  }
+}
 
-    async function carregarDashboard() {
-      showToast('🔄 Carregando dashboard...', 1500);
+function badge(texto, cor) {
+  return '<span class="badge badge-' + cor + '">' + (texto || '—') + '</span>';
+}
 
-      var hoje = new Date();
-      hoje.setHours(0,0,0,0);
-      var hojeStr = hoje.toISOString().split('T')[0];
+function badgeStatus(status) {
+  var s = (status || '').toLowerCase();
+  var mapa = {
+    ativo:'green', concluido:'green', aprovado:'green',
+    agendado:'blue', 'em-andamento':'blue', aberto:'blue',
+    vencido:'red', inativo:'red', cancelado:'red', reprovado:'red',
+    afastado:'orange', pendente:'yellow',
+    critico:'red', alto:'orange', medio:'yellow', baixo:'green',
+    alta:'red', media:'yellow', baixa:'green'
+  };
+  return badge(status, mapa[s] || 'gray');
+}
 
-      var colabs = await getData('safenr_colaboradores');
-      var treins = await getData('safenr_treinamentos');
-      var agenda = await getData('safenr_agenda');
-      var ocorrs = await getData('safenr_ocorrencias');
-      var riscos = await getData('safenr_riscos');
-      var insp   = await getData('safenr_inspecoes');
-      var docs   = await getData('safenr_documentos');
+function badgeTipoOcorr(tipo) {
+  var mapa = {
+    acidente:'red', incidente:'orange',
+    'quase-acidente':'yellow', 'condicao-insegura':'purple'
+  };
+  return badge(tipo, mapa[(tipo||'').toLowerCase()] || 'gray');
+}
 
-      document.getElementById('kpi-colab').textContent = colabs.length;
-      document.getElementById('kpi-colab-sub').textContent =
-        colabs.filter(function(c){ return c.status === 'ativo'; }).length + ' ativos';
+/* ── SCORE IA ── */
+function calcularScore(colabs, treins, riscos, ocorrs, insp, docs) {
+  var pts = 0;
+  var eTot = 0, eVenc = 0;
+  colabs.forEach(function(c) {
+    (c.epis || []).forEach(function(e) { eTot++; if (isVencido(e.validade)) eVenc++; });
+  });
+  pts += eTot > 0 ? Math.round(20 * (1 - eVenc / eTot)) : 20;
 
-      document.getElementById('kpi-ocorr').textContent = ocorrs.length;
-      document.getElementById('kpi-ocorr-sub').textContent =
-        ocorrs.filter(function(o){ return o.tipo === 'acidente'; }).length + ' acidentes';
+  var tVenc = treins.filter(function(t){ return isVencido(t.dataVal); }).length;
+  pts += treins.length > 0 ? Math.max(0, Math.round(20 * (1 - tVenc / treins.length))) : 20;
 
-      var vencidos = treins.filter(function(t){ return isVencido(t.dataVal); }).length;
-      document.getElementById('kpi-trein').textContent = treins.length;
-      document.getElementById('kpi-trein-sub').textContent =
-        vencidos > 0 ? vencidos + ' vencidos' : 'Todos em dia';
+  var rCrit = riscos.filter(function(r){ return r.nivel === 'critico'; }).length;
+  pts += Math.min(20, Math.max(0, 20 - rCrit * 3));
 
-      var eventosHoje = agenda.filter(function(e){ return e.data === hojeStr; }).length;
-      var eventosSemana = agenda.filter(function(e){
-        if (!e.data) return false;
-        var d = new Date(e.data + 'T00:00:00');
-        return d >= hoje && (d - hoje) / 86400000 <= 7;
-      }).length;
+  var dVenc = docs.filter(function(d){ return isVencido(d.validade); }).length;
+  pts += docs.length > 0 ? Math.max(0, Math.round(15 * (1 - dVenc / docs.length))) : 10;
 
-      document.getElementById('kpi-agenda').textContent = eventosHoje;
-      document.getElementById('kpi-agenda-sub').textContent = eventosSemana + ' na semana';
+  var ocSA = ocorrs.filter(function(o){ return o.tipo === 'acidente' && !o.acao; }).length;
+  pts += Math.min(15, Math.max(0, 15 - ocSA * 3));
 
-      destroyChart('chartOcorr');
-      var ocorrCanvas = document.getElementById('chartOcorr');
-      if (ocorrCanvas) {
-        chartInstances['chartOcorr'] = new Chart(ocorrCanvas, {
-          type: 'doughnut',
-          data: {
-            labels: ['Acidente', 'Incidente', 'Quase-acidente', 'Condição insegura'],
-            datasets: [{
-              data: [
-                ocorrs.filter(function(o){ return o.tipo === 'acidente'; }).length,
-                ocorrs.filter(function(o){ return o.tipo === 'incidente'; }).length,
-                ocorrs.filter(function(o){ return o.tipo === 'quase-acidente'; }).length,
-                ocorrs.filter(function(o){ return o.tipo === 'condicao-insegura'; }).length
-              ],
-              backgroundColor: ['#f87171','#fb923c','#fbbf24','#a78bfa'],
-              borderColor: '#0f1923',
-              borderWidth: 3
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                labels: { color: 'rgba(255,255,255,.7)' }
-              }
-            }
-          }
-        });
-      }
+  var iOk = insp.filter(function(i){ return i.status === 'concluido' || i.status === 'aprovado'; }).length;
+  pts += insp.length > 0 ? Math.round(10 * (iOk / insp.length)) : 10;
 
-      destroyChart('chartTrein');
-      var treinCanvas = document.getElementById('chartTrein');
-      if (treinCanvas) {
-        chartInstances['chartTrein'] = new Chart(treinCanvas, {
-          type: 'bar',
-          data: {
-            labels: ['Agendado', 'Concluído', 'Vencido'],
-            datasets: [{
-              label: 'Treinamentos',
-              data: [
-                treins.filter(function(t){ return t.status === 'agendado'; }).length,
-                treins.filter(function(t){ return t.status === 'concluido'; }).length,
-                treins.filter(function(t){ return t.status === 'vencido'; }).length
-              ],
-              backgroundColor: ['#60a5fa','#4ade80','#f87171'],
-              borderRadius: 8
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                labels: { color: 'rgba(255,255,255,.7)' }
-              }
-            },
-            scales: {
-              x: {
-                ticks: { color: 'rgba(255,255,255,.7)' },
-                grid: { color: 'rgba(255,255,255,.05)' }
-              },
-              y: {
-                beginAtZero: true,
-                ticks: { color: 'rgba(255,255,255,.7)', stepSize: 1 },
-                grid: { color: 'rgba(255,255,255,.05)' }
-              }
-            }
-          }
-        });
-      }
+  return Math.min(100, Math.round(pts));
+}
 
-      var listaOcorr = document.getElementById('dashboardUltimasOcorrencias');
-      var ultimas = ocorrs.slice().sort(function(a,b){
-        return new Date(b.registradoEm || b.data || 0) - new Date(a.registradoEm || a.data || 0);
-      }).slice(0,5);
+/* ── NAVEGAÇÃO ── */
+function mostrarTela(nome) {
+  telaAtual = nome;
 
-      if (ultimas.length === 0) {
-        listaOcorr.innerHTML = '<div class="empty-box">Nenhuma ocorrência registrada.</div>';
-      } else {
-        listaOcorr.innerHTML = ultimas.map(function(o){
-          return '<div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">' +
-            '<strong>' + (o.colaborador || '--') + '</strong> — ' + (o.tipo || '--') +
-            '<br><span style="color:rgba(255,255,255,.5);font-size:.8rem;">' + fmt(o.data) + ' | ' + (o.setor || '--') + '</span>' +
+  document.querySelectorAll('.tela').forEach(function(t) {
+    t.classList.remove('active');
+  });
+  document.querySelectorAll('.nav-item').forEach(function(l) {
+    l.classList.remove('active');
+  });
+
+  var sec = document.getElementById('tela-' + nome);
+  if (sec) sec.classList.add('active');
+
+  var nav = document.querySelector('.nav-item[data-tela="' + nome + '"]');
+  if (nav) nav.classList.add('active');
+
+  var titulo = nav ? nav.textContent.trim() : nome;
+  setEl('tituloTela', titulo);
+
+  inicializarTelaAtual();
+}
+
+function inicializarTelaAtual() {
+  aplicarPermissoes();
+  atualizarData();
+  var mapa = {
+    dashboard:   carregarDashboard,
+    colaboradores: carregarColaboradores,
+    treinamentos:  carregarTreinamentos,
+    agenda:        carregarAgenda,
+    ocorrencias:   carregarOcorrencias,
+    riscos:        carregarRiscos,
+    inspecoes:     carregarInspecoes,
+    checklists:    carregarChecklists,
+    'plano-acao':  carregarPlanos,
+    documentos:    carregarDocumentos
+  };
+  if (mapa[telaAtual]) mapa[telaAtual]();
+}
+
+function atualizarData() {
+  setEl('dataHoje', new Date().toLocaleDateString('pt-BR', {
+    weekday:'long', day:'2-digit', month:'long', year:'numeric'
+  }));
+}
+
+/* ══════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════ */
+async function carregarDashboard() {
+  showToast('🔄 Carregando dashboard...', 1800);
+
+  var hoje    = new Date(); hoje.setHours(0,0,0,0);
+  var hojeStr = hoje.toISOString().split('T')[0];
+
+  var [colabs, treins, agenda, ocorrs, riscos, insp, docs, checks, planos] = await Promise.all([
+    getData('safenr_colaboradores'),
+    getData('safenr_treinamentos'),
+    getData('safenr_agenda'),
+    getData('safenr_ocorrencias'),
+    getData('safenr_riscos'),
+    getData('safenr_inspecoes'),
+    getData('safenr_documentos'),
+    getData('safenr_checklists'),
+    getData('safenr_planos')
+  ]);
+
+  /* KPIs */
+  setEl('kpi-colab', colabs.length);
+  setEl('kpi-colab-sub', colabs.filter(function(c){ return c.status==='ativo'; }).length + ' ativos');
+
+  setEl('kpi-ocorr', ocorrs.length);
+  setEl('kpi-ocorr-sub', ocorrs.filter(function(o){ return o.tipo==='acidente'; }).length + ' acidentes');
+
+  var tVenc = treins.filter(function(t){ return isVencido(t.dataVal); }).length;
+  setEl('kpi-trein', treins.length);
+  setEl('kpi-trein-sub', tVenc > 0 ? tVenc + ' vencidos ⚠️' : 'Todos em dia ✅');
+
+  var rCrit = riscos.filter(function(r){ return r.nivel==='critico'; }).length;
+  setEl('kpi-riscos', riscos.length);
+  setEl('kpi-riscos-sub', rCrit + ' críticos');
+
+  var iPend = insp.filter(function(i){ return i.status==='pendente'; }).length;
+  setEl('kpi-insp', insp.length);
+  setEl('kpi-insp-sub', iPend + ' pendentes');
+
+  var cPend = checks.filter(function(c){ return !c.concluido; }).length;
+  setEl('kpi-check', checks.length);
+  setEl('kpi-check-sub', cPend + ' pendentes');
+
+  var eHoje = agenda.filter(function(e){ return e.data === hojeStr; }).length;
+  var eSem  = agenda.filter(function(e){
+    if (!e.data) return false;
+    var d = new Date(e.data + 'T00:00:00');
+    return d >= hoje && (d - hoje) / 86400000 <= 7;
+  }).length;
+  setEl('kpi-agenda', eHoje);
+  setEl('kpi-agenda-sub', eSem + ' esta semana');
+
+  var pAtras = planos.filter(function(p){
+    return p.status !== 'concluido' && p.status !== 'cancelado'
+        && p.quando && new Date(p.quando + 'T00:00:00') < hoje;
+  }).length;
+  setEl('kpi-planos', planos.length);
+  setEl('kpi-planos-sub', pAtras > 0 ? pAtras + ' atrasados ⚠️' : 'Em dia ✅');
+
+  /* Score IA */
+  var score = calcularScore(colabs, treins, riscos, ocorrs, insp, docs);
+  var sCor  = score >= 85 ? '#4ade80' : score >= 70 ? '#fbbf24' : score >= 50 ? '#fb923c' : '#f87171';
+  var banEl = document.getElementById('iaBannerScore');
+  if (banEl) { banEl.textContent = 'Score SST: ' + score + '/100'; banEl.style.color = sCor; }
+
+  /* Alertas */
+  renderAlertas(colabs, treins, riscos, ocorrs, docs, planos, hoje);
+
+  /* Gráficos */
+  renderChartDoughnut('chartOcorr',
+    ['Acidente','Incidente','Quase-acidente','Condição insegura'],
+    ['acidente','incidente','quase-acidente','condicao-insegura'].map(function(t){
+      return ocorrs.filter(function(o){ return o.tipo === t; }).length;
+    }),
+    ['#f87171','#fb923c','#fbbf24','#a78bfa']
+  );
+
+  renderChartDoughnut('chartRiscos',
+    ['Crítico','Alto','Médio','Baixo'],
+    ['critico','alto','medio','baixo'].map(function(n){
+      return riscos.filter(function(r){ return r.nivel === n; }).length;
+    }),
+    ['#f87171','#fb923c','#fbbf24','#4ade80']
+  );
+
+  /* Últimas ocorrências */
+  var boxOcorr = document.getElementById('dashUltimasOcorr');
+  var ult5 = ocorrs.slice().sort(function(a,b){
+    return new Date(b.registradoEm || b.data || 0) - new Date(a.registradoEm || a.data || 0);
+  }).slice(0, 5);
+
+  boxOcorr.innerHTML = ult5.length === 0
+    ? '<div class="empty-box">Nenhuma ocorrência.</div>'
+    : ult5.map(function(o){
+        return '<div class="ativ-item">' +
+          '<div class="ativ-dot" style="background:' + (o.tipo==='acidente'?'var(--red)':'var(--yellow)') + '"></div>' +
+          '<div class="ativ-txt"><strong>' + (o.colaborador||'—') + '</strong> — ' + (o.tipo||'—') +
+          ' em <em>' + (o.setor||'—') + '</em></div>' +
+          '<div class="ativ-data">' + fmt(o.data) + '</div>' +
           '</div>';
-        }).join('');
-      }
+      }).join('');
 
-      var listaAgenda = document.getElementById('dashboardProximosEventos');
-      var proximos = agenda
-        .filter(function(e){ return e.data >= hojeStr; })
-        .sort(function(a,b){ return a.data.localeCompare(b.data); })
-        .slice(0,5);
+  /* Próximos eventos */
+  var boxAgenda = document.getElementById('dashProximosEventos');
+  var prox5 = agenda.filter(function(e){ return e.data >= hojeStr; })
+    .sort(function(a,b){ return (a.data||'').localeCompare(b.data||''); })
+    .slice(0, 5);
 
-      if (proximos.length === 0) {
-        listaAgenda.innerHTML = '<div class="empty-box">Nenhum evento próximo.</div>';
-      } else {
-        listaAgenda.innerHTML = proximos.map(function(e){
-          return '<div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">' +
-            '<strong>' + (e.titulo || 'Evento') + '</strong>' +
-            '<br><span style="color:rgba(255,255,255,.5);font-size:.8rem;">' + fmt(e.data) + ' | ' + (e.tipo || '--') + '</span>' +
+  boxAgenda.innerHTML = prox5.length === 0
+    ? '<div class="empty-box">Nenhum evento próximo.</div>'
+    : prox5.map(function(e){
+        return '<div class="ativ-item">' +
+          '<div class="ativ-dot" style="background:var(--accent)"></div>' +
+          '<div class="ativ-txt"><strong>' + (e.titulo||'Evento') + '</strong></div>' +
+          '<div class="ativ-data">' + fmt(e.data) + '</div>' +
           '</div>';
-        }).join('');
-      }
+      }).join('');
+}
 
-      console.log('Score IA:', calcularScoreIA_sync(colabs, treins, riscos, ocorrs, insp, docs));
-    }
-
-    async function carregarColaboradores() {
-      var lista = await getData('safenr_colaboradores');
-      var filtro = (document.getElementById('filtroColaborador') || {}).value || '';
-      filtro = filtro.toLowerCase().trim();
-
-      if (filtro) {
-        lista = lista.filter(function(c){
-          return (c.nome || '').toLowerCase().includes(filtro) ||
-                 (c.cargo || '').toLowerCase().includes(filtro) ||
-                 (c.setor || '').toLowerCase().includes(filtro);
-        });
-      }
-
-      var tbody = document.querySelector('#tabelaColaboradores tbody');
-      var vazio = document.getElementById('vazioColaboradores');
-      tbody.innerHTML = '';
-
-      if (lista.length === 0) {
-        vazio.style.display = 'block';
-        return;
-      }
-
-      vazio.style.display = 'none';
-
-      lista.forEach(function(c){
-        var tr = document.createElement('tr');
-        tr.innerHTML =
-          '<td>' + (c.nome || '--') + '</td>' +
-          '<td>' + (c.cargo || '--') + '</td>' +
-          '<td>' + (c.setor || '--') + '</td>' +
-          '<td>' + badgeStatus(c.status || '--') + '</td>' +
-          '<td><button class="btn btn-danger" onclick="excluirRegistro(\'safenr_colaboradores\', \'' + c.id + '\', carregarColaboradores)">Excluir</button></td>';
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function adicionarColaborador() {
-      var nome = document.getElementById('colabNome').value.trim();
-      var cargo = document.getElementById('colabCargo').value.trim();
-      var setor = document.getElementById('colabSetor').value.trim();
-      var status = document.getElementById('colabStatus').value;
-
-      if (!nome) {
-        showToast('⚠️ Informe o nome do colaborador');
-        return;
-      }
-
-      var lista = await getData('safenr_colaboradores');
-      lista.push({
-        id: gerarId(),
-        nome: nome,
-        cargo: cargo,
-        setor: setor,
-        status: status,
-        criadoEm: new Date().toISOString()
-      });
-
-      await saveData('safenr_colaboradores', lista);
-
-      document.getElementById('colabNome').value = '';
-      document.getElementById('colabCargo').value = '';
-      document.getElementById('colabSetor').value = '';
-      document.getElementById('colabStatus').value = 'ativo';
-
-      await carregarColaboradores();
-      await carregarDashboard();
-    }
-
-    async function carregarTreinamentos() {
-      var lista = await getData('safenr_treinamentos');
-      var filtro = (document.getElementById('filtroTreinamento') || {}).value || '';
-      var statusFiltro = (document.getElementById('filtroStatusTreinamento') || {}).value || '';
-
-      filtro = filtro.toLowerCase().trim();
-
-      if (filtro) {
-        lista = lista.filter(function(t){
-          return (t.nome || '').toLowerCase().includes(filtro) ||
-                 (t.colaborador || '').toLowerCase().includes(filtro);
-        });
-      }
-
-      if (statusFiltro) {
-        lista = lista.filter(function(t){ return t.status === statusFiltro; });
-      }
-
-      var tbody = document.querySelector('#tabelaTreinamentos tbody');
-      var vazio = document.getElementById('vazioTreinamentos');
-      tbody.innerHTML = '';
-
-      if (lista.length === 0) {
-        vazio.style.display = 'block';
-        return;
-      }
-
-      vazio.style.display = 'none';
-
-      lista.forEach(function(t){
-        var tr = document.createElement('tr');
-        tr.innerHTML =
-          '<td>' + (t.nome || '--') + '</td>' +
-          '<td>' + (t.colaborador || '--') + '</td>' +
-          '<td>' + fmt(t.dataReal) + '</td>' +
-          '<td>' + fmt(t.dataVal) + '</td>' +
-          '<td>' + badgeStatus(t.status || '--') + '</td>' +
-          '<td><button class="btn btn-danger" onclick="excluirRegistro(\'safenr_treinamentos\', \'' + t.id + '\', carregarTreinamentos)">Excluir</button></td>';
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function adicionarTreinamento() {
-      var nome = document.getElementById('treinNome').value.trim();
-      var colaborador = document.getElementById('treinColaborador').value.trim();
-      var status = document.getElementById('treinStatus').value;
-      var dataReal = document.getElementById('treinDataReal').value;
-      var dataVal = document.getElementById('treinDataVal').value;
-      var obs = document.getElementById('treinObs').value.trim();
-
-      if (!nome || !colaborador) {
-        showToast('⚠️ Informe treinamento e colaborador');
-        return;
-      }
-
-      var lista = await getData('safenr_treinamentos');
-      lista.push({
-        id: gerarId(),
-        nome: nome,
-        colaborador: colaborador,
-        status: status,
-        dataReal: dataReal,
-        dataVal: dataVal,
-        observacao: obs,
-        criadoEm: new Date().toISOString()
-      });
-
-      await saveData('safenr_treinamentos', lista);
-
-      document.getElementById('treinNome').value = '';
-      document.getElementById('treinColaborador').value = '';
-      document.getElementById('treinStatus').value = 'agendado';
-      document.getElementById('treinDataReal').value = '';
-      document.getElementById('treinDataVal').value = '';
-      document.getElementById('treinObs').value = '';
-
-      await carregarTreinamentos();
-      await carregarDashboard();
-    }
-
-    async function carregarAgenda() {
-      var lista = await getData('safenr_agenda');
-      var filtro = (document.getElementById('filtroAgenda') || {}).value || '';
-      var tipoFiltro = (document.getElementById('filtroTipoAgenda') || {}).value || '';
-
-      filtro = filtro.toLowerCase().trim();
-
-      if (filtro) {
-        lista = lista.filter(function(e){
-          return (e.titulo || '').toLowerCase().includes(filtro) ||
-                 (e.descricao || '').toLowerCase().includes(filtro);
-        });
-      }
-
-      if (tipoFiltro) {
-        lista = lista.filter(function(e){ return e.tipo === tipoFiltro; });
-      }
-
-      lista.sort(function(a,b){ return (a.data || '').localeCompare(b.data || ''); });
-
-      var tbody = document.querySelector('#tabelaAgenda tbody');
-      var vazio = document.getElementById('vazioAgenda');
-      tbody.innerHTML = '';
-
-      if (lista.length === 0) {
-        vazio.style.display = 'block';
-        return;
-      }
-
-      vazio.style.display = 'none';
-
-      lista.forEach(function(e){
-        var tr = document.createElement('tr');
-        tr.innerHTML =
-          '<td>' + fmt(e.data) + '</td>' +
-          '<td>' + (e.titulo || '--') + '</td>' +
-          '<td><span class="badge badge-purple">' + (e.tipo || '--') + '</span></td>' +
-          '<td>' + (e.descricao || '--') + '</td>' +
-          '<td><button class="btn btn-danger" onclick="excluirRegistro(\'safenr_agenda\', \'' + e.id + '\', carregarAgenda)">Excluir</button></td>';
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function adicionarEventoAgenda() {
-      var titulo = document.getElementById('agendaTitulo').value.trim();
-      var data = document.getElementById('agendaData').value;
-      var tipo = document.getElementById('agendaTipo').value;
-      var descricao = document.getElementById('agendaDescricao').value.trim();
-
-      if (!titulo || !data) {
-        showToast('⚠️ Informe título e data');
-        return;
-      }
-
-      var lista = await getData('safenr_agenda');
-      lista.push({
-        id: gerarId(),
-        titulo: titulo,
+function renderChartDoughnut(canvasId, labels, data, colors) {
+  destroyChart(canvasId);
+  var el = document.getElementById(canvasId);
+  if (!el) return;
+  chartInstances[canvasId] = new Chart(el, {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
         data: data,
-        tipo: tipo,
-        descricao: descricao,
-        criadoEm: new Date().toISOString()
-      });
-
-      await saveData('safenr_agenda', lista);
-
-      document.getElementById('agendaTitulo').value = '';
-      document.getElementById('agendaData').value = '';
-      document.getElementById('agendaTipo').value = 'treinamento';
-      document.getElementById('agendaDescricao').value = '';
-
-      await carregarAgenda();
-      await carregarDashboard();
-    }
-
-    async function carregarOcorrencias() {
-      var lista = await getData('safenr_ocorrencias');
-      var filtro = (document.getElementById('filtroOcorrencia') || {}).value || '';
-      var tipoFiltro = (document.getElementById('filtroTipoOcorrencia') || {}).value || '';
-
-      filtro = filtro.toLowerCase().trim();
-
-      if (filtro) {
-        lista = lista.filter(function(o){
-          return (o.colaborador || '').toLowerCase().includes(filtro) ||
-                 (o.setor || '').toLowerCase().includes(filtro) ||
-                 (o.descricao || '').toLowerCase().includes(filtro) ||
-                 (o.tipo || '').toLowerCase().includes(filtro);
-        });
-      }
-
-      if (tipoFiltro) {
-        lista = lista.filter(function(o){ return o.tipo === tipoFiltro; });
-      }
-
-      lista.sort(function(a,b){
-        return new Date(b.data || 0) - new Date(a.data || 0);
-      });
-
-      var tbody = document.querySelector('#tabelaOcorrencias tbody');
-      var vazio = document.getElementById('vazioOcorrencias');
-      tbody.innerHTML = '';
-
-      if (lista.length === 0) {
-        vazio.style.display = 'block';
-        return;
-      }
-
-      vazio.style.display = 'none';
-
-      lista.forEach(function(o){
-        var tr = document.createElement('tr');
-        tr.innerHTML =
-          '<td>' + fmt(o.data) + '</td>' +
-          '<td><span class="badge badge-red">' + (o.tipo || '--') + '</span></td>' +
-          '<td>' + (o.colaborador || '--') + '</td>' +
-          '<td>' + (o.setor || '--') + '</td>' +
-          '<td>' + (o.descricao || '--') + '</td>' +
-          '<td>' + (o.acao || '--') + '</td>' +
-          '<td><button class="btn btn-danger" onclick="excluirRegistro(\'safenr_ocorrencias\', \'' + o.id + '\', carregarOcorrencias)">Excluir</button></td>';
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function adicionarOcorrencia() {
-      var data = document.getElementById('ocorrData').value;
-      var tipo = document.getElementById('ocorrTipo').value;
-      var colaborador = document.getElementById('ocorrColaborador').value.trim();
-      var setor = document.getElementById('ocorrSetor').value.trim();
-      var acao = document.getElementById('ocorrAcao').value.trim();
-      var responsavel = document.getElementById('ocorrResponsavel').value.trim();
-      var descricao = document.getElementById('ocorrDescricao').value.trim();
-
-      if (!data || !tipo || !descricao) {
-        showToast('⚠️ Informe data, tipo e descrição');
-        return;
-      }
-
-      var lista = await getData('safenr_ocorrencias');
-      lista.push({
-        id: gerarId(),
-        data: data,
-        tipo: tipo,
-        colaborador: colaborador,
-        setor: setor,
-        acao: acao,
-        responsavel: responsavel,
-        descricao: descricao,
-        registradoEm: new Date().toISOString()
-      });
-
-      await saveData('safenr_ocorrencias', lista);
-
-      document.getElementById('ocorrData').value = '';
-      document.getElementById('ocorrTipo').value = 'acidente';
-      document.getElementById('ocorrColaborador').value = '';
-      document.getElementById('ocorrSetor').value = '';
-      document.getElementById('ocorrAcao').value = '';
-      document.getElementById('ocorrResponsavel').value = '';
-      document.getElementById('ocorrDescricao').value = '';
-
-      await carregarOcorrencias();
-      await carregarDashboard();
-    }
-
-    async function excluirRegistro(chave, id, callback) {
-      var user = JSON.parse(localStorage.getItem('safenr_user') || '{}');
-      var perms = PERMISSOES[user.perfil || 'admin'] || PERMISSOES.admin;
-
-      if (!perms.podeExcluir) {
-        showToast('❌ Sem permissão para excluir');
-        return;
-      }
-
-      var ok = confirm('Deseja realmente excluir este registro?');
-      if (!ok) return;
-
-      var lista = await getData(chave);
-      lista = lista.filter(function(item){ return item.id !== id; });
-      await saveData(chave, lista);
-
-      if (typeof callback === 'function') {
-        await callback();
-      }
-
-      await carregarDashboard();
-      showToast('✅ Registro excluído');
-    }
-
-    async function inicializarTelaAtual() {
-      atualizarData();
-      aplicarPermissoes();
-
-      if (telaAtual === 'dashboard') {
-        await carregarDashboard();
-      } else if (telaAtual === 'colaboradores') {
-        await carregarColaboradores();
-      } else if (telaAtual === 'treinamentos') {
-        await carregarTreinamentos();
-      } else if (telaAtual === 'agenda') {
-        await carregarAgenda();
-      } else if (telaAtual === 'ocorrencias') {
-        await carregarOcorrencias();
-      } else {
-        showToast('✅ Tela carregada');
+        backgroundColor: colors,
+        borderColor: 'var(--bg)',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: { color: 'rgba(255,255,255,.65)', font:{ size:12 }, boxWidth:14 }
+        }
       }
     }
+  });
+}
 
-    async function exportarPDF() {
-      var user = JSON.parse(localStorage.getItem('safenr_user') || '{}');
-      var perms = PERMISSOES[user.perfil || 'admin'] || PERMISSOES.admin;
+function renderAlertas(colabs, treins, riscos, ocorrs, docs, planos, hoje) {
+  var alertas = [];
 
-      if (!perms.podeExportar) {
-        showToast('❌ Sem permissão para exportar');
-        return;
-      }
+  var eVenc = 0;
+  colabs.forEach(function(c){ (c.epis||[]).forEach(function(e){ if(isVencido(e.validade)) eVenc++; }); });
+  if (eVenc > 0)
+    alertas.push({ urgente:true,  icone:'🦺', titulo:eVenc+' EPI(s) vencido(s)', desc:'Substituição imediata necessária' });
 
-      showToast('📄 Gerando PDF...');
+  var tVenc = treins.filter(function(t){ return isVencido(t.dataVal); }).length;
+  if (tVenc > 0)
+    alertas.push({ urgente:true,  icone:'🎓', titulo:tVenc+' treinamento(s) vencido(s)', desc:'Certificados expirados' });
 
-      var colabs = await getData('safenr_colaboradores');
-      var ocorrs = await getData('safenr_ocorrencias');
-      var treins = await getData('safenr_treinamentos');
-      var agenda = await getData('safenr_agenda');
-      var riscos = await getData('safenr_riscos');
-      var insp   = await getData('safenr_inspecoes');
-      var docs   = await getData('safenr_documentos');
-      var score  = calcularScoreIA_sync(colabs, treins, riscos, ocorrs, insp, docs);
+  var rCrit = riscos.filter(function(r){ return r.nivel==='critico'; }).length;
+  if (rCrit > 0)
+    alertas.push({ urgente:true,  icone:'⚠️', titulo:rCrit+' risco(s) crítico(s)', desc:'Ação imediata requerida' });
 
-      var jsPDFRef = window.jspdf.jsPDF;
-      var doc = new jsPDFRef();
-      var hoje = new Date().toLocaleDateString('pt-BR');
+  var ocSA = ocorrs.filter(function(o){ return o.tipo==='acidente' && !o.acao; }).length;
+  if (ocSA > 0)
+    alertas.push({ urgente:true,  icone:'🚨', titulo:ocSA+' acidente(s) sem plano de ação', desc:'Investigação pendente' });
 
-      doc.setFontSize(18);
-      doc.text('SafeNR — Relatório Geral', 14, 20);
-      doc.setFontSize(11);
-      doc.text('Gerado em: ' + hoje, 14, 28);
-      doc.text('Empresa: ' + (user.empresa || 'Demo'), 14, 35);
+  var dVenc = docs.filter(function(d){ return isVencido(d.validade); }).length;
+  if (dVenc > 0)
+    alertas.push({ urgente:true,  icone:'🗂️', titulo:dVenc+' documento(s) SST vencido(s)', desc:'Renovação necessária' });
 
-      doc.autoTable({
-        startY: 42,
-        head: [['Indicador', 'Total']],
-        body: [
-          ['Colaboradores', colabs.length],
-          ['Ocorrências', ocorrs.length],
-          ['Treinamentos', treins.length],
-          ['Eventos na agenda', agenda.length],
-          ['Score IA SST', score + '/100']
-        ]
-      });
+  var pAtras = planos.filter(function(p){
+    return p.status!=='concluido' && p.status!=='cancelado'
+        && p.quando && new Date(p.quando+'T00:00:00') < hoje;
+  }).length;
+  if (pAtras > 0)
+    alertas.push({ urgente:true,  icone:'📌', titulo:pAtras+' plano(s) de ação atrasado(s)', desc:'Prazos vencidos' });
 
-      if (ocorrs.length > 0) {
-        doc.addPage();
-        doc.setFontSize(14);
-        doc.text('Ocorrências', 14, 20);
-        doc.autoTable({
-          startY: 26,
-          head: [['Data', 'Tipo', 'Colaborador', 'Setor', 'Descrição']],
-          body: ocorrs.map(function(o){
-            return [
-              fmt(o.data),
-              o.tipo || '--',
-              o.colaborador || '--',
-              o.setor || '--',
-              (o.descricao || '--').substring(0, 50)
-            ];
-          })
-        });
-      }
+  var eBreve = 0;
+  colabs.forEach(function(c){ (c.epis||[]).forEach(function(e){ if(venceEm30(e.validade)) eBreve++; }); });
+  if (eBreve > 0)
+    alertas.push({ urgente:false, icone:'🦺', titulo:eBreve+' EPI(s) vencem em 30 dias', desc:'Planejar substituição' });
 
-      doc.save('SafeNR_Relatorio_' + hoje.replace(/\//g, '-') + '.pdf');
-      showToast('✅ PDF gerado com sucesso');
-    }
+  var tBreve = treins.filter(function(t){ return venceEm30(t.dataVal); }).length;
+  if (tBreve > 0)
+    alertas.push({ urgente:false, icone:'🎓', titulo:tBreve+' treinamento(s) vencem em 30 dias', desc:'Agendar renovação' });
 
-    async function exportarExcel() {
-      var user = JSON.parse(localStorage.getItem('safenr_user') || '{}');
-      var perms = PERMISSOES[user.perfil || 'admin'] || PERMISSOES.admin;
+  var grid = document.getElementById('alertasGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
 
-      if (!perms.podeExportar) {
-        showToast('❌ Sem permissão para exportar');
-        return;
-      }
+  if (alertas.length === 0) {
+    grid.innerHTML = '<div class="alerta-card ok"><div class="alerta-icone">✅</div>' +
+      '<div class="alerta-texto"><p>Nenhum alerta crítico</p><span>Todos os indicadores OK</span></div></div>';
+    return;
+  }
 
-      showToast('📊 Gerando Excel...');
+  alertas.slice(0, 6).forEach(function(a) {
+    var div = document.createElement('div');
+    div.className = 'alerta-card' + (a.urgente ? '' : ' warn');
+    div.innerHTML =
+      '<div class="alerta-icone">' + a.icone + '</div>' +
+      '<div class="alerta-texto"><p>' + a.titulo + '</p><span>' + a.desc + '</span></div>';
+    grid.appendChild(div);
+  });
+}
 
-      var XLSX = window.XLSX;
-      var wb = XLSX.utils.book_new();
-      var hoje = new Date().toLocaleDateString('pt-BR');
+/* ══════════════════════════════════════════
+   COLABORADORES
+══════════════════════════════════════════ */
+async function carregarColaboradores() {
+  var lista  = await getData('safenr_colaboradores');
+  var filtro = valEl('filtroColab').toLowerCase();
+  var fStatus = valEl('filtroStatusColab');
 
-      var colabs = await getData('safenr_colaboradores');
-      var treins = await getData('safenr_treinamentos');
-      var agenda = await getData('safenr_agenda');
-      var ocorrs = await getData('safenr_ocorrencias');
+  if (filtro)  lista = lista.filter(function(c){ return (c.nome||'').toLowerCase().includes(filtro) || (c.cargo||'').toLowerCase().includes(filtro) || (c.setor||'').toLowerCase().includes(filtro); });
+  if (fStatus) lista = lista.filter(function(c){ return c.status === fStatus; });
 
-      var resumo = XLSX.utils.aoa_to_sheet([
-        ['SafeNR — Relatório Geral', ''],
-        ['Gerado em:', hoje],
-        ['Empresa:', user.empresa || 'Demo'],
-        ['', ''],
-        ['Indicador', 'Total'],
-        ['Colaboradores', colabs.length],
-        ['Treinamentos', treins.length],
-        ['Agenda', agenda.length],
-        ['Ocorrências', ocorrs.length]
-      ]);
-      XLSX.utils.book_append_sheet(wb, resumo, 'Resumo');
+  renderTabela('tbodyColaboradores', 'vazioColaboradores', lista, function(c) {
+    return '<td>' + (c.nome||'—') + '</td>' +
+           '<td>' + (c.cargo||'—') + '</td>' +
+           '<td>' + (c.setor||'—') + '</td>' +
+           '<td>' + fmt(c.admissao) + '</td>' +
+           '<td>' + badgeStatus(c.status) + '</td>' +
+           '<td>' + btnExcluir('safenr_colaboradores', c.id, 'carregarColaboradores') + '</td>';
+  });
+}
 
-      if (colabs.length > 0) {
-        XLSX.utils.book_append_sheet(wb,
-          XLSX.utils.json_to_sheet(colabs.map(function(c){
-            return {
-              Nome: c.nome || '--',
-              Cargo: c.cargo || '--',
-              Setor: c.setor || '--',
-              Status: c.status || '--'
-            };
-          })),
-          'Colaboradores'
-        );
-      }
+async function adicionarColaborador() {
+  var nome = valEl('colabNome');
+  if (!nome) { showToast('⚠️ Informe o nome do colaborador'); return; }
 
-      if (treins.length > 0) {
-        XLSX.utils.book_append_sheet(wb,
-          XLSX.utils.json_to_sheet(treins.map(function(t){
-            return {
-              Treinamento: t.nome || '--',
-              Colaborador: t.colaborador || '--',
-              DataRealizacao: t.dataReal || '--',
-              Validade: t.dataVal || '--',
-              Status: t.status || '--'
-            };
-          })),
-          'Treinamentos'
-        );
-      }
+  var lista = await getData('safenr_colaboradores');
+  lista.push({
+    id: gerarId(), nome, cargo: valEl('colabCargo'), setor: valEl('colabSetor'),
+    admissao: valEl('colabAdmissao'), status: valEl('colabStatus') || 'ativo',
+    contato: valEl('colabContato'), criadoEm: new Date().toISOString()
+  });
+  await saveData('safenr_colaboradores', lista);
+  ['colabNome','colabCargo','colabSetor','colabAdmissao','colabContato'].forEach(function(id){ clearEl(id); });
+  clearEl('colabStatus', 'ativo');
+  await carregarColaboradores();
+  showToast('✅ Colaborador salvo!');
+}
 
-      if (agenda.length > 0) {
-        XLSX.utils.book_append_sheet(wb,
-          XLSX.utils.json_to_sheet(agenda.map(function(a){
-            return {
-              Data: a.data || '--',
-              Titulo: a.titulo || '--',
-              Tipo: a.tipo || '--',
-              Descricao: a.descricao || '--'
-            };
-          })),
-          'Agenda'
-        );
-      }
+/* ══════════════════════════════════════════
+   TREINAMENTOS
+══════════════════════════════════════════ */
+async function carregarTreinamentos() {
+  var lista   = await getData('safenr_treinamentos');
+  var filtro  = valEl('filtroTrein').toLowerCase();
+  var fStatus = valEl('filtroStatusTrein');
 
-      if (ocorrs.length > 0) {
-        XLSX.utils.book_append_sheet(wb,
-          XLSX.utils.json_to_sheet(ocorrs.map(function(o){
-            return {
-              Data: o.data || '--',
-              Tipo: o.tipo || '--',
-              Colaborador: o.colaborador || '--',
-              Setor: o.setor || '--',
-              Descricao: o.descricao || '--',
-              Acao: o.acao || '--'
-            };
-          })),
-          'Ocorrencias'
-        );
-      }
+  if (filtro)  lista = lista.filter(function(t){ return (t.nome||'').toLowerCase().includes(filtro) || (t.colaborador||'').toLowerCase().includes(filtro); });
+  if (fStatus) lista = lista.filter(function(t){ return t.status === fStatus; });
 
-      XLSX.writeFile(wb, 'SafeNR_Relatorio_' + hoje.replace(/\//g, '-') + '.xlsx');
-      showToast('✅ Excel gerado com sucesso');
-    }
+  renderTabela('tbodyTreinamentos', 'vazioTreinamentos', lista, function(t) {
+    return '<td>' + (t.nome||'—') + '</td>' +
+           '<td>' + (t.colaborador||'—') + '</td>' +
+           '<td>' + fmt(t.dataReal) + '</td>' +
+           '<td>' + fmt(t.dataVal) + (isVencido(t.dataVal) ? ' <span style="color:var(--red)">⚠</span>' : venceEm30(t.dataVal) ? ' <span style="color:var(--yellow)">⏰</span>' : '') + '</td>' +
+           '<td>' + (t.carga ? t.carga + 'h' : '—') + '</td>' +
+           '<td>' + badgeStatus(t.status) + '</td>' +
+           '<td>' + btnExcluir('safenr_treinamentos', t.id, 'carregarTreinamentos') + '</td>';
+  });
+}
 
-    function registrarEventosMenu() {
-      document.querySelectorAll('.nav-item[data-tela]').forEach(function(link) {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          var tela = this.getAttribute('data-tela');
-          mostrarTela(tela);
-        });
-      });
-    }
+async function adicionarTreinamento() {
+  var nome  = valEl('treinNome');
+  var colab = valEl('treinColab');
+  if (!nome || !colab) { showToast('⚠️ Informe treinamento e colaborador'); return; }
 
-    function inicializarApp() {
-      var userData = localStorage.getItem('safenr_user');
-      if (!userData) {
-        localStorage.setItem('safenr_user', JSON.stringify({
-          nome: 'Odair',
-          perfil: 'admin',
-          empresa: 'Demo',
-          empresaId: 'demo'
-        }));
-      }
+  var lista = await getData('safenr_treinamentos');
+  lista.push({
+    id: gerarId(), nome, colaborador: colab, status: valEl('treinStatus') || 'agendado',
+    dataReal: valEl('treinDataReal'), dataVal: valEl('treinDataVal'),
+    carga: valEl('treinCarga'), observacao: valEl('treinObs'),
+    criadoEm: new Date().toISOString()
+  });
+  await saveData('safenr_treinamentos', lista);
+  ['treinNome','treinColab','treinDataReal','treinDataVal','treinCarga','treinObs'].forEach(function(id){ clearEl(id); });
+  clearEl('treinStatus', 'agendado');
+  await carregarTreinamentos();
+  showToast('✅ Treinamento salvo!');
+}
 
-      registrarEventosMenu();
-      atualizarData();
-      aplicarPermissoes();
-      mostrarTela('dashboard');
-    }
+/* ══════════════════════════════════════════
+   AGENDA
+══════════════════════════════════════════ */
+async function carregarAgenda() {
+  var lista = await getData('safenr_agenda');
+  var filtro = valEl('filtroAgenda').toLowerCase();
+  var fTipo  = valEl('filtroTipoAgenda');
 
-    inicializarApp();
-  </script>
+  if (filtro) lista = lista.filter(function(e){ return (e.titulo||'').toLowerCase().includes(filtro) || (e.descricao||'').toLowerCase().includes(filtro); });
+  if (fTipo)  lista = lista.filter(function(e){ return e.tipo === fTipo; });
+  lista.sort(function(a,b){ return (a.data||'').localeCompare(b.data||''); });
+
+  renderTabela('tbodyAgenda', 'vazioAgenda', lista, function(e) {
+    return '<td>' + fmt(e.data) + '</td>' +
+           '<td>' + (e.titulo||'—') + '</td>' +
+           '<td>' + badge(e.tipo||'outro','purple') + '</td>' +
+           '<td>' + (e.responsavel||'—') + '</td>' +
+           '<td>' + (e.local||'—') + '</td>' +
+           '<td>' + btnExcluir('safenr_agenda', e.id, 'carregarAgenda') + '</td>';
+  });
+}
+
+async function adicionarAgenda() {
+  var titulo = valEl('agendaTitulo');
+  var data   = valEl('agendaData');
+  if (!titulo || !data) { showToast('⚠️ Informe título e data'); return; }
+
+  var lista = await getData('safenr_agenda');
+  lista.push({
+    id: gerarId(), titulo, data, tipo: valEl('agendaTipo') || 'outro',
+    responsavel: valEl('agendaResponsavel'), local: valEl('agendaLocal'),
+    descricao: valEl('agendaDesc'), criadoEm: new Date().toISOString()
+  });
+  await saveData('safenr_agenda', lista);
+  ['agendaTitulo','agendaData','agendaResponsavel','agendaLocal','agendaDesc'].forEach(function(id){ clearEl(id); });
+  clearEl('agendaTipo', 'treinamento');
+  await carregarAgenda();
+  showToast('✅ Evento salvo!');
+}
+
+/* ══════════════════════════════════════════
+   OCORRÊNCIAS
+══════════════════════════════════════════ */
+async function carregarOcorrencias() {
+  var lista  = await getData('safenr_ocorrencias');
+  var filtro = valEl('filtroOcorr').toLowerCase();
+  var fTipo  = valEl('filtroTipoOcorr');
+
+  if (filtro) lista = lista.filter(function(o){ return (o.colaborador||'').toLowerCase().includes(filtro) || (o.descricao||'').toLowerCase().includes(filtro) || (o.setor||'').toLowerCase().includes(filtro); });
+  if (fTipo)  lista = lista.filter(function(o){ return o.tipo === fTipo; });
+  lista.sort(function(a,b){ return new Date(b.data||0) - new Date(a.data||0); });
+
+  renderTabela('tbodyOcorrencias', 'vazioOcorrencias', lista, function(o) {
+    return '<td>' + fmt(o.data) + '</td>' +
+           '<td>' + badgeTipoOcorr(o.tipo) + '</td>' +
+           '<td>' + (o.colaborador||'—') + '</td>' +
+           '<td>' + (o.setor||'—') + '</td>' +
+           '<td>' + truncate(o.descricao, 60) + '</td>' +
+           '<td>' + truncate(o.acao, 40) + '</td>' +
+           '<td>' + btnExcluir('safenr_ocorrencias', o.id, 'carregarOcorrencias') + '</td>';
+  });
+}
+
+async function adicionarOcorrencia() {
+  var data = valEl('ocorrData');
+  var desc = valEl('ocorrDesc');
+  if (!data || !desc) { showToast('⚠️ Informe data e descrição'); return; }
+
+  var lista = await getData('safenr_ocorrencias');
+  lista.push({
+    id: gerarId(), data, tipo: valEl('ocorrTipo') || 'incidente',
+    colaborador: valEl('ocorrColab'), setor: valEl('ocorrSetor'),
+    acao: valEl('ocorrAcao'), responsavel: valEl('ocorrResp'),
+    descricao: desc, registradoEm: new Date().toISOString()
+  });
+  await saveData('safenr_ocorrencias', lista);
+  ['ocorrData','ocorrColab','ocorrSetor','ocorrAcao','ocorrResp','ocorrDesc'].forEach(function(id){ clearEl(id); });
+  clearEl('ocorrTipo', 'acidente');
+  await carregarOcorrencias();
+  showToast('✅ Ocorrência registrada!');
+}
+
+/* ══════════════════════════════════════════
+   RISCOS
+══════════════════════════════════════════ */
+async function carregarRiscos() {
+  var lista  = await getData('safenr_riscos');
+  var filtro = valEl('filtroRisco').toLowerCase();
+  var fNivel = valEl('filtroNivelRisco');
+
+  if (filtro) lista = lista.filter(function(r){ return (r.nome||'').toLowerCase().includes(filtro) || (r.setor||'').toLowerCase().includes(filtro); });
+  if (fNivel) lista = lista.filter(function(r){ return r.nivel === fNivel; });
+
+  renderTabela('tbodyRiscos', 'vazioRiscos', lista, function(r) {
+    return '<td>' + (r.nome||'—') + '</td>' +
+           '<td>' + badge(r.tipo||'—','blue') + '</td>' +
+           '<td>' + (r.setor||'—') + '</td>' +
+           '<td>' + badgeStatus(r.nivel) + '</td>' +
+           '<td>' + truncate(r.medida, 60) + '</td>' +
+           '<td>' + fmt(r.prazo) + '</td>' +
+           '<td>' + btnExcluir('safenr_riscos', r.id, 'carregarRiscos') + '</td>';
+  });
+}
+
+async function adicionarRisco() {
+  var nome = valEl('riscoNome');
+  if (!nome) { showToast('⚠️ Informe o risco'); return; }
+
+  var lista = await getData('safenr_riscos');
+  lista.push({
+    id: gerarId(), nome, setor: valEl('riscoSetor'),
+    nivel: valEl('riscoNivel') || 'medio', tipo: valEl('riscoTipo') || 'fisico',
+    responsavel: valEl('riscoResp'), prazo: valEl('riscoPrazo'),
+    medida: valEl('riscoMedida'), criadoEm: new Date().toISOString()
+  });
+  await saveData('safenr_riscos', lista);
+  ['riscoNome','riscoSetor','riscoResp','riscoPrazo','riscoMedida'].forEach(function(id){ clearEl(id); });
+  clearEl('riscoNivel', 'medio');
+  clearEl('riscoTipo', 'fisico');
+  await carregarRiscos();
+  showToast('✅ Risco salvo!');
+}
+
+/* ══════════════════════════════════════════
+   INSPEÇÕES
+══════════════════════════════════════════ */
+async function carregarInspecoes() {
+  var lista  = await getData('safenr_inspecoes');
+  var filtro = valEl('filtroInsp').toLowerCase();
+  var fStatus = valEl('filtroStatusInsp');
+
+  if (filtro)  lista = lista.filter(function(i){ return (i.titulo||'').toLowerCase().includes(filtro) || (i.area||'').toLowerCase().includes(filtro) || (i.inspetor||'').toLowerCase().includes(filtro); });
+  if (fStatus) lista = lista.filter(function(i){ return i.status === fStatus; });
+  lista.sort(function(a,b){ return new Date(b.data||0) - new Date(a.data||0); });
+
+  renderTabela('tbodyInspecoes', 'vazioInspecoes', lista, function(i) {
+    return '<td>' + (i.titulo||'—') + '</td>' +
+           '<td>' + fmt(i.data) + '</td>' +
+           '<td>' + (i.inspetor||'—') + '</td>' +
+           '<td>' + (i.area||'—') + '</td>' +
+           '<td>' + fmt(i.proxima) + '</td>' +
+           '<td>' + badgeStatus(i.status) + '</td>' +
+           '<td>' + btnExcluir('safenr_inspecoes', i.id, 'carregarInspecoes') + '</td>';
+  });
+}
+
+async function adicionarInspecao() {
+  var titulo = valEl('inspTitulo');
+  var data   = valEl('inspData');
+  if (!titulo || !data) { showToast('⚠️ Informe título e data'); return; }
+
+  var lista = await getData('safenr_inspecoes');
+  lista.push({
+    id: gerarId(), titulo, data, status: valEl('inspStatus') || 'pendente',
+    inspetor: valEl('inspInspetor'), area: valEl('inspArea'),
+    proxima: valEl('inspProxima'), observacoes: valEl('inspObs'),
+    criadoEm: new Date().toISOString()
+  });
+  await saveData('safenr_inspecoes', lista);
+  ['inspTitulo','inspData','inspInspetor','inspArea','inspProxima','inspObs'].forEach(function(id){ clearEl(id); });
+  clearEl('inspStatus', 'pendente');
+  await carregarInspecoes();
+  showToast('✅ Inspeção salva!');
+}
+
+/* ══════════════════════════════════════════
+   CHECKLISTS
+══════════════════════════════════════════ */
+async function carregarChecklists() {
+  var lista  = await getData('safenr_checklists');
+  var filtro = valEl('filtroCheck').toLowerCase();
+  if (filtro) lista = lista.filter(function(c){ return (c.titulo||'').toLowerCase().includes(filtro) || (c.area||'').toLowerCase().includes(filtro); });
+
+  var box   = document.getElementById('checklistsLista');
+  var vazio = document.getElementById('vazioChecklists');
+  if (!box) return;
+
+  box.innerHTML = '';
+
+  if (lista.length === 0) {
+    vazio.style.display = 'block';
+    return;
+  }
+
+  vazio.style.display = 'none';
+
+  lista.forEach(function(cl) {
+    var itens = cl.itens || [];
+    var ok    = itens.filter(function(it){ return it.ok; }).length;
+    var pct   = itens.length > 0 ? Math.round((ok / itens.length) * 100) : 0;
+
+    var div = document.createElement('div');
+    div.style.cssText = 'border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;';
+    div.innerHTML =
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">' +
+        '<div>' +
+          '<strong>' + (cl.titulo||'—') + '</strong>' +
+          ' <span style="font-size:.78rem;color:var(--muted);">' + fmt(cl.data) + ' | ' + (cl.area||'—') + ' | ' + (cl.responsavel||'—') + '</span>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;align-items:center">' +
+          badge(pct + '%', pct >= 80 ? 'green' : pct >= 50 ? 'yellow' : 'red') +
+          btnExcluir('safenr_checklists', cl.id, 'carregarChecklists') +
+        '</div>' +
+      '</div>' +
+      '<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:' + pct + '%"></div></div>' +
+      '<div style="margin-top:10px">' +
+        itens.map(function(it, idx) {
+          return '<div class="checklist-item">' +
+            '<input type="checkbox"' + (it.ok ? ' checked' : '') + ' onchange="toggleCheckItem(\'' + cl.id + '\',' + idx + ',this.checked)">' +
+            '<span style="font-size:.85rem;' + (it.ok ? 'color:var(--muted);text-decoration:line-through' : '') + '">' + it.texto + '</span>' +
+            '</div>';
+        }).join('') +
+      '</div>';
+    box.appendChild(div);
+  });
+}
+
+async function toggleCheckItem(clId, idx, checked) {
+  var lista = await getData('safenr_checklists');
+  var cl    = lista.find(function(c){ return c.id === clId; });
+  if (cl && cl.itens && cl.itens[idx]) {
+    cl.itens[idx].ok = checked;
+    cl.concluido = cl.itens.every(function(it){ return it.ok; });
+    await saveData('safenr_checklists', lista);
+  }
+}
+
+async function adicionarChecklist() {
+  var titulo = valEl('checkTitulo');
+  if (!titulo) { showToast('⚠️ Informe o título'); return; }
+
+  var itensRaw = valEl('checkItens');
+  var itens    = itensRaw.split('\n')
+    .map(function(s){ return s.trim(); })
+    .filter(Boolean)
+    .map(function(s){ return { texto: s, ok: false }; });
+
+  var lista = await getData('safenr_checklists');
+  lista.push({
+    id: gerarId(), titulo, responsavel: valEl('checkResp'),
+    area: valEl('checkArea'), data: valEl('checkData'),
+    itens: itens, concluido: false, criadoEm: new Date().toISOString()
+  });
+  await saveData('safenr_checklists', lista);
+  ['checkTitulo','checkResp','checkArea','checkData','checkItens'].forEach(function(id){ clearEl(id); });
+  await carregarChecklists();
+  showToast('✅ Checklist salvo!');
+}
+
+/* ══════════════════════════════════════════
+   PLANO DE AÇÃO
+══════════════════════════════════════════ */
+async function carregarPlanos() {
+  var lista  = await getData('safenr_planos');
+  var filtro = valEl('filtroPlano').toLowerCase();
+  var fStatus = valEl('filtroStatusPlano');
+
+  if (filtro)  lista = lista.filter(function(p){ return (p.oque||'').toLowerCase().includes(filtro) || (p.quem||'').toLowerCase().includes(filtro); });
+  if (fStatus) lista = lista.filter(function(p){ return p.status === fStatus; });
+  lista.sort(function(a,b){ return new Date(a.quando||0) - new Date(b.quando||0); });
+
+  renderTabela('tbodyPlanos', 'vazioPlanos', lista, function(p) {
+    return '<td>' + (p.oque||'—') + '</td>' +
+           '<td>' + (p.quem||'—') + '</td>' +
+           '<td>' + fmt(p.quando) + '</td>' +
+           '<td>' + (p.onde||'—') + '</td>' +
+           '<td>' + badgeStatus(p.prioridade) + '</td>' +
+           '<td>' + badgeStatus(p.status) + '</td>' +
+           '<td>' + btnExcluir('safenr_planos', p.id, 'carregarPlanos') + '</td>';
+  });
+}
+
+async function adicionarPlano() {
+  var oque = valEl('planoOque');
+  if (!oque) { showToast('⚠️ Informe a ação (O quê?)'); return; }
+
+  var lista = await getData('safenr_planos');
+  lista.push({
+    id: gerarId(), oque, porque: valEl('planoPorque'), quem: valEl('planoQuem'),
+    quando: valEl('planoQuando'), onde: valEl('planoOnde'),
+    como: valEl('planoComo'), quanto: valEl('planoQuanto'),
+    status: valEl('planoStatus') || 'aberto', prioridade: valEl('planoPrioridade') || 'media',
+    criadoEm: new Date().toISOString()
+  });
+  await saveData('safenr_planos', lista);
+  ['planoOque','planoPorque','planoQuem','planoQuando','planoOnde','planoComo','planoQuanto'].forEach(function(id){ clearEl(id); });
+  clearEl('planoStatus', 'aberto');
+  clearEl('planoPrioridade', 'media');
+  await carregarPlanos();
+  showToast('✅ Ação salva!');
+}
+
+/* ══════════════════════════════════════════
+   DOCUMENTOS SST
+══════════════════════════════════════════ */
+async function carregarDocumentos() {
+  var lista  = await getData('safenr_documentos');
+  var filtro = valEl('filtroDoc').toLowerCase();
+  var fTipo  = valEl('filtroTipoDoc');
+
+  if (filtro) lista = lista.filter(function(d){ return (d.titulo||'').toLowerCase().includes(filtro) || (d.responsavel||'').toLowerCase().includes(filtro); });
+  if (fTipo)  lista = lista.filter(function(d){ return d.tipo === fTipo; });
+
+  renderTabela('tbodyDocumentos', 'vazioDocumentos', lista, function(d) {
+    var isV = isVencido(d.validade);
+    var isB = venceEm30(d.validade);
+    return '<td>' + (d.titulo||'—') + '</td>' +
+           '<td>' + badge((d.tipo||'outro').toUpperCase(),'blue') + '</td>' +
+           '<td>' + (d.numero||'—') + '</td>' +
+           '<td>' + fmt(d.emissao) + '</td>' +
+           '<td>' + fmt(d.validade) + (isV ? ' <span style="color:var(--red)">⚠</span>' : isB ? ' <span style="color:var(--yellow)">⏰</span>' : '') + '</td>' +
+           '<td>' + (d.responsavel||'—') + '</td>' +
+           '<td>' + btnExcluir('safenr_documentos', d.id, 'carregarDocumentos') + '</td>';
+  });
+}
+
+async function adicionarDocumento() {
+  var titulo = valEl('docTitulo');
+  if (!titulo) { showToast('⚠️ Informe o título do documento'); return; }
+
+  var lista = await getData('safenr_documentos');
+  lista.push({
+    id: gerarId(), titulo, tipo: valEl('docTipo') || 'outro',
+    numero: valEl('docNumero'), emissao: valEl('docEmissao'),
+    validade: valEl('docValidade'), responsavel: valEl('docResp'),
+    observacoes: valEl('docObs'), criadoEm: new Date().toISOString()
+  });
+  await saveData('safenr_documentos', lista);
+  ['docTitulo','docNumero','docEmissao','docValidade','docResp','docObs'].forEach(function(id){ clearEl(id); });
+  clearEl('docTipo', 'outro');
+  await carregarDocumentos();
+  showToast('✅ Documento salvo!');
+}
+
+/* ══════════════════════════════════════════
+   HELPERS DE RENDERIZAÇÃO
+══════════════════════════════════════════ */
+function renderTabela(tbodyId, vazioId, lista, rowFn) {
+  var tbody = document.getElementById(tbodyId);
+  var vazio = document.getElementById(vazioId);
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+
+  if (lista.length === 0) {
+    if (vazio) vazio.style.display = 'block';
+    return;
+  }
+
+  if (vazio) vazio.style.display = 'none';
+
+  lista.forEach(function(item) {
+    var tr = document.createElement('tr');
+    tr.innerHTML = rowFn(item);
+    tbody.appendChild(tr);
+  });
+}
+
+function btnExcluir(chave, id, callback) {
+  return '<button class="btn btn-danger btn-sm" onclick="excluirRegistro(\'' + chave + '\',\'' + id + '\',' + callback + ')">🗑</button>';
+}
+
+async function excluirRegistro(chave, id, callback) {
+  var user  = getUser();
+  var perms = PERMISSOES[user.perfil || 'admin'] || PERMISSOES.admin;
+  if (!perms.podeExcluir) { showToast('❌ Sem permissão para excluir'); return; }
+  if (!confirm('Deseja excluir este registro?')) return;
+
+  var lista = await getData(chave);
+  lista = lista.filter(function(item){ return item.id !== id; });
+  await saveData(chave, lista);
+
+  if (typeof callback === 'function') await callback();
+  showToast('🗑 Registro excluído');
+}
+
+/* ══════════════════════════════════════════
+   EXPORTAR PDF
+══════════════════════════════════════════ */
+async function exportarPDF() {
+  var user  = getUser();
+  var perms = PERMISSOES[user.perfil || 'admin'] || PERMISSOES.admin;
+  if (!perms.podeExportar) { showToast('❌ Sem permissão'); return; }
+
+  showToast('📄 Gerando PDF...', 5000);
+
+  var [colabs, ocorrs, treins, riscos, insp, docs, planos] = await Promise.all([
+    getData('safenr_colaboradores'),
+    getData('safenr_ocorrencias'),
+    getData('safenr_treinamentos'),
+    getData('safenr_riscos'),
+    getData('safenr_inspecoes'),
+    getData('safenr_documentos'),
+    getData('safenr_planos')
+  ]);
+
+  var score = calcularScore(colabs, treins, riscos, ocorrs, insp, docs);
+  var doc   = new window.jspdf.jsPDF();
+  var hoje  = new Date().toLocaleDateString('pt-BR');
+
+  /* Capa */
+  doc.setFillColor(15, 25, 35);
+  doc.rect(0, 0, 210, 42, 'F');
+  doc.setTextColor(0, 212, 255);
+  doc.setFontSize(22); doc.setFont('helvetica','bold');
+  doc.text('SafeNR', 14, 18);
+  doc.setFontSize(11); doc.setFont('helvetica','normal');
+  doc.setTextColor(180, 190, 200);
+  doc.text('Relatório Geral — Segurança do Trabalho', 14, 27);
+  doc.text('Empresa: ' + (user.empresa||'Demo') + '   |   Gerado em: ' + hoje, 14, 35);
+
+  /* Resumo */
+  doc.setTextColor(30, 30, 30);
+  doc.setFontSize(13); doc.setFont('helvetica','bold');
+  doc.text('Resumo Executivo', 14, 52);
+  doc.autoTable({
+    startY: 57,
+    head: [['Indicador', 'Total']],
+    body: [
+      ['Colaboradores', colabs.length],
+      ['Ocorrências',   ocorrs.length],
+      ['Treinamentos',  treins.length],
+      ['Riscos',        riscos.length],
+      ['Inspeções',     insp.length],
+      ['Documentos SST',docs.length],
+      ['Planos de Ação',planos.length],
+      ['Score IA SST',  score + '/100']
+    ],
+    theme: 'grid',
+    headStyles: { fillColor:[0,153,204], textColor:255, fontStyle:'bold' },
+    alternateRowStyles: { fillColor:[240,248,255] }
+  });
+
+  /* Ocorrências */
+  if (ocorrs.length > 0) {
+    doc.addPage();
+    doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.text('Ocorrências', 14, 20);
+    doc.autoTable({
+      startY: 26,
+      head: [['Data','Tipo','Colaborador','Setor','Descrição']],
+      body: ocorrs.map(function(o){
+        return [fmt(o.data), o.tipo||'—', o.colaborador||'—', o.setor||'—', truncate(o.descricao,55)];
+      }),
+      headStyles: { fillColor:[220,38,38], textColor:255, fontStyle:'bold' }
+    });
+  }
+
+  /* Treinamentos */
+  if (treins.length > 0) {
+    doc.addPage();
+    doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.text('Treinamentos', 14, 20);
+    doc.autoTable({
+      startY: 26,
+      head: [['Treinamento','Colaborador','Realização','Validade','Status']],
+      body: treins.map(function(t){
+        return [t.nome||'—', t.colaborador||'—', fmt(t.dataReal), fmt(t.dataVal), t.status||'—'];
+      }),
+      headStyles: { fillColor:[22,163,74], textColor:255, fontStyle:'bold' }
+    });
+  }
+
+  /* Riscos */
+  if (riscos.length > 0) {
+    doc.addPage();
+    doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.text('Riscos', 14, 20);
+    doc.autoTable({
+      startY: 26,
+      head: [['Risco','Tipo','Setor','Nível','Medida de controle']],
+      body: riscos.map(function(r){
+        return [r.nome||'—', r.tipo||'—', r.setor||'—', r.nivel||'—', truncate(r.medida,50)];
+      }),
+      headStyles: { fillColor:[217,119,6], textColor:255, fontStyle:'bold' }
+    });
+  }
+
+  /* Planos de ação */
+  if (planos.length > 0) {
+    doc.addPage();
+    doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.text('Planos de Ação — 5W2H', 14, 20);
+    doc.autoTable({
+      startY: 26,
+      head: [['Ação','Responsável','Prazo','Status','Prioridade']],
+      body: planos.map(function(p){
+        return [truncate(p.oque,45), p.quem||'—', fmt(p.quando), p.status||'—', p.prioridade||'—'];
+      }),
+      headStyles: { fillColor:[99,102,241], textColor:255, fontStyle:'bold' }
+    });
+  }
+
+  /* Rodapé */
+  var nPages = doc.internal.getNumberOfPages();
+  for (var i = 1; i <= nPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8); doc.setTextColor(150);
+    doc.text('SafeNR — Gestão de Segurança do Trabalho  |  Página ' + i + ' de ' + nPages, 14, 290);
+  }
+
+  doc.save('SafeNR_Relatorio_' + hoje.replace(/\//g,'-') + '.pdf');
+  showToast('✅ PDF gerado!');
+}
+
+/* ══════════════════════════════════════════
+   EXPORTAR EXCEL
+══════════════════════════════════════════ */
+async function exportarExcel() {
+  var user  = getUser();
+  var perms = PERMISSOES[user.perfil || 'admin'] || PERMISSOES.admin;
+  if (!perms.podeExportar) { showToast('❌ Sem permissão'); return; }
+
+  showToast('📊 Gerando Excel...', 5000);
+
+  var XLSX  = window.XLSX;
+  var wb    = XLSX.utils.book_new();
+  var hoje  = new Date().toLocaleDateString('pt-BR');
+
+  var [colabs, treins, agenda, ocorrs, riscos, insp, docs, planos, checks] = await Promise.all([
+    getData('safenr_colaboradores'),
+    getData('safenr_treinamentos'),
+    getData('safenr_agenda'),
+    getData('safenr_ocorrencias'),
+    getData('safenr_riscos'),
+    getData('safenr_inspecoes'),
+    getData('safenr_documentos'),
+    getData('safenr_planos'),
+    getData('safenr_checklists')
+  ]);
+
+  var score = calcularScore(colabs, treins, riscos, ocorrs, insp, []);
+
+  var abas = [
+    { nome:'Resumo', dados: XLSX.utils.aoa_to_sheet([
+      ['SafeNR — Relatório Geral',''],
+      ['Gerado em:', hoje],
+      ['Empresa:', user.empresa||'Demo'],
+      ['Perfil:', user.perfil||'admin'],
+      ['',''],
+      ['Indicador','Total'],
+      ['Colaboradores', colabs.length],
+      ['Treinamentos',  treins.length],
+      ['Agenda',        agenda.length],
+      ['Ocorrências',   ocorrs.length],
+      ['Riscos',        riscos.length],
+      ['Inspeções',     insp.length],
+      ['Documentos SST',docs.length],
+      ['Planos de Ação',planos.length],
+      ['Checklists',    checks.length],
+      ['Score IA SST',  score+'/100']
+    ])},
+    colabs.length > 0 && { nome:'Colaboradores', dados: XLSX.utils.json_to_sheet(colabs.map(function(c){ return { Nome:c.nome||'—', Cargo:c.cargo||'—', Setor:c.setor||'—', Admissao:c.admissao||'—', Status:c.status||'—' }; }))},
+    treins.length > 0 && { nome:'Treinamentos', dados: XLSX.utils.json_to_sheet(treins.map(function(t){ return { Treinamento:t.nome||'—', Colaborador:t.colaborador||'—', Realizacao:t.dataReal||'—', Validade:t.dataVal||'—', CargaH:t.carga||'—', Status:t.status||'—' }; }))},
+    ocorrs.length > 0 && { nome:'Ocorrencias', dados: XLSX.utils.json_to_sheet(ocorrs.map(function(o){ return { Data:o.data||'—', Tipo:o.tipo||'—', Colaborador:o.colaborador||'—', Setor:o.setor||'—', Descricao:o.descricao||'—', Acao:o.acao||'—' }; }))},
+    riscos.length > 0 && { nome:'Riscos', dados: XLSX.utils.json_to_sheet(riscos.map(function(r){ return { Risco:r.nome||'—', Tipo:r.tipo||'—', Setor:r.setor||'—', Nivel:r.nivel||'—', Medida:r.medida||'—', Prazo:r.prazo||'—' }; }))},
+    planos.length > 0 && { nome:'PlanoAcao_5W2H', dados: XLSX.utils.json_to_sheet(planos.map(function(p){ return { Acao:p.oque||'—', PorQue:p.porque||'—', Quem:p.quem||'—', Quando:p.quando||'—', Onde:p.onde||'—', Como:p.como||'—', Custo:p.quanto||'—', Status:p.status||'—', Prioridade:p.prioridade||'—' }; }))},
+    docs.length > 0   && { nome:'DocumentosSST', dados: XLSX.utils.json_to_sheet(docs.map(function(d){ return { Titulo:d.titulo||'—', Tipo:(d.tipo||'—').toUpperCase(), Revisao:d.numero||'—', Emissao:d.emissao||'—', Validade:d.validade||'—', Responsavel:d.responsavel||'—' }; }))}
+  ];
+
+  abas.forEach(function(aba) {
+    if (aba) XLSX.utils.book_append_sheet(wb, aba.dados, aba.nome);
+  });
+
+  XLSX.writeFile(wb, 'SafeNR_Relatorio_' + hoje.replace(/\//g,'-') + '.xlsx');
+  showToast('✅ Excel gerado!');
+}
+
+/* ══════════════════════════════════════════
+   INICIALIZAÇÃO
+══════════════════════════════════════════ */
+function inicializarApp() {
+  var userData = localStorage.getItem('safenr_user');
+  if (!userData) {
+    localStorage.setItem('safenr_user', JSON.stringify({
+      nome: 'Odair', perfil: 'admin',
+      empresa: 'Demo', empresaId: 'demo'
+    }));
+  }
+
+  document.querySelectorAll('.nav-item[data-tela]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      mostrarTela(this.getAttribute('data-tela'));
+    });
+  });
+
+  atualizarData();
+  aplicarPermissoes();
+  mostrarTela('dashboard');
+}
+
+inicializarApp();
+</script>
 </body>
 </html>
