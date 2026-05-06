@@ -18,65 +18,238 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Segoe UI',sans-serif; background:#0f1923; color:#fff; display:flex; min-height:100vh; }
+
     .sidebar {
-      width:240px; background:#0a1520; border-right:1px solid rgba(255,255,255,.07);
-      display:flex; flex-direction:column; padding:24px 0; position:fixed; height:100vh; z-index:10;
+      width:240px;
+      background:#0a1520;
+      border-right:1px solid rgba(255,255,255,.07);
+      display:flex;
+      flex-direction:column;
+      padding:24px 0;
+      position:fixed;
+      height:100vh;
+      z-index:10;
     }
-    .sidebar-logo { text-align:center; padding:0 24px 28px; border-bottom:1px solid rgba(255,255,255,.07); }
-    .sidebar-logo h1 { font-size:1.6rem; font-weight:800; letter-spacing:2px; }
+
+    .sidebar-logo {
+      text-align:center;
+      padding:0 24px 28px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+    }
+
+    .sidebar-logo h1 {
+      font-size:1.6rem;
+      font-weight:800;
+      letter-spacing:2px;
+    }
+
     .sidebar-logo h1 span { color:#00d4ff; }
-    .sidebar-logo p { font-size:.7rem; color:rgba(255,255,255,.35); margin-top:2px; }
-    .nav { flex:1; padding:20px 0; overflow-y:auto; }
+
+    .sidebar-logo p {
+      font-size:.7rem;
+      color:rgba(255,255,255,.35);
+      margin-top:2px;
+    }
+
+    .nav {
+      flex:1;
+      padding:20px 0;
+      overflow-y:auto;
+    }
+
     .nav-item {
-      display:flex; align-items:center; gap:12px; padding:13px 24px; cursor:pointer;
-      color:rgba(255,255,255,.55); font-size:.9rem; font-weight:500;
-      transition:all .2s; border-left:3px solid transparent; text-decoration:none;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:13px 24px;
+      cursor:pointer;
+      color:rgba(255,255,255,.55);
+      font-size:.9rem;
+      font-weight:500;
+      transition:all .2s;
+      border-left:3px solid transparent;
+      text-decoration:none;
     }
-    .nav-item:hover { color:#fff; background:rgba(255,255,255,.04); }
-    .nav-item.active { color:#00d4ff; border-left-color:#00d4ff; background:rgba(0,212,255,.06); }
-    .nav-item .icon { font-size:1.1rem; width:20px; text-align:center; }
+
+    .nav-item:hover {
+      color:#fff;
+      background:rgba(255,255,255,.04);
+    }
+
+    .nav-item.active {
+      color:#00d4ff;
+      border-left-color:#00d4ff;
+      background:rgba(0,212,255,.06);
+    }
+
+    .nav-item .icon {
+      font-size:1.1rem;
+      width:20px;
+      text-align:center;
+    }
+
     .sidebar-user {
-      padding:16px 24px; border-top:1px solid rgba(255,255,255,.07);
-      display:flex; align-items:center; gap:12px;
+      padding:16px 24px;
+      border-top:1px solid rgba(255,255,255,.07);
+      display:flex;
+      align-items:center;
+      gap:12px;
     }
+
     .avatar {
-      width:36px; height:36px; background:linear-gradient(135deg,#00d4ff,#0099cc);
-      border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.85rem;
+      width:36px;
+      height:36px;
+      background:linear-gradient(135deg,#00d4ff,#0099cc);
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:.85rem;
     }
+
     .user-info p { font-size:.82rem; font-weight:600; }
-    .user-info span { font-size:.72rem; color:rgba(255,255,255,.4); }
-    .btn-sair { background:none; border:none; color:rgba(255,80,80,.7); cursor:pointer; font-size:.8rem; margin-left:auto; }
 
     .perfil-badge {
-      display:inline-block; background:rgba(0,212,255,.12); border:1px solid rgba(0,212,255,.2);
-      border-radius:20px; padding:2px 10px; font-size:.65rem; font-weight:700; color:#00d4ff; margin-top:3px;
+      display:inline-block;
+      background:rgba(0,212,255,.12);
+      border:1px solid rgba(0,212,255,.2);
+      border-radius:20px;
+      padding:2px 10px;
+      font-size:.65rem;
+      font-weight:700;
+      color:#00d4ff;
+      margin-top:3px;
     }
 
-    .main { margin-left:240px; flex:1; padding:32px; }
-    .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; gap:16px; flex-wrap:wrap; }
-    .topbar-left h2 { font-size:1.4rem; font-weight:700; margin-bottom:2px; }
-    .topbar-left p { font-size:.85rem; color:rgba(255,255,255,.35); }
-    .topbar-right { display:flex; gap:10px; flex-wrap:wrap; }
+    .btn-sair {
+      background:none;
+      border:none;
+      color:rgba(255,80,80,.7);
+      cursor:pointer;
+      font-size:.8rem;
+      margin-left:auto;
+    }
+
+    .main {
+      margin-left:240px;
+      flex:1;
+      padding:32px;
+    }
+
+    .topbar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:24px;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .topbar-left h2 {
+      font-size:1.4rem;
+      font-weight:700;
+      margin-bottom:2px;
+    }
+
+    .topbar-left p {
+      font-size:.85rem;
+      color:rgba(255,255,255,.35);
+    }
+
+    .topbar-right {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
 
     .btn {
-      border-radius:10px; font-size:.85rem; font-weight:600; padding:10px 18px; cursor:pointer; transition:all .2s;
+      border-radius:10px;
+      font-size:.85rem;
+      font-weight:600;
+      padding:10px 18px;
+      cursor:pointer;
+      transition:all .2s;
       border:1px solid transparent;
     }
-    .btn-atualizar { background:rgba(0,212,255,.1); border-color:rgba(0,212,255,.2); color:#00d4ff; }
+
+    .btn-atualizar {
+      background:rgba(0,212,255,.1);
+      border-color:rgba(0,212,255,.2);
+      color:#00d4ff;
+    }
+
     .btn-atualizar:hover { background:rgba(0,212,255,.2); }
-    .btn-export-pdf { background:rgba(248,113,113,.1); border-color:rgba(248,113,113,.25); color:#f87171; }
+
+    .btn-export-pdf {
+      background:rgba(248,113,113,.1);
+      border-color:rgba(248,113,113,.25);
+      color:#f87171;
+    }
+
     .btn-export-pdf:hover { background:rgba(248,113,113,.22); }
-    .btn-export-xls { background:rgba(74,222,128,.1); border-color:rgba(74,222,128,.25); color:#4ade80; }
+
+    .btn-export-xls {
+      background:rgba(74,222,128,.1);
+      border-color:rgba(74,222,128,.25);
+      color:#4ade80;
+    }
+
     .btn-export-xls:hover { background:rgba(74,222,128,.22); }
 
-    .sync-toast {
-      position:fixed; bottom:28px; right:28px; background:#1e293b; border:1px solid rgba(0,212,255,.25);
-      border-radius:12px; padding:12px 20px; font-size:.82rem; color:#00d4ff; display:flex; align-items:center; gap:10px;
-      z-index:9999; opacity:0; transform:translateY(12px); transition:all .35s; pointer-events:none;
+    .btn-primary {
+      background:linear-gradient(135deg,#00d4ff,#0099cc);
+      color:#0f1923;
+      border:none;
     }
-    .sync-toast.show { opacity:1; transform:translateY(0); }
-    .sync-dot { width:8px; height:8px; border-radius:50%; background:#00d4ff; animation:pulse 1.2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+
+    .btn-primary:hover { filter:brightness(1.05); }
+
+    .btn-danger {
+      background:rgba(248,113,113,.12);
+      border-color:rgba(248,113,113,.25);
+      color:#f87171;
+    }
+
+    .btn-danger:hover { background:rgba(248,113,113,.2); }
+
+    .sync-toast {
+      position:fixed;
+      bottom:28px;
+      right:28px;
+      background:#1e293b;
+      border:1px solid rgba(0,212,255,.25);
+      border-radius:12px;
+      padding:12px 20px;
+      font-size:.82rem;
+      color:#00d4ff;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      z-index:9999;
+      opacity:0;
+      transform:translateY(12px);
+      transition:all .35s;
+      pointer-events:none;
+    }
+
+    .sync-toast.show {
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    .sync-dot {
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#00d4ff;
+      animation:pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity:1; }
+      50% { opacity:.3; }
+    }
 
     .tela { display:none; }
     .tela.active { display:block; }
@@ -89,6 +262,13 @@
       margin-bottom:20px;
     }
 
+    .section-title {
+      font-size:1rem;
+      font-weight:700;
+      margin-bottom:14px;
+      color:rgba(255,255,255,.9);
+    }
+
     .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
     .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
     .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
@@ -99,32 +279,34 @@
       border-radius:14px;
       padding:20px;
     }
+
     .kpi-icon { font-size:1.8rem; margin-bottom:8px; }
     .kpi-valor { font-size:2rem; font-weight:900; line-height:1; margin-bottom:4px; }
     .kpi-label { font-size:.75rem; color:rgba(255,255,255,.4); font-weight:600; text-transform:uppercase; }
     .kpi-sub { font-size:.72rem; margin-top:6px; font-weight:600; }
 
-    .section-title { font-size:1rem; font-weight:700; margin-bottom:14px; color:rgba(255,255,255,.9); }
-
-    .placeholder {
-      padding:20px; border-radius:12px; background:rgba(255,255,255,.02);
-      border:1px dashed rgba(255,255,255,.12); color:rgba(255,255,255,.6);
-    }
-
     .chart-wrap { position:relative; height:260px; }
 
-    table {
-      width:100%;
-      border-collapse:collapse;
-      margin-top:10px;
+    .form-grid {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+      margin-bottom:14px;
     }
-    table th, table td {
-      text-align:left;
-      padding:12px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      font-size:.85rem;
+
+    .form-grid-3 {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-bottom:14px;
     }
-    table th { color:#00d4ff; font-weight:700; }
+
+    label {
+      display:block;
+      font-size:.82rem;
+      color:rgba(255,255,255,.7);
+      margin-bottom:6px;
+    }
 
     input, select, textarea {
       width:100%;
@@ -137,26 +319,78 @@
       outline:none;
     }
 
-    .form-grid {
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:14px;
+    textarea {
+      min-height:100px;
+      resize:vertical;
     }
 
     .form-actions {
-      margin-top:16px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      margin-top:8px;
     }
 
-    @media (max-width: 1100px) {
-      .grid-4, .grid-3, .grid-2, .form-grid { grid-template-columns:1fr; }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+    }
+
+    table th, table td {
+      text-align:left;
+      padding:12px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      font-size:.85rem;
+      vertical-align:top;
+    }
+
+    table th {
+      color:#00d4ff;
+      font-weight:700;
+    }
+
+    .empty-box {
+      padding:18px;
+      border:1px dashed rgba(255,255,255,.12);
+      border-radius:12px;
+      color:rgba(255,255,255,.5);
+      text-align:center;
+    }
+
+    .badge {
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:999px;
+      font-size:.72rem;
+      font-weight:700;
+    }
+
+    .badge-green { background:rgba(74,222,128,.12); color:#4ade80; border:1px solid rgba(74,222,128,.2); }
+    .badge-yellow { background:rgba(251,191,36,.12); color:#fbbf24; border:1px solid rgba(251,191,36,.2); }
+    .badge-red { background:rgba(248,113,113,.12); color:#f87171; border:1px solid rgba(248,113,113,.2); }
+    .badge-blue { background:rgba(0,212,255,.12); color:#00d4ff; border:1px solid rgba(0,212,255,.2); }
+    .badge-purple { background:rgba(167,139,250,.12); color:#a78bfa; border:1px solid rgba(167,139,250,.2); }
+
+    .toolbar {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .toolbar input, .toolbar select {
+      max-width:260px;
+    }
+
+    @media (max-width: 1200px) {
+      .grid-4, .grid-3, .grid-2, .form-grid, .form-grid-3 {
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
 <body>
-
   <div class="sync-toast" id="syncToast">
     <div class="sync-dot"></div>
     <span id="syncMsg">Sincronizando...</span>
@@ -173,10 +407,10 @@
       <a href="#" class="nav-item" data-tela="colaboradores"><span class="icon">👷</span> Colaboradores</a>
       <a href="#" class="nav-item" data-tela="treinamentos"><span class="icon">🎓</span> Treinamentos</a>
       <a href="#" class="nav-item" data-tela="agenda"><span class="icon">📅</span> Agenda</a>
+      <a href="#" class="nav-item" data-tela="ocorrencias"><span class="icon">🚨</span> Ocorrências</a>
       <a href="#" class="nav-item" data-tela="inspecoes"><span class="icon">🔍</span> Inspeções</a>
       <a href="#" class="nav-item" data-tela="riscos"><span class="icon">⚠️</span> Riscos</a>
       <a href="#" class="nav-item" data-tela="checklists"><span class="icon">📋</span> Checklists</a>
-      <a href="#" class="nav-item" data-tela="ocorrencias"><span class="icon">🚨</span> Ocorrências</a>
       <a href="#" class="nav-item" data-tela="plano-acao"><span class="icon">📌</span> Plano de Ação</a>
       <a href="#" class="nav-item" data-tela="documentos"><span class="icon">🗂️</span> Documentos SST</a>
       <a href="#" class="nav-item" data-tela="relatorios"><span class="icon">📄</span> Relatórios</a>
@@ -235,27 +469,39 @@
             <div class="kpi-sub" id="kpi-trein-sub"></div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-icon">⚠️</div>
-            <div class="kpi-valor" id="kpi-riscos">0</div>
-            <div class="kpi-label">Riscos</div>
-            <div class="kpi-sub" id="kpi-riscos-sub"></div>
+            <div class="kpi-icon">📅</div>
+            <div class="kpi-valor" id="kpi-agenda">0</div>
+            <div class="kpi-label">Eventos Hoje</div>
+            <div class="kpi-sub" id="kpi-agenda-sub"></div>
           </div>
         </div>
       </div>
 
       <div class="grid-2">
         <div class="card">
-          <div class="section-title">⚠️ Riscos por Nível</div>
+          <div class="section-title">⚠️ Ocorrências por tipo</div>
           <div class="chart-wrap">
-            <canvas id="chartRiscos"></canvas>
+            <canvas id="chartOcorr"></canvas>
           </div>
         </div>
 
         <div class="card">
-          <div class="section-title">🚨 Ocorrências por Tipo</div>
+          <div class="section-title">🎓 Treinamentos por status</div>
           <div class="chart-wrap">
-            <canvas id="chartOcorr"></canvas>
+            <canvas id="chartTrein"></canvas>
           </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="section-title">🕐 Últimas ocorrências</div>
+          <div id="dashboardUltimasOcorrencias"></div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">📅 Próximos eventos</div>
+          <div id="dashboardProximosEventos"></div>
         </div>
       </div>
     </section>
@@ -287,7 +533,14 @@
         </div>
 
         <div class="form-actions">
-          <button class="btn btn-atualizar" onclick="adicionarColaborador()">Salvar colaborador</button>
+          <button class="btn btn-primary" onclick="adicionarColaborador()">Salvar colaborador</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">📋 Lista de colaboradores</div>
+        <div class="toolbar">
+          <input type="text" id="filtroColaborador" placeholder="Buscar por nome, cargo ou setor" oninput="carregarColaboradores()" />
         </div>
 
         <table id="tabelaColaboradores">
@@ -297,29 +550,241 @@
               <th>Cargo</th>
               <th>Setor</th>
               <th>Status</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
+        <div id="vazioColaboradores" class="empty-box" style="display:none;">Nenhum colaborador cadastrado.</div>
       </div>
     </section>
 
-    <section class="tela" id="tela-treinamentos"><div class="card"><div class="section-title">🎓 Treinamentos</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>treinamentos.html</strong>.</div></div></section>
-    <section class="tela" id="tela-agenda"><div class="card"><div class="section-title">📅 Agenda</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>agenda.html</strong>.</div></div></section>
-    <section class="tela" id="tela-inspecoes"><div class="card"><div class="section-title">🔍 Inspeções</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>inspecoes.html</strong>.</div></div></section>
-    <section class="tela" id="tela-riscos"><div class="card"><div class="section-title">⚠️ Riscos</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>riscos.html</strong>.</div></div></section>
-    <section class="tela" id="tela-checklists"><div class="card"><div class="section-title">📋 Checklists</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>checklists.html</strong>.</div></div></section>
-    <section class="tela" id="tela-ocorrencias"><div class="card"><div class="section-title">🚨 Ocorrências</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>ocorrencias.html</strong>.</div></div></section>
-    <section class="tela" id="tela-plano-acao"><div class="card"><div class="section-title">📌 Plano de Ação</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>plano-acao.html</strong>.</div></div></section>
-    <section class="tela" id="tela-documentos"><div class="card"><div class="section-title">🗂️ Documentos SST</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>documentos.html</strong>.</div></div></section>
-    <section class="tela" id="tela-relatorios"><div class="card"><div class="section-title">📄 Relatórios</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>relatorios.html</strong>.</div></div></section>
-    <section class="tela" id="tela-epis"><div class="card"><div class="section-title">🦺 Cadastro EPIs</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>epis.html</strong>.</div></div></section>
-    <section class="tela" id="tela-biblioteca"><div class="card"><div class="section-title">📚 Biblioteca NRs</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>biblioteca.html</strong>.</div></div></section>
-    <section class="tela" id="tela-fotos"><div class="card"><div class="section-title">📷 Galeria de Fotos</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>fotos.html</strong>.</div></div></section>
-    <section class="tela" id="tela-ambientes"><div class="card"><div class="section-title">🏭 Ambientes</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>ambientes.html</strong>.</div></div></section>
-    <section class="tela" id="tela-ia-sugestoes"><div class="card"><div class="section-title">🤖 IA Sugestões</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>ia-sugestoes.html</strong>.</div></div></section>
-    <section class="tela" id="tela-notificacoes"><div class="card"><div class="section-title">🔔 Notificações</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>notificacoes.html</strong>.</div></div></section>
-    <section class="tela" id="tela-configuracoes"><div class="card"><div class="section-title">⚙️ Configurações</div><div class="placeholder">Migrar aqui o conteúdo do arquivo <strong>configuracoes.html</strong>.</div></div></section>
+    <section class="tela" id="tela-treinamentos">
+      <div class="card">
+        <div class="section-title">🎓 Cadastro de Treinamentos</div>
+
+        <div class="form-grid-3">
+          <div>
+            <label>Treinamento</label>
+            <input type="text" id="treinNome" />
+          </div>
+          <div>
+            <label>Colaborador</label>
+            <input type="text" id="treinColaborador" />
+          </div>
+          <div>
+            <label>Status</label>
+            <select id="treinStatus">
+              <option value="agendado">Agendado</option>
+              <option value="concluido">Concluído</option>
+              <option value="vencido">Vencido</option>
+            </select>
+          </div>
+          <div>
+            <label>Data realização</label>
+            <input type="date" id="treinDataReal" />
+          </div>
+          <div>
+            <label>Validade</label>
+            <input type="date" id="treinDataVal" />
+          </div>
+          <div>
+            <label>Observação</label>
+            <input type="text" id="treinObs" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" onclick="adicionarTreinamento()">Salvar treinamento</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">📋 Lista de treinamentos</div>
+        <div class="toolbar">
+          <input type="text" id="filtroTreinamento" placeholder="Buscar treinamento ou colaborador" oninput="carregarTreinamentos()" />
+          <select id="filtroStatusTreinamento" onchange="carregarTreinamentos()">
+            <option value="">Todos os status</option>
+            <option value="agendado">Agendado</option>
+            <option value="concluido">Concluído</option>
+            <option value="vencido">Vencido</option>
+          </select>
+        </div>
+
+        <table id="tabelaTreinamentos">
+          <thead>
+            <tr>
+              <th>Treinamento</th>
+              <th>Colaborador</th>
+              <th>Data realização</th>
+              <th>Validade</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div id="vazioTreinamentos" class="empty-box" style="display:none;">Nenhum treinamento cadastrado.</div>
+      </div>
+    </section>
+
+    <section class="tela" id="tela-agenda">
+      <div class="card">
+        <div class="section-title">📅 Cadastro de Eventos na Agenda</div>
+
+        <div class="form-grid-3">
+          <div>
+            <label>Título</label>
+            <input type="text" id="agendaTitulo" />
+          </div>
+          <div>
+            <label>Data</label>
+            <input type="date" id="agendaData" />
+          </div>
+          <div>
+            <label>Tipo</label>
+            <select id="agendaTipo">
+              <option value="treinamento">Treinamento</option>
+              <option value="inspecao">Inspeção</option>
+              <option value="reuniao">Reunião</option>
+              <option value="vencimento">Vencimento</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label>Descrição</label>
+          <textarea id="agendaDescricao"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" onclick="adicionarEventoAgenda()">Salvar evento</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">📋 Lista da agenda</div>
+
+        <div class="toolbar">
+          <input type="text" id="filtroAgenda" placeholder="Buscar por título ou descrição" oninput="carregarAgenda()" />
+          <select id="filtroTipoAgenda" onchange="carregarAgenda()">
+            <option value="">Todos os tipos</option>
+            <option value="treinamento">Treinamento</option>
+            <option value="inspecao">Inspeção</option>
+            <option value="reuniao">Reunião</option>
+            <option value="vencimento">Vencimento</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+
+        <table id="tabelaAgenda">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Título</th>
+              <th>Tipo</th>
+              <th>Descrição</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div id="vazioAgenda" class="empty-box" style="display:none;">Nenhum evento cadastrado.</div>
+      </div>
+    </section>
+
+    <section class="tela" id="tela-ocorrencias">
+      <div class="card">
+        <div class="section-title">🚨 Cadastro de Ocorrências</div>
+
+        <div class="form-grid-3">
+          <div>
+            <label>Data</label>
+            <input type="date" id="ocorrData" />
+          </div>
+          <div>
+            <label>Tipo</label>
+            <select id="ocorrTipo">
+              <option value="acidente">Acidente</option>
+              <option value="incidente">Incidente</option>
+              <option value="quase-acidente">Quase-acidente</option>
+              <option value="condicao-insegura">Condição insegura</option>
+            </select>
+          </div>
+          <div>
+            <label>Colaborador</label>
+            <input type="text" id="ocorrColaborador" />
+          </div>
+          <div>
+            <label>Setor</label>
+            <input type="text" id="ocorrSetor" />
+          </div>
+          <div>
+            <label>Ação corretiva</label>
+            <input type="text" id="ocorrAcao" />
+          </div>
+          <div>
+            <label>Responsável</label>
+            <input type="text" id="ocorrResponsavel" />
+          </div>
+        </div>
+
+        <div>
+          <label>Descrição</label>
+          <textarea id="ocorrDescricao"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" onclick="adicionarOcorrencia()">Salvar ocorrência</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">📋 Lista de ocorrências</div>
+
+        <div class="toolbar">
+          <input type="text" id="filtroOcorrencia" placeholder="Buscar ocorrência" oninput="carregarOcorrencias()" />
+          <select id="filtroTipoOcorrencia" onchange="carregarOcorrencias()">
+            <option value="">Todos os tipos</option>
+            <option value="acidente">Acidente</option>
+            <option value="incidente">Incidente</option>
+            <option value="quase-acidente">Quase-acidente</option>
+            <option value="condicao-insegura">Condição insegura</option>
+          </select>
+        </div>
+
+        <table id="tabelaOcorrencias">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Tipo</th>
+              <th>Colaborador</th>
+              <th>Setor</th>
+              <th>Descrição</th>
+              <th>Ação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div id="vazioOcorrencias" class="empty-box" style="display:none;">Nenhuma ocorrência cadastrada.</div>
+      </div>
+    </section>
+
+    <section class="tela" id="tela-inspecoes"><div class="card"><div class="section-title">🔍 Inspeções</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
+    <section class="tela" id="tela-riscos"><div class="card"><div class="section-title">⚠️ Riscos</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
+    <section class="tela" id="tela-checklists"><div class="card"><div class="section-title">📋 Checklists</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
+    <section class="tela" id="tela-plano-acao"><div class="card"><div class="section-title">📌 Plano de Ação</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
+    <section class="tela" id="tela-documentos"><div class="card"><div class="section-title">🗂️ Documentos SST</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
+    <section class="tela" id="tela-relatorios"><div class="card"><div class="section-title">📄 Relatórios</div><div class="empty-box">Use os botões de exportação no topo.</div></div></section>
+    <section class="tela" id="tela-epis"><div class="card"><div class="section-title">🦺 Cadastro EPIs</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
+    <section class="tela" id="tela-biblioteca"><div class="card"><div class="section-title">📚 Biblioteca NRs</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
+    <section class="tela" id="tela-fotos"><div class="card"><div class="section-title">📷 Galeria de Fotos</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
+    <section class="tela" id="tela-ambientes"><div class="card"><div class="section-title">🏭 Ambientes</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
+    <section class="tela" id="tela-ia-sugestoes"><div class="card"><div class="section-title">🤖 IA Sugestões</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
+    <section class="tela" id="tela-notificacoes"><div class="card"><div class="section-title">🔔 Notificações</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
+    <section class="tela" id="tela-configuracoes"><div class="card"><div class="section-title">⚙️ Configurações</div><div class="empty-box">Informação detalhada não disponível no anexo para este módulo.</div></div></section>
   </main>
 
   <script>
@@ -375,7 +840,7 @@
         localStorage.setItem(chave, JSON.stringify(resposta.data || []));
         return resposta.data || [];
       } catch (e) {
-        console.warn('[SafeNR] Offline/local:', e.message);
+        console.warn('[SafeNR] Usando cache local:', e.message);
         return JSON.parse(localStorage.getItem(chave) || '[]');
       }
     }
@@ -389,14 +854,16 @@
         var sb = getSupabase();
         var userData = JSON.parse(localStorage.getItem('safenr_user') || '{}');
         var registros = payload.map(function(item) {
-          return Object.assign({}, item, { empresa_id: userData.empresaId || 'demo' });
+          return Object.assign({}, item, {
+            empresa_id: userData.empresaId || 'demo'
+          });
         });
         var resposta = await sb.from(tabela).upsert(registros, { onConflict: 'id' });
         if (resposta.error) throw resposta.error;
         showToast('✅ Dados sincronizados na nuvem');
       } catch (e) {
-        console.warn('[SafeNR] Erro ao salvar:', e.message);
-        showToast('⚠️ Salvo localmente');
+        console.warn('[SafeNR] Salvo localmente:', e.message);
+        showToast('⚠️ Salvo localmente (offline)');
       }
     }
 
@@ -427,29 +894,25 @@
       var labels = { admin:'👑 Admin', tecnico:'🦺 Técnico', gestor:'📊 Gestor' };
       document.getElementById('perfilBadge').textContent = labels[perfil] || perfil;
 
-      if (!perms.podeExportar) {
-        document.querySelectorAll('[data-requer="exportar"]').forEach(function(el) {
-          el.style.display = 'none';
-        });
-      }
+      document.querySelectorAll('[data-requer="exportar"]').forEach(function(el) {
+        el.style.display = perms.podeExportar ? '' : 'none';
+      });
 
-      if (!perms.podeConfigurar) {
-        var cfg = document.querySelector('[data-tela="configuracoes"]');
-        if (cfg) {
-          cfg.style.opacity = '0.3';
-          cfg.style.pointerEvents = 'none';
-        }
+      var cfg = document.querySelector('[data-tela="configuracoes"]');
+      if (cfg) {
+        cfg.style.opacity = perms.podeConfigurar ? '1' : '0.3';
+        cfg.style.pointerEvents = perms.podeConfigurar ? '' : 'none';
       }
     }
 
     function mostrarTela(nome) {
       telaAtual = nome;
 
-      document.querySelectorAll('.tela').forEach(function(t){
+      document.querySelectorAll('.tela').forEach(function(t) {
         t.classList.remove('active');
       });
 
-      document.querySelectorAll('.nav-item').forEach(function(link){
+      document.querySelectorAll('.nav-item').forEach(function(link) {
         link.classList.remove('active');
       });
 
@@ -472,16 +935,36 @@
       }
     }
 
+    function fmt(d) {
+      if (!d) return '--';
+      var p = d.split('-');
+      return p[2] + '/' + p[1] + '/' + p[0];
+    }
+
     function isVencido(d) {
       return d && new Date(d + 'T00:00:00') < new Date();
+    }
+
+    function venceEm30(d) {
+      if (!d) return false;
+      var diff = (new Date(d + 'T00:00:00') - new Date()) / 86400000;
+      return diff >= 0 && diff <= 30;
+    }
+
+    function badgeStatus(status) {
+      var s = (status || '').toLowerCase();
+      if (s === 'ativo' || s === 'concluido') return '<span class="badge badge-green">' + status + '</span>';
+      if (s === 'agendado') return '<span class="badge badge-blue">' + status + '</span>';
+      if (s === 'vencido' || s === 'inativo') return '<span class="badge badge-red">' + status + '</span>';
+      return '<span class="badge badge-yellow">' + (status || '--') + '</span>';
     }
 
     function calcularScoreIA_sync(colabs, treins, riscos, ocorrs, insp, docs) {
       var pontos = 0;
       var episTotal = 0, episVenc = 0;
 
-      colabs.forEach(function(c){
-        (c.epis || []).forEach(function(e){
+      colabs.forEach(function(c) {
+        (c.epis || []).forEach(function(e) {
           episTotal++;
           if (isVencido(e.validade)) episVenc++;
         });
@@ -507,57 +990,48 @@
       return Math.min(100, Math.round(pontos));
     }
 
+    function gerarId() {
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return 'id-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
+    }
+
     async function carregarDashboard() {
       showToast('🔄 Carregando dashboard...', 1500);
 
+      var hoje = new Date();
+      hoje.setHours(0,0,0,0);
+      var hojeStr = hoje.toISOString().split('T')[0];
+
       var colabs = await getData('safenr_colaboradores');
-      var ocorrs = await getData('safenr_ocorrencias');
       var treins = await getData('safenr_treinamentos');
+      var agenda = await getData('safenr_agenda');
+      var ocorrs = await getData('safenr_ocorrencias');
       var riscos = await getData('safenr_riscos');
       var insp   = await getData('safenr_inspecoes');
       var docs   = await getData('safenr_documentos');
 
       document.getElementById('kpi-colab').textContent = colabs.length;
-      document.getElementById('kpi-colab-sub').textContent = colabs.filter(function(c){ return c.status === 'ativo'; }).length + ' ativos';
+      document.getElementById('kpi-colab-sub').textContent =
+        colabs.filter(function(c){ return c.status === 'ativo'; }).length + ' ativos';
 
       document.getElementById('kpi-ocorr').textContent = ocorrs.length;
-      document.getElementById('kpi-ocorr-sub').textContent = 'Registros totais';
+      document.getElementById('kpi-ocorr-sub').textContent =
+        ocorrs.filter(function(o){ return o.tipo === 'acidente'; }).length + ' acidentes';
 
-      var treinVenc = treins.filter(function(t){ return isVencido(t.dataVal); }).length;
+      var vencidos = treins.filter(function(t){ return isVencido(t.dataVal); }).length;
       document.getElementById('kpi-trein').textContent = treins.length;
-      document.getElementById('kpi-trein-sub').textContent = treinVenc > 0 ? treinVenc + ' vencidos' : 'Todos OK';
+      document.getElementById('kpi-trein-sub').textContent =
+        vencidos > 0 ? vencidos + ' vencidos' : 'Todos em dia';
 
-      var riscoCrit = riscos.filter(function(r){ return r.nivel === 'critico'; }).length;
-      document.getElementById('kpi-riscos').textContent = riscos.length;
-      document.getElementById('kpi-riscos-sub').textContent = riscoCrit + ' críticos';
+      var eventosHoje = agenda.filter(function(e){ return e.data === hojeStr; }).length;
+      var eventosSemana = agenda.filter(function(e){
+        if (!e.data) return false;
+        var d = new Date(e.data + 'T00:00:00');
+        return d >= hoje && (d - hoje) / 86400000 <= 7;
+      }).length;
 
-      destroyChart('chartRiscos');
-      var riscoCanvas = document.getElementById('chartRiscos');
-      if (riscoCanvas) {
-        chartInstances['chartRiscos'] = new Chart(riscoCanvas, {
-          type: 'doughnut',
-          data: {
-            labels: ['Crítico', 'Alto', 'Médio', 'Baixo', 'Eliminado'],
-            datasets: [{
-              data: [
-                riscos.filter(function(r){ return r.nivel === 'critico'; }).length,
-                riscos.filter(function(r){ return r.nivel === 'alto'; }).length,
-                riscos.filter(function(r){ return r.nivel === 'medio'; }).length,
-                riscos.filter(function(r){ return r.nivel === 'baixo'; }).length,
-                riscos.filter(function(r){ return r.nivel === 'eliminado'; }).length
-              ],
-              backgroundColor: ['#f87171','#fb923c','#fbbf24','#4ade80','rgba(255,255,255,.2)'],
-              borderColor: '#0f1923',
-              borderWidth: 3
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: 'rgba(255,255,255,.7)' } } }
-          }
-        });
-      }
+      document.getElementById('kpi-agenda').textContent = eventosHoje;
+      document.getElementById('kpi-agenda-sub').textContent = eventosSemana + ' na semana';
 
       destroyChart('chartOcorr');
       var ocorrCanvas = document.getElementById('chartOcorr');
@@ -565,7 +1039,7 @@
         chartInstances['chartOcorr'] = new Chart(ocorrCanvas, {
           type: 'doughnut',
           data: {
-            labels: ['Acidente', 'Incidente', 'Quase-Acidente', 'Condição Insegura'],
+            labels: ['Acidente', 'Incidente', 'Quase-acidente', 'Condição insegura'],
             datasets: [{
               data: [
                 ocorrs.filter(function(o){ return o.tipo === 'acidente'; }).length,
@@ -581,28 +1055,124 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: 'rgba(255,255,255,.7)' } } }
+            plugins: {
+              legend: {
+                labels: { color: 'rgba(255,255,255,.7)' }
+              }
+            }
           }
         });
       }
 
-      var score = calcularScoreIA_sync(colabs, treins, riscos, ocorrs, insp, docs);
-      console.log('Score IA:', score);
+      destroyChart('chartTrein');
+      var treinCanvas = document.getElementById('chartTrein');
+      if (treinCanvas) {
+        chartInstances['chartTrein'] = new Chart(treinCanvas, {
+          type: 'bar',
+          data: {
+            labels: ['Agendado', 'Concluído', 'Vencido'],
+            datasets: [{
+              label: 'Treinamentos',
+              data: [
+                treins.filter(function(t){ return t.status === 'agendado'; }).length,
+                treins.filter(function(t){ return t.status === 'concluido'; }).length,
+                treins.filter(function(t){ return t.status === 'vencido'; }).length
+              ],
+              backgroundColor: ['#60a5fa','#4ade80','#f87171'],
+              borderRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                labels: { color: 'rgba(255,255,255,.7)' }
+              }
+            },
+            scales: {
+              x: {
+                ticks: { color: 'rgba(255,255,255,.7)' },
+                grid: { color: 'rgba(255,255,255,.05)' }
+              },
+              y: {
+                beginAtZero: true,
+                ticks: { color: 'rgba(255,255,255,.7)', stepSize: 1 },
+                grid: { color: 'rgba(255,255,255,.05)' }
+              }
+            }
+          }
+        });
+      }
+
+      var listaOcorr = document.getElementById('dashboardUltimasOcorrencias');
+      var ultimas = ocorrs.slice().sort(function(a,b){
+        return new Date(b.registradoEm || b.data || 0) - new Date(a.registradoEm || a.data || 0);
+      }).slice(0,5);
+
+      if (ultimas.length === 0) {
+        listaOcorr.innerHTML = '<div class="empty-box">Nenhuma ocorrência registrada.</div>';
+      } else {
+        listaOcorr.innerHTML = ultimas.map(function(o){
+          return '<div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">' +
+            '<strong>' + (o.colaborador || '--') + '</strong> — ' + (o.tipo || '--') +
+            '<br><span style="color:rgba(255,255,255,.5);font-size:.8rem;">' + fmt(o.data) + ' | ' + (o.setor || '--') + '</span>' +
+          '</div>';
+        }).join('');
+      }
+
+      var listaAgenda = document.getElementById('dashboardProximosEventos');
+      var proximos = agenda
+        .filter(function(e){ return e.data >= hojeStr; })
+        .sort(function(a,b){ return a.data.localeCompare(b.data); })
+        .slice(0,5);
+
+      if (proximos.length === 0) {
+        listaAgenda.innerHTML = '<div class="empty-box">Nenhum evento próximo.</div>';
+      } else {
+        listaAgenda.innerHTML = proximos.map(function(e){
+          return '<div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">' +
+            '<strong>' + (e.titulo || 'Evento') + '</strong>' +
+            '<br><span style="color:rgba(255,255,255,.5);font-size:.8rem;">' + fmt(e.data) + ' | ' + (e.tipo || '--') + '</span>' +
+          '</div>';
+        }).join('');
+      }
+
+      console.log('Score IA:', calcularScoreIA_sync(colabs, treins, riscos, ocorrs, insp, docs));
     }
 
     async function carregarColaboradores() {
       var lista = await getData('safenr_colaboradores');
-      var tbody = document.querySelector('#tabelaColaboradores tbody');
-      if (!tbody) return;
+      var filtro = (document.getElementById('filtroColaborador') || {}).value || '';
+      filtro = filtro.toLowerCase().trim();
 
+      if (filtro) {
+        lista = lista.filter(function(c){
+          return (c.nome || '').toLowerCase().includes(filtro) ||
+                 (c.cargo || '').toLowerCase().includes(filtro) ||
+                 (c.setor || '').toLowerCase().includes(filtro);
+        });
+      }
+
+      var tbody = document.querySelector('#tabelaColaboradores tbody');
+      var vazio = document.getElementById('vazioColaboradores');
       tbody.innerHTML = '';
+
+      if (lista.length === 0) {
+        vazio.style.display = 'block';
+        return;
+      }
+
+      vazio.style.display = 'none';
+
       lista.forEach(function(c){
         var tr = document.createElement('tr');
         tr.innerHTML =
           '<td>' + (c.nome || '--') + '</td>' +
           '<td>' + (c.cargo || '--') + '</td>' +
           '<td>' + (c.setor || '--') + '</td>' +
-          '<td>' + (c.status || '--') + '</td>';
+          '<td>' + badgeStatus(c.status || '--') + '</td>' +
+          '<td><button class="btn btn-danger" onclick="excluirRegistro(\'safenr_colaboradores\', \'' + c.id + '\', carregarColaboradores)">Excluir</button></td>';
         tbody.appendChild(tr);
       });
     }
@@ -620,7 +1190,7 @@
 
       var lista = await getData('safenr_colaboradores');
       lista.push({
-        id: crypto.randomUUID(),
+        id: gerarId(),
         nome: nome,
         cargo: cargo,
         setor: setor,
@@ -639,6 +1209,275 @@
       await carregarDashboard();
     }
 
+    async function carregarTreinamentos() {
+      var lista = await getData('safenr_treinamentos');
+      var filtro = (document.getElementById('filtroTreinamento') || {}).value || '';
+      var statusFiltro = (document.getElementById('filtroStatusTreinamento') || {}).value || '';
+
+      filtro = filtro.toLowerCase().trim();
+
+      if (filtro) {
+        lista = lista.filter(function(t){
+          return (t.nome || '').toLowerCase().includes(filtro) ||
+                 (t.colaborador || '').toLowerCase().includes(filtro);
+        });
+      }
+
+      if (statusFiltro) {
+        lista = lista.filter(function(t){ return t.status === statusFiltro; });
+      }
+
+      var tbody = document.querySelector('#tabelaTreinamentos tbody');
+      var vazio = document.getElementById('vazioTreinamentos');
+      tbody.innerHTML = '';
+
+      if (lista.length === 0) {
+        vazio.style.display = 'block';
+        return;
+      }
+
+      vazio.style.display = 'none';
+
+      lista.forEach(function(t){
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td>' + (t.nome || '--') + '</td>' +
+          '<td>' + (t.colaborador || '--') + '</td>' +
+          '<td>' + fmt(t.dataReal) + '</td>' +
+          '<td>' + fmt(t.dataVal) + '</td>' +
+          '<td>' + badgeStatus(t.status || '--') + '</td>' +
+          '<td><button class="btn btn-danger" onclick="excluirRegistro(\'safenr_treinamentos\', \'' + t.id + '\', carregarTreinamentos)">Excluir</button></td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function adicionarTreinamento() {
+      var nome = document.getElementById('treinNome').value.trim();
+      var colaborador = document.getElementById('treinColaborador').value.trim();
+      var status = document.getElementById('treinStatus').value;
+      var dataReal = document.getElementById('treinDataReal').value;
+      var dataVal = document.getElementById('treinDataVal').value;
+      var obs = document.getElementById('treinObs').value.trim();
+
+      if (!nome || !colaborador) {
+        showToast('⚠️ Informe treinamento e colaborador');
+        return;
+      }
+
+      var lista = await getData('safenr_treinamentos');
+      lista.push({
+        id: gerarId(),
+        nome: nome,
+        colaborador: colaborador,
+        status: status,
+        dataReal: dataReal,
+        dataVal: dataVal,
+        observacao: obs,
+        criadoEm: new Date().toISOString()
+      });
+
+      await saveData('safenr_treinamentos', lista);
+
+      document.getElementById('treinNome').value = '';
+      document.getElementById('treinColaborador').value = '';
+      document.getElementById('treinStatus').value = 'agendado';
+      document.getElementById('treinDataReal').value = '';
+      document.getElementById('treinDataVal').value = '';
+      document.getElementById('treinObs').value = '';
+
+      await carregarTreinamentos();
+      await carregarDashboard();
+    }
+
+    async function carregarAgenda() {
+      var lista = await getData('safenr_agenda');
+      var filtro = (document.getElementById('filtroAgenda') || {}).value || '';
+      var tipoFiltro = (document.getElementById('filtroTipoAgenda') || {}).value || '';
+
+      filtro = filtro.toLowerCase().trim();
+
+      if (filtro) {
+        lista = lista.filter(function(e){
+          return (e.titulo || '').toLowerCase().includes(filtro) ||
+                 (e.descricao || '').toLowerCase().includes(filtro);
+        });
+      }
+
+      if (tipoFiltro) {
+        lista = lista.filter(function(e){ return e.tipo === tipoFiltro; });
+      }
+
+      lista.sort(function(a,b){ return (a.data || '').localeCompare(b.data || ''); });
+
+      var tbody = document.querySelector('#tabelaAgenda tbody');
+      var vazio = document.getElementById('vazioAgenda');
+      tbody.innerHTML = '';
+
+      if (lista.length === 0) {
+        vazio.style.display = 'block';
+        return;
+      }
+
+      vazio.style.display = 'none';
+
+      lista.forEach(function(e){
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td>' + fmt(e.data) + '</td>' +
+          '<td>' + (e.titulo || '--') + '</td>' +
+          '<td><span class="badge badge-purple">' + (e.tipo || '--') + '</span></td>' +
+          '<td>' + (e.descricao || '--') + '</td>' +
+          '<td><button class="btn btn-danger" onclick="excluirRegistro(\'safenr_agenda\', \'' + e.id + '\', carregarAgenda)">Excluir</button></td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function adicionarEventoAgenda() {
+      var titulo = document.getElementById('agendaTitulo').value.trim();
+      var data = document.getElementById('agendaData').value;
+      var tipo = document.getElementById('agendaTipo').value;
+      var descricao = document.getElementById('agendaDescricao').value.trim();
+
+      if (!titulo || !data) {
+        showToast('⚠️ Informe título e data');
+        return;
+      }
+
+      var lista = await getData('safenr_agenda');
+      lista.push({
+        id: gerarId(),
+        titulo: titulo,
+        data: data,
+        tipo: tipo,
+        descricao: descricao,
+        criadoEm: new Date().toISOString()
+      });
+
+      await saveData('safenr_agenda', lista);
+
+      document.getElementById('agendaTitulo').value = '';
+      document.getElementById('agendaData').value = '';
+      document.getElementById('agendaTipo').value = 'treinamento';
+      document.getElementById('agendaDescricao').value = '';
+
+      await carregarAgenda();
+      await carregarDashboard();
+    }
+
+    async function carregarOcorrencias() {
+      var lista = await getData('safenr_ocorrencias');
+      var filtro = (document.getElementById('filtroOcorrencia') || {}).value || '';
+      var tipoFiltro = (document.getElementById('filtroTipoOcorrencia') || {}).value || '';
+
+      filtro = filtro.toLowerCase().trim();
+
+      if (filtro) {
+        lista = lista.filter(function(o){
+          return (o.colaborador || '').toLowerCase().includes(filtro) ||
+                 (o.setor || '').toLowerCase().includes(filtro) ||
+                 (o.descricao || '').toLowerCase().includes(filtro) ||
+                 (o.tipo || '').toLowerCase().includes(filtro);
+        });
+      }
+
+      if (tipoFiltro) {
+        lista = lista.filter(function(o){ return o.tipo === tipoFiltro; });
+      }
+
+      lista.sort(function(a,b){
+        return new Date(b.data || 0) - new Date(a.data || 0);
+      });
+
+      var tbody = document.querySelector('#tabelaOcorrencias tbody');
+      var vazio = document.getElementById('vazioOcorrencias');
+      tbody.innerHTML = '';
+
+      if (lista.length === 0) {
+        vazio.style.display = 'block';
+        return;
+      }
+
+      vazio.style.display = 'none';
+
+      lista.forEach(function(o){
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td>' + fmt(o.data) + '</td>' +
+          '<td><span class="badge badge-red">' + (o.tipo || '--') + '</span></td>' +
+          '<td>' + (o.colaborador || '--') + '</td>' +
+          '<td>' + (o.setor || '--') + '</td>' +
+          '<td>' + (o.descricao || '--') + '</td>' +
+          '<td>' + (o.acao || '--') + '</td>' +
+          '<td><button class="btn btn-danger" onclick="excluirRegistro(\'safenr_ocorrencias\', \'' + o.id + '\', carregarOcorrencias)">Excluir</button></td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function adicionarOcorrencia() {
+      var data = document.getElementById('ocorrData').value;
+      var tipo = document.getElementById('ocorrTipo').value;
+      var colaborador = document.getElementById('ocorrColaborador').value.trim();
+      var setor = document.getElementById('ocorrSetor').value.trim();
+      var acao = document.getElementById('ocorrAcao').value.trim();
+      var responsavel = document.getElementById('ocorrResponsavel').value.trim();
+      var descricao = document.getElementById('ocorrDescricao').value.trim();
+
+      if (!data || !tipo || !descricao) {
+        showToast('⚠️ Informe data, tipo e descrição');
+        return;
+      }
+
+      var lista = await getData('safenr_ocorrencias');
+      lista.push({
+        id: gerarId(),
+        data: data,
+        tipo: tipo,
+        colaborador: colaborador,
+        setor: setor,
+        acao: acao,
+        responsavel: responsavel,
+        descricao: descricao,
+        registradoEm: new Date().toISOString()
+      });
+
+      await saveData('safenr_ocorrencias', lista);
+
+      document.getElementById('ocorrData').value = '';
+      document.getElementById('ocorrTipo').value = 'acidente';
+      document.getElementById('ocorrColaborador').value = '';
+      document.getElementById('ocorrSetor').value = '';
+      document.getElementById('ocorrAcao').value = '';
+      document.getElementById('ocorrResponsavel').value = '';
+      document.getElementById('ocorrDescricao').value = '';
+
+      await carregarOcorrencias();
+      await carregarDashboard();
+    }
+
+    async function excluirRegistro(chave, id, callback) {
+      var user = JSON.parse(localStorage.getItem('safenr_user') || '{}');
+      var perms = PERMISSOES[user.perfil || 'admin'] || PERMISSOES.admin;
+
+      if (!perms.podeExcluir) {
+        showToast('❌ Sem permissão para excluir');
+        return;
+      }
+
+      var ok = confirm('Deseja realmente excluir este registro?');
+      if (!ok) return;
+
+      var lista = await getData(chave);
+      lista = lista.filter(function(item){ return item.id !== id; });
+      await saveData(chave, lista);
+
+      if (typeof callback === 'function') {
+        await callback();
+      }
+
+      await carregarDashboard();
+      showToast('✅ Registro excluído');
+    }
+
     async function inicializarTelaAtual() {
       atualizarData();
       aplicarPermissoes();
@@ -647,6 +1486,12 @@
         await carregarDashboard();
       } else if (telaAtual === 'colaboradores') {
         await carregarColaboradores();
+      } else if (telaAtual === 'treinamentos') {
+        await carregarTreinamentos();
+      } else if (telaAtual === 'agenda') {
+        await carregarAgenda();
+      } else if (telaAtual === 'ocorrencias') {
+        await carregarOcorrencias();
       } else {
         showToast('✅ Tela carregada');
       }
@@ -655,20 +1500,23 @@
     async function exportarPDF() {
       var user = JSON.parse(localStorage.getItem('safenr_user') || '{}');
       var perms = PERMISSOES[user.perfil || 'admin'] || PERMISSOES.admin;
+
       if (!perms.podeExportar) {
         showToast('❌ Sem permissão para exportar');
         return;
       }
 
+      showToast('📄 Gerando PDF...');
+
       var colabs = await getData('safenr_colaboradores');
       var ocorrs = await getData('safenr_ocorrencias');
       var treins = await getData('safenr_treinamentos');
+      var agenda = await getData('safenr_agenda');
       var riscos = await getData('safenr_riscos');
       var insp   = await getData('safenr_inspecoes');
       var docs   = await getData('safenr_documentos');
       var score  = calcularScoreIA_sync(colabs, treins, riscos, ocorrs, insp, docs);
 
-      showToast('📄 Gerando PDF...');
       var jsPDFRef = window.jspdf.jsPDF;
       var doc = new jsPDFRef();
       var hoje = new Date().toLocaleDateString('pt-BR');
@@ -677,18 +1525,38 @@
       doc.text('SafeNR — Relatório Geral', 14, 20);
       doc.setFontSize(11);
       doc.text('Gerado em: ' + hoje, 14, 28);
+      doc.text('Empresa: ' + (user.empresa || 'Demo'), 14, 35);
 
       doc.autoTable({
-        startY: 36,
+        startY: 42,
         head: [['Indicador', 'Total']],
         body: [
           ['Colaboradores', colabs.length],
           ['Ocorrências', ocorrs.length],
           ['Treinamentos', treins.length],
-          ['Riscos', riscos.length],
+          ['Eventos na agenda', agenda.length],
           ['Score IA SST', score + '/100']
         ]
       });
+
+      if (ocorrs.length > 0) {
+        doc.addPage();
+        doc.setFontSize(14);
+        doc.text('Ocorrências', 14, 20);
+        doc.autoTable({
+          startY: 26,
+          head: [['Data', 'Tipo', 'Colaborador', 'Setor', 'Descrição']],
+          body: ocorrs.map(function(o){
+            return [
+              fmt(o.data),
+              o.tipo || '--',
+              o.colaborador || '--',
+              o.setor || '--',
+              (o.descricao || '--').substring(0, 50)
+            ];
+          })
+        });
+      }
 
       doc.save('SafeNR_Relatorio_' + hoje.replace(/\//g, '-') + '.pdf');
       showToast('✅ PDF gerado com sucesso');
@@ -697,33 +1565,102 @@
     async function exportarExcel() {
       var user = JSON.parse(localStorage.getItem('safenr_user') || '{}');
       var perms = PERMISSOES[user.perfil || 'admin'] || PERMISSOES.admin;
+
       if (!perms.podeExportar) {
         showToast('❌ Sem permissão para exportar');
         return;
       }
 
       showToast('📊 Gerando Excel...');
+
       var XLSX = window.XLSX;
       var wb = XLSX.utils.book_new();
+      var hoje = new Date().toLocaleDateString('pt-BR');
+
       var colabs = await getData('safenr_colaboradores');
+      var treins = await getData('safenr_treinamentos');
+      var agenda = await getData('safenr_agenda');
+      var ocorrs = await getData('safenr_ocorrencias');
 
-      var ws = XLSX.utils.json_to_sheet(colabs.map(function(c){
-        return {
-          Nome: c.nome || '--',
-          Cargo: c.cargo || '--',
-          Setor: c.setor || '--',
-          Status: c.status || '--'
-        };
-      }));
+      var resumo = XLSX.utils.aoa_to_sheet([
+        ['SafeNR — Relatório Geral', ''],
+        ['Gerado em:', hoje],
+        ['Empresa:', user.empresa || 'Demo'],
+        ['', ''],
+        ['Indicador', 'Total'],
+        ['Colaboradores', colabs.length],
+        ['Treinamentos', treins.length],
+        ['Agenda', agenda.length],
+        ['Ocorrências', ocorrs.length]
+      ]);
+      XLSX.utils.book_append_sheet(wb, resumo, 'Resumo');
 
-      XLSX.utils.book_append_sheet(wb, ws, 'Colaboradores');
-      XLSX.writeFile(wb, 'SafeNR_Colaboradores.xlsx');
+      if (colabs.length > 0) {
+        XLSX.utils.book_append_sheet(wb,
+          XLSX.utils.json_to_sheet(colabs.map(function(c){
+            return {
+              Nome: c.nome || '--',
+              Cargo: c.cargo || '--',
+              Setor: c.setor || '--',
+              Status: c.status || '--'
+            };
+          })),
+          'Colaboradores'
+        );
+      }
+
+      if (treins.length > 0) {
+        XLSX.utils.book_append_sheet(wb,
+          XLSX.utils.json_to_sheet(treins.map(function(t){
+            return {
+              Treinamento: t.nome || '--',
+              Colaborador: t.colaborador || '--',
+              DataRealizacao: t.dataReal || '--',
+              Validade: t.dataVal || '--',
+              Status: t.status || '--'
+            };
+          })),
+          'Treinamentos'
+        );
+      }
+
+      if (agenda.length > 0) {
+        XLSX.utils.book_append_sheet(wb,
+          XLSX.utils.json_to_sheet(agenda.map(function(a){
+            return {
+              Data: a.data || '--',
+              Titulo: a.titulo || '--',
+              Tipo: a.tipo || '--',
+              Descricao: a.descricao || '--'
+            };
+          })),
+          'Agenda'
+        );
+      }
+
+      if (ocorrs.length > 0) {
+        XLSX.utils.book_append_sheet(wb,
+          XLSX.utils.json_to_sheet(ocorrs.map(function(o){
+            return {
+              Data: o.data || '--',
+              Tipo: o.tipo || '--',
+              Colaborador: o.colaborador || '--',
+              Setor: o.setor || '--',
+              Descricao: o.descricao || '--',
+              Acao: o.acao || '--'
+            };
+          })),
+          'Ocorrencias'
+        );
+      }
+
+      XLSX.writeFile(wb, 'SafeNR_Relatorio_' + hoje.replace(/\//g, '-') + '.xlsx');
       showToast('✅ Excel gerado com sucesso');
     }
 
     function registrarEventosMenu() {
-      document.querySelectorAll('.nav-item[data-tela]').forEach(function(link){
-        link.addEventListener('click', function(e){
+      document.querySelectorAll('.nav-item[data-tela]').forEach(function(link) {
+        link.addEventListener('click', function(e) {
           e.preventDefault();
           var tela = this.getAttribute('data-tela');
           mostrarTela(tela);
