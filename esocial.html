@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SafeNR — eSocial SST</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .topbar h2{font-size:1.4rem;font-weight:700}
+    .info-banner{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:flex-start;gap:14px}
+    .info-banner span{font-size:1.5rem;flex-shrink:0}
+    .info-banner p{font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.6}
+    .info-banner strong{color:#00d4ff}
+    .esocial-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:24px}
+    .evento-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;transition:all .2s}
+    .evento-card:hover{background:rgba(255,255,255,.05)}
+    .evento-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+    .evento-codigo{font-size:1.2rem;font-weight:900;color:#00d4ff}
+    .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700}
+    .badge.sst{background:rgba(0,212,255,.12);color:#00d4ff}
+    .badge.pendente{background:rgba(251,191,36,.15);color:#fbbf24}
+    .badge.ok{background:rgba(74,222,128,.15);color:#4ade80}
+    .badge.atencao{background:rgba(248,113,113,.15);color:#f87171}
+    .evento-nome{font-size:.9rem;font-weight:700;margin-bottom:6px}
+    .evento-desc{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.5;margin-bottom:14px}
+    .evento-stats{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+    .evento-stat-row{display:flex;justify-content:space-between;font-size:.78rem;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .evento-stat-row:last-child{border-bottom:none}
+    .stat-label{color:rgba(255,255,255,.4)}
+    .stat-valor{font-weight:700}
+    .btn-gerar-evento{width:100%;padding:10px;border-radius:10px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:#00d4ff;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s}
+    .btn-gerar-evento:hover{background:rgba(0,212,255,.2)}
+    .xml-section{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px}
+    .xml-section h3{font-size:.9rem;font-weight:800;color:#00d4ff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px}
+    .xml-output{background:#0a1520;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:16px;font-family:'Courier New',monospace;font-size:.75rem;color:#a5f3fc;max-height:320px;overflow-y:auto;white-space:pre;line-height:1.6;margin-bottom:14px}
+    .xml-acoes{display:flex;gap:10px;flex-wrap:wrap}
+    .btn-xml{padding:10px 20px;border-radius:10px;border:none;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s}
+    .btn-copiar{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:#00d4ff}
+    .btn-download{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);color:#4ade80}
+    .btn-copiar:hover,.btn-download:hover{opacity:.8}
+    .timeline-section{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;margin-top:20px}
+    .timeline-section h3{font-size:.9rem;font-weight:800;color:#00d4ff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px}
+    .timeline-item{display:flex;gap:14px;margin-bottom:16px}
+    .timeline-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:4px}
+    .timeline-dot.verde{background:#4ade80}
+    .timeline-dot.amarelo{background:#fbbf24}
+    .timeline-dot.vermelho{background:#f87171}
+    .timeline-dot.azul{background:#00d4ff}
+    .timeline-content{flex:1;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.05)}
+    .timeline-content:last-child{border-bottom:none}
+    .timeline-titulo{font-size:.85rem;font-weight:700;margin-bottom:4px}
+    .timeline-desc{font-size:.75rem;color:rgba(255,255,255,.4);line-height:1.5}
+    .toast{position:fixed;bottom:24px;right:24px;background:#1a2535;border:1px solid rgba(74,222,128,.3);border-radius:12px;padding:14px 22px;color:#4ade80;font-size:.88rem;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s}
+    .toast.show{transform:translateY(0);opacity:1}
+  </style>
+</head>
+<body>
+<div class="main">
+  <div class="topbar">
+    <div><h2>📡 eSocial — Módulo SST</h2></div>
+  </div>
+
+  <div class="info-banner">
+    <span>ℹ️</span>
+    <p><strong>eSocial SST:</strong> Os eventos S-2210 (Comunicação de Acidente de Trabalho), S-2220 (Monitoramento da Saúde do Trabalhador) e S-2240 (Condições Ambientais do Trabalho) são obrigatórios para empresas do grupo 1, 2, 3 e 4. Este módulo auxilia na geração dos XMLs e no acompanhamento dos envios. <strong>Consulte sempre seu contador ou especialista eSocial para homologação e envio oficial.</strong></p>
+  </div>
+
+  <div class="esocial-grid">
+    <div class="evento-card">
+      <div class="evento-header">
+        <div class="evento-codigo">S-2210</div>
+        <span class="badge sst">SST</span>
+      </div>
+      <div class="evento-nome">Comunicação de Acidente de Trabalho (CAT)</div>
+      <div class="evento-desc">Informa ao eSocial a ocorrência de acidentes de trabalho com ou sem afastamento, incluindo doenças ocupacionais.</div>
+      <div class="evento-stats" id="stats-s2210"></div>
+      <button class="btn-gerar-evento" onclick="gerarEvento('S-2210')">📄 Visualizar / Gerar S-2210</button>
+    </div>
+
+    <div class="evento-card">
+      <div class="evento-header">
+        <div class="evento-codigo">S-2220</div>
+        <span class="badge sst">SST</span>
+      </div>
+      <div class="evento-nome">Monitoramento da Saúde do Trabalhador</div>
+      <div class="evento-desc">Registra os dados dos exames médicos ocupacionais (ASO): admissional, periódico, retorno, mudança de função e demissional.</div>
+      <div class="evento-stats" id="stats-s2220"></div>
+      <button class="btn-gerar-evento" onclick="gerarEvento('S-2220')">📄 Visualizar / Gerar S-2220</button>
+    </div>
+
+    <div class="evento-card">
+      <div class="evento-header">
+        <div class="evento-codigo">S-2240</div>
+        <span class="badge sst">SST</span>
+      </div>
+      <div class="evento-nome">Condições Ambientais do Trabalho</div>
+      <div class="evento-desc">Informa as condições ambientais do trabalho e os fatores de riscos ocupacionais a que os trabalhadores estão expostos.</div>
+      <div class="evento-stats" id="stats-s2240"></div>
+      <button class="btn-gerar-evento" onclick="gerarEvento('S-2240')">📄 Visualizar / Gerar S-2240</button>
+    </div>
+
+    <div class="evento-card">
+      <div class="evento-header">
+        <div class="evento-codigo">S-1000</div>
+        <span class="badge sst">SST</span>
+      </div>
+      <div class="evento-nome">Informações do Empregador</div>
+      <div class="evento-desc">Informações do empregador/contribuinte: razão social, CNPJ, CNAE, enquadramento tributário e dados de contato.</div>
+      <div class="evento-stats" id="stats-s1000"></div>
+      <button class="btn-gerar-evento" onclick="gerarEvento('S-1000')">📄 Visualizar / Gerar S-1000</button>
+    </div>
+  </div>
+
+  <div class="xml-section">
+    <h3>📋 Visualizador de XML</h3>
+    <div class="xml-output" id="xmlOutput"><!-- Selecione um evento acima para visualizar o XML gerado --></div>
+    <div class="xml-acoes">
+      <button class="btn-xml btn-copiar" onclick="copiarXml()">📋 Copiar XML</button>
+      <button class="btn-xml btn-download" onclick="downloadXml()">💾 Download .xml</button>
+    </div>
+  </div>
+
+  <div class="timeline-section">
+    <h3>📅 Orientações e Prazos eSocial SST</h3>
+    <div class="timeline-item"><div class="timeline-dot vermelho"></div><div class="timeline-content"><div class="timeline-titulo">S-2210 — Acidente de Trabalho (CAT)</div><div class="timeline-desc">Deve ser enviado <strong>até o 1º dia útil</strong> após a ocorrência do acidente. Em caso de morte, imediatamente. Prazo: mesmo dia ou 1º dia útil seguinte.</div></div></div>
+    <div class="timeline-item"><div class="timeline-dot amarelo"></div><div class="timeline-content"><div class="timeline-titulo">S-2220 — Monitoramento da Saúde (ASO)</div><div class="timeline-desc">Deve ser enviado <strong>até o dia 15</strong> do mês subsequente ao da realização do exame médico. Para admissional: antes do início das atividades.</div></div></div>
+    <div class="timeline-item"><div class="timeline-dot azul"></div><div class="timeline-content"><div class="timeline-titulo">S-2240 — Condições Ambientais</div><div class="timeline-desc">Enviado <strong>antes do início da prestação de serviços</strong> pelo trabalhador. Deve ser atualizado sempre que houver mudança nas condições de trabalho.</div></div></div>
+    <div class="timeline-item"><div class="timeline-dot verde"></div><div class="timeline-content"><div class="timeline-titulo">Tabelas — S-1000 e S-1005</div><div class="timeline-desc">Devem ser enviadas <strong>antes dos eventos não periódicos</strong>. São pré-requisitos para o envio dos eventos SST.</div></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="./sidebar.js"></script>
+<script>
+var ocorrs =JSON.parse(localStorage.getItem('safenr_ocorrencias')||'[]');
+var colabs  =JSON.parse(localStorage.getItem('safenr_colaboradores')||'[]');
+var riscos  =JSON.parse(localStorage.getItem('safenr_riscos')||'[]');
+var cfg     =JSON.parse(localStorage.getItem('safenr_config')||'{}');
+var xmlAtual='';var eventoAtual='';
+function fmt(d){if(!d)return new Date().toISOString().slice(0,10);return d;}
+function toast(msg,cor){
+  var t=document.getElementById('toast');t.textContent=msg;t.style.color=cor||'#4ade80';t.style.borderColor=(cor||'#4ade80')+'44';
+  t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);
+}
+function statRow(l,v,cls){return '<div class="evento-stat-row"><span class="stat-label">'+l+'</span><span class="stat-valor'+(cls?' style="color:'+cls+'"':'')+' ">'+v+'</span></div>';}
+function carregarStats(){
+  var acidentes=ocorrs.filter(function(o){return o.tipo==='acidente';});
+  var comCat=ocorrs.filter(function(o){return o.cat==='sim';});
+  document.getElementById('stats-s2210').innerHTML=
+    statRow('Acidentes registrados',acidentes.length)+
+    statRow('CATs emitidas',comCat.length)+
+    statRow('Pendentes de envio',Math.max(0,acidentes.length-comCat.length),'#fbbf24');
+  var hoje=new Date();hoje.setHours(0,0,0,0);
+  var asoVenc=colabs.filter(function(c){return c.asoVal&&new Date(c.asoVal+'T00:00:00')<hoje;});
+  document.getElementById('stats-s2220').innerHTML=
+    statRow('Colaboradores ativos',colabs.filter(function(c){return c.status==='ativo';}).length)+
+    statRow('ASOs vencidos',asoVenc.length,asoVenc.length>0?'#f87171':null)+
+    statRow('Em conformidade',colabs.length-asoVenc.length);
+  document.getElementById('stats-s2240').innerHTML=
+    statRow('Riscos mapeados',riscos.length)+
+    statRow('Críticos',riscos.filter(function(r){return r.nivel==='critico';}).length,'#f87171')+
+    statRow('Com agente definido',riscos.filter(function(r){return r.tipo;}).length);
+  document.getElementById('stats-s1000').innerHTML=
+    statRow('Empresa',cfg.empresa?'✅ Cadastrada':'⚠️ Pendente',cfg.empresa?null:'#fbbf24')+
+    statRow('CNPJ',cfg.cnpj||'Não informado')+
+    statRow('CNAE',cfg.cnae||'Não informado');
+}
+function gerarEvento(tipo){
+  eventoAtual=tipo;
+  var empresa=cfg.empresa||'EMPRESA NÃO CONFIGURADA';
+  var cnpj=cfg.cnpj||'00.000.000/0001-00';
+  var ambiente='2';
+  var proc='1';
+  var verProc='SafeNR v1.0';
+  var xml='';
+  if(tipo==='S-1000'){
+    xml='<?xml version="1.0" encoding="UTF-8"?>\n'+
+    '<eSocial xmlns="http://www.esocial.gov.br/schema/evt/evtInfoEmpregador/v02_05_00">\n'+
+    '  <evtInfoEmpregador Id="ID_EVENTO_001">\n'+
+    '    <ideEvento>\n'+
+    '      <tpAmb>'+ambiente+'</tpAmb>\n'+
+    '      <procEmi>'+proc+'</procEmi>\n'+
+    '      <verProc>'+verProc+'</verProc>\n'+
+    '    </ideEvento>\n'+
+    '    <ideEmpregador>\n'+
+    '      <tpInsc>1</tpInsc>\n'+
+    '      <nrInsc>'+cnpj.replace(/\D/g,'')+'</nrInsc>\n'+
+    '    </ideEmpregador>\n'+
+    '    <infoEmpregador>\n'+
+    '      <inclusao>\n'+
+    '        <idePeriodo>\n'+
+    '          <iniValid>'+new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0')+'</iniValid>\n'+
+    '        </idePeriodo>\n'+
+    '        <infoCadastro>\n'+
+    '          <nmRazao>'+empresa+'</nmRazao>\n'+
+    '          <classTrib>99</classTrib>\n'+
+    '          <indCoop>0</indCoop>\n'+
+    '          <indConstr>0</indConstr>\n'+
+    '          <indDesFolha>0</indDesFolha>\n'+
+    '        </infoCadastro>\n'+
+    '      </inclusao>\n'+
+    '    </infoEmpregador>\n'+
+    '  </evtInfoEmpregador>\n'+
+    '</eSocial>';
+  } else if(tipo==='S-2210'){
+    var acid=ocorrs.filter(function(o){return o.tipo==='acidente';})[0]||{};
+    var cpf=(colabs.find(function(c){return c.nome===acid.colaborador;})||{}).cpf||'000.000.000-00';
+    xml='<?xml version="1.0" encoding="UTF-8"?>\n'+
+    '<eSocial xmlns="http://www.esocial.gov.br/schema/evt/evtCAT/v02_04_03">\n'+
+    '  <evtCAT Id="ID_S2210_001">\n'+
+    '    <ideEvento>\n'+
+    '      <indRetif>1</indRetif>\n'+
+    '      <tpAmb>'+ambiente+'</tpAmb>\n'+
+    '      <procEmi>'+proc+'</procEmi>\n'+
+    '      <verProc>'+verProc+'</verProc>\n'+
+    '    </ideEvento>\n'+
+    '    <ideEmpregador>\n'+
+    '      <tpInsc>1</tpInsc>\n'+
+    '      <nrInsc>'+cnpj.replace(/\D/g,'')+'</nrInsc>\n'+
+    '    </ideEmpregador>\n'+
+    '    <ideVinculo>\n'+
+    '      <cpfTrab>'+cpf.replace(/\D/g,'')+'</cpfTrab>\n'+
+    '      <!-- Matrícula: '+(acid.colaborador||'Não informado')+' -->\n'+
+    '    </ideVinculo>\n'+
+    '    <cat>\n'+
+    '      <dtAcid>'+fmt(acid.data)+'</dtAcid>\n'+
+    '      <tpAcid>1</tpAcid> <!-- 1=Típico, 2=Doença, 3=Trajeto -->\n'+
+    '      <hrAcid>'+(acid.hora||'00:00')+'</hrAcid>\n'+
+    '      <localAcidente>\n'+
+    '        <tpLocal>1</tpLocal>\n'+
+    '        <dscLocal>'+(acid.setor||'Não informado')+'</dscLocal>\n'+
+    '      </localAcidente>\n'+
+    '      <parteAtingida>\n'+
+    '        <codParteAting>099</codParteAting> <!-- '+(acid.parte||'Não especificada')+' -->\n'+
+    '      </parteAtingida>\n'+
+    '      <agenteCausador>\n'+
+    '        <codAgntCausador>099</codAgntCausador>\n'+
+    '      </agenteCausador>\n'+
+    '      <descAcid>'+(acid.descricao||'Descrição não informada')+'</descAcid>\n'+
+    '      <houveAfastamento>'+(acid.afastamento==='sim'?'S':'N')+'</houveAfastamento>\n'+
+    '    </cat>\n'+
+    '  </evtCAT>\n'+
+    '</eSocial>';
+  } else if(tipo==='S-2220'){
+    var colab=colabs[0]||{};
+    xml='<?xml version="1.0" encoding="UTF-8"?>\n'+
+    '<eSocial xmlns="http://www.esocial.gov.br/schema/evt/evtMonit/v02_09_01">\n'+
+    '  <evtMonit Id="ID_S2220_001">\n'+
+    '    <ideEvento>\n'+
+    '      <indRetif>1</indRetif>\n'+
+    '      <tpAmb>'+ambiente+'</tpAmb>\n'+
+    '      <procEmi>'+proc+'</procEmi>\n'+
+    '      <verProc>'+verProc+'</verProc>\n'+
+    '    </ideEvento>\n'+
+    '    <ideEmpregador>\n'+
+    '      <tpInsc>1</tpInsc>\n'+
+    '      <nrInsc>'+cnpj.replace(/\D/g,'')+'</nrInsc>\n'+
+    '    </ideEmpregador>\n'+
+    '    <ideVinculo>\n'+
+    '      <cpfTrab>'+(colab.cpf||'00000000000').replace(/\D/g,'')+'</cpfTrab>\n'+
+    '      <!-- Nome: '+(colab.nome||'Não informado')+' -->\n'+
+    '    </ideVinculo>\n'+
+    '    <exMedOcup>\n'+
+    '      <tpExame>0</tpExame> <!-- 0=Admissional, 1=Periódico, 2=Retorno, 3=Mudança, 9=Demissional -->\n'+
+    '      <dtExame>'+(colab.aso||new Date().toISOString().slice(0,10))+'</dtExame>\n'+
+    '      <dtVencto>'+(colab.asoVal||'')+'</dtVencto>\n'+
+    '      <procEmi>'+proc+'</procEmi>\n'+
+    '      <ordExame>0</ordExame> <!-- 0=Normal -->\n'+
+    '      <aso>\n'+
+    '        <dtAso>'+(colab.aso||new Date().toISOString().slice(0,10))+'</dtAso>\n'+
+    '        <resAso>1</resAso> <!-- 1=Apto -->\n'+
+    '      </aso>\n'+
+    '    </exMedOcup>\n'+
+    '  </evtMonit>\n'+
+    '</eSocial>';
+  } else if(tipo==='S-2240'){
+    var risco=riscos[0]||{};
+    xml='<?xml version="1.0" encoding="UTF-8"?>\n'+
+    '<eSocial xmlns="http://www.esocial.gov.br/schema/evt/evtExpRisco/v02_04_02">\n'+
+    '  <evtExpRisco Id="ID_S2240_001">\n'+
+    '    <ideEvento>\n'+
+    '      <indRetif>1</indRetif>\n'+
+    '      <tpAmb>'+ambiente+'</tpAmb>\n'+
+    '      <procEmi>'+proc+'</procEmi>\n'+
+    '      <verProc>'+verProc+'</verProc>\n'+
+    '    </ideEvento>\n'+
+    '    <ideEmpregador>\n'+
+    '      <tpInsc>1</tpInsc>\n'+
+    '      <nrInsc>'+cnpj.replace(/\D/g,'')+'</nrInsc>\n'+
+    '    </ideEmpregador>\n'+
+    '    <ideVinculo>\n'+
+    '      <cpfTrab>00000000000</cpfTrab>\n'+
+    '      <matricula>001</matricula>\n'+
+    '    </ideVinculo>\n'+
+    '    <infoExpRisco>\n'+
+    '      <iniValid>'+new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0')+'</iniValid>\n'+
+    '      <infoAmb>\n'+
+    '        <localAmb>1</localAmb>\n'+
+    '        <dscSetor>'+(risco.setor||'Não informado')+'</dscSetor>\n'+
+    '        <tpInsc>1</tpInsc>\n'+
+    '        <nrInsc>'+cnpj.replace(/\D/g,'')+'</nrInsc>\n'+
+    '      </infoAmb>\n'+
+    '      <infoAtiv>\n'+
+    '        <dscAtiv>'+(risco.descricao||'Atividade não especificada')+'</dscAtiv>\n'+
+    '      </infoAtiv>\n'+
+    (riscos.length>0?
+    '      <agNoc>\n'+
+    '        <codAgNoc>09.01.001</codAgNoc>\n'+
+    '        <dscAgNoc>'+(risco.descricao||'Agente não especificado')+'</dscAgNoc>\n'+
+    '        <tpAval>2</tpAval>\n'+
+    '        <intConc>0</intConc>\n'+
+    '        <limite>0</limite>\n'+
+    '        <tecMedicao>0</tecMedicao>\n'+
+    '        <insalubridade>N</insalubridade>\n'+
+    '        <periculosidade>N</periculosidade>\n'+
+    '      </agNoc>\n':'')+
+    '    </infoExpRisco>\n'+
+    '  </evtExpRisco>\n'+
+    '</eSocial>';
+  }
+  xmlAtual=xml;
+  document.getElementById('xmlOutput').textContent=xml;
+}
+function copiarXml(){
+  if(!xmlAtual){toast('Gere um evento primeiro!','#fbbf24');return;}
+  navigator.clipboard.writeText(xmlAtual).then(function(){toast('✅ XML copiado!');}).catch(function(){toast('❌ Erro ao copiar','#f87171');});
+}
+function downloadXml(){
+  if(!xmlAtual){toast('Gere um evento primeiro!','#fbbf24');return;}
+  var blob=new Blob([xmlAtual],{type:'application/xml'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='esocial_'+eventoAtual+'_'+new Date().toISOString().slice(0,10)+'.xml';a.click();
+  toast('✅ Download iniciado!');
+}
+carregarStats();
+</script>
+</body>
+</html>
