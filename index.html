@@ -2,77 +2,143 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SafeNR — Login</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{background:#0f1923;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Segoe UI',sans-serif}
-    .box{background:#0a1520;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:36px;width:340px;text-align:center}
-    h1{color:#fff;font-size:1.8rem;font-weight:900;margin-bottom:4px}
-    h1 span{color:#00d4ff}
-    p{color:rgba(255,255,255,.35);font-size:.8rem;margin-bottom:24px}
-    input{width:100%;background:#111c28;border:1px solid rgba(255,255,255,.1);color:#fff;border-radius:10px;padding:12px;font-size:.9rem;outline:none;margin-bottom:12px;display:block}
-    input:focus{border-color:#00d4ff}
-    button{width:100%;background:#00d4ff;color:#0f1923;border:none;border-radius:10px;padding:13px;font-size:1rem;font-weight:800;cursor:pointer;margin-top:4px}
-    .erro{color:#f87171;font-size:.82rem;margin-top:10px;display:none}
-    .dica{margin-top:16px;background:#111c28;border-radius:10px;padding:12px;text-align:left}
-    .dica p{color:rgba(255,255,255,.4);font-size:.72rem;margin-bottom:6px;text-transform:uppercase;font-weight:700}
-    .dica div{color:rgba(255,255,255,.6);font-size:.8rem;line-height:1.8}
-    .dica span{color:#00d4ff;cursor:pointer;font-weight:700}
+    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .bg-glow{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+    .glow{position:absolute;border-radius:50%;filter:blur(120px);opacity:.15}
+    .glow-1{width:600px;height:600px;background:#00d4ff;top:-200px;left:-200px}
+    .glow-2{width:500px;height:500px;background:#7c3aed;bottom:-200px;right:-100px}
+    .glow-3{width:400px;height:400px;background:#059669;top:50%;left:50%;transform:translate(-50%,-50%)}
+    .login-wrap{position:relative;z-index:1;width:100%;max-width:460px;padding:20px}
+    .login-card{background:rgba(255,255,255,.04);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:44px 40px;box-shadow:0 32px 64px rgba(0,0,0,.4)}
+    .logo{text-align:center;margin-bottom:32px}
+    .logo-icon{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#00d4ff,#0099cc);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 14px}
+    .logo-nome{font-size:1.6rem;font-weight:900;letter-spacing:-.5px}
+    .logo-nome span{color:#00d4ff}
+    .logo-sub{font-size:.78rem;color:rgba(255,255,255,.4);margin-top:4px;letter-spacing:1px;text-transform:uppercase}
+    .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+    .form-group label{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px}
+    .form-group input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;color:#fff;font-size:.95rem;outline:none;transition:all .2s;font-family:inherit}
+    .form-group input::placeholder{color:rgba(255,255,255,.25)}
+    .form-group input:focus{border-color:#00d4ff;background:rgba(0,212,255,.05)}
+    .form-group input.erro{border-color:#f87171;background:rgba(248,113,113,.05)}
+    .msg-erro{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:10px;padding:12px 16px;font-size:.82rem;color:#f87171;text-align:center;margin-bottom:16px;display:none}
+    .msg-erro.show{display:block}
+    .btn-login{width:100%;padding:15px;border-radius:12px;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;color:#fff;font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;margin-top:8px;letter-spacing:.3px}
+    .btn-login:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,212,255,.3)}
+    .btn-login:active{transform:translateY(0)}
+    .divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:rgba(255,255,255,.2);font-size:.78rem}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+    .btn-demo{width:100%;padding:13px;border-radius:12px;background:transparent;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
+    .btn-demo:hover{background:rgba(255,255,255,.06);color:#fff;border-color:rgba(255,255,255,.25)}
+    .footer-login{text-align:center;margin-top:24px;font-size:.72rem;color:rgba(255,255,255,.2)}
+    .footer-login strong{color:rgba(255,255,255,.35)}
+    .badge-versao{display:inline-block;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:3px 10px;font-size:.65rem;color:#00d4ff;font-weight:700;margin-left:8px;vertical-align:middle}
+    .loading-spinner{display:none;width:20px;height:20px;border:2px solid rgba(255,255,255,.3);border-top:2px solid #fff;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .features-strip{display:flex;justify-content:center;gap:16px;margin-top:28px;flex-wrap:wrap}
+    .feat{display:flex;align-items:center;gap:5px;font-size:.7rem;color:rgba(255,255,255,.25)}
+    .feat span:first-child{font-size:.8rem}
   </style>
 </head>
 <body>
-<div class="box">
-  <h1>Safe<span>NR</span></h1>
-  <p>Sistema de Gestão SST</p>
-
-  <input type="email"    id="email" placeholder="E-mail"  value="admin@safenr.com.br"/>
-  <input type="password" id="senha" placeholder="Senha"
-         onkeydown="if(event.key==='Enter')entrar()"/>
-  <button onclick="entrar()">Entrar no SafeNR</button>
-  <div class="erro" id="erro">E-mail ou senha incorretos.</div>
-
-  <div class="dica">
-    <p>Credenciais de acesso</p>
-    <div>
-      admin@safenr.com.br → <span onclick="preencher('admin@safenr.com.br','admin123')">admin123</span><br/>
-      tecnico@safenr.com.br → <span onclick="preencher('tecnico@safenr.com.br','tec123')">tec123</span><br/>
-      gestor@safenr.com.br → <span onclick="preencher('gestor@safenr.com.br','gest123')">gest123</span>
+<div class="bg-glow">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+</div>
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="logo">
+      <div class="logo-icon">🛡️</div>
+      <div class="logo-nome">Safe<span>NR</span><span class="badge-versao">v1.0</span></div>
+      <div class="logo-sub">Sistema de Gestão de Segurança do Trabalho</div>
+    </div>
+    <form onsubmit="return false">
+      <div class="form-group">
+        <label>Usuário / E-mail</label>
+        <input type="text" id="loginUser" placeholder="Digite seu usuário" autocomplete="username"/>
+      </div>
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="loginSenha" placeholder="Digite sua senha" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')fazerLogin()"/>
+      </div>
+      <div class="msg-erro" id="erroMsg">❌ Usuário ou senha incorretos.</div>
+      <button class="btn-login" onclick="fazerLogin()">
+        <span id="btnTexto">Entrar no Sistema</span>
+        <div class="loading-spinner" id="spinner"></div>
+      </button>
+    </form>
+    <div class="divider">ou</div>
+    <button class="btn-demo" onclick="entrarDemo()">🚀 Entrar com conta demo</button>
+    <div class="footer-login">
+      <strong>SafeNR</strong> — Todos os dados são armazenados localmente no seu navegador.<br/>
+      Nenhuma informação é enviada para servidores externos.
     </div>
   </div>
+  <div class="features-strip">
+    <div class="feat"><span>🛡️</span><span>Gestão de Riscos</span></div>
+    <div class="feat"><span>📋</span><span>NRs e Checklists</span></div>
+    <div class="feat"><span>🎓</span><span>Treinamentos</span></div>
+    <div class="feat"><span>📡</span><span>eSocial SST</span></div>
+    <div class="feat"><span>🤖</span><span>IA Integrada</span></div>
+  </div>
 </div>
-
 <script>
-  var USUARIOS = [
-    {email:'admin@safenr.com.br',   senha:'admin123', nome:'Odair',   perfil:'admin'},
-    {email:'tecnico@safenr.com.br', senha:'tec123',   nome:'Técnico', perfil:'tecnico'},
-    {email:'gestor@safenr.com.br',  senha:'gest123',  nome:'Gestor',  perfil:'gestor'}
-  ];
-
-  function preencher(email, senha) {
-    document.getElementById('email').value = email;
-    document.getElementById('senha').value = senha;
-    document.getElementById('erro').style.display = 'none';
+function fazerLogin(){
+  var u=document.getElementById('loginUser').value.trim();
+  var s=document.getElementById('loginSenha').value;
+  var erro=document.getElementById('erroMsg');
+  erro.classList.remove('show');
+  document.getElementById('loginUser').classList.remove('erro');
+  document.getElementById('loginSenha').classList.remove('erro');
+  if(!u||!s){
+    erro.textContent='❌ Preencha usuário e senha.';erro.classList.add('show');
+    if(!u)document.getElementById('loginUser').classList.add('erro');
+    if(!s)document.getElementById('loginSenha').classList.add('erro');
+    return;
   }
-
-  function entrar() {
-    var email = document.getElementById('email').value.trim().toLowerCase();
-    var senha = document.getElementById('senha').value.trim();
-    var u = USUARIOS.find(function(x){ return x.email===email && x.senha===senha; });
-    if (u) {
-      localStorage.setItem('safenr_user', JSON.stringify({
-        nome: u.nome, email: u.email, perfil: u.perfil,
-        empresa: 'SafeNR', empresaId: 'demo'
-      }));
-      window.location.href = './app.html';
+  document.getElementById('btnTexto').style.display='none';
+  document.getElementById('spinner').style.display='block';
+  setTimeout(function(){
+    var userData=localStorage.getItem('safenr_user');
+    var user=userData?JSON.parse(userData):null;
+    var ok=false;
+    if(user&&user.nome){
+      var loginMatch=(u===user.nome||u===(user.email||''));
+      var senhaHash=user.senha?atob(user.senha):'admin123';
+      ok=loginMatch&&s===senhaHash;
     } else {
-      document.getElementById('erro').style.display = 'block';
-      document.getElementById('senha').value = '';
+      ok=(u==='admin'&&s==='admin123')||(u==='demo'&&s==='demo123');
+      if(ok){
+        var nome=u==='demo'?'Usuário Demo':'Administrador';
+        localStorage.setItem('safenr_user',JSON.stringify({nome:nome,cargo:'Técnico de Segurança',email:u+'@safenr.com',senha:btoa(s)}));
+      }
     }
-  }
-
-  if (localStorage.getItem('safenr_user')) {
-    window.location.href = './app.html';
-  }
+    if(ok){
+      localStorage.setItem('safenr_logado','1');
+      window.location.href='app.html';
+    } else {
+      document.getElementById('btnTexto').style.display='block';
+      document.getElementById('spinner').style.display='none';
+      erro.textContent='❌ Usuário ou senha incorretos. Tente: admin / admin123';
+      erro.classList.add('show');
+      document.getElementById('loginUser').classList.add('erro');
+      document.getElementById('loginSenha').classList.add('erro');
+    }
+  },800);
+}
+function entrarDemo(){
+  document.getElementById('loginUser').value='demo';
+  document.getElementById('loginSenha').value='demo123';
+  fazerLogin();
+}
+var logado=localStorage.getItem('safenr_logado');
+if(logado==='1')window.location.href='app.html';
 </script>
 </body>
 </html>
