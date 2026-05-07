@@ -7,257 +7,221 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
-    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;z-index:10}
-    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
-    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
-    .sidebar-logo h1 span{color:#00d4ff}
-    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
-    .nav{flex:1;padding:20px 0;overflow-y:auto}
-    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
-    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
-    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
-    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
-    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
-    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
-    .user-info p{font-size:.82rem;font-weight:600}
-    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
-    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
-
-    /* MAIN */
     .main{margin-left:240px;flex:1;padding:32px}
     .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
     .topbar h2{font-size:1.4rem;font-weight:700}
     .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
-    .btn-novo{background:linear-gradient(135deg,#f87171,#dc2626);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
+    .btn-novo{background:linear-gradient(135deg,#fb923c,#ea580c);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
     .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
-
-    /* CARDS DE RESUMO */
-    .resumo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px}
+    .resumo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
     .resumo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s}
     .resumo-card:hover{background:rgba(255,255,255,.06)}
-    .resumo-card .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
-    .resumo-card .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-    .resumo-card.critico  .rc-valor{color:#f87171}
-    .resumo-card.alto     .rc-valor{color:#fb923c}
-    .resumo-card.medio    .rc-valor{color:#fbbf24}
-    .resumo-card.baixo    .rc-valor{color:#4ade80}
-    .resumo-card.eliminado .rc-valor{color:rgba(255,255,255,.3)}
-
-    /* FILTROS */
+    .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
+    .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
     .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
     .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
-    .filtro-btn:hover,.filtro-btn.active{background:rgba(248,113,113,.12);border-color:#f87171;color:#f87171}
-    .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:220px;margin-left:auto}
+    .filtro-btn:hover,.filtro-btn.active{background:rgba(251,146,60,.12);border-color:#fb923c;color:#fb923c}
+    .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:240px;margin-left:auto}
     .busca-input::placeholder{color:rgba(255,255,255,.3)}
-    .busca-input:focus{border-color:#f87171}
-
-    /* TABELA */
-    .tabela-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
-    table{width:100%;border-collapse:collapse}
-    thead tr{background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.08)}
-    th{padding:14px 18px;text-align:left;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px}
-    td{padding:14px 18px;font-size:.87rem;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
-    tr:last-child td{border-bottom:none}
-    tr:hover td{background:rgba(255,255,255,.02)}
-
-    /* BADGES */
-    .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
-    .badge.critico  {background:rgba(248,113,113,.2);color:#f87171}
-    .badge.alto     {background:rgba(251,146,60,.2);color:#fb923c}
-    .badge.medio    {background:rgba(251,191,36,.2);color:#fbbf24}
-    .badge.baixo    {background:rgba(74,222,128,.2);color:#4ade80}
-    .badge.eliminado{background:rgba(255,255,255,.1);color:rgba(255,255,255,.4)}
-
-    .btn-acao{background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:8px;font-size:.85rem;transition:background .2s}
-    .btn-acao:hover{background:rgba(255,255,255,.08)}
-    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3)}
+    .busca-input:focus{border-color:#fb923c}
+    .riscos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .risco-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;transition:all .2s;border-top:3px solid transparent}
+    .risco-card:hover{transform:translateY(-2px);background:rgba(255,255,255,.05)}
+    .risco-card.critico{border-top-color:#f87171;background:rgba(248,113,113,.04)}
+    .risco-card.alto{border-top-color:#fb923c;background:rgba(251,146,60,.04)}
+    .risco-card.medio{border-top-color:#fbbf24;background:rgba(251,191,36,.04)}
+    .risco-card.baixo{border-top-color:#4ade80;background:rgba(74,222,128,.04)}
+    .risco-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px}
+    .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700}
+    .badge.critico{background:rgba(248,113,113,.2);color:#f87171}
+    .badge.alto{background:rgba(251,146,60,.2);color:#fb923c}
+    .badge.medio{background:rgba(251,191,36,.2);color:#fbbf24}
+    .badge.baixo{background:rgba(74,222,128,.2);color:#4ade80}
+    .badge.fisico{background:rgba(96,165,250,.15);color:#60a5fa}
+    .badge.quimico{background:rgba(167,139,250,.15);color:#a78bfa}
+    .badge.biologico{background:rgba(74,222,128,.15);color:#4ade80}
+    .badge.ergonomico{background:rgba(251,191,36,.15);color:#fbbf24}
+    .badge.mecanico{background:rgba(251,146,60,.15);color:#fb923c}
+    .badge.eletrico{background:rgba(248,113,113,.15);color:#f87171}
+    .badge.outro{background:rgba(255,255,255,.1);color:rgba(255,255,255,.5)}
+    .risco-desc{font-size:.9rem;font-weight:700;margin-bottom:8px;line-height:1.3}
+    .risco-info{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+    .risco-info-row{font-size:.78rem;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:6px}
+    .medida-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 12px;font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:12px;min-height:36px;line-height:1.5}
+    .medida-box.sem{color:rgba(248,113,113,.7);border-color:rgba(248,113,113,.2);background:rgba(248,113,113,.05)}
+    .risco-acoes{display:flex;gap:8px;justify-content:flex-end}
+    .btn-acao{background:none;border:1px solid rgba(255,255,255,.1);border-radius:8px;cursor:pointer;padding:6px 12px;font-size:.8rem;color:rgba(255,255,255,.6);transition:all .2s}
+    .btn-acao:hover{background:rgba(255,255,255,.08);color:#fff}
+    .matriz-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px;margin-bottom:24px;overflow-x:auto}
+    .matriz-wrap h3{font-size:.9rem;font-weight:700;margin-bottom:16px;color:rgba(255,255,255,.7)}
+    .matriz{display:grid;grid-template-columns:100px repeat(5,1fr);gap:4px;font-size:.72rem;min-width:500px}
+    .matriz-header{background:rgba(255,255,255,.08);border-radius:6px;padding:8px 4px;text-align:center;font-weight:700;color:rgba(255,255,255,.6)}
+    .matriz-label{background:rgba(255,255,255,.05);border-radius:6px;padding:8px;text-align:center;font-weight:700;color:rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:.68rem}
+    .matriz-cell{border-radius:6px;padding:8px 4px;text-align:center;font-weight:700;font-size:.68rem;display:flex;align-items:center;justify-content:center}
+    .cell-baixo{background:rgba(74,222,128,.2);color:#4ade80}
+    .cell-medio{background:rgba(251,191,36,.2);color:#fbbf24}
+    .cell-alto{background:rgba(251,146,60,.2);color:#fb923c}
+    .cell-critico{background:rgba(248,113,113,.2);color:#f87171}
+    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3);grid-column:1/-1}
     .empty-state div{font-size:3rem;margin-bottom:12px}
-
-    /* MODAL */
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center;padding:20px}
     .modal-overlay.open{display:flex}
-    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto}
+    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:640px;max-height:92vh;overflow-y:auto}
     .modal h3{font-size:1.2rem;font-weight:700;margin-bottom:24px}
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
     .form-row.full{grid-template-columns:1fr}
     .form-group{display:flex;flex-direction:column;gap:6px}
     .form-group label{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.55)}
     .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;color:#fff;font-size:.9rem;outline:none;transition:border .2s;font-family:inherit}
-    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#f87171}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#fb923c}
     .form-group select option{background:#1a2535}
-    .form-group textarea{resize:vertical;min-height:80px}
+    .form-group textarea{resize:vertical;min-height:70px}
     .auto-field{background:rgba(0,212,255,.06)!important;border-color:rgba(0,212,255,.2)!important;color:rgba(255,255,255,.6)!important;cursor:not-allowed!important}
     .auto-tag{font-size:.68rem;color:#00d4ff;background:rgba(0,212,255,.1);border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:600}
+    .secao-titulo{font-size:.78rem;font-weight:800;color:#fb923c;text-transform:uppercase;letter-spacing:1px;margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid rgba(251,146,60,.15)}
+    .nivel-preview{padding:8px 16px;border-radius:8px;font-size:.85rem;font-weight:700;text-align:center;margin-top:8px;transition:all .3s;display:none}
     .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
     .btn-cancelar{padding:12px 24px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
-    .btn-salvar{padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#f87171,#dc2626);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
+    .btn-salvar{padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#fb923c,#ea580c);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
     .detalhe-row{display:flex;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
     .detalhe-row:last-child{border-bottom:none}
-    .detalhe-label{font-size:.78rem;color:rgba(255,255,255,.4);min-width:150px;font-weight:600}
+    .detalhe-label{font-size:.78rem;color:rgba(255,255,255,.4);min-width:160px;font-weight:600}
     .detalhe-valor{font-size:.88rem;color:#fff;flex:1}
   </style>
 </head>
 <body>
-
-<!-- SIDEBAR -->
-<div class="sidebar">
-  <div class="sidebar-logo">
-    <h1>Safe<span>NR</span></h1>
-    <p>Gestao de Seguranca do Trabalho</p>
-  </div>
-  <nav class="nav">
-    <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
-    <a class="nav-item" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
-    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
-    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
-    <a class="nav-item active" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
-    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
-    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
-    <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
-    <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
-    <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
-    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
-  </nav>
-  <div class="sidebar-user">
-    <div class="avatar" id="avatarLetra">A</div>
-    <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
-    <button class="btn-sair" onclick="sair()">✕</button>
-  </div>
-</div>
-
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
-    <div><h2>⚠️ Riscos</h2><span id="totalRegistros">0 registros</span></div>
+    <div><h2>⚠️ Gestao de Riscos</h2><span id="totalRegistros">0 registros</span></div>
     <button class="btn-novo" onclick="abrirModal()">+ Novo Risco</button>
   </div>
-
-  <!-- CARDS DE RESUMO -->
   <div class="resumo-grid">
-    <div class="resumo-card critico"   onclick="filtrarCard('critico')">
-      <div class="rc-valor" id="cnt-critico">0</div>
-      <div class="rc-label">Critico</div>
+    <div class="resumo-card" onclick="filtrar('critico',document.getElementById('fb-critico'))">
+      <div class="rc-valor" id="cnt-critico" style="color:#f87171">0</div>
+      <div class="rc-label">Criticos</div>
     </div>
-    <div class="resumo-card alto"      onclick="filtrarCard('alto')">
-      <div class="rc-valor" id="cnt-alto">0</div>
-      <div class="rc-label">Alto</div>
+    <div class="resumo-card" onclick="filtrar('alto',document.getElementById('fb-alto'))">
+      <div class="rc-valor" id="cnt-alto" style="color:#fb923c">0</div>
+      <div class="rc-label">Altos</div>
     </div>
-    <div class="resumo-card medio"     onclick="filtrarCard('medio')">
-      <div class="rc-valor" id="cnt-medio">0</div>
-      <div class="rc-label">Medio</div>
+    <div class="resumo-card" onclick="filtrar('medio',document.getElementById('fb-medio'))">
+      <div class="rc-valor" id="cnt-medio" style="color:#fbbf24">0</div>
+      <div class="rc-label">Medios</div>
     </div>
-    <div class="resumo-card baixo"     onclick="filtrarCard('baixo')">
-      <div class="rc-valor" id="cnt-baixo">0</div>
-      <div class="rc-label">Baixo</div>
-    </div>
-    <div class="resumo-card eliminado" onclick="filtrarCard('eliminado')">
-      <div class="rc-valor" id="cnt-eliminado">0</div>
-      <div class="rc-label">Eliminado</div>
+    <div class="resumo-card" onclick="filtrar('baixo',document.getElementById('fb-baixo'))">
+      <div class="rc-valor" id="cnt-baixo" style="color:#4ade80">0</div>
+      <div class="rc-label">Baixos</div>
     </div>
   </div>
-
-  <!-- FILTROS -->
+  <div class="matriz-wrap">
+    <h3>📊 Matriz de Risco — Probabilidade × Severidade</h3>
+    <div class="matriz">
+      <div class="matriz-header" style="background:transparent"></div>
+      <div class="matriz-header">Insignificante</div>
+      <div class="matriz-header">Leve</div>
+      <div class="matriz-header">Moderada</div>
+      <div class="matriz-header">Grave</div>
+      <div class="matriz-header">Catastrofica</div>
+      <div class="matriz-label">Muito Alta</div>
+      <div class="matriz-cell cell-medio">MEDIO</div><div class="matriz-cell cell-alto">ALTO</div><div class="matriz-cell cell-critico">CRITICO</div><div class="matriz-cell cell-critico">CRITICO</div><div class="matriz-cell cell-critico">CRITICO</div>
+      <div class="matriz-label">Alta</div>
+      <div class="matriz-cell cell-baixo">BAIXO</div><div class="matriz-cell cell-medio">MEDIO</div><div class="matriz-cell cell-alto">ALTO</div><div class="matriz-cell cell-critico">CRITICO</div><div class="matriz-cell cell-critico">CRITICO</div>
+      <div class="matriz-label">Media</div>
+      <div class="matriz-cell cell-baixo">BAIXO</div><div class="matriz-cell cell-medio">MEDIO</div><div class="matriz-cell cell-medio">MEDIO</div><div class="matriz-cell cell-alto">ALTO</div><div class="matriz-cell cell-critico">CRITICO</div>
+      <div class="matriz-label">Baixa</div>
+      <div class="matriz-cell cell-baixo">BAIXO</div><div class="matriz-cell cell-baixo">BAIXO</div><div class="matriz-cell cell-medio">MEDIO</div><div class="matriz-cell cell-medio">MEDIO</div><div class="matriz-cell cell-alto">ALTO</div>
+      <div class="matriz-label">Muito Baixa</div>
+      <div class="matriz-cell cell-baixo">BAIXO</div><div class="matriz-cell cell-baixo">BAIXO</div><div class="matriz-cell cell-baixo">BAIXO</div><div class="matriz-cell cell-medio">MEDIO</div><div class="matriz-cell cell-medio">MEDIO</div>
+    </div>
+  </div>
   <div class="filtros">
-    <button class="filtro-btn active" id="fb-todos"     onclick="filtrar('todos',this)">Todos</button>
-    <button class="filtro-btn"        id="fb-critico"   onclick="filtrar('critico',this)">🔴 Critico</button>
-    <button class="filtro-btn"        id="fb-alto"      onclick="filtrar('alto',this)">🟠 Alto</button>
-    <button class="filtro-btn"        id="fb-medio"     onclick="filtrar('medio',this)">🟡 Medio</button>
-    <button class="filtro-btn"        id="fb-baixo"     onclick="filtrar('baixo',this)">🟢 Baixo</button>
-    <button class="filtro-btn"        id="fb-eliminado" onclick="filtrar('eliminado',this)">⚪ Eliminado</button>
-    <input
-      class="busca-input"
-      type="text"
-      placeholder="🔎 Buscar risco..."
-      oninput="renderizar(getLista())"
-    />
+    <button class="filtro-btn active" id="fb-todos"   onclick="filtrar('',this)">Todos</button>
+    <button class="filtro-btn" id="fb-critico" onclick="filtrar('critico',this)">🔴 Critico</button>
+    <button class="filtro-btn" id="fb-alto"    onclick="filtrar('alto',this)">🟠 Alto</button>
+    <button class="filtro-btn" id="fb-medio"   onclick="filtrar('medio',this)">🟡 Medio</button>
+    <button class="filtro-btn" id="fb-baixo"   onclick="filtrar('baixo',this)">🟢 Baixo</button>
+    <input class="busca-input" type="text" placeholder="🔎 Buscar risco..." oninput="renderizar(getLista())"/>
   </div>
-
-  <!-- TABELA -->
-  <div class="tabela-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Descricao</th>
-          <th>Tipo</th>
-          <th>Setor</th>
-          <th>Nivel</th>
-          <th>Prazo</th>
-          <th>Responsavel</th>
-          <th>Registrado por</th>
-          <th>Acoes</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaBody"></tbody>
-    </table>
-    <div class="empty-state" id="emptyState" style="display:none">
-      <div>⚠️</div>
-      <p>Nenhum risco cadastrado.<br>Clique em <strong>+ Novo Risco</strong>.</p>
-    </div>
-  </div>
+  <div class="riscos-grid" id="riscosGrid"></div>
 </div>
 
 <!-- MODAL FORM -->
 <div class="modal-overlay" id="modalForm">
   <div class="modal">
-    <h3 id="modalTitulo">Novo Risco</h3>
+    <h3 id="modalTitulo">⚠️ Novo Risco</h3>
+    <div class="secao-titulo">Identificacao do Risco</div>
     <div class="form-row full">
       <div class="form-group">
-        <label>Descricao *</label>
-        <textarea id="f_desc" placeholder="Descreva o risco identificado..."></textarea>
+        <label>Descricao do Risco *</label>
+        <input type="text" id="f_desc" placeholder="Ex: Exposicao a ruido acima do limite — NR-15"/>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>Tipo *</label>
+        <label>Tipo de Agente *</label>
         <select id="f_tipo">
           <option value="">Selecione</option>
-          <option>Fisico</option>
-          <option>Quimico</option>
-          <option>Biologico</option>
-          <option>Ergonomico</option>
-          <option>Acidente</option>
-          <option>Psicossocial</option>
+          <option value="fisico">Fisico (ruido, calor, vibracao)</option>
+          <option value="quimico">Quimico (gases, poeiras, vapores)</option>
+          <option value="biologico">Biologico (bacterias, virus)</option>
+          <option value="ergonomico">Ergonomico (postura, repeticao)</option>
+          <option value="mecanico">Mecanico (maquinas, queda)</option>
+          <option value="eletrico">Eletrico</option>
+          <option value="outro">Outro</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Nivel *</label>
-        <select id="f_nivel">
-          <option value="">Selecione</option>
-          <option value="critico">Critico</option>
-          <option value="alto">Alto</option>
-          <option value="medio">Medio</option>
-          <option value="baixo">Baixo</option>
-          <option value="eliminado">Eliminado</option>
-        </select>
+        <label>Setor / Local *</label>
+        <input type="text" id="f_setor" placeholder="Ex: Producao, Almoxarifado"/>
       </div>
     </div>
+    <div class="secao-titulo">Avaliacao — Probabilidade × Severidade</div>
     <div class="form-row">
       <div class="form-group">
-        <label>Setor *</label>
-        <input type="text" id="f_setor" placeholder="Ex: Producao"/>
+        <label>Probabilidade *</label>
+        <select id="f_prob" onchange="calcNivel()">
+          <option value="">Selecione</option>
+          <option value="5">Muito Alta</option>
+          <option value="4">Alta</option>
+          <option value="3">Media</option>
+          <option value="2">Baixa</option>
+          <option value="1">Muito Baixa</option>
+        </select>
       </div>
       <div class="form-group">
-        <label>Data Identificacao</label>
-        <input type="date" id="f_data"/>
+        <label>Severidade *</label>
+        <select id="f_sev" onchange="calcNivel()">
+          <option value="">Selecione</option>
+          <option value="1">Insignificante</option>
+          <option value="2">Leve</option>
+          <option value="3">Moderada</option>
+          <option value="4">Grave</option>
+          <option value="5">Catastrofica</option>
+        </select>
       </div>
     </div>
+    <div class="nivel-preview" id="nivelPreview"></div>
+    <div class="secao-titulo">Controle e Responsavel</div>
     <div class="form-row full">
       <div class="form-group">
         <label>Medida de Controle</label>
-        <textarea id="f_medida" placeholder="Descreva as medidas para controlar o risco..."></textarea>
+        <textarea id="f_medida" placeholder="EPC, EPI, procedimento administrativo..."></textarea>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>Responsavel</label>
+        <label>Responsavel pelo Controle</label>
         <input type="text" id="f_resp" placeholder="Nome do responsavel"/>
       </div>
       <div class="form-group">
-        <label>Prazo</label>
-        <input type="date" id="f_prazo"/>
+        <label>NR Relacionada</label>
+        <input type="text" id="f_nr" placeholder="Ex: NR-15, NR-9"/>
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Observacoes</label>
+        <textarea id="f_obs" placeholder="Observacoes adicionais..."></textarea>
       </div>
     </div>
     <div class="form-row">
@@ -272,7 +236,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
-      <button class="btn-salvar"   onclick="salvar()">Salvar</button>
+      <button class="btn-salvar" onclick="salvar()">💾 Salvar</button>
     </div>
   </div>
 </div>
@@ -280,7 +244,7 @@
 <!-- MODAL VER -->
 <div class="modal-overlay" id="modalVer">
   <div class="modal">
-    <h3>Detalhes do Risco</h3>
+    <h3>⚠️ Detalhes do Risco</h3>
     <div id="modalVerConteudo"></div>
     <div class="modal-footer">
       <button class="btn-cancelar" onclick="fecharVer()">Fechar</button>
@@ -288,216 +252,136 @@
   </div>
 </div>
 
+<script src="./sidebar.js"></script>
 <script>
-/* ── AUTH ── */
-var userData = localStorage.getItem('safenr_user');
-if (!userData) { window.location.href = './index.html'; }
-var user = JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
-document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
-function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
-
-/* ── DADOS ── */
-var registros   = JSON.parse(localStorage.getItem('safenr_riscos') || '[]');
-var editandoId  = null;
-var filtroAtivo = 'todos';
-
-function salvarStorage() { localStorage.setItem('safenr_riscos', JSON.stringify(registros)); }
-
-function fmt(d) {
-  if (!d) return '--';
-  var p = d.split('-');
-  return p[2] + '/' + p[1] + '/' + p[0];
+var userData2 = localStorage.getItem('safenr_user');
+var user2 = userData2 ? JSON.parse(userData2) : {};
+var registros = JSON.parse(localStorage.getItem('safenr_riscos') || '[]');
+var editandoId = null;
+var filtroAtivo = '';
+function salvarStorage(){ localStorage.setItem('safenr_riscos', JSON.stringify(registros)); }
+function fmtDT(iso){ if(!iso) return '--'; return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+var MATRIZ=[[0,0,0,0,0],['baixo','baixo','baixo','medio','medio'],['baixo','baixo','medio','medio','alto'],['baixo','medio','medio','alto','critico'],['baixo','medio','alto','critico','critico'],['medio','alto','critico','critico','critico']];
+function calcNivel(){
+  var p=parseInt(document.getElementById('f_prob').value)||0;
+  var s=parseInt(document.getElementById('f_sev').value)||0;
+  var prev=document.getElementById('nivelPreview');
+  if(!p||!s){prev.style.display='none';return;}
+  var nivel=MATRIZ[p][s];
+  var cores={baixo:'#4ade80',medio:'#fbbf24',alto:'#fb923c',critico:'#f87171'};
+  var bgs={baixo:'rgba(74,222,128,.15)',medio:'rgba(251,191,36,.15)',alto:'rgba(251,146,60,.15)',critico:'rgba(248,113,113,.15)'};
+  prev.style.display='block';prev.style.color=cores[nivel];prev.style.background=bgs[nivel];prev.style.border='1px solid '+cores[nivel];
+  prev.textContent='⚠️ Nivel calculado: '+nivel.toUpperCase();
+  return nivel;
 }
-
-function fmtDT(iso) {
-  if (!iso) return '--';
-  return new Date(iso).toLocaleString('pt-BR', {
-    day:'2-digit', month:'2-digit', year:'numeric',
-    hour:'2-digit', minute:'2-digit'
-  });
-}
-
-var nivelLabel = {
-  critico:   'Critico',
-  alto:      'Alto',
-  medio:     'Medio',
-  baixo:     'Baixo',
-  eliminado: 'Eliminado'
-};
-
-/* ── FILTROS ── */
-function getLista() {
-  var busca = document.querySelector('.busca-input').value.toLowerCase();
-  return registros.filter(function(r) {
-    if (filtroAtivo !== 'todos' && r.nivel !== filtroAtivo) return false;
-    if (busca &&
-        !(r.descricao  || '').toLowerCase().includes(busca) &&
-        !(r.setor      || '').toLowerCase().includes(busca) &&
-        !(r.tipo       || '').toLowerCase().includes(busca) &&
-        !(r.responsavel|| '').toLowerCase().includes(busca)) return false;
+function getLista(){
+  var busca=document.querySelector('.busca-input').value.toLowerCase();
+  return registros.filter(function(r){
+    if(filtroAtivo&&r.nivel!==filtroAtivo) return false;
+    if(busca&&!(r.descricao||'').toLowerCase().includes(busca)&&!(r.setor||'').toLowerCase().includes(busca)&&!(r.tipo||'').toLowerCase().includes(busca)) return false;
     return true;
   });
 }
-
-function filtrar(s, btn) {
-  filtroAtivo = s;
-  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
-  btn.classList.add('active');
+function filtrar(s,btn){
+  filtroAtivo=s;
+  document.querySelectorAll('.filtro-btn').forEach(function(b){b.classList.remove('active');});
+  if(btn) btn.classList.add('active');
   renderizar(getLista());
 }
-
-function filtrarCard(nivel) {
-  filtroAtivo = nivel;
-  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
-  var btn = document.getElementById('fb-' + nivel);
-  if (btn) btn.classList.add('active');
-  renderizar(getLista());
-}
-
-/* ── COUNTERS ── */
-function atualizarContadores() {
-  ['critico','alto','medio','baixo','eliminado'].forEach(function(n) {
-    var cnt = registros.filter(function(r) { return r.nivel === n; }).length;
-    document.getElementById('cnt-' + n).textContent = cnt;
+function atualizarContadores(){
+  ['critico','alto','medio','baixo'].forEach(function(n){
+    document.getElementById('cnt-'+n).textContent=registros.filter(function(r){return r.nivel===n;}).length;
   });
+  document.getElementById('totalRegistros').textContent=registros.length+' registro(s)';
 }
-
-/* ── RENDERIZAR ── */
-function renderizar(lista) {
-  var tbody = document.getElementById('tabelaBody');
-  var empty = document.getElementById('emptyState');
-  tbody.innerHTML = '';
-  document.getElementById('totalRegistros').textContent = registros.length + ' registro(s)';
+function renderizar(lista){
+  var grid=document.getElementById('riscosGrid');
+  grid.innerHTML='';
   atualizarContadores();
-  if (lista.length === 0) { empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  lista.forEach(function(r) {
-    var nv  = r.nivel || 'baixo';
-    var lbl = nivelLabel[nv] || nv;
-    var tr  = document.createElement('tr');
-    tr.innerHTML =
-      '<td style="color:rgba(255,255,255,.3);font-size:.8rem">#' + String(r.id).padStart(3,'0') + '</td>' +
-      '<td style="max-width:200px"><strong style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + (r.descricao || '--') + '</strong></td>' +
-      '<td>' + (r.tipo || '--') + '</td>' +
-      '<td>' + (r.setor || '--') + '</td>' +
-      '<td><span class="badge ' + nv + '">' + lbl + '</span></td>' +
-      '<td>' + fmt(r.prazo) + '</td>' +
-      '<td>' + (r.responsavel || '--') + '</td>' +
-      '<td style="font-size:.82rem">👤 ' + (r.registradoPor || '--') + '</td>' +
-      '<td>' +
-        '<button class="btn-acao" onclick="ver('    + r.id + ')" title="Visualizar">👁️</button>' +
-        '<button class="btn-acao" onclick="editar(' + r.id + ')" title="Editar">✏️</button>' +
-        '<button class="btn-acao" onclick="excluir('+ r.id + ')" title="Excluir">🗑️</button>' +
-      '</td>';
-    tbody.appendChild(tr);
+  if(lista.length===0){grid.innerHTML='<div class="empty-state"><div>⚠️</div><p>Nenhum risco cadastrado.<br>Clique em <strong>+ Novo Risco</strong>.</p></div>';return;}
+  var ordem=['critico','alto','medio','baixo'];
+  lista.sort(function(a,b){return ordem.indexOf(a.nivel)-ordem.indexOf(b.nivel);});
+  lista.forEach(function(r){
+    var div=document.createElement('div');
+    div.className='risco-card '+(r.nivel||'medio');
+    div.innerHTML=
+      '<div class="risco-card-top">'+
+        '<span class="badge '+(r.nivel||'medio')+'">'+(r.nivel||'medio').toUpperCase()+'</span>'+
+        '<span class="badge '+(r.tipo||'outro')+'">'+(r.tipo||'outro')+'</span>'+
+      '</div>'+
+      '<div class="risco-desc">'+(r.descricao||'--')+'</div>'+
+      '<div class="risco-info">'+
+        '<div class="risco-info-row">🏭 '+(r.setor||'--')+'</div>'+
+        '<div class="risco-info-row">📊 Prob: '+(r.prob||'--')+' × Sev: '+(r.sev||'--')+'</div>'+
+        (r.nr?'<div class="risco-info-row">📚 '+r.nr+'</div>':'')+
+        (r.responsavel?'<div class="risco-info-row">👤 '+r.responsavel+'</div>':'')+
+      '</div>'+
+      '<div class="medida-box '+(r.medida?'':'sem')+'">'+
+        (r.medida?'🛡️ '+r.medida:'⚠️ Sem medida de controle definida')+
+      '</div>'+
+      '<div class="risco-acoes">'+
+        '<button class="btn-acao" onclick="ver('+r.id+')">👁️ Ver</button>'+
+        '<button class="btn-acao" onclick="abrirModal('+r.id+')">✏️ Editar</button>'+
+        '<button class="btn-acao" onclick="excluir('+r.id+')" style="color:rgba(248,113,113,.7)">🗑️</button>'+
+      '</div>';
+    grid.appendChild(div);
   });
 }
-
-/* ── MODAL FORM ── */
-function abrirModal(id) {
-  editandoId = id || null;
-  document.getElementById('modalTitulo').textContent = id ? 'Editar Risco' : 'Novo Risco';
-  ['f_desc','f_tipo','f_nivel','f_setor','f_data','f_medida','f_resp','f_prazo'].forEach(function(f) {
-    document.getElementById(f).value = '';
-  });
-  document.getElementById('f_regPor').value = user.nome || 'Usuario';
-  document.getElementById('f_regEm').value  = new Date().toLocaleString('pt-BR', {
-    day:'2-digit', month:'2-digit', year:'numeric',
-    hour:'2-digit', minute:'2-digit', second:'2-digit'
-  });
-  if (id) {
-    var r = registros.find(function(x) { return x.id === id; });
-    document.getElementById('f_desc').value   = r.descricao   || '';
-    document.getElementById('f_tipo').value   = r.tipo        || '';
-    document.getElementById('f_nivel').value  = r.nivel       || '';
-    document.getElementById('f_setor').value  = r.setor       || '';
-    document.getElementById('f_data').value   = r.data        || '';
-    document.getElementById('f_medida').value = r.medida      || '';
-    document.getElementById('f_resp').value   = r.responsavel || '';
-    document.getElementById('f_prazo').value  = r.prazo       || '';
-    document.getElementById('f_regPor').value = r.registradoPor || user.nome;
-    document.getElementById('f_regEm').value  = fmtDT(r.registradoEm);
+function abrirModal(id){
+  editandoId=id||null;
+  document.getElementById('modalTitulo').textContent=(id?'✏️ Editar':'⚠️ Novo')+' Risco';
+  ['f_desc','f_setor','f_medida','f_resp','f_nr','f_obs'].forEach(function(f){document.getElementById(f).value='';});
+  document.getElementById('f_tipo').value='';document.getElementById('f_prob').value='';document.getElementById('f_sev').value='';
+  document.getElementById('nivelPreview').style.display='none';
+  document.getElementById('f_regPor').value=user2.nome||'Usuario';
+  document.getElementById('f_regEm').value=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  if(id){
+    var r=registros.find(function(x){return x.id===id;});
+    document.getElementById('f_desc').value=r.descricao||'';document.getElementById('f_tipo').value=r.tipo||'';
+    document.getElementById('f_setor').value=r.setor||'';document.getElementById('f_prob').value=r.prob||'';
+    document.getElementById('f_sev').value=r.sev||'';document.getElementById('f_medida').value=r.medida||'';
+    document.getElementById('f_resp').value=r.responsavel||'';document.getElementById('f_nr').value=r.nr||'';
+    document.getElementById('f_obs').value=r.obs||'';
+    document.getElementById('f_regPor').value=r.registradoPor||user2.nome;
+    document.getElementById('f_regEm').value=fmtDT(r.registradoEm);
+    calcNivel();
   }
   document.getElementById('modalForm').classList.add('open');
 }
-
-function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId = null; }
-
-function salvar() {
-  var desc  = document.getElementById('f_desc').value.trim();
-  var tipo  = document.getElementById('f_tipo').value;
-  var nivel = document.getElementById('f_nivel').value;
-  var setor = document.getElementById('f_setor').value.trim();
-  if (!desc || !tipo || !nivel || !setor) { alert('Preencha os campos obrigatorios.'); return; }
-  var dados = {
-    descricao:   desc,
-    tipo:        tipo,
-    nivel:       nivel,
-    setor:       setor,
-    data:        document.getElementById('f_data').value,
-    medida:      document.getElementById('f_medida').value.trim(),
-    responsavel: document.getElementById('f_resp').value.trim(),
-    prazo:       document.getElementById('f_prazo').value
-  };
-  if (editandoId) {
-    var idx = registros.findIndex(function(r) { return r.id === editandoId; });
-    registros[idx] = Object.assign({}, registros[idx], dados);
-  } else {
-    var nId = registros.length > 0
-      ? Math.max.apply(null, registros.map(function(r) { return r.id; })) + 1
-      : 1;
-    registros.push(Object.assign({
-      id:            nId,
-      registradoPor: user.nome || 'Usuario',
-      registradoEm:  new Date().toISOString()
-    }, dados));
-  }
-  salvarStorage();
-  fecharModal();
-  renderizar(getLista());
+function fecharModal(){document.getElementById('modalForm').classList.remove('open');editandoId=null;}
+function salvar(){
+  var desc=document.getElementById('f_desc').value.trim();
+  var tipo=document.getElementById('f_tipo').value;
+  var setor=document.getElementById('f_setor').value.trim();
+  var prob=document.getElementById('f_prob').value;
+  var sev=document.getElementById('f_sev').value;
+  if(!desc||!tipo||!setor||!prob||!sev){alert('Preencha: Descricao, Tipo, Setor, Probabilidade e Severidade.');return;}
+  var nivel=MATRIZ[parseInt(prob)][parseInt(sev)];
+  var dados={descricao:desc,tipo:tipo,setor:setor,prob:prob,sev:sev,nivel:nivel,medida:document.getElementById('f_medida').value.trim(),responsavel:document.getElementById('f_resp').value.trim(),nr:document.getElementById('f_nr').value.trim(),obs:document.getElementById('f_obs').value.trim()};
+  if(editandoId){var idx=registros.findIndex(function(r){return r.id===editandoId;});registros[idx]=Object.assign({},registros[idx],dados);}
+  else{var nId=registros.length>0?Math.max.apply(null,registros.map(function(r){return r.id;}))+1:1;registros.push(Object.assign({id:nId,registradoPor:user2.nome||'Usuario',registradoEm:new Date().toISOString()},dados));}
+  salvarStorage();fecharModal();renderizar(getLista());
 }
-
-function editar(id)  { abrirModal(id); }
-
-function excluir(id) {
-  if (!confirm('Excluir este risco?')) return;
-  registros = registros.filter(function(r) { return r.id !== id; });
-  salvarStorage();
-  renderizar(getLista());
-}
-
-/* ── MODAL VER ── */
-function ver(id) {
-  var r   = registros.find(function(x) { return x.id === id; });
-  var nv  = r.nivel || 'baixo';
-  var lbl = nivelLabel[nv] || nv;
-  function row(l, v) {
-    return '<div class="detalhe-row">' +
-      '<span class="detalhe-label">' + l + '</span>' +
-      '<span class="detalhe-valor">' + v + '</span>' +
-      '</div>';
-  }
-  document.getElementById('modalVerConteudo').innerHTML =
-    row('Descricao',         r.descricao   || '--') +
-    row('Tipo',              r.tipo        || '--') +
-    row('Nivel',             '<span class="badge ' + nv + '">' + lbl + '</span>') +
-    row('Setor',             r.setor       || '--') +
-    row('Data Identificacao',fmt(r.data)) +
-    row('Medida de Controle',r.medida      || '--') +
-    row('Responsavel',       r.responsavel || '--') +
-    row('Prazo',             fmt(r.prazo)) +
-    row('Registrado por',    '<span style="color:#00d4ff">' + (r.registradoPor || '--') + '</span>') +
-    row('Registrado em',     '<span style="color:#00d4ff">' + fmtDT(r.registradoEm) + '</span>');
+function excluir(id){if(!confirm('Excluir este risco?'))return;registros=registros.filter(function(r){return r.id!==id;});salvarStorage();renderizar(getLista());}
+function ver(id){
+  var r=registros.find(function(x){return x.id===id;});
+  function row(l,v){return '<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>';}
+  var cores={baixo:'#4ade80',medio:'#fbbf24',alto:'#fb923c',critico:'#f87171'};
+  var probLbl={5:'Muito Alta',4:'Alta',3:'Media',2:'Baixa',1:'Muito Baixa'};
+  var sevLbl={5:'Catastrofica',4:'Grave',3:'Moderada',2:'Leve',1:'Insignificante'};
+  document.getElementById('modalVerConteudo').innerHTML=
+    row('Descricao',r.descricao||'--')+row('Tipo','<span class="badge '+(r.tipo||'outro')+'">'+(r.tipo||'--')+'</span>')+
+    row('Setor',r.setor||'--')+row('Probabilidade',probLbl[r.prob]||r.prob||'--')+row('Severidade',sevLbl[r.sev]||r.sev||'--')+
+    row('Nivel','<span class="badge '+(r.nivel||'')+'">'+(r.nivel||'--').toUpperCase()+'</span>')+
+    row('Medida de Controle',r.medida||'<span style="color:#f87171">Nao definida</span>')+
+    row('Responsavel',r.responsavel||'--')+row('NR Relacionada',r.nr||'--')+row('Observacoes',r.obs||'--')+
+    row('Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+
+    row('Registrado em','<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
   document.getElementById('modalVer').classList.add('open');
 }
-
-function fecharVer() { document.getElementById('modalVer').classList.remove('open'); }
-
-document.getElementById('modalForm').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
-document.getElementById('modalVer').addEventListener('click',  function(e) { if (e.target === this) fecharVer(); });
-
-/* ── INIT ── */
+function fecharVer(){document.getElementById('modalVer').classList.remove('open');}
+document.getElementById('modalForm').addEventListener('click',function(e){if(e.target===this)fecharModal();});
+document.getElementById('modalVer').addEventListener('click',function(e){if(e.target===this)fecharVer();});
 renderizar(getLista());
 </script>
 </body>
