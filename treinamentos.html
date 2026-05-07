@@ -7,92 +7,43 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
-    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;z-index:10}
-    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
-    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
-    .sidebar-logo h1 span{color:#00d4ff}
-    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
-    .nav{flex:1;padding:20px 0;overflow-y:auto}
-    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
-    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
-    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
-    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
-    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
-    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
-    .user-info p{font-size:.82rem;font-weight:600}
-    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
-    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
-
-    /* MAIN */
     .main{margin-left:240px;flex:1;padding:32px}
     .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
     .topbar h2{font-size:1.4rem;font-weight:700}
     .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
-    .btn-novo{background:linear-gradient(135deg,#a78bfa,#7c3aed);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
+    .btn-novo{background:linear-gradient(135deg,#818cf8,#6366f1);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
     .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
-
-    /* RESUMO */
-    .resumo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px}
+    .resumo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
     .resumo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s}
     .resumo-card:hover{background:rgba(255,255,255,.06)}
-    .resumo-card .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
-    .resumo-card .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-    .rc-total    {color:#a78bfa}
-    .rc-agendado {color:#60a5fa}
-    .rc-concluido{color:#4ade80}
-    .rc-vencido  {color:#f87171}
-    .rc-breve    {color:#fbbf24}
-
-    /* FILTROS */
+    .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
+    .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
     .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
     .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
-    .filtro-btn:hover,.filtro-btn.active{background:rgba(167,139,250,.12);border-color:#a78bfa;color:#a78bfa}
-    .filtro-select{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:8px 14px;color:#fff;font-size:.82rem;outline:none;cursor:pointer}
-    .filtro-select option{background:#1a2535}
+    .filtro-btn:hover,.filtro-btn.active{background:rgba(129,140,248,.12);border-color:#818cf8;color:#818cf8}
     .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:240px;margin-left:auto}
     .busca-input::placeholder{color:rgba(255,255,255,.3)}
-    .busca-input:focus{border-color:#a78bfa}
-
-    /* CARDS */
-    .cards-lista{display:flex;flex-direction:column;gap:14px}
-    .trein-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:22px 24px;border-left:4px solid #a78bfa;transition:all .2s}
-    .trein-card:hover{background:rgba(255,255,255,.05)}
-    .trein-card.vencido   {border-left-color:#f87171}
-    .trein-card.vence-breve{border-left-color:#fbbf24}
-    .trein-card.concluido {border-left-color:#4ade80}
-    .trein-card.cancelado {border-left-color:rgba(255,255,255,.2)}
-
-    .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
-    .card-top h3{font-size:1rem;font-weight:700;color:#fff}
-    .card-badges{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
-
-    .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700}
-    .badge.agendado    {background:rgba(96,165,250,.15);color:#60a5fa}
+    .busca-input:focus{border-color:#818cf8}
+    .tabela-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
+    table{width:100%;border-collapse:collapse}
+    thead tr{background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.08)}
+    th{padding:14px 18px;text-align:left;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px}
+    td{padding:14px 18px;font-size:.87rem;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:rgba(255,255,255,.02)}
+    .badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
+    .badge.concluido{background:rgba(74,222,128,.15);color:#4ade80}
+    .badge.agendado{background:rgba(96,165,250,.15);color:#60a5fa}
     .badge.em-andamento{background:rgba(251,191,36,.15);color:#fbbf24}
-    .badge.concluido   {background:rgba(74,222,128,.15);color:#4ade80}
-    .badge.cancelado   {background:rgba(255,255,255,.08);color:rgba(255,255,255,.4)}
-    .badge.presencial  {background:rgba(167,139,250,.15);color:#a78bfa}
-    .badge.online      {background:rgba(0,212,255,.15);color:#00d4ff}
-    .badge.hibrido     {background:rgba(251,146,60,.15);color:#fb923c}
-    .badge.vencido-tag {background:rgba(248,113,113,.2);color:#f87171}
-    .badge.breve-tag   {background:rgba(251,191,36,.2);color:#fbbf24}
-
-    .card-info{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 16px;margin-bottom:14px}
-    .card-info-item{font-size:.82rem;color:rgba(255,255,255,.5)}
-    .card-info-item strong{color:#fff;display:block;font-size:.85rem}
-    .card-desc{font-size:.83rem;color:rgba(255,255,255,.4);margin-bottom:12px;line-height:1.5}
-    .card-actions{display:flex;gap:8px;justify-content:flex-end}
-    .btn-acao{background:none;border:none;cursor:pointer;padding:7px 12px;border-radius:8px;font-size:.83rem;font-weight:600;transition:all .2s}
+    .badge.cancelado{background:rgba(255,255,255,.1);color:rgba(255,255,255,.4)}
+    .badge.vencido{background:rgba(248,113,113,.15);color:#f87171}
+    .badge.a-vencer{background:rgba(251,191,36,.15);color:#fbbf24}
+    .badge.valido{background:rgba(74,222,128,.15);color:#4ade80}
+    .btn-acao{background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:8px;font-size:.85rem;transition:background .2s}
     .btn-acao:hover{background:rgba(255,255,255,.08)}
-    .btn-editar{color:#a78bfa;border:1px solid rgba(167,139,250,.25)!important}
-    .btn-excluir{color:#f87171;border:1px solid rgba(248,113,113,.2)!important}
-
-    /* EMPTY */
-    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3);display:none}
+    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3)}
     .empty-state div{font-size:3rem;margin-bottom:12px}
-
-    /* MODAL */
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center;padding:20px}
     .modal-overlay.open{display:flex}
     .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:640px;max-height:92vh;overflow-y:auto}
     .modal h3{font-size:1.2rem;font-weight:700;margin-bottom:24px}
@@ -101,16 +52,18 @@
     .form-group{display:flex;flex-direction:column;gap:6px}
     .form-group label{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.55)}
     .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;color:#fff;font-size:.9rem;outline:none;transition:border .2s;font-family:inherit}
-    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#a78bfa}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#818cf8}
     .form-group select option{background:#1a2535}
-    .form-group textarea{resize:vertical;min-height:75px}
+    .form-group textarea{resize:vertical;min-height:70px}
     .auto-field{background:rgba(0,212,255,.06)!important;border-color:rgba(0,212,255,.2)!important;color:rgba(255,255,255,.6)!important;cursor:not-allowed!important}
     .auto-tag{font-size:.68rem;color:#00d4ff;background:rgba(0,212,255,.1);border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:600}
+    .secao-titulo{font-size:.78rem;font-weight:800;color:#818cf8;text-transform:uppercase;letter-spacing:1px;margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid rgba(129,140,248,.15)}
+    .participantes-wrap{max-height:180px;overflow-y:auto;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px}
+    .participante-item{display:flex;align-items:center;gap:8px;padding:6px 8px;background:rgba(255,255,255,.04);border-radius:8px;font-size:.82rem}
+    .participante-item input[type=checkbox]{accent-color:#818cf8;width:16px;height:16px;cursor:pointer;flex-shrink:0}
     .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
     .btn-cancelar{padding:12px 24px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
-    .btn-salvar{padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#a78bfa,#7c3aed);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
-
-    /* DETALHE MODAL */
+    .btn-salvar{padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#818cf8,#6366f1);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
     .detalhe-row{display:flex;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
     .detalhe-row:last-child{border-bottom:none}
     .detalhe-label{font-size:.78rem;color:rgba(255,255,255,.4);min-width:160px;font-weight:600}
@@ -118,133 +71,84 @@
   </style>
 </head>
 <body>
-
-<!-- SIDEBAR -->
-<div class="sidebar">
-  <div class="sidebar-logo">
-    <h1>Safe<span>NR</span></h1>
-    <p>Gestao de Seguranca do Trabalho</p>
-  </div>
-  <nav class="nav">
-    <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
-    <a class="nav-item active" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
-    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
-    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
-    <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
-    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
-    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
-    <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
-    <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
-    <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
-    <a class="nav-item" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
-  </nav>
-  <div class="sidebar-user">
-    <div class="avatar" id="avatarLetra">A</div>
-    <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
-    <button class="btn-sair" onclick="sair()">✕</button>
-  </div>
-</div>
-
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div><h2>🎓 Treinamentos</h2><span id="totalRegistros">0 registros</span></div>
     <button class="btn-novo" onclick="abrirModal()">+ Novo Treinamento</button>
   </div>
-
-  <!-- RESUMO -->
   <div class="resumo-grid">
-    <div class="resumo-card" onclick="filtrarStatus('')">
-      <div class="rc-valor rc-total"     id="cnt-total">0</div>
-      <div class="rc-label">Total</div>
-    </div>
-    <div class="resumo-card" onclick="filtrarStatus('agendado')">
-      <div class="rc-valor rc-agendado"  id="cnt-agendado">0</div>
-      <div class="rc-label">Agendados</div>
-    </div>
-    <div class="resumo-card" onclick="filtrarStatus('concluido')">
-      <div class="rc-valor rc-concluido" id="cnt-concluido">0</div>
+    <div class="resumo-card" onclick="filtrar('concluido',document.getElementById('fb-conc'))">
+      <div class="rc-valor" id="cnt-concluido" style="color:#4ade80">0</div>
       <div class="rc-label">Concluidos</div>
     </div>
-    <div class="resumo-card">
-      <div class="rc-valor rc-vencido"   id="cnt-vencido">0</div>
-      <div class="rc-label">Vencidos</div>
+    <div class="resumo-card" onclick="filtrar('agendado',document.getElementById('fb-agend'))">
+      <div class="rc-valor" id="cnt-agendado" style="color:#60a5fa">0</div>
+      <div class="rc-label">Agendados</div>
     </div>
     <div class="resumo-card">
-      <div class="rc-valor rc-breve"     id="cnt-breve">0</div>
+      <div class="rc-valor" id="cnt-vencido" style="color:#f87171">0</div>
+      <div class="rc-label">Cert. Vencidos</div>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-valor" id="cnt-avencer" style="color:#fbbf24">0</div>
       <div class="rc-label">Vencem em 30d</div>
     </div>
   </div>
-
-  <!-- FILTROS -->
   <div class="filtros">
-    <button class="filtro-btn active" id="fb-todos"       onclick="filtrarBtn('',this)">Todos</button>
-    <button class="filtro-btn"        id="fb-agendado"    onclick="filtrarBtn('agendado',this)">📅 Agendado</button>
-    <button class="filtro-btn"        id="fb-em-andamento"onclick="filtrarBtn('em-andamento',this)">🔄 Em Andamento</button>
-    <button class="filtro-btn"        id="fb-concluido"   onclick="filtrarBtn('concluido',this)">✅ Concluido</button>
-    <button class="filtro-btn"        id="fb-cancelado"   onclick="filtrarBtn('cancelado',this)">❌ Cancelado</button>
-    <select class="filtro-select" id="filtroModalidade" onchange="renderizar(getLista())">
-      <option value="">Todas modalidades</option>
-      <option value="presencial">Presencial</option>
-      <option value="online">Online</option>
-      <option value="hibrido">Hibrido</option>
-    </select>
-    <input
-      class="busca-input"
-      type="text"
-      placeholder="🔎 Buscar treinamento..."
-      oninput="renderizar(getLista())"
-    />
+    <button class="filtro-btn active" id="fb-todos"  onclick="filtrar('',this)">Todos</button>
+    <button class="filtro-btn" id="fb-conc"  onclick="filtrar('concluido',this)">✅ Concluidos</button>
+    <button class="filtro-btn" id="fb-agend" onclick="filtrar('agendado',this)">📅 Agendados</button>
+    <button class="filtro-btn" id="fb-and"   onclick="filtrar('em-andamento',this)">▶️ Em Andamento</button>
+    <button class="filtro-btn" id="fb-canc"  onclick="filtrar('cancelado',this)">❌ Cancelados</button>
+    <input class="busca-input" type="text" placeholder="🔎 Buscar treinamento..." oninput="renderizar(getLista())"/>
   </div>
-
-  <!-- LISTA DE CARDS -->
-  <div class="cards-lista" id="cardLista"></div>
-  <div class="empty-state" id="emptyState">
-    <div>🎓</div>
-    <p>Nenhum treinamento cadastrado.<br>Clique em <strong>+ Novo Treinamento</strong>.</p>
+  <div class="tabela-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Treinamento</th><th>NR</th><th>Instrutor</th><th>Carga</th>
+          <th>Status</th><th>Realizado</th><th>Cert. Validade</th><th>Cert. Status</th>
+          <th>Participantes</th><th>Registrado por</th><th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaBody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div>🎓</div>
+      <p>Nenhum treinamento cadastrado.<br>Clique em <strong>+ Novo Treinamento</strong>.</p>
+    </div>
   </div>
 </div>
 
 <!-- MODAL FORM -->
 <div class="modal-overlay" id="modalForm">
   <div class="modal">
-    <h3 id="modalTitulo">Novo Treinamento</h3>
+    <h3 id="modalTitulo">🎓 Novo Treinamento</h3>
+    <div class="secao-titulo">Identificacao</div>
     <div class="form-row full">
       <div class="form-group">
         <label>Nome do Treinamento *</label>
-        <input type="text" id="f_nome" placeholder="Ex: NR-35 Trabalho em Altura"/>
+        <input type="text" id="f_nome" placeholder="Ex: NR-35 — Trabalho em Altura"/>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>Instrutor *</label>
-        <input type="text" id="f_instrutor" placeholder="Nome do instrutor"/>
+        <label>NR Relacionada</label>
+        <input type="text" id="f_nr" placeholder="Ex: NR-35"/>
       </div>
       <div class="form-group">
-        <label>Carga Horaria (h) *</label>
-        <input type="number" id="f_carga" min="1" placeholder="Ex: 8"/>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Data de Realizacao *</label>
-        <input type="date" id="f_dataReal"/>
-      </div>
-      <div class="form-group">
-        <label>Data de Validade *</label>
-        <input type="date" id="f_dataVal"/>
+        <label>Carga Horaria (h)</label>
+        <input type="number" id="f_carga" placeholder="Ex: 8" min="1"/>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>Modalidade *</label>
+        <label>Modalidade</label>
         <select id="f_modalidade">
-          <option value="">Selecione</option>
           <option value="presencial">Presencial</option>
-          <option value="online">Online</option>
+          <option value="ead">EAD / Online</option>
           <option value="hibrido">Hibrido</option>
+          <option value="pratico">Pratico / Campo</option>
         </select>
       </div>
       <div class="form-group">
@@ -257,25 +161,40 @@
         </select>
       </div>
     </div>
+    <div class="secao-titulo">Datas e Instrutor</div>
     <div class="form-row">
       <div class="form-group">
-        <label>Local</label>
-        <input type="text" id="f_local" placeholder="Ex: Sala de reunioes"/>
+        <label>Data de Realizacao *</label>
+        <input type="date" id="f_dataReal"/>
       </div>
       <div class="form-group">
-        <label>NR Relacionada</label>
-        <input type="text" id="f_nr" placeholder="Ex: NR-35"/>
+        <label>Validade do Certificado</label>
+        <input type="date" id="f_dataVal"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Instrutor / Empresa</label>
+        <input type="text" id="f_instrutor" placeholder="Nome do instrutor ou empresa"/>
+      </div>
+      <div class="form-group">
+        <label>Local de Realizacao</label>
+        <input type="text" id="f_local" placeholder="Ex: Sala de treinamento"/>
       </div>
     </div>
     <div class="form-row full">
       <div class="form-group">
-        <label>Descricao</label>
-        <textarea id="f_desc" placeholder="Descreva o conteudo do treinamento..."></textarea>
+        <label>Numero do Certificado</label>
+        <input type="text" id="f_cert" placeholder="Ex: CERT-2025-001"/>
       </div>
     </div>
+    <div class="secao-titulo">Participantes</div>
+    <div class="participantes-wrap" id="participantesLista">
+      <p style="font-size:.8rem;color:rgba(255,255,255,.3);text-align:center;padding:10px">Nenhum colaborador ativo cadastrado.</p>
+    </div>
+    <div class="secao-titulo">Observacoes</div>
     <div class="form-row full">
       <div class="form-group">
-        <label>Observacoes</label>
         <textarea id="f_obs" placeholder="Informacoes adicionais..."></textarea>
       </div>
     </div>
@@ -291,7 +210,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
-      <button class="btn-salvar"   onclick="salvar()">Salvar</button>
+      <button class="btn-salvar" onclick="salvar()">💾 Salvar</button>
     </div>
   </div>
 </div>
@@ -299,7 +218,7 @@
 <!-- MODAL VER -->
 <div class="modal-overlay" id="modalVer">
   <div class="modal">
-    <h3>Detalhes do Treinamento</h3>
+    <h3>🎓 Detalhes do Treinamento</h3>
     <div id="modalVerConteudo"></div>
     <div class="modal-footer">
       <button class="btn-cancelar" onclick="fecharVer()">Fechar</button>
@@ -307,304 +226,143 @@
   </div>
 </div>
 
+<script src="./sidebar.js"></script>
 <script>
-/* ── AUTH ── */
-var userData = localStorage.getItem('safenr_user');
-if (!userData) { window.location.href = './index.html'; }
-var user = JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent = user.nome || 'Usuario';
-document.getElementById('avatarLetra').textContent = (user.nome || 'U')[0].toUpperCase();
-function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
-
-/* ── DADOS ── */
-var registros   = JSON.parse(localStorage.getItem('safenr_treinamentos') || '[]');
-var editandoId  = null;
-var filtroAtivo = '';
-
-function salvarStorage() { localStorage.setItem('safenr_treinamentos', JSON.stringify(registros)); }
-
-function fmt(d) {
-  if (!d) return '--';
-  var p = d.split('-');
-  return p[2] + '/' + p[1] + '/' + p[0];
-}
-
-function fmtDT(iso) {
-  if (!iso) return '--';
-  return new Date(iso).toLocaleString('pt-BR', {
-    day:'2-digit', month:'2-digit', year:'numeric',
-    hour:'2-digit', minute:'2-digit'
-  });
-}
-
-function isVencido(dataVal) {
-  if (!dataVal) return false;
-  return new Date(dataVal + 'T00:00:00') < new Date();
-}
-
-function venceEm30(dataVal) {
-  if (!dataVal) return false;
-  var hoje = new Date();
-  var val  = new Date(dataVal + 'T00:00:00');
-  var diff = (val - hoje) / 86400000;
-  return diff >= 0 && diff <= 30;
-}
-
-var statusLabel = {
-  'agendado':     'Agendado',
-  'em-andamento': 'Em Andamento',
-  'concluido':    'Concluido',
-  'cancelado':    'Cancelado'
-};
-
-var modalLabel = {
-  'presencial': 'Presencial',
-  'online':     'Online',
-  'hibrido':    'Hibrido'
-};
-
-/* ── FILTROS ── */
-function getLista() {
-  var busca      = document.querySelector('.busca-input').value.toLowerCase();
-  var modalidade = document.getElementById('filtroModalidade').value;
-  return registros.filter(function(t) {
-    if (filtroAtivo && t.status !== filtroAtivo) return false;
-    if (modalidade  && t.modalidade !== modalidade) return false;
-    if (busca &&
-        !(t.nome      || '').toLowerCase().includes(busca) &&
-        !(t.instrutor || '').toLowerCase().includes(busca) &&
-        !(t.nr        || '').toLowerCase().includes(busca)) return false;
+var userData2=localStorage.getItem('safenr_user');
+var user2=userData2?JSON.parse(userData2):{};
+var registros=JSON.parse(localStorage.getItem('safenr_treinamentos')||'[]');
+var editandoId=null,filtroAtivo='';
+function salvarStorage(){localStorage.setItem('safenr_treinamentos',JSON.stringify(registros));}
+function fmt(d){if(!d)return '--';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function fmtDT(iso){if(!iso)return '--';return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
+function isVencido(d){return d&&new Date(d+'T00:00:00')<new Date();}
+function venceEm30(d){if(!d)return false;var diff=(new Date(d+'T00:00:00')-new Date())/86400000;return diff>=0&&diff<=30;}
+function getCertStatus(d){if(!d)return{cls:'',label:'Sem validade'};if(isVencido(d))return{cls:'vencido',label:'Vencido'};if(venceEm30(d))return{cls:'a-vencer',label:'A Vencer'};return{cls:'valido',label:'Valido'};}
+function getLista(){
+  var busca=document.querySelector('.busca-input').value.toLowerCase();
+  return registros.filter(function(r){
+    if(filtroAtivo&&r.status!==filtroAtivo)return false;
+    if(busca&&!(r.nome||'').toLowerCase().includes(busca)&&!(r.nr||'').toLowerCase().includes(busca)&&!(r.instrutor||'').toLowerCase().includes(busca))return false;
     return true;
   });
 }
-
-function filtrarBtn(status, btn) {
-  filtroAtivo = status;
-  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
-  btn.classList.add('active');
-  renderizar(getLista());
+function filtrar(s,btn){filtroAtivo=s;document.querySelectorAll('.filtro-btn').forEach(function(b){b.classList.remove('active');});if(btn)btn.classList.add('active');renderizar(getLista());}
+function atualizarContadores(){
+  document.getElementById('cnt-concluido').textContent=registros.filter(function(r){return r.status==='concluido';}).length;
+  document.getElementById('cnt-agendado').textContent=registros.filter(function(r){return r.status==='agendado';}).length;
+  document.getElementById('cnt-vencido').textContent=registros.filter(function(r){return isVencido(r.dataVal);}).length;
+  document.getElementById('cnt-avencer').textContent=registros.filter(function(r){return venceEm30(r.dataVal)&&!isVencido(r.dataVal);}).length;
+  document.getElementById('totalRegistros').textContent=registros.length+' registro(s)';
 }
-
-function filtrarStatus(status) {
-  filtroAtivo = status;
-  document.querySelectorAll('.filtro-btn').forEach(function(b) { b.classList.remove('active'); });
-  var id = status ? 'fb-' + status : 'fb-todos';
-  var btn = document.getElementById(id);
-  if (btn) btn.classList.add('active');
-  renderizar(getLista());
-}
-
-/* ── CONTADORES ── */
-function atualizarContadores() {
-  document.getElementById('cnt-total').textContent    = registros.length;
-  document.getElementById('cnt-agendado').textContent = registros.filter(function(t) { return t.status === 'agendado'; }).length;
-  document.getElementById('cnt-concluido').textContent= registros.filter(function(t) { return t.status === 'concluido'; }).length;
-  document.getElementById('cnt-vencido').textContent  = registros.filter(function(t) { return isVencido(t.dataVal); }).length;
-  document.getElementById('cnt-breve').textContent    = registros.filter(function(t) { return venceEm30(t.dataVal); }).length;
-  document.getElementById('totalRegistros').textContent = registros.length + ' registro(s)';
-}
-
-/* ── RENDERIZAR ── */
-function renderizar(lista) {
-  var container = document.getElementById('cardLista');
-  var empty     = document.getElementById('emptyState');
-  container.innerHTML = '';
-  atualizarContadores();
-
-  if (lista.length === 0) { empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-
-  lista.forEach(function(t) {
-    var vencido = isVencido(t.dataVal);
-    var breve   = venceEm30(t.dataVal);
-    var st      = t.status     || 'agendado';
-    var mod     = t.modalidade || '';
-
-    var cardClass = 'trein-card';
-    if      (vencido)       cardClass += ' vencido';
-    else if (breve)         cardClass += ' vence-breve';
-    else if (st==='concluido') cardClass += ' concluido';
-    else if (st==='cancelado') cardClass += ' cancelado';
-
-    var div = document.createElement('div');
-    div.className = cardClass;
-    div.innerHTML =
-      '<div class="card-top">' +
-        '<h3>🎓 ' + (t.nome || '--') + '</h3>' +
-        '<div class="card-badges">' +
-          '<span class="badge ' + st + '">'  + (statusLabel[st] || st) + '</span>' +
-          (mod ? '<span class="badge ' + mod + '">' + (modalLabel[mod] || mod) + '</span>' : '') +
-          (vencido ? '<span class="badge vencido-tag">⛔ Vencido</span>' : '') +
-          (breve && !vencido ? '<span class="badge breve-tag">⚠️ Vence em breve</span>' : '') +
-        '</div>' +
-      '</div>' +
-      '<div class="card-info">' +
-        '<div class="card-info-item"><strong>' + (t.instrutor || '--') + '</strong>Instrutor</div>' +
-        '<div class="card-info-item"><strong>' + (t.carga ? t.carga + 'h' : '--') + '</strong>Carga</div>' +
-        '<div class="card-info-item"><strong>' + fmt(t.dataReal) + '</strong>Realizacao</div>' +
-        '<div class="card-info-item"><strong>' + fmt(t.dataVal) + '</strong>Validade</div>' +
-        (t.local ? '<div class="card-info-item"><strong>' + t.local + '</strong>Local</div>' : '') +
-        (t.nr    ? '<div class="card-info-item"><strong>' + t.nr   + '</strong>NR</div>' : '') +
-      '</div>' +
-      (t.desc ? '<p class="card-desc">' + t.desc + '</p>' : '') +
-      '<div class="card-actions">' +
-        '<button class="btn-acao" onclick="ver('    + t.id + ')" title="Visualizar">👁️</button>' +
-        '<button class="btn-acao btn-editar"  onclick="abrirModal(' + t.id + ')" title="Editar">✏️ Editar</button>' +
-        '<button class="btn-acao btn-excluir" onclick="excluir('   + t.id + ')" title="Excluir">🗑️ Excluir</button>' +
-      '</div>';
-    container.appendChild(div);
+function renderizar(lista){
+  var tbody=document.getElementById('tabelaBody');
+  var empty=document.getElementById('emptyState');
+  tbody.innerHTML='';atualizarContadores();
+  if(lista.length===0){empty.style.display='block';return;}
+  empty.style.display='none';
+  lista.forEach(function(r){
+    var cert=getCertStatus(r.dataVal);
+    var tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td style="color:rgba(255,255,255,.3);font-size:.8rem">#'+String(r.id).padStart(3,'0')+'</td>'+
+      '<td><strong>'+(r.nome||'--')+'</strong></td>'+
+      '<td>'+(r.nr||'--')+'</td>'+
+      '<td>'+(r.instrutor||'--')+'</td>'+
+      '<td style="text-align:center">'+(r.carga||'--')+'h</td>'+
+      '<td><span class="badge '+(r.status||'')+'">'+(r.status||'--')+'</span></td>'+
+      '<td>'+fmt(r.dataReal)+'</td>'+
+      '<td>'+fmt(r.dataVal)+'</td>'+
+      '<td>'+(r.dataVal?'<span class="badge '+cert.cls+'">'+cert.label+'</span>':'--')+'</td>'+
+      '<td style="text-align:center">'+(r.participantes&&r.participantes.length>0?r.participantes.length+' pessoa(s)':'--')+'</td>'+
+      '<td style="font-size:.82rem">👤 '+(r.registradoPor||'--')+'</td>'+
+      '<td>'+
+        '<button class="btn-acao" onclick="ver('+r.id+')">👁️</button>'+
+        '<button class="btn-acao" onclick="abrirModal('+r.id+')">✏️</button>'+
+        '<button class="btn-acao" onclick="excluir('+r.id+')">🗑️</button>'+
+      '</td>';
+    tbody.appendChild(tr);
   });
 }
-
-/* ── MODAL ── */
-function abrirModal(id) {
-  editandoId = id || null;
-  document.getElementById('modalTitulo').textContent = id ? 'Editar Treinamento' : 'Novo Treinamento';
-  ['f_nome','f_instrutor','f_carga','f_dataReal','f_dataVal','f_local','f_nr','f_desc','f_obs'].forEach(function(f) {
-    document.getElementById(f).value = '';
-  });
-  document.getElementById('f_modalidade').value = '';
-  document.getElementById('f_status').value     = 'agendado';
-  document.getElementById('f_regPor').value = user.nome || 'Usuario';
-  document.getElementById('f_regEm').value  = new Date().toLocaleString('pt-BR', {
-    day:'2-digit', month:'2-digit', year:'numeric',
-    hour:'2-digit', minute:'2-digit', second:'2-digit'
-  });
-  if (id) {
-    var t = registros.find(function(x) { return x.id === id; });
-    document.getElementById('f_nome').value      = t.nome       || '';
-    document.getElementById('f_instrutor').value = t.instrutor  || '';
-    document.getElementById('f_carga').value     = t.carga      || '';
-    document.getElementById('f_dataReal').value  = t.dataReal   || '';
-    document.getElementById('f_dataVal').value   = t.dataVal    || '';
-    document.getElementById('f_modalidade').value= t.modalidade || '';
-    document.getElementById('f_status').value    = t.status     || 'agendado';
-    document.getElementById('f_local').value     = t.local      || '';
-    document.getElementById('f_nr').value        = t.nr         || '';
-    document.getElementById('f_desc').value      = t.desc       || '';
-    document.getElementById('f_obs').value       = t.obs        || '';
-    document.getElementById('f_regPor').value    = t.registradoPor || user.nome;
-    document.getElementById('f_regEm').value     = fmtDT(t.registradoEm);
+function carregarParticipantes(sel){
+  var colabs=JSON.parse(localStorage.getItem('safenr_colaboradores')||'[]').filter(function(c){return c.status==='ativo';});
+  var wrap=document.getElementById('participantesLista');
+  if(colabs.length===0){wrap.innerHTML='<p style="font-size:.8rem;color:rgba(255,255,255,.3);text-align:center;padding:10px">Nenhum colaborador ativo.</p>';return;}
+  wrap.innerHTML=colabs.map(function(c){
+    var chk=(sel||[]).indexOf(c.id)>-1?'checked':'';
+    return '<div class="participante-item"><input type="checkbox" id="pt_'+c.id+'" value="'+c.id+'" '+chk+'><label for="pt_'+c.id+'" style="cursor:pointer;flex:1">'+c.nome+' <span style="color:rgba(255,255,255,.3)">— '+(c.cargo||'')+'</span></label></div>';
+  }).join('');
+}
+function getParticipantes(){return Array.prototype.slice.call(document.querySelectorAll('#participantesLista input:checked')).map(function(c){return parseInt(c.value);});}
+function abrirModal(id){
+  editandoId=id||null;
+  document.getElementById('modalTitulo').textContent=(id?'✏️ Editar':'🎓 Novo')+' Treinamento';
+  ['f_nome','f_nr','f_carga','f_instrutor','f_local','f_cert','f_obs'].forEach(function(f){document.getElementById(f).value='';});
+  document.getElementById('f_status').value='agendado';document.getElementById('f_modalidade').value='presencial';
+  document.getElementById('f_dataReal').value='';document.getElementById('f_dataVal').value='';
+  document.getElementById('f_regPor').value=user2.nome||'Usuario';
+  document.getElementById('f_regEm').value=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  var sel=[];
+  if(id){
+    var r=registros.find(function(x){return x.id===id;});
+    document.getElementById('f_nome').value=r.nome||'';document.getElementById('f_nr').value=r.nr||'';
+    document.getElementById('f_carga').value=r.carga||'';document.getElementById('f_status').value=r.status||'agendado';
+    document.getElementById('f_modalidade').value=r.modalidade||'presencial';document.getElementById('f_dataReal').value=r.dataReal||'';
+    document.getElementById('f_dataVal').value=r.dataVal||'';document.getElementById('f_instrutor').value=r.instrutor||'';
+    document.getElementById('f_local').value=r.local||'';document.getElementById('f_cert').value=r.cert||'';
+    document.getElementById('f_obs').value=r.obs||'';document.getElementById('f_regPor').value=r.registradoPor||user2.nome;
+    document.getElementById('f_regEm').value=fmtDT(r.registradoEm);sel=r.participantes||[];
   }
+  carregarParticipantes(sel);
   document.getElementById('modalForm').classList.add('open');
 }
-
-function fecharModal() { document.getElementById('modalForm').classList.remove('open'); editandoId = null; }
-
-function salvar() {
-  var nome      = document.getElementById('f_nome').value.trim();
-  var instrutor = document.getElementById('f_instrutor').value.trim();
-  var carga     = document.getElementById('f_carga').value;
-  var dataReal  = document.getElementById('f_dataReal').value;
-  var dataVal   = document.getElementById('f_dataVal').value;
-  var modalidade= document.getElementById('f_modalidade').value;
-  var status    = document.getElementById('f_status').value;
-  if (!nome || !instrutor || !carga || !dataReal || !dataVal || !modalidade) {
-    alert('Preencha todos os campos obrigatorios.');
-    return;
+function fecharModal(){document.getElementById('modalForm').classList.remove('open');editandoId=null;}
+function salvar(){
+  var nome=document.getElementById('f_nome').value.trim();
+  var status=document.getElementById('f_status').value;
+  var dataReal=document.getElementById('f_dataReal').value;
+  if(!nome||!status||!dataReal){alert('Preencha: Nome, Status e Data de Realizacao.');return;}
+  var dados={nome:nome,status:status,dataReal:dataReal,nr:document.getElementById('f_nr').value.trim(),carga:parseInt(document.getElementById('f_carga').value)||0,modalidade:document.getElementById('f_modalidade').value,dataVal:document.getElementById('f_dataVal').value,instrutor:document.getElementById('f_instrutor').value.trim(),local:document.getElementById('f_local').value.trim(),cert:document.getElementById('f_cert').value.trim(),obs:document.getElementById('f_obs').value.trim(),participantes:getParticipantes()};
+  if(editandoId){var idx=registros.findIndex(function(r){return r.id===editandoId;});registros[idx]=Object.assign({},registros[idx],dados);}
+  else{var nId=registros.length>0?Math.max.apply(null,registros.map(function(r){return r.id;}))+1:1;registros.push(Object.assign({id:nId,registradoPor:user2.nome||'Usuario',registradoEm:new Date().toISOString()},dados));}
+  if(dados.dataVal){
+    var agenda=JSON.parse(localStorage.getItem('safenr_agenda')||'[]');
+    var tid=editandoId||registros[registros.length-1].id;
+    agenda=agenda.filter(function(e){return e.trein_id!==tid;});
+    var nId2=agenda.length>0?Math.max.apply(null,agenda.map(function(e){return e.id||0;}))+1:1;
+    agenda.push({id:nId2,trein_id:tid,titulo:'🎓 Vencimento: '+dados.nome,data:dados.dataVal,tipo:'treinamento',status:'pendente',obs:'Certificado vence. Agende a reciclagem.'});
+    localStorage.setItem('safenr_agenda',JSON.stringify(agenda));
   }
-  var dados = {
-    nome:       nome,
-    instrutor:  instrutor,
-    carga:      parseInt(carga),
-    dataReal:   dataReal,
-    dataVal:    dataVal,
-    modalidade: modalidade,
-    status:     status,
-    local:      document.getElementById('f_local').value.trim(),
-    nr:         document.getElementById('f_nr').value.trim(),
-    desc:       document.getElementById('f_desc').value.trim(),
-    obs:        document.getElementById('f_obs').value.trim()
-  };
-  if (editandoId) {
-    var idx = registros.findIndex(function(r) { return r.id === editandoId; });
-    registros[idx] = Object.assign({}, registros[idx], dados);
-  } else {
-    var nId = registros.length > 0
-      ? Math.max.apply(null, registros.map(function(r) { return r.id; })) + 1
-      : 1;
-    registros.push(Object.assign({
-      id:            nId,
-      registradoPor: user.nome || 'Usuario',
-      registradoEm:  new Date().toISOString()
-    }, dados));
-  }
-
-  /* Salva também na agenda como lembrete de vencimento */
-  vincularAgenda(editandoId || registros[registros.length - 1].id, nome, dataVal);
-
-  salvarStorage();
-  fecharModal();
-  renderizar(getLista());
+  salvarStorage();fecharModal();renderizar(getLista());
 }
-
-/* ── VÍNCULO COM AGENDA ── */
-function vincularAgenda(treinId, nome, dataVal) {
-  var agenda = JSON.parse(localStorage.getItem('safenr_agenda') || '[]');
-  /* Remove evento anterior deste treinamento */
-  agenda = agenda.filter(function(e) { return e.treinamento_id !== treinId; });
-  /* Cria novo evento de vencimento */
-  var nId = agenda.length > 0
-    ? Math.max.apply(null, agenda.map(function(e) { return e.id || 0; })) + 1
-    : 1;
-  agenda.push({
-    id:             nId,
-    treinamento_id: treinId,
-    titulo:         '⚠️ Vencimento: ' + nome,
-    data:           dataVal,
-    tipo:           'treinamento',
-    status:         'pendente',
-    obs:            'Certificado do treinamento vence nesta data.'
-  });
-  localStorage.setItem('safenr_agenda', JSON.stringify(agenda));
+function excluir(id){
+  if(!confirm('Excluir este treinamento?'))return;
+  var agenda=JSON.parse(localStorage.getItem('safenr_agenda')||'[]');
+  agenda=agenda.filter(function(e){return e.trein_id!==id;});
+  localStorage.setItem('safenr_agenda',JSON.stringify(agenda));
+  registros=registros.filter(function(r){return r.id!==id;});
+  salvarStorage();renderizar(getLista());
 }
-
-function excluir(id) {
-  if (!confirm('Excluir este treinamento?\nO lembrete na agenda tambem sera removido.')) return;
-  /* Remove da agenda */
-  var agenda = JSON.parse(localStorage.getItem('safenr_agenda') || '[]');
-  agenda = agenda.filter(function(e) { return e.treinamento_id !== id; });
-  localStorage.setItem('safenr_agenda', JSON.stringify(agenda));
-  /* Remove do array */
-  registros = registros.filter(function(r) { return r.id !== id; });
-  salvarStorage();
-  renderizar(getLista());
-}
-
-/* ── MODAL VER ── */
-function ver(id) {
-  var t   = registros.find(function(x) { return x.id === id; });
-  var st  = t.status     || 'agendado';
-  var mod = t.modalidade || '';
-  function row(l, v) {
-    return '<div class="detalhe-row">' +
-      '<span class="detalhe-label">' + l + '</span>' +
-      '<span class="detalhe-valor">' + v + '</span>' +
-      '</div>';
-  }
-  document.getElementById('modalVerConteudo').innerHTML =
-    row('Nome',           t.nome      || '--') +
-    row('Instrutor',      t.instrutor || '--') +
-    row('Carga Horaria',  (t.carga ? t.carga + 'h' : '--')) +
-    row('Realizacao',     fmt(t.dataReal)) +
-    row('Validade',       fmt(t.dataVal)) +
-    row('Modalidade',     '<span class="badge ' + mod + '">' + (modalLabel[mod] || '--') + '</span>') +
-    row('Status',         '<span class="badge ' + st  + '">' + (statusLabel[st] || st) + '</span>') +
-    row('Local',          t.local || '--') +
-    row('NR Relacionada', t.nr    || '--') +
-    row('Descricao',      t.desc  || '--') +
-    row('Observacoes',    t.obs   || '--') +
-    row('Registrado por', '<span style="color:#00d4ff">' + (t.registradoPor || '--') + '</span>') +
-    row('Registrado em',  '<span style="color:#00d4ff">' + fmtDT(t.registradoEm) + '</span>');
+function ver(id){
+  var r=registros.find(function(x){return x.id===id;});
+  var cert=getCertStatus(r.dataVal);
+  var colabs=JSON.parse(localStorage.getItem('safenr_colaboradores')||'[]');
+  function row(l,v){return '<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>';}
+  var partsHtml='--';
+  if(r.participantes&&r.participantes.length>0){partsHtml=r.participantes.map(function(pid){var c=colabs.find(function(x){return x.id===pid;});return c?c.nome:'#'+pid;}).join(', ');}
+  document.getElementById('modalVerConteudo').innerHTML=
+    row('Nome',r.nome||'--')+row('NR',r.nr||'--')+row('Carga',(r.carga||0)+'h')+
+    row('Modalidade',r.modalidade||'--')+row('Status','<span class="badge '+(r.status||'')+'">'+(r.status||'--')+'</span>')+
+    row('Data Realizacao',fmt(r.dataReal))+row('Validade Cert.',fmt(r.dataVal))+
+    row('Status Cert.',r.dataVal?'<span class="badge '+cert.cls+'">'+cert.label+'</span>':'--')+
+    row('Numero Cert.',r.cert||'--')+row('Instrutor',r.instrutor||'--')+row('Local',r.local||'--')+
+    row('Participantes',partsHtml)+row('Observacoes',r.obs||'--')+
+    row('Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+
+    row('Registrado em','<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
   document.getElementById('modalVer').classList.add('open');
 }
-
-function fecharVer() { document.getElementById('modalVer').classList.remove('open'); }
-
-document.getElementById('modalForm').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
-document.getElementById('modalVer').addEventListener('click',  function(e) { if (e.target === this) fecharVer(); });
-
-/* ── INIT ── */
+function fecharVer(){document.getElementById('modalVer').classList.remove('open');}
+document.getElementById('modalForm').addEventListener('click',function(e){if(e.target===this)fecharModal();});
+document.getElementById('modalVer').addEventListener('click',function(e){if(e.target===this)fecharVer();});
 renderizar(getLista());
 </script>
 </body>
