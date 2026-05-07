@@ -3,463 +3,340 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SafeNR — Configuracoes</title>
+  <title>SafeNR — Configurações</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
-    .sidebar{width:240px;background:#0a1520;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;padding:24px 0;position:fixed;height:100vh;z-index:10}
-    .sidebar-logo{text-align:center;padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.07)}
-    .sidebar-logo h1{font-size:1.6rem;font-weight:800;letter-spacing:2px}
-    .sidebar-logo h1 span{color:#00d4ff}
-    .sidebar-logo p{font-size:.7rem;color:rgba(255,255,255,.35);margin-top:2px}
-    .nav{flex:1;padding:20px 0;overflow-y:auto}
-    .nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(255,255,255,.5);font-size:.9rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
-    .nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
-    .nav-item.active{color:#00d4ff;border-left-color:#00d4ff;background:rgba(0,212,255,.06)}
-    .nav-item .icon{font-size:1.1rem;width:20px;text-align:center}
-    .notif-badge{background:#f87171;color:#fff;border-radius:20px;padding:1px 7px;font-size:.65rem;font-weight:700;margin-left:auto}
-    .sidebar-user{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
-    .avatar{width:36px;height:36px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
-    .user-info p{font-size:.82rem;font-weight:600}
-    .user-info span{font-size:.72rem;color:rgba(255,255,255,.4)}
-    .btn-sair{background:none;border:none;color:rgba(255,80,80,.7);cursor:pointer;font-size:.8rem;margin-left:auto}
-    .main{margin-left:240px;flex:1;padding:32px;max-width:900px}
-    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+    .main{margin-left:240px;flex:1;padding:32px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
     .topbar h2{font-size:1.4rem;font-weight:700}
-    .config-section{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:28px;margin-bottom:20px}
-    .config-section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.06)}
-    .config-section-icon{font-size:1.4rem}
-    .config-section-header h3{font-size:1rem;font-weight:700}
-    .config-section-header p{font-size:.78rem;color:rgba(255,255,255,.35);margin-top:2px}
-    .config-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:16px}
-    .config-row.full{grid-template-columns:1fr}
-    .form-group{display:flex;flex-direction:column;gap:7px}
-    .form-group label{font-size:.82rem;font-weight:600;color:rgba(255,255,255,.55)}
+    .cfg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+    .cfg-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px}
+    .cfg-card.full{grid-column:1/-1}
+    .cfg-card h3{font-size:.9rem;font-weight:800;color:#00d4ff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+    .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+    .form-group label{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.55)}
     .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;color:#fff;font-size:.9rem;outline:none;transition:border .2s;font-family:inherit}
     .form-group input:focus,.form-group select:focus{border-color:#00d4ff}
     .form-group select option{background:#1a2535}
-    .form-group textarea{resize:vertical;min-height:80px}
-    .form-group textarea:focus{border-color:#00d4ff;outline:none}
-    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-    .toggle-row:last-child{border-bottom:none}
-    .toggle-info p{font-size:.88rem;font-weight:600;margin-bottom:3px}
-    .toggle-info span{font-size:.75rem;color:rgba(255,255,255,.35)}
-    .toggle{position:relative;width:46px;height:26px;flex-shrink:0}
+    .form-group textarea{resize:vertical;min-height:60px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .toggle-group{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .toggle-group:last-child{border-bottom:none}
+    .toggle-label{font-size:.85rem;color:rgba(255,255,255,.7)}
+    .toggle-desc{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:2px}
+    .toggle{position:relative;width:44px;height:24px;flex-shrink:0}
     .toggle input{opacity:0;width:0;height:0}
-    .toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,.12);border-radius:26px;cursor:pointer;transition:.3s}
-    .toggle-slider:before{content:'';position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s}
+    .toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,.15);border-radius:24px;cursor:pointer;transition:.3s}
+    .toggle-slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
     .toggle input:checked+.toggle-slider{background:linear-gradient(135deg,#00d4ff,#0099cc)}
     .toggle input:checked+.toggle-slider:before{transform:translateX(20px)}
-    .storage-bar{background:rgba(255,255,255,.07);border-radius:20px;height:10px;margin:10px 0;overflow:hidden}
-    .storage-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#00d4ff,#0099cc);transition:width .5s}
-    .storage-info{display:flex;justify-content:space-between;font-size:.78rem;color:rgba(255,255,255,.4)}
-    .modulos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .modulo-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px}
-    .modulo-item .icon{font-size:1.1rem}
-    .modulo-item .info{flex:1}
-    .modulo-item .info p{font-size:.82rem;font-weight:600}
-    .modulo-item .info span{font-size:.7rem;color:rgba(255,255,255,.35)}
-    .btn-salvar-conf{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 28px;cursor:pointer;transition:all .2s}
-    .btn-salvar-conf:hover{opacity:.85;transform:translateY(-1px)}
-    .btn-perigoso{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:10px;color:#f87171;font-size:.88rem;font-weight:600;padding:11px 22px;cursor:pointer;transition:all .2s}
-    .btn-perigoso:hover{background:rgba(248,113,113,.2)}
-    .btn-neutro{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:rgba(255,255,255,.7);font-size:.88rem;font-weight:600;padding:11px 22px;cursor:pointer;transition:all .2s}
-    .btn-neutro:hover{background:rgba(255,255,255,.12)}
-    .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
-    .toast{position:fixed;bottom:24px;right:24px;background:#0a1520;border:1px solid rgba(0,212,255,.3);border-radius:12px;padding:14px 20px;font-size:.88rem;color:#00d4ff;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;display:flex;align-items:center;gap:10px}
+    .btn-salvar{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 28px;cursor:pointer;transition:all .2s;margin-top:8px}
+    .btn-salvar:hover{opacity:.85}
+    .btn-danger{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:10px;color:#f87171;font-size:.85rem;font-weight:600;padding:10px 20px;cursor:pointer;transition:all .2s}
+    .btn-danger:hover{background:rgba(248,113,113,.2)}
+    .btn-export{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);border-radius:10px;color:#4ade80;font-size:.85rem;font-weight:600;padding:10px 20px;cursor:pointer;transition:all .2s}
+    .btn-export:hover{background:rgba(74,222,128,.2)}
+    .acoes-grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+    .perfil-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .perfil-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#00d4ff,#0099cc);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;flex-shrink:0}
+    .perfil-info .nome{font-size:1rem;font-weight:700}
+    .perfil-info .cargo{font-size:.8rem;color:rgba(255,255,255,.4)}
+    .toast{position:fixed;bottom:24px;right:24px;background:#1a2535;border:1px solid rgba(74,222,128,.3);border-radius:12px;padding:14px 22px;color:#4ade80;font-size:.88rem;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s}
     .toast.show{transform:translateY(0);opacity:1}
-    .perfil-avatar-big{width:72px;height:72px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;flex-shrink:0}
-    .versao-tag{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:4px 12px;font-size:.75rem;color:#00d4ff;font-weight:700}
+    .cor-picker{width:100%;height:44px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);cursor:pointer;padding:4px}
   </style>
 </head>
 <body>
-
-<div class="sidebar">
-  <div class="sidebar-logo">
-    <h1>Safe<span>NR</span></h1>
-    <p>Gestao de Seguranca do Trabalho</p>
-  </div>
-  <nav class="nav">
-    <a class="nav-item" href="./app.html"><span class="icon">🏠</span> Dashboard</a>
-    <a class="nav-item" href="./treinamentos.html"><span class="icon">🎓</span> Treinamentos</a>
-    <a class="nav-item" href="./agenda.html"><span class="icon">📅</span> Agenda</a>
-    <a class="nav-item" href="./inspecoes.html"><span class="icon">🔍</span> Inspecoes</a>
-    <a class="nav-item" href="./riscos.html"><span class="icon">⚠️</span> Riscos</a>
-    <a class="nav-item" href="./checklists.html"><span class="icon">📋</span> Checklists</a>
-    <a class="nav-item" href="./colaboradores.html"><span class="icon">👷</span> Colaboradores</a>
-    <a class="nav-item" href="./ocorrencias.html"><span class="icon">🚨</span> Ocorrencias</a>
-    <a class="nav-item" href="./plano-acao.html"><span class="icon">📌</span> Plano de Acao</a>
-    <a class="nav-item" href="./documentos.html"><span class="icon">🗂️</span> Documentos SST</a>
-    <a class="nav-item" href="./relatorios.html"><span class="icon">📄</span> Relatorios</a>
-    <a class="nav-item" href="./epis.html"><span class="icon">🦺</span> Cadastro EPIs</a>
-    <a class="nav-item" href="./biblioteca.html"><span class="icon">📚</span> Biblioteca NRs</a>
-    <a class="nav-item" href="./fotos.html"><span class="icon">📷</span> Galeria de Fotos</a>
-    <a class="nav-item" href="./ambientes.html"><span class="icon">🏭</span> Ambientes</a>
-    <a class="nav-item" href="./ia-sugestoes.html"><span class="icon">🤖</span> IA Sugestoes</a>
-    <a class="nav-item" href="./notificacoes.html"><span class="icon">🔔</span> Notificacoes</a>
-    <a class="nav-item active" href="./configuracoes.html"><span class="icon">⚙️</span> Configuracoes</a>
-  </nav>
-  <div class="sidebar-user">
-    <div class="avatar" id="avatarLetra">A</div>
-    <div class="user-info"><p id="nomeUsuario">Usuario</p><span>Administrador</span></div>
-    <button class="btn-sair" onclick="sair()">✕</button>
-  </div>
-</div>
-
 <div class="main">
   <div class="topbar">
-    <div><h2>⚙️ Configuracoes</h2></div>
-    <span class="versao-tag">SafeNR v3.0</span>
+    <div><h2>⚙️ Configurações do Sistema</h2></div>
   </div>
+  <div class="cfg-grid">
 
-  <!-- PERFIL DA EMPRESA -->
-  <div class="config-section">
-    <div class="config-section-header">
-      <div class="config-section-icon">🏢</div>
-      <div><h3>Perfil da Empresa</h3><p>Dados da empresa exibidos nos relatorios e documentos</p></div>
-    </div>
-    <div class="config-row">
-      <div class="form-group"><label>Razao Social *</label><input type="text" id="cfg_razao" placeholder="Ex: Industria ABC Ltda."/></div>
-      <div class="form-group"><label>CNPJ</label><input type="text" id="cfg_cnpj" placeholder="00.000.000/0000-00"/></div>
-    </div>
-    <div class="config-row">
-      <div class="form-group"><label>CNAE Principal</label><input type="text" id="cfg_cnae" placeholder="Ex: 2511-0/00"/></div>
-      <div class="form-group"><label>Grau de Risco (NR-4)</label>
-        <select id="cfg_grau">
-          <option value="1">Grau 1</option>
-          <option value="2">Grau 2</option>
-          <option value="3">Grau 3</option>
-          <option value="4">Grau 4</option>
-        </select>
-      </div>
-    </div>
-    <div class="config-row">
-      <div class="form-group"><label>Responsavel pelo SESMT / SST</label><input type="text" id="cfg_resp" placeholder="Nome do Tecnico ou Engenheiro de Seguranca"/></div>
-      <div class="form-group"><label>Registro Profissional</label><input type="text" id="cfg_registro" placeholder="Ex: TST-12345 / CREA-123456"/></div>
-    </div>
-    <div class="config-row">
-      <div class="form-group"><label>Endereco</label><input type="text" id="cfg_end" placeholder="Rua, numero, bairro"/></div>
-      <div class="form-group"><label>Cidade / UF</label><input type="text" id="cfg_cidade" placeholder="Ex: Itajai / SC"/></div>
-    </div>
-    <div class="config-row">
-      <div class="form-group"><label>Telefone</label><input type="text" id="cfg_tel" placeholder="(47) 00000-0000"/></div>
-      <div class="form-group"><label>E-mail SST</label><input type="text" id="cfg_email" placeholder="sst@empresa.com.br"/></div>
-    </div>
-    <div class="config-row full">
-      <div class="form-group"><label>N° Aproximado de Colaboradores</label><input type="number" id="cfg_nColabs" placeholder="Ex: 150" min="0"/></div>
-    </div>
-  </div>
-
-  <!-- PERFIL DO USUÁRIO -->
-  <div class="config-section">
-    <div class="config-section-header">
-      <div class="config-section-icon">👤</div>
-      <div><h3>Perfil do Usuario</h3><p>Dados da conta logada atualmente</p></div>
-    </div>
-    <div style="display:flex;align-items:center;gap:20px;margin-bottom:24px">
-      <div class="perfil-avatar-big" id="cfgAvatarBig">A</div>
-      <div>
-        <p id="cfgNomeExibido" style="font-size:1.1rem;font-weight:700">Usuario</p>
-        <span style="font-size:.8rem;color:rgba(255,255,255,.4)">Administrador</span>
-      </div>
-    </div>
-    <div class="config-row">
-      <div class="form-group"><label>Nome de Exibicao</label><input type="text" id="cfg_nomeUser" placeholder="Seu nome"/></div>
-      <div class="form-group"><label>Cargo / Funcao</label><input type="text" id="cfg_cargoUser" placeholder="Ex: Tecnico de Seguranca do Trabalho"/></div>
-    </div>
-    <div class="config-row">
-      <div class="form-group"><label>Nova Senha</label><input type="password" id="cfg_senha" placeholder="Deixe em branco para manter"/></div>
-      <div class="form-group"><label>Confirmar Senha</label><input type="password" id="cfg_senha2" placeholder="Repita a nova senha"/></div>
-    </div>
-  </div>
-
-  <!-- NOTIFICAÇÕES -->
-  <div class="config-section">
-    <div class="config-section-header">
-      <div class="config-section-icon">🔔</div>
-      <div><h3>Alertas e Notificacoes</h3><p>Controle quais alertas automaticos deseja receber</p></div>
-    </div>
-    <div class="toggle-row">
-      <div class="toggle-info"><p>EPIs Vencidos ou Vencendo</p><span>Alerta quando EPI vencer ou faltarem 30 dias</span></div>
-      <label class="toggle"><input type="checkbox" id="tog_epi" checked/><span class="toggle-slider"></span></label>
-    </div>
-    <div class="toggle-row">
-      <div class="toggle-info"><p>Treinamentos Vencidos ou Vencendo</p><span>Alerta de certificados expirados ou a vencer</span></div>
-      <label class="toggle"><input type="checkbox" id="tog_trein" checked/><span class="toggle-slider"></span></label>
-    </div>
-    <div class="toggle-row">
-      <div class="toggle-info"><p>Riscos Criticos sem Medida de Controle</p><span>Alerta quando risco critico nao tiver controle definido</span></div>
-      <label class="toggle"><input type="checkbox" id="tog_risco" checked/><span class="toggle-slider"></span></label>
-    </div>
-    <div class="toggle-row">
-      <div class="toggle-info"><p>Acidentes sem Plano de Acao</p><span>Alerta quando acidente nao possuir medida corretiva</span></div>
-      <label class="toggle"><input type="checkbox" id="tog_acidente" checked/><span class="toggle-slider"></span></label>
-    </div>
-    <div class="toggle-row">
-      <div class="toggle-info"><p>Inspecoes Pendentes ha mais de 30 dias</p><span>Alerta de inspecoes paradas</span></div>
-      <label class="toggle"><input type="checkbox" id="tog_insp" checked/><span class="toggle-slider"></span></label>
-    </div>
-    <div class="toggle-row">
-      <div class="toggle-info"><p>Documentos SST Vencendo</p><span>PGR, PCMSO, LTCAT e outros com validade proxima</span></div>
-      <label class="toggle"><input type="checkbox" id="tog_docs" checked/><span class="toggle-slider"></span></label>
-    </div>
-    <div class="toggle-row">
-      <div class="toggle-info"><p>Planos de Acao em Atraso</p><span>Alertas de acoes 5W2H com prazo vencido</span></div>
-      <label class="toggle"><input type="checkbox" id="tog_planos" checked/><span class="toggle-slider"></span></label>
-    </div>
-    <div style="margin-top:20px">
+    <div class="cfg-card">
+      <h3>🏢 Dados da Empresa</h3>
+      <div id="perfilHeader"></div>
       <div class="form-group">
-        <label>Antecedencia para alertas de vencimento (dias)</label>
+        <label>Nome da Empresa *</label>
+        <input type="text" id="cfg_empresa" placeholder="Ex: Metalúrgica XYZ Ltda"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>CNPJ</label>
+          <input type="text" id="cfg_cnpj" placeholder="00.000.000/0001-00" maxlength="18"/>
+        </div>
+        <div class="form-group">
+          <label>CNAE Principal</label>
+          <input type="text" id="cfg_cnae" placeholder="Ex: 2512-8/00"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Grau de Risco (NR-4)</label>
+          <select id="cfg_grauRisco">
+            <option value="1">Grau 1</option>
+            <option value="2">Grau 2</option>
+            <option value="3">Grau 3</option>
+            <option value="4">Grau 4</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nº de Funcionários</label>
+          <input type="number" id="cfg_numFunc" placeholder="Ex: 150" min="0"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Endereço</label>
+        <input type="text" id="cfg_endereco" placeholder="Rua, número, bairro, cidade — UF"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Telefone</label>
+          <input type="text" id="cfg_tel" placeholder="(47) 99999-0000"/>
+        </div>
+        <div class="form-group">
+          <label>E-mail Corporativo</label>
+          <input type="email" id="cfg_email" placeholder="sst@empresa.com"/>
+        </div>
+      </div>
+      <button class="btn-salvar" onclick="salvarEmpresa()">💾 Salvar Dados da Empresa</button>
+    </div>
+
+    <div class="cfg-card">
+      <h3>👤 Perfil do Usuário</h3>
+      <div id="perfilUsuario"></div>
+      <div class="form-group">
+        <label>Nome Completo *</label>
+        <input type="text" id="cfg_nome" placeholder="Seu nome"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cargo / Função</label>
+          <input type="text" id="cfg_cargo" placeholder="Ex: Técnico de Segurança"/>
+        </div>
+        <div class="form-group">
+          <label>Registro Profissional</label>
+          <input type="text" id="cfg_registro" placeholder="Ex: TRT 12345"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" id="cfg_userEmail" placeholder="email@empresa.com"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nova Senha</label>
+          <input type="password" id="cfg_senha" placeholder="Deixe em branco para não alterar"/>
+        </div>
+        <div class="form-group">
+          <label>Confirmar Senha</label>
+          <input type="password" id="cfg_senha2" placeholder="Repita a nova senha"/>
+        </div>
+      </div>
+      <button class="btn-salvar" onclick="salvarPerfil()">💾 Salvar Perfil</button>
+    </div>
+
+    <div class="cfg-card">
+      <h3>🔔 Notificações e Alertas</h3>
+      <div class="toggle-group">
+        <div><div class="toggle-label">Alertas de treinamentos vencidos</div><div class="toggle-desc">Notificar quando certificados estiverem vencidos ou prestes a vencer</div></div>
+        <label class="toggle"><input type="checkbox" id="cfg_alTreins" checked/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-group">
+        <div><div class="toggle-label">Alertas de ASO vencido</div><div class="toggle-desc">Notificar quando atestados de saúde estiverem vencidos</div></div>
+        <label class="toggle"><input type="checkbox" id="cfg_alAso" checked/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-group">
+        <div><div class="toggle-label">Alertas de planos atrasados</div><div class="toggle-desc">Notificar quando planos de ação ultrapassarem o prazo</div></div>
+        <label class="toggle"><input type="checkbox" id="cfg_alPlanos" checked/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-group">
+        <div><div class="toggle-label">Alertas de EPIs vencidos</div><div class="toggle-desc">Notificar quando CAs de EPIs estiverem vencidos</div></div>
+        <label class="toggle"><input type="checkbox" id="cfg_alEpis" checked/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-group">
+        <div><div class="toggle-label">Alertas de documentos vencidos</div><div class="toggle-desc">Notificar quando PGR, PCMSO e laudos vencerem</div></div>
+        <label class="toggle"><input type="checkbox" id="cfg_alDocs" checked/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="form-group" style="margin-top:16px">
+        <label>Dias de antecedência para alertas</label>
         <select id="cfg_diasAlerta">
-          <option value="7">7 dias antes</option>
           <option value="15">15 dias antes</option>
           <option value="30" selected>30 dias antes</option>
+          <option value="45">45 dias antes</option>
           <option value="60">60 dias antes</option>
-          <option value="90">90 dias antes</option>
         </select>
       </div>
+      <button class="btn-salvar" onclick="salvarNotif()">💾 Salvar Configurações</button>
     </div>
-  </div>
 
-  <!-- ARMAZENAMENTO -->
-  <div class="config-section">
-    <div class="config-section-header">
-      <div class="config-section-icon">💾</div>
-      <div><h3>Armazenamento de Dados</h3><p>Uso do localStorage do navegador</p></div>
+    <div class="cfg-card">
+      <h3>🎨 Aparência</h3>
+      <div class="form-group">
+        <label>Cor de Destaque Principal</label>
+        <input type="color" class="cor-picker" id="cfg_corPrimaria" value="#00d4ff"/>
+      </div>
+      <div class="toggle-group">
+        <div><div class="toggle-label">Modo compacto na sidebar</div><div class="toggle-desc">Exibir apenas ícones na barra lateral</div></div>
+        <label class="toggle"><input type="checkbox" id="cfg_sidebarCompacta"/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-group">
+        <div><div class="toggle-label">Animações reduzidas</div><div class="toggle-desc">Desativar transições e efeitos visuais</div></div>
+        <label class="toggle"><input type="checkbox" id="cfg_semAnim"/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="form-group" style="margin-top:16px">
+        <label>Itens por página nas tabelas</label>
+        <select id="cfg_itensPag">
+          <option value="10">10 itens</option>
+          <option value="25" selected>25 itens</option>
+          <option value="50">50 itens</option>
+          <option value="100">100 itens</option>
+        </select>
+      </div>
+      <button class="btn-salvar" onclick="salvarAparencia()">💾 Salvar Aparência</button>
     </div>
-    <div id="storageInfo">
-      <div class="storage-bar"><div class="storage-fill" id="storageBar" style="width:0%"></div></div>
-      <div class="storage-info"><span id="storageUsado">0 KB usados</span><span id="storageTotal">~5 MB disponivel</span></div>
-    </div>
-    <div style="margin-top:16px">
-      <p style="font-size:.82rem;font-weight:700;margin-bottom:12px;color:rgba(255,255,255,.6)">Modulos de dados</p>
-      <div class="modulos-grid" id="modulosGrid"></div>
-    </div>
-    <div class="btn-row" style="margin-top:20px">
-      <button class="btn-neutro" onclick="exportarDados()">📥 Exportar Backup (JSON)</button>
-      <button class="btn-neutro" onclick="document.getElementById('importInput').click()">📤 Importar Backup</button>
-      <input type="file" id="importInput" accept=".json" style="display:none" onchange="importarDados(event)"/>
-    </div>
-    <div style="margin-top:12px">
-      <button class="btn-perigoso" onclick="limparTodosDados()">🗑️ Limpar TODOS os Dados</button>
-      <p style="font-size:.72rem;color:rgba(248,113,113,.5);margin-top:6px">⚠️ Esta acao e irreversivel e apagara todos os registros do sistema.</p>
-    </div>
-  </div>
 
-  <!-- SOBRE -->
-  <div class="config-section">
-    <div class="config-section-header">
-      <div class="config-section-icon">ℹ️</div>
-      <div><h3>Sobre o SafeNR</h3><p>Informacoes do sistema</p></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:14px">
-        <p style="font-size:.72rem;color:rgba(255,255,255,.35);margin-bottom:4px">VERSAO</p>
-        <p style="font-size:.95rem;font-weight:700;color:#00d4ff">SafeNR v3.0 — Fase 3</p>
+    <div class="cfg-card full">
+      <h3>💾 Backup e Dados</h3>
+      <div class="acoes-grid">
+        <button class="btn-export" onclick="exportarDados()">📥 Exportar todos os dados (JSON)</button>
+        <button class="btn-export" onclick="document.getElementById('f_import').click()">📤 Importar backup (JSON)</button>
+        <input type="file" id="f_import" accept=".json" style="display:none" onchange="importarDados(this)"/>
+        <button class="btn-danger" onclick="limparModulo('treins')">🗑️ Limpar Treinamentos</button>
+        <button class="btn-danger" onclick="limparModulo('riscos')">🗑️ Limpar Riscos</button>
+        <button class="btn-danger" onclick="limparModulo('ocorrs')">🗑️ Limpar Ocorrências</button>
+        <button class="btn-danger" onclick="resetTotal()">⚠️ RESETAR TUDO</button>
       </div>
-      <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:14px">
-        <p style="font-size:.72rem;color:rgba(255,255,255,.35);margin-bottom:4px">TECNOLOGIA</p>
-        <p style="font-size:.95rem;font-weight:700">HTML5 · CSS3 · JS Vanilla</p>
-      </div>
-      <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:14px">
-        <p style="font-size:.72rem;color:rgba(255,255,255,.35);margin-bottom:4px">ARMAZENAMENTO</p>
-        <p style="font-size:.95rem;font-weight:700">localStorage (offline)</p>
-      </div>
-      <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:14px">
-        <p style="font-size:.72rem;color:rgba(255,255,255,.35);margin-bottom:4px">GRAFICOS</p>
-        <p style="font-size:.95rem;font-weight:700">Chart.js 4.4.4</p>
+      <div style="margin-top:16px;padding:14px;background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.15);border-radius:10px;font-size:.78rem;color:rgba(255,255,255,.5)">
+        ⚠️ <strong style="color:#fbbf24">Atenção:</strong> O backup é armazenado localmente no navegador (localStorage). Exporte regularmente para evitar perda de dados ao limpar o cache.
       </div>
     </div>
-    <div style="margin-top:16px;padding:14px;background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.12);border-radius:10px">
-      <p style="font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.6">
-        SafeNR e um sistema de Gestao de Seguranca do Trabalho desenvolvido para auxiliar tecnicos e engenheiros de SST no controle de EPIs, treinamentos, inspecoes, riscos, ocorrencias e conformidade com as Normas Regulamentadoras brasileiras.
-      </p>
-    </div>
-  </div>
 
-  <!-- BOTÃO SALVAR -->
-  <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px;padding-bottom:40px">
-    <button class="btn-neutro"      onclick="window.history.back()">Cancelar</button>
-    <button class="btn-salvar-conf" onclick="salvarConfiguracoes()">💾 Salvar Configuracoes</button>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
+<script src="./sidebar.js"></script>
 <script>
-var userData = localStorage.getItem('safenr_user');
-if (!userData) { window.location.href = './index.html'; }
-var user = JSON.parse(userData);
-document.getElementById('nomeUsuario').textContent    = user.nome || 'Usuario';
-document.getElementById('avatarLetra').textContent    = (user.nome || 'U')[0].toUpperCase();
-document.getElementById('cfgAvatarBig').textContent   = (user.nome || 'U')[0].toUpperCase();
-document.getElementById('cfgNomeExibido').textContent = user.nome || 'Usuario';
-function sair() { localStorage.removeItem('safenr_user'); window.location.href = './index.html'; }
-
-function toast(msg, tipo) {
-  var t = document.getElementById('toast');
-  t.innerHTML = (tipo === 'erro' ? '❌' : '✅') + ' ' + msg;
-  t.style.borderColor = tipo === 'erro' ? 'rgba(248,113,113,.3)' : 'rgba(0,212,255,.3)';
-  t.style.color       = tipo === 'erro' ? '#f87171' : '#00d4ff';
-  t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+var cfg=JSON.parse(localStorage.getItem('safenr_config')||'{}');
+var user=JSON.parse(localStorage.getItem('safenr_user')||'{}');
+function toast(msg,cor){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.style.color=cor||'#4ade80';t.style.borderColor=(cor||'#4ade80')+'44';
+  t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);
 }
-
-var MODULOS = [
-  {key:'safenr_colaboradores', icon:'👷', nome:'Colaboradores'},
-  {key:'safenr_ocorrencias',   icon:'🚨', nome:'Ocorrencias'},
-  {key:'safenr_treinamentos',  icon:'🎓', nome:'Treinamentos'},
-  {key:'safenr_riscos',        icon:'⚠️', nome:'Riscos'},
-  {key:'safenr_inspecoes',     icon:'🔍', nome:'Inspecoes'},
-  {key:'safenr_checklists',    icon:'📋', nome:'Checklists'},
-  {key:'safenr_planos',        icon:'📌', nome:'Plano de Acao'},
-  {key:'safenr_documentos',    icon:'🗂️', nome:'Documentos'},
-  {key:'safenr_agenda',        icon:'📅', nome:'Agenda'},
-  {key:'safenr_ambientes',     icon:'🏭', nome:'Ambientes'},
-  {key:'safenr_notificacoes',  icon:'🔔', nome:'Notificacoes'},
-  {key:'safenr_epis',          icon:'🦺', nome:'Cadastro EPIs'}
-];
-
-function calcStorage() {
-  var total = 0;
-  for (var k in localStorage) {
-    if (!localStorage.hasOwnProperty(k)) continue;
-    total += ((localStorage[k].length + k.length) * 2);
-  }
-  return total;
+function carregarCampos(){
+  document.getElementById('cfg_empresa').value=cfg.empresa||'';
+  document.getElementById('cfg_cnpj').value=cfg.cnpj||'';
+  document.getElementById('cfg_cnae').value=cfg.cnae||'';
+  document.getElementById('cfg_grauRisco').value=cfg.grauRisco||'2';
+  document.getElementById('cfg_numFunc').value=cfg.numFunc||'';
+  document.getElementById('cfg_endereco').value=cfg.endereco||'';
+  document.getElementById('cfg_tel').value=cfg.tel||'';
+  document.getElementById('cfg_email').value=cfg.email||'';
+  document.getElementById('cfg_nome').value=user.nome||'';
+  document.getElementById('cfg_cargo').value=user.cargo||'';
+  document.getElementById('cfg_registro').value=user.registro||'';
+  document.getElementById('cfg_userEmail').value=user.email||'';
+  document.getElementById('cfg_alTreins').checked=cfg.alTreins!==false;
+  document.getElementById('cfg_alAso').checked=cfg.alAso!==false;
+  document.getElementById('cfg_alPlanos').checked=cfg.alPlanos!==false;
+  document.getElementById('cfg_alEpis').checked=cfg.alEpis!==false;
+  document.getElementById('cfg_alDocs').checked=cfg.alDocs!==false;
+  document.getElementById('cfg_diasAlerta').value=cfg.diasAlerta||'30';
+  document.getElementById('cfg_corPrimaria').value=cfg.corPrimaria||'#00d4ff';
+  document.getElementById('cfg_sidebarCompacta').checked=!!cfg.sidebarCompacta;
+  document.getElementById('cfg_semAnim').checked=!!cfg.semAnim;
+  document.getElementById('cfg_itensPag').value=cfg.itensPag||'25';
+  var letra=(user.nome||'U')[0].toUpperCase();
+  document.getElementById('perfilUsuario').innerHTML=
+    '<div class="perfil-header"><div class="perfil-avatar">'+letra+'</div>'+
+    '<div class="perfil-info"><div class="nome">'+(user.nome||'Usuário')+'</div><div class="cargo">'+(user.cargo||'Segurança do Trabalho')+'</div></div></div>';
 }
-
-function atualizarStorage() {
-  var bytes = calcStorage();
-  var kb    = Math.round(bytes / 1024);
-  var pct   = Math.min(100, Math.round((bytes / (5 * 1024 * 1024)) * 100));
-  document.getElementById('storageUsado').textContent = kb + ' KB usados';
-  document.getElementById('storageBar').style.width   = pct + '%';
-  if (pct > 80)      document.getElementById('storageBar').style.background = 'linear-gradient(90deg,#f87171,#dc2626)';
-  else if (pct > 60) document.getElementById('storageBar').style.background = 'linear-gradient(90deg,#fbbf24,#d97706)';
-
-  var grid = document.getElementById('modulosGrid');
-  grid.innerHTML = '';
-  MODULOS.forEach(function(m) {
-    var dados = JSON.parse(localStorage.getItem(m.key) || '[]');
-    var qtd   = Array.isArray(dados) ? dados.length : 1;
-    var div   = document.createElement('div');
-    div.className = 'modulo-item';
-    div.innerHTML = '<span class="icon">'+m.icon+'</span><div class="info"><p>'+m.nome+'</p><span>'+qtd+' registro(s)</span></div>';
-    grid.appendChild(div);
-  });
+function salvarEmpresa(){
+  cfg.empresa=document.getElementById('cfg_empresa').value.trim();
+  cfg.cnpj=document.getElementById('cfg_cnpj').value.trim();
+  cfg.cnae=document.getElementById('cfg_cnae').value.trim();
+  cfg.grauRisco=document.getElementById('cfg_grauRisco').value;
+  cfg.numFunc=document.getElementById('cfg_numFunc').value;
+  cfg.endereco=document.getElementById('cfg_endereco').value.trim();
+  cfg.tel=document.getElementById('cfg_tel').value.trim();
+  cfg.email=document.getElementById('cfg_email').value.trim();
+  localStorage.setItem('safenr_config',JSON.stringify(cfg));
+  toast('✅ Dados da empresa salvos!');
 }
-
-function carregarConfiguracoes() {
-  var cfg = JSON.parse(localStorage.getItem('safenr_config') || '{}');
-  ['cfg_razao','cfg_cnpj','cfg_cnae','cfg_grau','cfg_resp','cfg_registro',
-   'cfg_end','cfg_cidade','cfg_tel','cfg_email','cfg_nColabs','cfg_diasAlerta'].forEach(function(c) {
-    var el  = document.getElementById(c);
-    var key = c.replace('cfg_', '');
-    if (el && cfg[key] !== undefined) el.value = cfg[key];
-  });
-  ['tog_epi','tog_trein','tog_risco','tog_acidente','tog_insp','tog_docs','tog_planos'].forEach(function(id) {
-    var key = id.replace('tog_', 'notif_');
-    var el  = document.getElementById(id);
-    if (el && cfg[key] !== undefined) el.checked = cfg[key];
-  });
-  document.getElementById('cfg_nomeUser').value  = user.nome  || '';
-  document.getElementById('cfg_cargoUser').value = user.cargo || '';
+function salvarPerfil(){
+  var senha=document.getElementById('cfg_senha').value;
+  var senha2=document.getElementById('cfg_senha2').value;
+  if(senha&&senha!==senha2){toast('❌ As senhas não coincidem!','#f87171');return;}
+  user.nome=document.getElementById('cfg_nome').value.trim();
+  user.cargo=document.getElementById('cfg_cargo').value.trim();
+  user.registro=document.getElementById('cfg_registro').value.trim();
+  user.email=document.getElementById('cfg_userEmail').value.trim();
+  if(senha)user.senha=btoa(senha);
+  localStorage.setItem('safenr_user',JSON.stringify(user));
+  carregarCampos();
+  toast('✅ Perfil atualizado!');
 }
-
-function salvarConfiguracoes() {
-  var cfg = {};
-  ['razao','cnpj','cnae','grau','resp','registro','end','cidade','tel','email','nColabs','diasAlerta'].forEach(function(k) {
-    var el = document.getElementById('cfg_'+k);
-    if (el) cfg[k] = el.value;
-  });
-  ['epi','trein','risco','acidente','insp','docs','planos'].forEach(function(k) {
-    var el = document.getElementById('tog_'+k);
-    if (el) cfg['notif_'+k] = el.checked;
-  });
-  localStorage.setItem('safenr_config', JSON.stringify(cfg));
-
-  var novoNome  = document.getElementById('cfg_nomeUser').value.trim();
-  var novoCargo = document.getElementById('cfg_cargoUser').value.trim();
-  var senha     = document.getElementById('cfg_senha').value;
-  var senha2    = document.getElementById('cfg_senha2').value;
-  if (senha) {
-    if (senha !== senha2) { toast('As senhas nao coincidem.', 'erro'); return; }
-    user.senha = senha;
-  }
-  if (novoNome)  user.nome  = novoNome;
-  if (novoCargo) user.cargo = novoCargo;
-  localStorage.setItem('safenr_user', JSON.stringify(user));
-  document.getElementById('nomeUsuario').textContent    = user.nome || 'Usuario';
-  document.getElementById('avatarLetra').textContent    = (user.nome || 'U')[0].toUpperCase();
-  document.getElementById('cfgAvatarBig').textContent   = (user.nome || 'U')[0].toUpperCase();
-  document.getElementById('cfgNomeExibido').textContent = user.nome || 'Usuario';
-  document.getElementById('cfg_senha').value  = '';
-  document.getElementById('cfg_senha2').value = '';
-  toast('Configuracoes salvas com sucesso!');
-  atualizarStorage();
+function salvarNotif(){
+  cfg.alTreins=document.getElementById('cfg_alTreins').checked;
+  cfg.alAso=document.getElementById('cfg_alAso').checked;
+  cfg.alPlanos=document.getElementById('cfg_alPlanos').checked;
+  cfg.alEpis=document.getElementById('cfg_alEpis').checked;
+  cfg.alDocs=document.getElementById('cfg_alDocs').checked;
+  cfg.diasAlerta=document.getElementById('cfg_diasAlerta').value;
+  localStorage.setItem('safenr_config',JSON.stringify(cfg));
+  toast('✅ Configurações de notificações salvas!');
 }
-
-function exportarDados() {
-  var backup = { versao:'SafeNR v3.0', exportadoEm:new Date().toISOString(), dados:{} };
-  MODULOS.forEach(function(m) {
-    backup.dados[m.key] = JSON.parse(localStorage.getItem(m.key) || '[]');
-  });
-  backup.dados.safenr_config = JSON.parse(localStorage.getItem('safenr_config') || '{}');
-  var blob = new Blob([JSON.stringify(backup, null, 2)], {type:'application/json'});
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement('a');
-  a.href     = url;
-  a.download = 'safenr_backup_'+new Date().toISOString().split('T')[0]+'.json';
-  a.click();
-  URL.revokeObjectURL(url);
-  toast('Backup exportado com sucesso!');
+function salvarAparencia(){
+  cfg.corPrimaria=document.getElementById('cfg_corPrimaria').value;
+  cfg.sidebarCompacta=document.getElementById('cfg_sidebarCompacta').checked;
+  cfg.semAnim=document.getElementById('cfg_semAnim').checked;
+  cfg.itensPag=document.getElementById('cfg_itensPag').value;
+  localStorage.setItem('safenr_config',JSON.stringify(cfg));
+  toast('✅ Aparência salva! Recarregue para aplicar.');
 }
-
-function importarDados(e) {
-  var file = e.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    try {
-      var backup = JSON.parse(ev.target.result);
-      if (!backup.dados) { toast('Arquivo de backup invalido.', 'erro'); return; }
-      if (!confirm('Importar backup? Os dados atuais serao substituidos.')) return;
-      Object.keys(backup.dados).forEach(function(k) {
-        localStorage.setItem(k, JSON.stringify(backup.dados[k]));
-      });
-      toast('Backup importado! Recarregando...');
-      setTimeout(function(){ location.reload(); }, 1500);
-    } catch(err) { toast('Erro ao ler arquivo.', 'erro'); }
+function exportarDados(){
+  var modulos=['safenr_colaboradores','safenr_treinamentos','safenr_riscos','safenr_ocorrencias','safenr_planos','safenr_checklists','safenr_epis','safenr_documentos','safenr_ambientes','safenr_inspecoes','safenr_fotos','safenr_agenda','safenr_notificacoes','safenr_config','safenr_user'];
+  var backup={exportadoEm:new Date().toISOString(),versao:'1.0',dados:{}};
+  modulos.forEach(function(m){var d=localStorage.getItem(m);if(d)backup.dados[m]=JSON.parse(d);});
+  var blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='safenr_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();
+  toast('✅ Backup exportado com sucesso!');
+}
+function importarDados(input){
+  if(!input.files||!input.files[0])return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var backup=JSON.parse(e.target.result);
+      if(!backup.dados){toast('❌ Arquivo inválido!','#f87171');return;}
+      if(!confirm('Isso irá sobrescrever os dados atuais. Continuar?'))return;
+      Object.keys(backup.dados).forEach(function(k){localStorage.setItem(k,JSON.stringify(backup.dados[k]));});
+      cfg=JSON.parse(localStorage.getItem('safenr_config')||'{}');
+      user=JSON.parse(localStorage.getItem('safenr_user')||'{}');
+      carregarCampos();
+      toast('✅ Backup importado com sucesso!');
+    }catch(err){toast('❌ Erro ao importar backup!','#f87171');}
   };
-  reader.readAsText(file);
-  e.target.value = '';
+  reader.readAsText(input.files[0]);
 }
-
-function limparTodosDados() {
-  if (!confirm('ATENCAO: Apagar TODOS os dados do SafeNR?\n\nEsta acao e IRREVERSIVEL.')) return;
-  if (!confirm('Tem certeza absoluta? Todos os colaboradores, ocorrencias, treinamentos e registros serao perdidos.')) return;
-  MODULOS.forEach(function(m){ localStorage.removeItem(m.key); });
-  localStorage.removeItem('safenr_config');
-  toast('Dados removidos. Redirecionando...');
-  setTimeout(function(){ window.location.href = './app.html'; }, 1500);
+function limparModulo(mod){
+  var mapa={treins:'safenr_treinamentos',riscos:'safenr_riscos',ocorrs:'safenr_ocorrencias'};
+  if(!confirm('Limpar todos os dados de '+mod+'? Esta ação não pode ser desfeita!'))return;
+  localStorage.removeItem(mapa[mod]);
+  toast('🗑️ Dados de '+mod+' removidos!','#fbbf24');
 }
-
-/* ── BADGE NOTIFICAÇÕES ── */
-(function(){
-  var n  = JSON.parse(localStorage.getItem('safenr_notificacoes') || '[]');
-  var nl = n.filter(function(x){ return !x.lida; }).length;
-  var link = document.querySelector('a[href="./notificacoes.html"]');
-  if (link && nl > 0) {
-    var b = document.createElement('span');
-    b.className   = 'notif-badge';
-    b.textContent = nl;
-    link.appendChild(b);
-  }
-})();
-
-carregarConfiguracoes();
-atualizarStorage();
+function resetTotal(){
+  if(!confirm('⚠️ ATENÇÃO: Isso apagará TODOS os dados do sistema! Tem certeza absoluta?'))return;
+  if(!confirm('Segunda confirmação: todos os registros serão perdidos permanentemente. Confirmar?'))return;
+  var keys=['safenr_colaboradores','safenr_treinamentos','safenr_riscos','safenr_ocorrencias','safenr_planos','safenr_checklists','safenr_epis','safenr_documentos','safenr_ambientes','safenr_inspecoes','safenr_fotos','safenr_agenda','safenr_notificacoes','safenr_ia_historico'];
+  keys.forEach(function(k){localStorage.removeItem(k);});
+  toast('🗑️ Sistema resetado!','#fbbf24');
+}
+carregarCampos();
 </script>
 </body>
 </html>
