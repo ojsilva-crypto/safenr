@@ -97,7 +97,8 @@ function fazerLogin(){
   document.getElementById('loginUser').classList.remove('erro');
   document.getElementById('loginSenha').classList.remove('erro');
   if(!u||!s){
-    erro.textContent='❌ Preencha usuário e senha.';erro.classList.add('show');
+    erro.textContent='❌ Preencha usuário e senha.';
+    erro.classList.add('show');
     if(!u)document.getElementById('loginUser').classList.add('erro');
     if(!s)document.getElementById('loginSenha').classList.add('erro');
     return;
@@ -116,7 +117,12 @@ function fazerLogin(){
       ok=(u==='admin'&&s==='admin123')||(u==='demo'&&s==='demo123');
       if(ok){
         var nome=u==='demo'?'Usuário Demo':'Administrador';
-        localStorage.setItem('safenr_user',JSON.stringify({nome:nome,cargo:'Técnico de Segurança',email:u+'@safenr.com',senha:btoa(s)}));
+        localStorage.setItem('safenr_user',JSON.stringify({
+          nome:nome,
+          cargo:'Técnico de Segurança',
+          email:u+'@safenr.com',
+          senha:btoa(s)
+        }));
       }
     }
     if(ok){
@@ -137,8 +143,10 @@ function entrarDemo(){
   document.getElementById('loginSenha').value='demo123';
   fazerLogin();
 }
-var logado=localStorage.getItem('safenr_logado');
-if(logado==='1')window.location.href='app.html';
+// Se já estiver logado, redireciona direto
+if(localStorage.getItem('safenr_logado')==='1'){
+  window.location.href='app.html';
+}
 </script>
 </body>
 </html>
