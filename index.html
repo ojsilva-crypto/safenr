@@ -4,403 +4,191 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SafeNR — Login</title>
-
-  <!-- PWA -->
-  <link rel="manifest" href="./manifest.json"/>
-  <meta name="theme-color" content="#0f1923"/>
-  <link rel="apple-touch-icon" href="./icons/icon-192.png"/>
-
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-
-    /* Fundo animado */
-    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(0,212,255,.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(99,102,241,.06) 0%,transparent 60%);pointer-events:none}
-
-    .login-wrap{width:100%;max-width:440px}
-
-    /* Logo */
-    .logo-area{text-align:center;margin-bottom:36px}
-    .logo-area h1{font-size:2.8rem;font-weight:900;letter-spacing:3px}
-    .logo-area h1 span{color:#00d4ff}
-    .logo-area p{font-size:.85rem;color:rgba(255,255,255,.35);margin-top:6px;letter-spacing:.5px}
-
-    /* Card */
-    .login-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:36px;backdrop-filter:blur(10px)}
-    .login-card h2{font-size:1.1rem;font-weight:700;margin-bottom:6px}
-    .login-card p.sub{font-size:.8rem;color:rgba(255,255,255,.35);margin-bottom:28px}
-
-    /* Perfil selector */
-    .perfil-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
-    .perfil-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 8px;cursor:pointer;text-align:center;transition:all .2s;color:rgba(255,255,255,.5)}
-    .perfil-btn:hover{background:rgba(0,212,255,.08);border-color:rgba(0,212,255,.2);color:#fff}
-    .perfil-btn.selected{background:rgba(0,212,255,.12);border-color:rgba(0,212,255,.4);color:#00d4ff}
-    .perfil-btn .picon{font-size:1.6rem;margin-bottom:6px}
-    .perfil-btn .pnome{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-    .perfil-btn .pdesc{font-size:.65rem;opacity:.6;margin-top:2px}
-
-    /* Inputs */
-    .form-group{margin-bottom:16px}
-    .form-group label{display:block;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:7px;letter-spacing:.3px}
-    .form-group input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:13px 16px;color:#fff;font-size:.9rem;outline:none;transition:all .2s}
-    .form-group input:focus{border-color:rgba(0,212,255,.4);background:rgba(0,212,255,.05);box-shadow:0 0 0 3px rgba(0,212,255,.07)}
-    .form-group input::placeholder{color:rgba(255,255,255,.2)}
-
-    /* Empresa input */
-    .empresa-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-    /* Botão entrar */
-    .btn-entrar{width:100%;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:12px;color:#0f1923;font-size:1rem;font-weight:800;padding:15px;cursor:pointer;transition:all .2s;margin-top:8px;letter-spacing:.3px}
-    .btn-entrar:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,255,.25)}
-    .btn-entrar:active{transform:translateY(0)}
-    .btn-entrar:disabled{opacity:.5;cursor:not-allowed;transform:none}
-
-    /* Divisor */
-    .divisor{display:flex;align-items:center;gap:12px;margin:20px 0;color:rgba(255,255,255,.2);font-size:.78rem}
+    body{background:#0f1923;display:flex;align-items:center;
+         justify-content:center;min-height:100vh;
+         font-family:'Segoe UI',system-ui,sans-serif}
+    .box{background:#0a1520;border:1px solid rgba(255,255,255,.08);
+         border-radius:20px;padding:40px 36px;width:380px;text-align:center}
+    h1{color:#fff;font-size:1.9rem;font-weight:900;letter-spacing:2px;margin-bottom:4px}
+    h1 span{color:#00d4ff}
+    .sub{color:rgba(255,255,255,.35);font-size:.8rem;margin-bottom:28px}
+    .perfis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+    .perfil-btn{background:#111c28;border:2px solid rgba(255,255,255,.08);
+                border-radius:12px;padding:14px 8px;cursor:pointer;
+                transition:all .2s;color:rgba(255,255,255,.5);font-size:.75rem;font-weight:700}
+    .perfil-btn:hover{border-color:rgba(0,212,255,.3);color:#fff}
+    .perfil-btn.ativo{border-color:#00d4ff;background:rgba(0,212,255,.08);color:#00d4ff}
+    .perfil-btn .ico{font-size:1.5rem;display:block;margin-bottom:6px}
+    .perfil-btn .nome{display:block;font-size:.78rem;font-weight:800}
+    .perfil-btn .desc{display:block;font-size:.65rem;opacity:.6;margin-top:2px}
+    .info-perfil{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);
+                 border-radius:10px;padding:10px 14px;font-size:.78rem;
+                 color:rgba(255,255,255,.65);margin-bottom:18px;text-align:left;line-height:1.5}
+    .field{text-align:left;margin-bottom:14px}
+    .field label{display:block;font-size:.78rem;font-weight:600;
+                 color:rgba(255,255,255,.5);margin-bottom:5px}
+    .field input{width:100%;background:#111c28;border:1px solid rgba(255,255,255,.1);
+                 color:#fff;border-radius:10px;padding:12px 14px;font-size:.93rem;
+                 outline:none;transition:border-color .18s}
+    .field input:focus{border-color:rgba(0,212,255,.4)}
+    .btn-entrar{width:100%;background:linear-gradient(135deg,#00d4ff,#0099cc);
+                color:#0f1923;border:none;border-radius:12px;padding:14px;
+                font-size:1rem;font-weight:800;cursor:pointer;
+                transition:filter .18s;letter-spacing:.5px}
+    .btn-entrar:hover{filter:brightness(1.08)}
+    .erro{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);
+          border-radius:8px;padding:10px 14px;color:#f87171;font-size:.82rem;
+          margin-bottom:14px;display:none;text-align:left}
+    .divisor{display:flex;align-items:center;gap:12px;margin:18px 0;
+             color:rgba(255,255,255,.2);font-size:.78rem}
     .divisor::before,.divisor::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
-
-    /* Criar conta */
-    .btn-criar{width:100%;background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:12px;color:rgba(255,255,255,.5);font-size:.88rem;font-weight:600;padding:13px;cursor:pointer;transition:all .2s}
-    .btn-criar:hover{border-color:rgba(255,255,255,.25);color:#fff}
-
-    /* Erro / sucesso */
-    .msg-erro{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:10px;padding:10px 14px;font-size:.82rem;color:#f87171;margin-bottom:16px;display:none}
-    .msg-erro.show{display:block}
-    .msg-ok{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);border-radius:10px;padding:10px 14px;font-size:.82rem;color:#4ade80;margin-bottom:16px;display:none}
-    .msg-ok.show{display:block}
-
-    /* Modo cadastro */
-    .campo-extra{display:none}
-    .campo-extra.show{display:block}
-
-    /* Permissões badge */
-    .perms-info{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.75rem;color:rgba(255,255,255,.4);line-height:1.6}
-    .perms-info strong{color:rgba(255,255,255,.6)}
-
-    /* Spinner */
-    .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(15,25,35,.4);border-top-color:#0f1923;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* Rodapé */
-    .login-footer{text-align:center;margin-top:24px;font-size:.72rem;color:rgba(255,255,255,.2)}
-
-    /* Instalar PWA banner */
-    .pwa-banner{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:12px 16px;margin-bottom:20px;display:none;align-items:center;gap:12px;cursor:pointer}
-    .pwa-banner.show{display:flex}
-    .pwa-banner p{font-size:.78rem;color:rgba(255,255,255,.6);flex:1}
-    .pwa-banner button{background:rgba(99,102,241,.3);border:none;border-radius:8px;color:#a5b4fc;font-size:.75rem;font-weight:700;padding:6px 12px;cursor:pointer;white-space:nowrap}
+    .credenciais{background:#111c28;border:1px solid rgba(255,255,255,.06);
+                 border-radius:10px;padding:12px 14px;text-align:left;font-size:.78rem}
+    .credenciais p{color:rgba(255,255,255,.4);margin-bottom:8px;font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px}
+    .cred-item{display:flex;justify-content:space-between;padding:5px 0;
+               border-bottom:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.6)}
+    .cred-item:last-child{border-bottom:none}
+    .cred-item span{color:#00d4ff;font-weight:700;cursor:pointer}
+    .cred-item span:hover{text-decoration:underline}
+    .versao{margin-top:20px;font-size:.68rem;color:rgba(255,255,255,.2)}
   </style>
 </head>
 <body>
+<div class="box">
+  <h1>Safe<span>NR</span></h1>
+  <p class="sub">Gestão de Segurança do Trabalho v4</p>
 
-<div class="login-wrap">
-
-  <!-- Logo -->
-  <div class="logo-area">
-    <h1>Safe<span>NR</span></h1>
-    <p>Gestao de Seguranca do Trabalho</p>
-  </div>
-
-  <!-- Banner instalar PWA -->
-  <div class="pwa-banner" id="pwaBanner">
-    <span style="font-size:1.4rem">📱</span>
-    <p>Instale o SafeNR como app no seu dispositivo</p>
-    <button onclick="instalarPWA()">Instalar</button>
-  </div>
-
-  <!-- Card login -->
-  <div class="login-card">
-    <h2>Bem-vindo de volta 👋</h2>
-    <p class="sub">Selecione seu perfil e acesse o sistema</p>
-
-    <!-- Seletor de perfil -->
-    <div class="perfil-grid" id="perfilGrid">
-      <div class="perfil-btn selected" data-perfil="admin" onclick="selecionarPerfil('admin',this)">
-        <div class="picon">👑</div>
-        <div class="pnome">Admin</div>
-        <div class="pdesc">Acesso total</div>
-      </div>
-      <div class="perfil-btn" data-perfil="tecnico" onclick="selecionarPerfil('tecnico',this)">
-        <div class="picon">🦺</div>
-        <div class="pnome">Tecnico</div>
-        <div class="pdesc">SST / SESMT</div>
-      </div>
-      <div class="perfil-btn" data-perfil="gestor" onclick="selecionarPerfil('gestor',this)">
-        <div class="picon">📊</div>
-        <div class="pnome">Gestor</div>
-        <div class="pdesc">Somente leitura</div>
-      </div>
+  <!-- PERFIS -->
+  <div class="perfis">
+    <div class="perfil-btn ativo" onclick="selecionarPerfil('admin',this)">
+      <span class="ico">👑</span>
+      <span class="nome">ADMIN</span>
+      <span class="desc">Acesso total</span>
     </div>
-
-    <!-- Info de permissões -->
-    <div class="perms-info" id="permsInfo">
-      <strong>👑 Administrador:</strong> Acesso completo a todos os modulos, configuracoes e exportacoes.
+    <div class="perfil-btn" onclick="selecionarPerfil('tecnico',this)">
+      <span class="ico">🦺</span>
+      <span class="nome">TÉCNICO</span>
+      <span class="desc">SST / SESMT</span>
     </div>
-
-    <!-- Mensagens -->
-    <div class="msg-erro" id="msgErro"></div>
-    <div class="msg-ok"   id="msgOk"></div>
-
-    <!-- Formulário -->
-    <form id="loginForm" onsubmit="return false">
-
-      <!-- Campos extras (cadastro) -->
-      <div class="campo-extra" id="campoNome">
-        <div class="form-group">
-          <label>SEU NOME COMPLETO</label>
-          <input type="text" id="inputNome" placeholder="Ex: Carlos Silva"/>
-        </div>
-      </div>
-      <div class="campo-extra empresa-row" id="campoEmpresa">
-        <div class="form-group">
-          <label>EMPRESA</label>
-          <input type="text" id="inputEmpresa" placeholder="Nome da empresa"/>
-        </div>
-        <div class="form-group">
-          <label>CNPJ (opcional)</label>
-          <input type="text" id="inputCNPJ" placeholder="00.000.000/0001-00" maxlength="18"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>E-MAIL</label>
-        <input type="email" id="inputEmail" placeholder="seu@email.com" required/>
-      </div>
-      <div class="form-group">
-        <label>SENHA</label>
-        <input type="password" id="inputSenha" placeholder="Minimo 6 caracteres" required/>
-      </div>
-
-      <button class="btn-entrar" id="btnEntrar" onclick="fazerLogin()">
-        Entrar no SafeNR
-      </button>
-
-      <div class="divisor">ou</div>
-
-      <button class="btn-criar" id="btnCriar" onclick="toggleCadastro()">
-        Criar nova conta
-      </button>
-    </form>
+    <div class="perfil-btn" onclick="selecionarPerfil('gestor',this)">
+      <span class="ico">📊</span>
+      <span class="nome">GESTOR</span>
+      <span class="desc">Somente leitura</span>
+    </div>
   </div>
 
-  <div class="login-footer">
-    SafeNR v2.0 — Gestao de Seguranca do Trabalho<br/>
-    Fase 2: Multi-usuario · PWA · Nuvem
+  <div class="info-perfil" id="infoPerfil">
+    👑 <strong>Administrador:</strong> Acesso completo a todos os módulos,
+    configurações e exportações.
   </div>
+
+  <div class="erro" id="erroMsg">✕ Usuário ou senha incorretos.</div>
+
+  <div class="field">
+    <label>E-MAIL</label>
+    <input type="email" id="email" placeholder="seu@email.com"
+           value="admin@safenr.com.br"/>
+  </div>
+  <div class="field">
+    <label>SENHA</label>
+    <input type="password" id="senha" placeholder="••••••••"
+           onkeydown="if(event.key==='Enter')entrar()"/>
+  </div>
+
+  <button class="btn-entrar" onclick="entrar()">Entrar no SafeNR</button>
+
+  <div class="divisor">credenciais de acesso</div>
+
+  <div class="credenciais">
+    <p>🔑 Usuários disponíveis</p>
+    <div class="cred-item">
+      <span>admin@safenr.com.br</span>
+      <span onclick="preencherCred('admin@safenr.com.br','admin123')">admin123</span>
+    </div>
+    <div class="cred-item">
+      <span>tecnico@safenr.com.br</span>
+      <span onclick="preencherCred('tecnico@safenr.com.br','tec123')">tec123</span>
+    </div>
+    <div class="cred-item">
+      <span>gestor@safenr.com.br</span>
+      <span onclick="preencherCred('gestor@safenr.com.br','gest123')">gest123</span>
+    </div>
+  </div>
+
+  <p class="versao">SafeNR v4 · Modo local · GitHub Pages</p>
 </div>
 
 <script>
-/* ══════════════════════════════════════════════════
-   CONFIGURAÇÃO SUPABASE
-   ══════════════════════════════════════════════════ */
-var SUPABASE_URL      = 'https://SEU_PROJETO.supabase.co';
-var SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_AQUI';
-var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  var perfilAtual = 'admin';
 
-/* ══════════════════════════════════════════════════
-   PERMISSÕES POR PERFIL
-   ══════════════════════════════════════════════════ */
-var PERMISSOES = {
-  admin: {
-    label: '👑 Administrador',
-    desc:  'Acesso completo a todos os modulos, configuracoes e exportacoes.',
-    modulos: ['*'],
-    podeEditar: true,
-    podeExcluir: true,
-    podeExportar: true,
-    podeConfigurar: true
-  },
-  tecnico: {
-    label: '🦺 Tecnico SST',
-    desc:  'Pode criar e editar registros de SST. Sem acesso a configuracoes e financeiro.',
-    modulos: ['treinamentos','inspecoes','riscos','checklists','ocorrencias','epis','ambientes','plano-acao','documentos','relatorios','biblioteca','fotos','notificacoes'],
-    podeEditar: true,
-    podeExcluir: false,
-    podeExportar: true,
-    podeConfigurar: false
-  },
-  gestor: {
-    label: '📊 Gestor',
-    desc:  'Somente visualizacao e exportacao de relatorios. Sem permissao de edicao.',
-    modulos: ['relatorios','agenda','colaboradores','ocorrencias','treinamentos'],
-    podeEditar: false,
-    podeExcluir: false,
-    podeExportar: true,
-    podeConfigurar: false
+  var USUARIOS = [
+    {email:'admin@safenr.com.br',   senha:'admin123', nome:'Odair',   perfil:'admin'},
+    {email:'tecnico@safenr.com.br', senha:'tec123',   nome:'Técnico', perfil:'tecnico'},
+    {email:'gestor@safenr.com.br',  senha:'gest123',  nome:'Gestor',  perfil:'gestor'}
+  ];
+
+  var INFO_PERFIL = {
+    admin:   '👑 <strong>Administrador:</strong> Acesso completo a todos os módulos, configurações e exportações.',
+    tecnico: '🦺 <strong>Técnico SST:</strong> Pode cadastrar, editar e exportar. Não pode excluir registros.',
+    gestor:  '📊 <strong>Gestor:</strong> Somente visualização e exportação de relatórios.'
+  };
+
+  function selecionarPerfil(perfil, el) {
+    perfilAtual = perfil;
+    document.querySelectorAll('.perfil-btn').forEach(function(b) { b.classList.remove('ativo'); });
+    el.classList.add('ativo');
+    document.getElementById('infoPerfil').innerHTML = INFO_PERFIL[perfil];
+    // preenche credencial padrão do perfil
+    var u = USUARIOS.find(function(x) { return x.perfil === perfil; });
+    if (u) { document.getElementById('email').value = u.email; document.getElementById('senha').value = ''; }
   }
-};
 
-var perfilSelecionado = 'admin';
-var modoCadastro = false;
-
-/* ── Selecionar perfil ── */
-function selecionarPerfil(perfil, el) {
-  perfilSelecionado = perfil;
-  document.querySelectorAll('.perfil-btn').forEach(function(b){ b.classList.remove('selected'); });
-  el.classList.add('selected');
-  var p = PERMISSOES[perfil];
-  document.getElementById('permsInfo').innerHTML =
-    '<strong>' + p.label + ':</strong> ' + p.desc;
-}
-
-/* ── Toggle cadastro / login ── */
-function toggleCadastro() {
-  modoCadastro = !modoCadastro;
-  var extras = ['campoNome', 'campoEmpresa'];
-  extras.forEach(function(id){
-    document.getElementById(id).classList.toggle('show', modoCadastro);
-  });
-  document.getElementById('btnEntrar').textContent = modoCadastro ? 'Criar Conta' : 'Entrar no SafeNR';
-  document.getElementById('btnCriar').textContent  = modoCadastro ? 'Ja tenho conta' : 'Criar nova conta';
-  document.getElementById('btnEntrar').onclick = modoCadastro ? criarConta : fazerLogin;
-  limparMsgs();
-}
-
-/* ── Mensagens ── */
-function showErro(msg) {
-  var el = document.getElementById('msgErro');
-  el.textContent = msg; el.classList.add('show');
-  document.getElementById('msgOk').classList.remove('show');
-}
-function showOk(msg) {
-  var el = document.getElementById('msgOk');
-  el.textContent = msg; el.classList.add('show');
-  document.getElementById('msgErro').classList.remove('show');
-}
-function limparMsgs() {
-  document.getElementById('msgErro').classList.remove('show');
-  document.getElementById('msgOk').classList.remove('show');
-}
-
-/* ── Loading ── */
-function setLoading(on) {
-  var btn = document.getElementById('btnEntrar');
-  btn.disabled = on;
-  btn.innerHTML = on
-    ? '<span class="spinner"></span> Aguarde...'
-    : (modoCadastro ? 'Criar Conta' : 'Entrar no SafeNR');
-}
-
-/* ══════════════════════════════════════════════════
-   LOGIN
-   ══════════════════════════════════════════════════ */
-async function fazerLogin() {
-  limparMsgs();
-  var email = document.getElementById('inputEmail').value.trim();
-  var senha = document.getElementById('inputSenha').value;
-  if (!email || !senha) { showErro('Preencha e-mail e senha.'); return; }
-
-  setLoading(true);
-  try {
-    var { data, error } = await sb.auth.signInWithPassword({ email: email, password: senha });
-    if (error) throw error;
-
-    /* Busca perfil salvo no banco */
-    var { data: perfil } = await sb
-      .from('usuarios')
-      .select('*')
-      .eq('user_id', data.user.id)
-      .single();
-
-    var userData = {
-      id:        data.user.id,
-      email:     data.user.email,
-      nome:      perfil ? perfil.nome      : email.split('@')[0],
-      empresa:   perfil ? perfil.empresa   : 'Demo',
-      empresaId: perfil ? perfil.empresa_id: data.user.id,
-      perfil:    perfil ? perfil.perfil    : perfilSelecionado,
-      perms:     PERMISSOES[perfil ? perfil.perfil : perfilSelecionado]
-    };
-
-    localStorage.setItem('safenr_user', JSON.stringify(userData));
-    showOk('✅ Login realizado! Redirecionando...');
-    setTimeout(function(){ window.location.href = './app.html'; }, 900);
-  } catch (e) {
-    showErro('❌ ' + (e.message || 'Erro ao fazer login'));
-    setLoading(false);
+  function preencherCred(email, senha) {
+    document.getElementById('email').value = email;
+    document.getElementById('senha').value = senha;
+    document.getElementById('erroMsg').style.display = 'none';
+    // seleciona perfil automaticamente
+    var u = USUARIOS.find(function(x) { return x.email === email; });
+    if (u) {
+      var btns = document.querySelectorAll('.perfil-btn');
+      var idx = ['admin','tecnico','gestor'].indexOf(u.perfil);
+      if (btns[idx]) selecionarPerfil(u.perfil, btns[idx]);
+    }
   }
-}
 
-/* ══════════════════════════════════════════════════
-   CRIAR CONTA
-   ══════════════════════════════════════════════════ */
-async function criarConta() {
-  limparMsgs();
-  var nome    = document.getElementById('inputNome').value.trim();
-  var empresa = document.getElementById('inputEmpresa').value.trim();
-  var email   = document.getElementById('inputEmail').value.trim();
-  var senha   = document.getElementById('inputSenha').value;
+  function entrar() {
+    var email = document.getElementById('email').value.trim().toLowerCase();
+    var senha = document.getElementById('senha').value.trim();
+    var erro  = document.getElementById('erroMsg');
 
-  if (!nome)    { showErro('Informe seu nome.');         return; }
-  if (!empresa) { showErro('Informe o nome da empresa.'); return; }
-  if (!email)   { showErro('Informe o e-mail.');          return; }
-  if (senha.length < 6) { showErro('Senha minima de 6 caracteres.'); return; }
-
-  setLoading(true);
-  try {
-    /* 1. Cria auth no Supabase */
-    var { data, error } = await sb.auth.signUp({ email: email, password: senha });
-    if (error) throw error;
-
-    /* 2. Salva perfil na tabela usuarios */
-    var empresaId = 'emp_' + Date.now();
-    await sb.from('usuarios').insert({
-      user_id:    data.user.id,
-      nome:       nome,
-      email:      email,
-      empresa:    empresa,
-      empresa_id: empresaId,
-      perfil:     perfilSelecionado,
-      cnpj:       document.getElementById('inputCNPJ').value.trim() || null
+    var usuario = USUARIOS.find(function(u) {
+      return u.email === email && u.senha === senha && u.perfil === perfilAtual;
     });
 
-    showOk('✅ Conta criada! Verifique seu e-mail para confirmar o cadastro.');
-    setLoading(false);
-  } catch (e) {
-    showErro('❌ ' + (e.message || 'Erro ao criar conta'));
-    setLoading(false);
+    if (usuario) {
+      localStorage.setItem('safenr_user', JSON.stringify({
+        nome:      usuario.nome,
+        email:     usuario.email,
+        perfil:    usuario.perfil,
+        empresa:   'SafeNR Demo',
+        empresaId: 'demo'
+      }));
+      erro.style.display = 'none';
+      window.location.href = './app.html';
+    } else {
+      erro.style.display  = 'block';
+      erro.textContent    = '✕ E-mail, senha ou perfil incorretos.';
+      document.getElementById('senha').value = '';
+      document.getElementById('senha').focus();
+    }
   }
-}
 
-/* ══════════════════════════════════════════════════
-   PWA — Instalar
-   ══════════════════════════════════════════════════ */
-var deferredPrompt = null;
-
-window.addEventListener('beforeinstallprompt', function(e) {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('pwaBanner').classList.add('show');
-});
-
-async function instalarPWA() {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  var { outcome } = await deferredPrompt.userChoice;
-  if (outcome === 'accepted') {
-    document.getElementById('pwaBanner').classList.remove('show');
+  // Se já logado, entra direto
+  if (localStorage.getItem('safenr_user')) {
+    window.location.href = './app.html';
   }
-  deferredPrompt = null;
-}
-
-/* ── Registrar Service Worker ── */
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js')
-    .then(function(reg){ console.log('[SafeNR PWA] SW registrado:', reg.scope); })
-    .catch(function(e){ console.warn('[SafeNR PWA] SW falhou:', e); });
-}
-
-/* ── Verificar se já está logado ── */
-(async function() {
-  var { data } = await sb.auth.getSession();
-  if (data.session) {
-    var cached = localStorage.getItem('safenr_user');
-    if (cached) { window.location.href = './app.html'; }
-  }
-})();
 </script>
 </body>
 </html>
