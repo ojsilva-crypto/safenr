@@ -4,6 +4,7 @@
     { href: './app.html',          icon: '🏠',  label: 'Dashboard' },
     { href: './treinamentos.html', icon: '🎓',  label: 'Treinamentos' },
     { href: './agenda.html',       icon: '📅',  label: 'Agenda' },
+    { href: './calendario.html',   icon: '🗓️', label: 'Calendario' },
     { href: './inspecoes.html',    icon: '🔍',  label: 'Inspecoes' },
     { href: './riscos.html',       icon: '⚠️',  label: 'Riscos' },
     { href: './checklists.html',   icon: '📋',  label: 'Checklists' },
