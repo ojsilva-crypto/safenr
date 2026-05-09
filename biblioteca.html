@@ -1,1469 +1,413 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SafeNR — Biblioteca NRs</title>
+  <title>Biblioteca de NRs</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
-    .main{margin-left:240px;flex:1;padding:32px}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* TOPBAR */
-    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
-    .topbar h2{font-size:1.4rem;font-weight:700}
-    .topbar-acoes{display:flex;align-items:center;gap:10px}
-    .btn-atualizar{background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.3);border-radius:10px;color:#00d4ff;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
-    .btn-atualizar:hover{background:rgba(0,212,255,.22)}
-    .btn-atualizar.girando svg{animation:girar 1s linear infinite}
-    @keyframes girar{to{transform:rotate(360deg)}}
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      color: #333;
+    }
 
-    /* BANNER ATUALIZAÇÃO */
-    .banner-update{background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(239,68,68,.1));border:1px solid rgba(245,158,11,.4);border-radius:14px;padding:16px 22px;margin-bottom:20px;display:none;align-items:flex-start;gap:14px}
-    .banner-update.show{display:flex}
-    .banner-update-icon{font-size:1.8rem;flex-shrink:0}
-    .banner-update-txt h4{color:#fbbf24;font-size:.95rem;margin-bottom:4px}
-    .banner-update-txt p{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.5}
-    .banner-update-txt ul{font-size:.8rem;color:rgba(255,255,255,.6);padding-left:18px;margin-top:6px}
-    .banner-update-txt ul li{margin-bottom:2px}
-    .btn-fechar-banner{background:none;border:none;color:rgba(255,255,255,.4);font-size:1.2rem;cursor:pointer;margin-left:auto;flex-shrink:0;align-self:flex-start}
+    header {
+      background: #1a73e8;
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
 
-    /* STATS */
-    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
-    .stat-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px 20px;text-align:center}
-    .stat-num{font-size:1.8rem;font-weight:900;color:#00d4ff}
-    .stat-label{font-size:.72rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+    header h1 { font-size: 1.5rem; }
+    header span { font-size: 2rem; }
 
-    /* FILTROS */
-    .filtros-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-    .busca-grande{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 18px;color:#fff;font-size:.95rem;outline:none;flex:1;min-width:220px;transition:border .2s}
-    .busca-grande::placeholder{color:rgba(255,255,255,.3)}
-    .busca-grande:focus{border-color:#00d4ff}
-    .select-filtro{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 16px;color:#fff;font-size:.85rem;outline:none;cursor:pointer}
-    .select-filtro option{background:#0f1923}
+    .search-bar {
+      padding: 20px 30px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-    /* GRID */
-    .nrs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .nr-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px;transition:all .25s;cursor:pointer;position:relative;overflow:hidden}
-    .nr-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#00d4ff,#0099cc);opacity:0;transition:opacity .25s}
-    .nr-card:hover{background:rgba(255,255,255,.06);transform:translateY(-3px);border-color:rgba(0,212,255,.3)}
-    .nr-card:hover::before{opacity:1}
-    .nr-card.tem-update{border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.04)}
-    .nr-card.tem-update::before{background:linear-gradient(90deg,#f59e0b,#ef4444);opacity:1}
-    .badge-update{position:absolute;top:12px;right:12px;background:#f59e0b;color:#000;font-size:.6rem;font-weight:900;padding:2px 8px;border-radius:20px;text-transform:uppercase}
-    .nr-numero{font-size:1.4rem;font-weight:900;color:#00d4ff;margin-bottom:6px}
-    .nr-nome{font-size:.88rem;font-weight:700;margin-bottom:8px;line-height:1.4}
-    .nr-desc{font-size:.75rem;color:rgba(255,255,255,.4);line-height:1.5;margin-bottom:14px}
-    .nr-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-    .nr-status{font-size:.7rem;padding:3px 10px;border-radius:20px;font-weight:700}
-    .nr-status.vigente{background:rgba(74,222,128,.15);color:#4ade80}
-    .nr-status.revogada{background:rgba(248,113,113,.15);color:#f87171}
-    .nr-status.revisao{background:rgba(251,191,36,.15);color:#fbbf24}
-    .btn-ver-nr{background:rgba(0,212,255,.1);border:none;border-radius:8px;color:#00d4ff;padding:7px 14px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s}
-    .btn-ver-nr:hover{background:rgba(0,212,255,.22)}
-    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3);grid-column:1/-1}
-    .empty-state div{font-size:3rem;margin-bottom:12px}
+    .search-bar input {
+      flex: 1;
+      min-width: 220px;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border 0.2s;
+    }
 
-    /* ÚLTIMA VERIFICAÇÃO */
-    .ultima-verif{font-size:.72rem;color:rgba(255,255,255,.3);text-align:right;margin-bottom:14px}
+    .search-bar input:focus { border-color: #1a73e8; }
 
-    /* MODAL */
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(5px);z-index:1000;align-items:center;justify-content:center;padding:20px}
-    .modal-overlay.open{display:flex}
-    .modal{background:#0d1a27;border:1px solid rgba(255,255,255,.1);border-radius:20px;width:100%;max-width:780px;max-height:92vh;overflow-y:auto;display:flex;flex-direction:column}
-    .modal-header{padding:28px 32px 20px;border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:0;background:#0d1a27;z-index:1}
-    .modal-nr-header{display:flex;align-items:center;gap:16px}
-    .modal-nr-num{font-size:2.4rem;font-weight:900;color:#00d4ff;min-width:80px}
-    .modal-nr-nome{font-size:1.05rem;font-weight:700;margin-bottom:4px;line-height:1.3}
-    .modal-nr-sub{font-size:.78rem;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
-    .modal-body{padding:24px 32px;flex:1}
-    .secao{margin-bottom:22px}
-    .secao h4{font-size:.78rem;font-weight:800;color:#00d4ff;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid rgba(0,212,255,.12);display:flex;align-items:center;gap:6px}
-    .secao p,.secao li{font-size:.84rem;color:rgba(255,255,255,.7);line-height:1.75}
-    .secao ul,.secao ol{padding-left:20px}
-    .secao li{margin-bottom:5px}
-    .secao strong{color:rgba(255,255,255,.9)}
-    .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:4px}
-    .info-item{background:rgba(255,255,255,.04);border-radius:10px;padding:12px 16px}
-    .info-item label{font-size:.68rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px}
-    .info-item span{font-size:.85rem;color:#fff;font-weight:600}
-    .tag-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-    .tag{font-size:.72rem;padding:4px 12px;border-radius:6px;background:rgba(0,212,255,.1);color:#00d4ff;border:1px solid rgba(0,212,255,.2)}
-    .modal-footer{padding:18px 32px;border-top:1px solid rgba(255,255,255,.07);display:flex;gap:12px;justify-content:flex-end;background:#0d1a27;position:sticky;bottom:0}
-    .btn-fechar{padding:11px 24px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:.88rem;cursor:pointer;transition:all .2s}
-    .btn-fechar:hover{background:rgba(255,255,255,.14)}
-    .btn-link{padding:11px 22px;border-radius:10px;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;color:#fff;font-size:.85rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+    .search-bar select {
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      background: white;
+      cursor: pointer;
+    }
 
-    /* TABS MODAL */
-    .modal-tabs{display:flex;gap:4px;margin-bottom:20px;background:rgba(255,255,255,.04);border-radius:10px;padding:4px}
-    .modal-tab{flex:1;padding:8px;border:none;background:none;color:rgba(255,255,255,.4);font-size:.8rem;font-weight:600;cursor:pointer;border-radius:8px;transition:all .2s;text-align:center}
-    .modal-tab.active{background:rgba(0,212,255,.15);color:#00d4ff}
-    .tab-pane{display:none}
-    .tab-pane.active{display:block}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 10px 30px 30px;
+    }
 
-    /* CHANGELOG */
-    .changelog-item{background:rgba(255,255,255,.03);border-radius:10px;padding:14px;margin-bottom:10px;border-left:3px solid #00d4ff}
-    .changelog-item.update{border-left-color:#f59e0b}
-    .changelog-data{font-size:.72rem;color:rgba(255,255,255,.35);margin-bottom:4px}
-    .changelog-titulo{font-size:.85rem;font-weight:700;color:#fff;margin-bottom:4px}
-    .changelog-desc{font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.5}
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      border-left: 5px solid #1a73e8;
+    }
 
-    /* PENALIDADES */
-    .penalidade-box{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:14px;margin-top:8px}
-    .penalidade-box h5{color:#f87171;font-size:.8rem;margin-bottom:6px}
-    .penalidade-box p{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.5}
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
 
-    /* RESPONSIVO */
-    @media(max-width:900px){.nrs-grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:600px){
-      .main{margin-left:0;padding:80px 16px 24px}
-      .nrs-grid{grid-template-columns:1fr}
-      .stats-row{grid-template-columns:repeat(2,1fr)}
-      .info-grid{grid-template-columns:1fr}
-      .modal-body{padding:16px 18px}
-      .modal-header{padding:18px 18px 14px}
-      .modal-footer{padding:14px 18px}
+    .card .nr-number {
+      font-size: 0.8rem;
+      color: #1a73e8;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .card p {
+      font-size: 0.85rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .card .badge {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #e8f0fe;
+      color: #1a73e8;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .modal h2 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+      color: #1a73e8;
+    }
+
+    .modal .nr-label {
+      font-size: 0.8rem;
+      color: #888;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .modal p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #444;
+      margin-bottom: 15px;
+    }
+
+    .modal a.btn-link {
+      display: inline-block;
+      margin-top: 5px;
+      padding: 10px 20px;
+      background: #1a73e8;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+
+    .modal a.btn-link:hover { background: #1558b0; }
+
+    .modal .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #888;
+      transition: color 0.2s;
+    }
+
+    .modal .close-btn:hover { color: #333; }
+
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: #888;
+      font-size: 1rem;
+      grid-column: 1 / -1;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.8rem;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
-<div class="main">
 
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <div><h2>📚 Biblioteca de NRs</h2><div style="font-size:.78rem;color:rgba(255,255,255,.35);margin-top:3px">Normas Regulamentadoras do Ministério do Trabalho e Emprego</div></div>
-    <div class="topbar-acoes">
-      <button class="btn-atualizar" id="btnVerificar" onclick="verificarAtualizacoes(true)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-        Verificar Atualizações
-      </button>
-    </div>
+<header>
+  <span>📋</span>
+  <div>
+    <h1>Biblioteca de Normas Regulamentadoras</h1>
+    <small>Ministério do Trabalho e Emprego — MTE</small>
   </div>
+</header>
 
-  <!-- BANNER ATUALIZAÇÃO -->
-  <div class="banner-update" id="bannerUpdate">
-    <div class="banner-update-icon">🔔</div>
-    <div class="banner-update-txt">
-      <h4 id="bannerTitulo">Atualizações Disponíveis!</h4>
-      <p id="bannerDesc">Novas versões de normas foram identificadas.</p>
-      <ul id="bannerLista"></ul>
-    </div>
-    <button class="btn-fechar-banner" onclick="fecharBanner()">✕</button>
-  </div>
-
-  <!-- ÚLTIMA VERIFICAÇÃO -->
-  <div class="ultima-verif" id="ultimaVerif">Última verificação: nunca</div>
-
-  <!-- STATS -->
-  <div class="stats-row">
-    <div class="stat-card"><div class="stat-num" id="statTotal">0</div><div class="stat-label">Total de NRs</div></div>
-    <div class="stat-card"><div class="stat-num" id="statVigentes" style="color:#4ade80">0</div><div class="stat-label">Vigentes</div></div>
-    <div class="stat-card"><div class="stat-num" id="statRevisao" style="color:#fbbf24">0</div><div class="stat-label">Em Revisão</div></div>
-    <div class="stat-card"><div class="stat-num" id="statRevogadas" style="color:#f87171">0</div><div class="stat-label">Revogadas</div></div>
-  </div>
-
-  <!-- FILTROS -->
-  <div class="filtros-row">
-    <input class="busca-grande" type="text" id="campoBusca" placeholder="🔎  Buscar NR... Ex: NR-6, trabalho em altura, EPI, CIPA" oninput="renderizar()"/>
-    <select class="select-filtro" id="filtroStatus" onchange="renderizar()">
-      <option value="">Todos os status</option>
-      <option value="vigente">✅ Vigentes</option>
-      <option value="revisao">🔄 Em Revisão</option>
-      <option value="revogada">❌ Revogadas</option>
-    </select>
-    <select class="select-filtro" id="filtroArea" onchange="renderizar()">
-      <option value="">Todas as áreas</option>
-      <option value="Saúde">🏥 Saúde</option>
-      <option value="Equipamento">⚙️ Equipamentos</option>
-      <option value="Construção">🏗️ Construção</option>
-      <option value="Elétrica">⚡ Elétrica</option>
-      <option value="Química">🧪 Química</option>
-      <option value="Ergonomia">🪑 Ergonomia</option>
-    </select>
-  </div>
-
-  <div class="nrs-grid" id="nrsGrid"></div>
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="🔍 Pesquisar norma..." oninput="renderCards()" />
+  <select id="filterSelect" onchange="renderCards()">
+    <option value="">Todas as categorias</option>
+    <option value="segurança">Segurança</option>
+    <option value="saúde">Saúde</option>
+    <option value="ergonomia">Ergonomia</option>
+    <option value="equipamento">Equipamento</option>
+    <option value="treinamento">Treinamento</option>
+  </select>
 </div>
 
-<!-- MODAL DETALHE NR -->
-<div class="modal-overlay" id="modalNr">
-  <div class="modal" id="modalNrConteudo"></div>
+<div class="grid" id="nrGrid"></div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalBox">
+    <button class="close-btn" onclick="closeModalBtn()">✕</button>
+    <h2 id="modalTitle"></h2>
+    <span class="nr-label" id="modalLabel"></span>
+    <p id="modalDesc"></p>
+    <p id="modalDetail"></p>
+    <a class="btn-link" id="modalLink" href="#" target="_blank">🔗 Acessar norma oficial</a>
+  </div>
 </div>
 
-<script src="./sidebar.js"></script>
+<footer>Dados baseados nas NRs do Ministério do Trabalho e Emprego • Atualizado em 2025</footer>
+
 <script>
-// ============================================================
-// BASE DE DADOS COMPLETA — TODAS AS NRs
-// ============================================================
-var NRS = [
-  {
-    num:'NR-1', nome:'Disposições Gerais e Gerenciamento de Riscos Ocupacionais',
-    desc:'Estabelece as disposições gerais, campo de aplicação, termos e definições e obrigações relativas às NRs. Inclui o PGR.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2022', portaria:'Portaria MTE nº 1.419/2022',
-    temas:['PGR','GRO','Gestão de Riscos','Obrigações','Inventário de Riscos'],
-    link:'https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/nr-01',
-    objetivo:'Estabelecer as bases para a aplicação de todas as demais NRs, definindo o campo de aplicação, conceitos fundamentais e as obrigações gerais de empregadores e trabalhadores em matéria de segurança e saúde no trabalho.',
-    obrigacoesEmpregador:[
-      'Elaborar e implementar o Programa de Gerenciamento de Riscos (PGR)',
-      'Manter inventário de riscos ocupacionais atualizado',
-      'Garantir a participação dos trabalhadores na gestão de SST',
-      'Promover a melhoria contínua das condições de trabalho',
-      'Cumprir e fazer cumprir as disposições legais e regulamentares sobre SST',
-      'Informar os trabalhadores sobre os riscos do ambiente de trabalho'
-    ],
-    obrigacoesTrabalhador:[
-      'Cumprir as disposições legais e regulamentares sobre SST',
-      'Usar corretamente os EPIs fornecidos',
-      'Colaborar com o empregador na implementação do PGR',
-      'Comunicar ao empregador situações de risco que identifique'
-    ],
-    pontosPrincipais:[
-      'O PGR substitui o PPRA (a partir de 2021) e deve conter inventário de riscos e plano de ação',
-      'Aplica-se a todos os empregadores que possuam empregados regidos pela CLT',
-      'MEIs com empregados também devem cumprir as NRs',
-      'O GRO (Gerenciamento de Riscos Ocupacionais) é processo contínuo e sistemático'
-    ],
-    penalidades:'O descumprimento das NRs sujeita o empregador a autuação fiscal com multas que variam de R$ 668,19 a R$ 6.681,82 por NR descumprida, podendo haver embargo ou interdição em casos graves.',
-    changelog:[
-      {data:'2022', tipo:'update', titulo:'Portaria MTE nº 1.419/2022', desc:'Atualização dos prazos e requisitos do PGR para microempresas e empresas de pequeno porte.'},
-      {data:'2021', tipo:'update', titulo:'Portaria SEPRT nº 6.730/2020', desc:'Inclusão do Gerenciamento de Riscos Ocupacionais (GRO) e criação do PGR em substituição ao PPRA.'},
-      {data:'2019', tipo:'update', titulo:'Revisão geral', desc:'Reestruturação completa da NR-1 com novo enfoque em gestão de riscos.'}
-    ]
-  },
-  {
-    num:'NR-2', nome:'Inspeção Prévia',
-    desc:'Estabelecia a obrigatoriedade de inspeção prévia pelo MTE antes do início das atividades empresariais.',
-    status:'revogada', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 915/2019',
-    temas:['Inspeção','Fiscalização'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'A NR-2 foi revogada em 2019 no contexto da desburocratização. Anteriormente exigia aprovação prévia das instalações pelo MTE.',
-    obrigacoesEmpregador:['NR revogada — não há mais obrigações específicas desta norma'],
-    obrigacoesTrabalhador:['NR revogada'],
-    pontosPrincipais:['Revogada pela Portaria SEPRT nº 915/2019','Fazia parte do pacote de desburocratização do governo federal'],
-    penalidades:'NR revogada — sem penalidades aplicáveis.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Revogação', desc:'Portaria SEPRT nº 915/2019 revogou a NR-2 como medida de desburocratização.'}]
-  },
-  {
-    num:'NR-3', nome:'Embargo e Interdição',
-    desc:'Regulamenta os procedimentos de embargo de obra e interdição de estabelecimento, setor, máquina ou equipamento por situação de grave e iminente risco.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 916/2019',
-    temas:['Embargo','Interdição','Risco Grave','Auditoria Fiscal'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Definir os procedimentos legais para que Auditores Fiscais do Trabalho possam embargar obras ou interditar estabelecimentos, setores, máquinas ou equipamentos que apresentem risco grave e iminente à vida ou saúde dos trabalhadores.',
-    obrigacoesEmpregador:[
-      'Acatar imediatamente o embargo ou interdição determinado pelo AFT',
-      'Cessar as atividades embargadas/interditadas até regularização',
-      'Tomar imediatamente as medidas necessárias para sanar as irregularidades',
-      'Comunicar os trabalhadores sobre o embargo/interdição'
-    ],
-    obrigacoesTrabalhador:[
-      'Respeitar o embargo ou interdição determinado',
-      'Comunicar situações de risco grave ao empregador ou ao AFT'
-    ],
-    pontosPrincipais:[
-      'O Auditor Fiscal pode embargar ou interditar de imediato, sem necessidade de notificação prévia',
-      'Durante interdição, é vedada qualquer atividade na área interditada',
-      'O empregador deve pagar os salários dos trabalhadores durante a interdição',
-      'O trabalhador pode recusar atividade em situação de risco grave sem punição'
-    ],
-    penalidades:'O descumprimento de embargo ou interdição configura crime previsto no Art. 203 do Código Penal, além de multa administrativa elevada.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 916/2019', desc:'Atualização dos procedimentos de embargo e interdição.'}]
-  },
-  {
-    num:'NR-4', nome:'Serviços Especializados em Engenharia de Segurança e em Medicina do Trabalho — SESMT',
-    desc:'Estabelece a obrigatoriedade das empresas privadas e públicas de manter SESMT, com profissionais especializados em SST.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2021', portaria:'Portaria SEPRT nº 6.734/2020',
-    temas:['SESMT','Engenheiro de Segurança','Médico do Trabalho','Técnico de Segurança','Dimensionamento'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a presença de profissionais especializados em segurança e saúde do trabalho nas empresas, de acordo com o grau de risco e o número de empregados, para prevenir acidentes e doenças ocupacionais.',
-    obrigacoesEmpregador:[
-      'Dimensionar o SESMT conforme Quadro I da NR-4 (grau de risco x nº de empregados)',
-      'Fornecer instalações físicas e equipamentos adequados ao SESMT',
-      'Garantir que os profissionais do SESMT tenham autonomia técnica',
-      'Registrar o SESMT no MTE',
-      'Possibilitar que o SESMT aplique os programas de SST'
-    ],
-    obrigacoesTrabalhador:[
-      'Colaborar com as ações do SESMT',
-      'Participar dos treinamentos e exames promovidos pelo SESMT'
-    ],
-    pontosPrincipais:[
-      'Profissionais do SESMT: Médico do Trabalho, Engenheiro de Segurança, Técnico de Segurança, Enfermeiro do Trabalho, Auxiliar de Enfermagem do Trabalho',
-      'O dimensionamento varia de acordo com o grau de risco (1 a 4) e número de empregados',
-      'Empresas com grau de risco 1 ou 2 com até 50 empregados estão dispensadas',
-      'O SESMT pode ser próprio ou contratado (SESMT externo), com restrições',
-      'Empresas do mesmo grupo econômico podem constituir SESMT conjunto'
-    ],
-    penalidades:'Multa administrativa por descumprimento. Autuação fiscal com base no Quadro I da NR-4. Valores a partir de R$ 668,19 por infração.',
-    changelog:[
-      {data:'2021', tipo:'update', titulo:'Portaria SEPRT nº 6.734/2020', desc:'Atualização dos requisitos de dimensionamento e possibilidade de SESMT externo.'},
-      {data:'2019', tipo:'update', titulo:'Revisão dos Graus de Risco', desc:'Atualização da CNAE e dos graus de risco das atividades econômicas.'}
-    ]
-  },
-  {
-    num:'NR-5', nome:'Comissão Interna de Prevenção de Acidentes e de Assédio — CIPA',
-    desc:'Estabelece a obrigatoriedade de organização e manutenção da CIPA nas empresas privadas e públicas, com representantes do empregador e dos empregados.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2023', portaria:'Portaria MTE nº 1.357/2023',
-    temas:['CIPA','Prevenção','Eleição','Estabilidade','Assédio'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Prevenir acidentes e doenças decorrentes do trabalho, de modo a tornar compatível permanentemente o trabalho com a preservação da vida e a promoção da saúde do trabalhador. Desde 2023, inclui prevenção ao assédio.',
-    obrigacoesEmpregador:[
-      'Constituir a CIPA conforme Quadro I da NR-5',
-      'Garantir eleição livre e secreta dos representantes dos empregados',
-      'Fornecer estrutura, local e materiais para reuniões da CIPA',
-      'Liberar cipeiros para exercício do mandato sem prejuízo salarial',
-      'Manter estabilidade dos cipeiros titulares eleitos',
-      'Implementar medidas propostas pela CIPA',
-      'Incluir tema assédio na pauta da CIPA (desde 2023)'
-    ],
-    obrigacoesTrabalhador:[
-      'Participar da eleição dos representantes dos empregados na CIPA',
-      'Colaborar com a CIPA na prevenção de acidentes',
-      'Reportar situações de risco à CIPA'
-    ],
-    pontosPrincipais:[
-      'Cipeiros titulares eleitos têm estabilidade desde o registro da candidatura até 1 ano após o mandato',
-      'Mandato de 1 ano, permitida 1 reeleição',
-      'Empresas com menos de 20 empregados devem designar um responsável pelo SESMT/CIPA',
-      'Reuniões ordinárias mensais são obrigatórias',
-      'Em 2023, incluída a competência de combate ao assédio moral e sexual',
-      'A CIPA deve elaborar o Mapa de Riscos anualmente'
-    ],
-    penalidades:'Multas por descumprimento das obrigações eleitorais, de estrutura e de funcionamento. Empregadores que demitirem cipeiros sem justa causa durante o período de estabilidade respondem por reintegração e indenização.',
-    changelog:[
-      {data:'2023', tipo:'update', titulo:'Portaria MTE nº 1.357/2023', desc:'Inclusão de competências de prevenção ao assédio moral e sexual no escopo da CIPA.'},
-      {data:'2019', tipo:'update', titulo:'Revisão geral', desc:'Simplificação dos requisitos e adequação ao novo formato das NRs.'}
-    ]
-  },
-  {
-    num:'NR-6', nome:'Equipamentos de Proteção Individual — EPI',
-    desc:'Estabelece a obrigação do fornecimento gratuito de EPIs pelo empregador, requisitos de qualidade (CA) e obrigações do empregado no uso.',
-    status:'vigente', area:'Equipamento', publicacao:'1978', ultimaAtualizacao:'2018', portaria:'Portaria MTb nº 871/2018',
-    temas:['EPI','CA','Certificado de Aprovação','Proteção Individual','Fornecimento Gratuito'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Regulamentar o uso dos Equipamentos de Proteção Individual, garantindo que o trabalhador disponha de proteção adequada quando não for possível eliminar ou neutralizar os riscos por medidas coletivas.',
-    obrigacoesEmpregador:[
-      'Fornecer gratuitamente o EPI adequado ao risco',
-      'Exigir o uso do EPI e fiscalizar a utilização',
-      'Orientar e treinar o trabalhador sobre uso, guarda e conservação do EPI',
-      'Substituir imediatamente o EPI danificado ou extraviado',
-      'Responsabilizar-se pela higienização e manutenção periódica do EPI',
-      'Manter registro de entrega dos EPIs (ficha de controle)',
-      'Adquirir apenas EPIs com CA válido'
-    ],
-    obrigacoesTrabalhador:[
-      'Usar o EPI apenas para a finalidade a que se destina',
-      'Responsabilizar-se pela guarda e conservação do EPI',
-      'Comunicar ao empregador qualquer alteração que torne o EPI impróprio',
-      'Cumprir as determinações do empregador sobre uso do EPI'
-    ],
-    pontosPrincipais:[
-      'O EPI deve possuir Certificado de Aprovação (CA) expedido pelo MTE para ser comercializado',
-      'O CA tem validade de 5 anos e deve ser renovado',
-      'A empresa é responsável mesmo que o trabalhador se recuse a usar o EPI — deve registrar a recusa',
-      'Tipos de EPI: proteção da cabeça, dos olhos, auditiva, respiratória, do tronco, membros superiores e inferiores, contra quedas',
-      'O uso do EPI não exime o empregador de adotar medidas coletivas de proteção'
-    ],
-    penalidades:'Multa por não fornecimento de EPI: a partir de R$ 402,53 por trabalhador. Em caso de acidente decorrente da falta do EPI, responsabilidade civil e criminal do empregador.',
-    changelog:[
-      {data:'2018', tipo:'update', titulo:'Portaria MTb nº 871/2018', desc:'Atualização do Anexo I com lista de EPIs e requisitos de CA.'},
-      {data:'2010', tipo:'update', titulo:'Portaria MTE nº 194/2010', desc:'Inclusão de novos tipos de EPI na lista obrigatória.'}
-    ]
-  },
-  {
-    num:'NR-7', nome:'Programa de Controle Médico de Saúde Ocupacional — PCMSO',
-    desc:'Estabelece a obrigatoriedade de elaboração e implementação do PCMSO, com realização de exames médicos ocupacionais.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2020', portaria:'Portaria SEPRT nº 6.734/2020',
-    temas:['PCMSO','ASO','Exame Admissional','Exame Periódico','Saúde Ocupacional'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Promover e preservar a saúde dos trabalhadores, por meio de ações de prevenção, rastreamento e diagnóstico precoce dos agravos à saúde relacionados ao trabalho.',
-    obrigacoesEmpregador:[
-      'Elaborar e implementar o PCMSO com a participação do médico coordenador',
-      'Custear todos os exames médicos obrigatórios',
-      'Garantir a realização dos exames nos prazos determinados',
-      'Emitir e arquivar o ASO em duas vias',
-      'Manter prontuário clínico individual de cada empregado por 20 anos',
-      'Elaborar relatório anual com os dados do PCMSO'
-    ],
-    obrigacoesTrabalhador:[
-      'Submeter-se aos exames médicos previstos no PCMSO',
-      'Fornecer informações sobre sua saúde ao médico do trabalho'
-    ],
-    pontosPrincipais:[
-      'Exames obrigatórios: admissional, periódico, retorno ao trabalho (após afastamento > 30 dias), mudança de função, demissional',
-      'O ASO (Atestado de Saúde Ocupacional) deve ser emitido em 2 vias — uma fica com o empregado',
-      'A periodicidade do exame periódico varia conforme a idade e os riscos da função',
-      'O PCMSO deve ser coordenado por médico do trabalho',
-      'Empregado considerado inapto não pode exercer a função até nova avaliação',
-      'Dados do PCMSO são sigilosos e protegidos pelo sigilo médico'
-    ],
-    penalidades:'Multa por não realização dos exames: a partir de R$ 402,53 por trabalhador. Em caso de doença ocupacional não detectada por falta do PCMSO, responsabilidade civil do empregador.',
-    changelog:[
-      {data:'2020', tipo:'update', titulo:'Portaria SEPRT nº 6.734/2020', desc:'Atualização dos prazos e requisitos para elaboração do PCMSO.'},
-      {data:'2013', tipo:'update', titulo:'Portaria MTE nº 1.823/2012', desc:'Revisão geral com ampliação dos exames complementares obrigatórios.'}
-    ]
-  },
-  {
-    num:'NR-8', nome:'Edificações',
-    desc:'Estabelece requisitos técnicos mínimos que devem ser observados nas edificações, para garantir segurança e conforto aos que nelas trabalham.',
-    status:'vigente', area:'Construção', publicacao:'1978', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 916/2019',
-    temas:['Edificações','Pisos','Escadas','Iluminação Natural','Ventilação'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir que as edificações utilizadas como locais de trabalho atendam a requisitos mínimos de segurança estrutural, higiene e conforto para os trabalhadores.',
-    obrigacoesEmpregador:[
-      'Garantir que pisos, paredes, tetos e coberturas estejam em condições de segurança',
-      'Manter escadas e rampas com corrimões e em boas condições',
-      'Garantir iluminação natural e/ou artificial adequada',
-      'Manter ventilação adequada nos locais de trabalho',
-      'Garantir que portas e janelas abram facilmente por dentro'
-    ],
-    obrigacoesTrabalhador:['Comunicar ao empregador quaisquer defeitos estruturais identificados'],
-    pontosPrincipais:[
-      'Pé-direito mínimo de 3 metros para locais de trabalho (pode variar)',
-      'Corredores e passagens com largura mínima de 1,20 m',
-      'Escadas com largura mínima de 1,20 m e degraus com espelho de no máximo 20 cm',
-      'Iluminação e ventilação devem atender às normas técnicas da ABNT'
-    ],
-    penalidades:'Multa administrativa por descumprimento das especificações técnicas.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 916/2019', desc:'Atualização de referências às normas técnicas ABNT.'}]
-  },
-  {
-    num:'NR-9', nome:'Avaliação e Controle das Exposições Ocupacionais a Agentes Físicos, Químicos e Biológicos',
-    desc:'Trata da identificação, avaliação e controle das exposições ocupacionais a agentes nocivos à saúde do trabalhador.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2021', portaria:'Portaria SEPRT nº 6.730/2020',
-    temas:['Agentes Físicos','Agentes Químicos','Agentes Biológicos','LTCAT','Ruído','Calor'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Estabelecer requisitos para identificação e avaliação quantitativa e qualitativa dos agentes físicos, químicos e biológicos presentes no ambiente de trabalho, integrando-se ao PGR da NR-1.',
-    obrigacoesEmpregador:[
-      'Identificar todos os agentes físicos, químicos e biológicos presentes no ambiente',
-      'Avaliar quantitativamente as exposições que superem os limites de tolerância',
-      'Implementar medidas de controle para reduzir as exposições',
-      'Elaborar e manter atualizado o LTCAT (para fins previdenciários)',
-      'Monitorar periodicamente as exposições',
-      'Registrar os dados de avaliação ambiental'
-    ],
-    obrigacoesTrabalhador:[
-      'Colaborar com as avaliações ambientais',
-      'Comunicar ao empregador situações de exposição anormal'
-    ],
-    pontosPrincipais:[
-      'Agentes físicos: ruído, vibrações, pressões anormais, temperaturas extremas, radiações',
-      'Agentes químicos: poeiras, fumos, névoas, gases, vapores, absorvidos pela pele',
-      'Agentes biológicos: bactérias, fungos, parasitos, vírus em hospitais, laboratórios, etc.',
-      'Os Limites de Tolerância (LT) são definidos nos Anexos da NR-15',
-      'A hierarquia de controle: eliminação > substituição > controle coletivo > administrativo > EPI',
-      'O LTCAT é laudo técnico que comprova exposição a agentes nocivos para aposentadoria especial'
-    ],
-    penalidades:'Multa por não realização das avaliações. Responsabilidade por doenças ocupacionais decorrentes de exposição não controlada.',
-    changelog:[
-      {data:'2021', tipo:'update', titulo:'Portaria SEPRT nº 6.730/2020', desc:'Reestruturação completa em substituição ao PPRA, com integração ao PGR da NR-1.'},
-      {data:'2013', tipo:'update', titulo:'Portaria MTE nº 1.471/2013', desc:'Atualização dos limites de tolerância para ruído e outros agentes.'}
-    ]
-  },
-  {
-    num:'NR-10', nome:'Segurança em Instalações e Serviços com Eletricidade',
-    desc:'Estabelece os requisitos e condições mínimas para garantir a segurança e saúde dos trabalhadores em instalações elétricas e suas proximidades.',
-    status:'vigente', area:'Elétrica', publicacao:'1978', ultimaAtualizacao:'2016', portaria:'Portaria MTb nº 598/2004',
-    temas:['Eletricidade','Instalações Elétricas','Choque Elétrico','SEP','Treinamento NR-10'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a segurança dos trabalhadores que interagem com energia elétrica, seja nas instalações, seja nos serviços realizados em suas proximidades, estabelecendo requisitos técnicos e de treinamento.',
-    obrigacoesEmpregador:[
-      'Garantir que somente trabalhadores habilitados, qualificados ou autorizados trabalhem com eletricidade',
-      'Promover treinamento NR-10 básico (40h) e específico para SEP quando aplicável',
-      'Elaborar e manter prontuário das instalações elétricas',
-      'Garantir sistema de bloqueio e etiquetagem (LOTO) para trabalhos com energia',
-      'Fornecer EPIs e ferramentas adequadas e com proteção dielétrica',
-      'Realizar inspeções periódicas nas instalações elétricas'
-    ],
-    obrigacoesTrabalhador:[
-      'Usar os EPIs dielétricos obrigatórios',
-      'Aplicar as técnicas de bloqueio e etiquetagem',
-      'Manter-se atualizado com os treinamentos NR-10',
-      'Recusar trabalho em condições inseguras'
-    ],
-    pontosPrincipais:[
-      'Treinamento básico: 40h (teórico + prático), renovação a cada 2 anos',
-      'Treinamento específico para SEP (Sistema Elétrico de Potência): 40h adicionais',
-      'É obrigatório o uso de EPIs dielétricos: luvas, capacete, óculos, botas',
-      'Bloqueio e etiquetagem (LOTO) são obrigatórios para trabalhos em equipamentos energizados',
-      'Trabalho em tensão é permitido somente por profissional habilitado com equipamentos específicos',
-      'O prontuário das instalações deve conter plantas, diagramas e memorial descritivo'
-    ],
-    penalidades:'Multa e interdição do local em caso de risco grave. Em caso de acidente elétrico fatal, responsabilidade criminal do empregador e responsáveis técnicos.',
-    changelog:[
-      {data:'2016', tipo:'update', titulo:'Portaria MTE nº 598/2004 — Atualização', desc:'Revisão dos requisitos de treinamento e dos EPIs obrigatórios.'},
-      {data:'2004', tipo:'update', titulo:'Portaria MTb nº 598/2004', desc:'Reestruturação completa da NR-10 com foco em gestão de riscos elétricos.'}
-    ]
-  },
-  {
-    num:'NR-11', nome:'Transporte, Movimentação, Armazenagem e Manuseio de Materiais',
-    desc:'Estabelece requisitos de segurança para operação de elevadores, guindastes, transportadores industriais e máquinas transportadoras.',
-    status:'vigente', area:'Equipamento', publicacao:'1978', ultimaAtualizacao:'2020', portaria:'Portaria SEPRT nº 876/2021',
-    temas:['Empilhadeira','Transporte','Armazenagem','Guindaste','Ponte Rolante'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a segurança nas operações de transporte e movimentação de materiais, prevenindo acidentes com equipamentos como empilhadeiras, guindastes, transportadores de correia e pontes rolantes.',
-    obrigacoesEmpregador:[
-      'Qualificar e autorizar operadores de empilhadeiras e guindastes',
-      'Garantir manutenção preventiva e corretiva dos equipamentos',
-      'Estabelecer e sinalizar as vias de circulação de empilhadeiras',
-      'Limitar a carga máxima dos equipamentos de içamento',
-      'Fornecer treinamento específico para operadores',
-      'Manter Anotação de Responsabilidade Técnica (ART) para guindastes'
-    ],
-    obrigacoesTrabalhador:[
-      'Operar apenas equipamentos para os quais está habilitado',
-      'Respeitar os limites de carga dos equipamentos',
-      'Verificar as condições do equipamento antes de operar',
-      'Usar os EPIs obrigatórios durante a operação'
-    ],
-    pontosPrincipais:[
-      'Operadores de empilhadeiras devem ter treinamento mínimo de 20h e carteira de operador',
-      'É proibido transportar pessoas em empilhadeiras ou elevadores de carga',
-      'As vias de circulação de empilhadeiras devem ser demarcadas e sinalizadas',
-      'Guindastes devem ter cálculo de capacidade e Livro de Registro de Segurança',
-      'A carga suspensa não pode ser direcionada sobre trabalhadores'
-    ],
-    penalidades:'Multa administrativa. Em caso de acidente, responsabilidade civil e criminal.',
-    changelog:[{data:'2021', tipo:'update', titulo:'Portaria SEPRT nº 876/2021', desc:'Atualização dos requisitos de treinamento para operadores de empilhadeiras.'}]
-  },
-  {
-    num:'NR-12', nome:'Segurança no Trabalho em Máquinas e Equipamentos',
-    desc:'Define referências técnicas, princípios fundamentais e medidas de proteção para garantir a saúde e integridade física dos trabalhadores que trabalham com máquinas.',
-    status:'vigente', area:'Equipamento', publicacao:'1978', ultimaAtualizacao:'2022', portaria:'Portaria MTE nº 916/2019',
-    temas:['Máquinas','Proteções','Prensas','Dispositivos de Segurança','Parada de Emergência'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Assegurar a saúde e integridade física dos trabalhadores por meio de medidas de proteção coletiva e individual em máquinas e equipamentos, desde o projeto até o descarte.',
-    obrigacoesEmpregador:[
-      'Instalar proteções coletivas em todas as zonas de risco das máquinas',
-      'Instalar dispositivo de parada de emergência em local acessível',
-      'Manter manual de instruções e projeto de proteções das máquinas',
-      'Garantir sinalização de segurança nas máquinas',
-      'Realizar manutenção preventiva documentada',
-      'Treinar os operadores antes de iniciar as atividades',
-      'Adquirir máquinas com Declaração de Conformidade'
-    ],
-    obrigacoesTrabalhador:[
-      'Não operar máquinas sem as proteções instaladas',
-      'Não remover ou neutralizar dispositivos de segurança',
-      'Comunicar ao empregador falhas nas proteções',
-      'Usar os EPIs obrigatórios'
-    ],
-    pontosPrincipais:[
-      'Toda máquina deve ter Manual de Instruções em português',
-      'As proteções devem ser fixas, móveis enclausuradoras ou de barreira',
-      'A abertura de proteções deve acionar parada automática da máquina',
-      'O botão de emergência deve ser vermelho sobre fundo amarelo, de acionamento positivo',
-      'Prensas e similares têm Anexo específico (Anexo VIII) com requisitos mais rígidos',
-      'Distâncias de segurança calculadas conforme ISO 13857'
-    ],
-    penalidades:'Multa e interdição da máquina. Em caso de acidente grave, responsabilidade criminal do empregador e do responsável técnico.',
-    changelog:[
-      {data:'2022', tipo:'update', titulo:'Portaria MTE — Atualização Anexos', desc:'Atualização dos Anexos sobre prensas, injetoras de plástico e máquinas de madeira.'},
-      {data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 916/2019', desc:'Simplificação de requisitos e atualização das referências normativas.'}
-    ]
-  },
-  {
-    num:'NR-13', nome:'Vasos de Pressão, Caldeiras, Tubulações e Tanques Metálicos de Armazenamento',
-    desc:'Estabelece requisitos mínimos para gestão da integridade estrutural de caldeiras, vasos de pressão, tubulações e tanques metálicos.',
-    status:'vigente', area:'Equipamento', publicacao:'1978', ultimaAtualizacao:'2021', portaria:'Portaria SEPRT nº 1.082/2021',
-    temas:['Caldeiras','Vasos de Pressão','Tubulações','Inspeção de Segurança','PH'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a integridade e a segurança de caldeiras, vasos de pressão, tubulações e tanques metálicos, prevenindo acidentes graves como explosões e vazamentos.',
-    obrigacoesEmpregador:[
-      'Manter prontuário atualizado de cada caldeira e vaso de pressão',
-      'Realizar inspeção periódica por Profissional Habilitado (PH)',
-      'Instalar e manter calibradas as válvulas de segurança',
-      'Afixar placa de identificação com dados técnicos',
-      'Manter Livro de Registro de Segurança para cada equipamento',
-      'Treinar e qualificar os operadores de caldeiras'
-    ],
-    obrigacoesTrabalhador:[
-      'Monitorar os parâmetros operacionais das caldeiras',
-      'Comunicar anomalias ao supervisor imediatamente',
-      'Usar os EPIs obrigatórios na operação'
-    ],
-    pontosPrincipais:[
-      'Caldeiras Categoria A (P>1.960 kPa ou volume>50L): inspeção a cada 12-24 meses',
-      'Caldeiras Categoria B e demais: prazos definidos pelo PH conforme análise de risco',
-      'O Profissional Habilitado (PH) é engenheiro com atribuição para inspeção de vasos',
-      'Válvulas de segurança devem ser testadas periodicamente',
-      'Operadores de caldeiras devem ter certificado de qualificação',
-      'Documentação deve ser mantida por toda a vida útil do equipamento + 20 anos'
-    ],
-    penalidades:'Embargo imediato em caso de risco grave. Multa elevada. Em caso de explosão, responsabilidade criminal.',
-    changelog:[
-      {data:'2021', tipo:'update', titulo:'Portaria SEPRT nº 1.082/2021', desc:'Revisão dos prazos de inspeção e requisitos para análise de risco em substituição à periodicidade fixa.'},
-      {data:'2018', tipo:'update', titulo:'Inclusão de Tanques Metálicos', desc:'Ampliação do escopo para incluir tanques metálicos de armazenamento.'}
-    ]
-  },
-  {
-    num:'NR-14', nome:'Fornos',
-    desc:'Regulamenta a construção, operação e manutenção de fornos em instalações industriais, garantindo segurança aos trabalhadores.',
-    status:'vigente', area:'Equipamento', publicacao:'1978', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 915/2019',
-    temas:['Fornos','Temperatura','Combustão','Exaustão'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Estabelecer requisitos de segurança para a construção, operação e manutenção de fornos industriais a fim de proteger os trabalhadores dos riscos de queimaduras, explosões e intoxicações.',
-    obrigacoesEmpregador:[
-      'Garantir sistema de exaustão dos gases de combustão',
-      'Manter temperatura monitorada e registrada',
-      'Instalar dispositivos de segurança contra explosão',
-      'Treinar os operadores para situações de emergência',
-      'Realizar inspeções periódicas nos fornos'
-    ],
-    obrigacoesTrabalhador:['Utilizar os EPIs obrigatórios (luvas, óculos, avental)', 'Monitorar os parâmetros de operação dos fornos'],
-    pontosPrincipais:[
-      'Os fornos devem ter aberturas suficientes para limpeza e manutenção',
-      'Sistemas de combustão devem ter dispositivos de segurança contra retorno de chama',
-      'Trabalhadores expostos ao calor devem ter medidas de controle conforme NR-15'
-    ],
-    penalidades:'Multa administrativa por descumprimento dos requisitos técnicos.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 915/2019', desc:'Atualização de referências técnicas.'}]
-  },
-  {
-    num:'NR-15', nome:'Atividades e Operações Insalubres',
-    desc:'Define as atividades e agentes insalubres, limites de tolerância e critérios para caracterização e classificação da insalubridade.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2014', portaria:'Portaria MTE nº 1.297/2014',
-    temas:['Insalubridade','Adicional Insalubridade','Ruído','Calor','Agentes Químicos','LTCAT'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Caracterizar e classificar as atividades e operações insalubres, definindo os limites de tolerância e os graus de insalubridade para fins de pagamento do adicional e adoção de medidas preventivas.',
-    obrigacoesEmpregador:[
-      'Eliminar ou neutralizar a insalubridade, prioritariamente por medidas coletivas',
-      'Caracterizar a insalubridade por meio de laudo técnico (médico do trabalho ou engenheiro de SST)',
-      'Pagar o adicional de insalubridade enquanto houver exposição',
-      'Fornecer EPI adequado quando não for possível eliminar o agente'
-    ],
-    obrigacoesTrabalhador:[
-      'Utilizar os EPIs fornecidos para controle da insalubridade',
-      'Submeter-se aos exames médicos do PCMSO'
-    ],
-    pontosPrincipais:[
-      'Adicional de 40% (grau máximo) sobre o salário mínimo: ruído extremo, agentes qco. perigosos',
-      'Adicional de 20% (grau médio): calor, pressão hiperbárica, radiações ionizantes',
-      'Adicional de 10% (grau mínimo): umidade, certas poeiras vegetais',
-      'A eliminação ou neutralização da insalubridade cessa o direito ao adicional',
-      'O laudo de insalubridade deve ser elaborado por Médico do Trabalho ou Eng. de Segurança',
-      'Limite de tolerância para ruído contínuo: 85 dB(A) para 8h/dia'
-    ],
-    penalidades:'Multa por não pagamento do adicional. Ação trabalhista com pagamento retroativo em caso de insalubridade não reconhecida.',
-    changelog:[
-      {data:'2014', tipo:'update', titulo:'Portaria MTE nº 1.297/2014', desc:'Atualização dos limites de tolerância para alguns agentes químicos.'},
-      {data:'1994', tipo:'update', titulo:'Portaria MTb nº 3.751/1990', desc:'Revisão dos limites de tolerância para ruído (redução de 90 para 85 dB para 8h).'}
-    ]
-  },
-  {
-    num:'NR-16', nome:'Atividades e Operações Perigosas',
-    desc:'Regulamenta as atividades e operações perigosas com inflamáveis, explosivos, energia elétrica, roubos e outras ofensas à integridade física.',
-    status:'vigente', area:'Química', publicacao:'1978', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 1.007/2018',
-    temas:['Periculosidade','Adicional Periculosidade','Inflamáveis','Explosivos','Motofrete'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Regulamentar as atividades e operações consideradas perigosas para fins de pagamento do adicional de periculosidade e adoção de medidas preventivas.',
-    obrigacoesEmpregador:[
-      'Pagar o adicional de periculosidade de 30% sobre o salário básico',
-      'Caracterizar a periculosidade por meio de laudo técnico',
-      'Adotar medidas para eliminar ou reduzir a exposição ao agente de risco',
-      'Fornecer EPIs específicos para os agentes de risco'
-    ],
-    obrigacoesTrabalhador:['Usar os EPIs obrigatórios', 'Seguir os procedimentos de segurança estabelecidos'],
-    pontosPrincipais:[
-      'Adicional de 30% sobre o salário básico (não sobre o salário mínimo, como na insalubridade)',
-      'Atividades perigosas: inflamáveis e explosivos, energia elétrica, segurança pessoal ou patrimonial, radiações ionizantes, motofrete',
-      'O trabalhador não pode acumular adicional de insalubridade e periculosidade — escolhe o mais favorável',
-      'O laudo deve ser elaborado por Engenheiro de Segurança ou Médico do Trabalho',
-      'Em 2014, motofretistas passaram a ter direito ao adicional de periculosidade'
-    ],
-    penalidades:'Ação trabalhista por pagamento retroativo do adicional. Multa por não caracterização da periculosidade quando devida.',
-    changelog:[
-      {data:'2018', tipo:'update', titulo:'Portaria SEPRT nº 1.007/2018', desc:'Inclusão de atividades com exposição a substâncias inflamáveis em veículos automotores.'},
-      {data:'2014', tipo:'update', titulo:'Lei nº 12.997/2014', desc:'Inclusão de motofretistas e mototaxistas como atividade perigosa.'}
-    ]
-  },
-  {
-    num:'NR-17', nome:'Ergonomia',
-    desc:'Visa estabelecer parâmetros que permitam a adaptação das condições de trabalho às características psicofisiológicas dos trabalhadores.',
-    status:'vigente', area:'Ergonomia', publicacao:'1978', ultimaAtualizacao:'2022', portaria:'Portaria MTE nº 423/2021',
-    temas:['Ergonomia','AET','Postura','LER/DORT','Telemarketing','Mobiliário'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Adaptar as condições de trabalho às características psicofisiológicas dos trabalhadores, de modo a proporcionar um máximo de conforto, segurança e eficiência, prevenindo LER/DORT e fadiga.',
-    obrigacoesEmpregador:[
-      'Realizar Análise Ergonômica do Trabalho (AET) quando identificados riscos ergonômicos',
-      'Adaptar o mobiliário às características dos trabalhadores',
-      'Garantir iluminação adequada nos postos de trabalho',
-      'Controlar ruído e temperatura nos ambientes de trabalho',
-      'Estabelecer pausas e alternância de atividades para trabalho repetitivo',
-      'Para telemarketing: pausas de 10 min a cada 50 min trabalhados'
-    ],
-    obrigacoesTrabalhador:[
-      'Utilizar corretamente o mobiliário e equipamentos ergonômicos fornecidos',
-      'Participar das avaliações ergonômicas',
-      'Comunicar sinais de desconforto ou dor ao médico do trabalho'
-    ],
-    pontosPrincipais:[
-      'Levantamento manual de cargas: máximo 60 kg para homens adultos em condições ideais',
-      'Telas de computador devem estar entre 45 e 70 cm dos olhos do operador',
-      'Cadeiras devem ter altura regulável e apoio lombar',
-      'Índice de Bulbo Úmido Termômetro de Globo (IBUTG) define os limites de calor',
-      'O Anexo II trata especificamente de trabalhadores em teleatendimento/telemarketing',
-      'A NR-17 passou por revisão completa em 2021 com novo enfoque em saúde mental'
-    ],
-    penalidades:'Multa e notificação para adequação do ambiente. Responsabilidade civil por doenças ocupacionais (LER/DORT) decorrentes de condições ergonômicas inadequadas.',
-    changelog:[
-      {data:'2022', tipo:'update', titulo:'Portaria MTE nº 423/2021', desc:'Revisão geral da NR-17 com inclusão de saúde mental e novas diretrizes para teletrabalho.'},
-      {data:'2021', tipo:'update', titulo:'Revisão de Teletrabalho', desc:'Inclusão de requisitos ergonômicos para trabalho remoto e home office.'}
-    ]
-  },
-  {
-    num:'NR-18', nome:'Segurança e Saúde no Trabalho na Indústria da Construção',
-    desc:'Estabelece diretrizes e medidas de controle e sistemas preventivos de segurança nos processos, nas condições e no meio ambiente de trabalho na Indústria da Construção.',
-    status:'vigente', area:'Construção', publicacao:'1978', ultimaAtualizacao:'2020', portaria:'Portaria SEPRT nº 3.733/2020',
-    temas:['Construção Civil','Andaimes','PCMAT','Escavação','Demolição','EPC'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a segurança e saúde dos trabalhadores na indústria da construção, estabelecendo medidas preventivas para os principais riscos do setor: quedas, soterramento, choque elétrico e outros.',
-    obrigacoesEmpregador:[
-      'Elaborar PCMAT para obras com 20 ou mais trabalhadores',
-      'Instalar proteções coletivas contra quedas (redes, guarda-corpos, andaimes)',
-      'Garantir EPIs adequados a cada atividade',
-      'Manter instalações provisórias adequadas (banheiros, vestiários, refeitório)',
-      'Treinar os trabalhadores antes de iniciar atividades de risco',
-      'Sinalizar e isolar as frentes de trabalho perigosas'
-    ],
-    obrigacoesTrabalhador:[
-      'Usar os EPIs obrigatórios, especialmente cinto de segurança em altura',
-      'Não retirar proteções coletivas instaladas',
-      'Participar dos treinamentos de segurança'
-    ],
-    pontosPrincipais:[
-      'PCMAT (Programa de Condições e Meio Ambiente na Construção) obrigatório para obras ≥ 20 trabalhadores',
-      'Andaimes devem ter guarda-corpo (1,20m), rodapé (20cm) e ser inspecionados periodicamente',
-      'Escavações com mais de 1,25m de profundidade devem ter escoramentos',
-      'Demolições exigem projeto técnico e medidas específicas de segurança',
-      'Quadros elétricos nas obras devem ser protegidos e identificados',
-      'Obrigatória instalação de DPS (Dispositivo de Proteção contra Surtos) nas instalações provisórias'
-    ],
-    penalidades:'Multa e embargo da obra em caso de risco grave. Em caso de acidente, responsabilidade penal dos responsáveis técnicos.',
-    changelog:[
-      {data:'2020', tipo:'update', titulo:'Portaria SEPRT nº 3.733/2020', desc:'Reestruturação completa da NR-18 com novo enfoque em gestão de riscos na construção.'},
-      {data:'2017', tipo:'update', titulo:'Revisão dos Andaimes', desc:'Atualização dos requisitos de montagem e inspeção de andaimes.'}
-    ]
-  },
-  {
-    num:'NR-19', nome:'Explosivos',
-    desc:'Regulamenta o armazenamento, manuseio e transporte de explosivos nas atividades laborais.',
-    status:'vigente', area:'Química', publicacao:'1978', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 915/2019',
-    temas:['Explosivos','Armazenamento','Transporte','Detonação'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a segurança no manuseio, armazenamento e transporte de explosivos em atividades de mineração, construção e outros setores que necessitam do uso de explosivos.',
-    obrigacoesEmpregador:[
-      'Garantir que somente trabalhadores habilitados e autorizados manuseiem explosivos',
-      'Manter paióis conforme normas técnicas do Exército',
-      'Elaborar procedimentos de segurança para detonações',
-      'Treinar os trabalhadores sobre os riscos dos explosivos'
-    ],
-    obrigacoesTrabalhador:['Seguir rigorosamente os procedimentos de segurança', 'Usar os EPIs obrigatórios'],
-    pontosPrincipais:[
-      'O armazenamento e uso de explosivos também é regulamentado pelo Exército Brasileiro',
-      'Somente Blasteiros certificados podem manusear explosivos',
-      'Distâncias de segurança devem ser observadas durante as detonações',
-      'Transporte de explosivos obedece regulamentação específica do ANTT'
-    ],
-    penalidades:'Multa e interdição. Crime previsto no Código Penal em caso de negligência.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 915/2019', desc:'Atualização de referências normativas.'}]
-  },
-  {
-    num:'NR-20', nome:'Segurança e Saúde no Trabalho com Inflamáveis e Combustíveis',
-    desc:'Estabelece requisitos mínimos para a gestão da segurança e saúde no trabalho contra riscos de acidentes em atividades com inflamáveis e combustíveis líquidos e gasosos.',
-    status:'vigente', area:'Química', publicacao:'1978', ultimaAtualizacao:'2012', portaria:'Portaria MTE nº 308/2012',
-    temas:['Inflamáveis','Combustíveis','Postos de Gasolina','GLP','Treinamento'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Proteger os trabalhadores que atuam com inflamáveis e combustíveis dos riscos de incêndio, explosão, intoxicação e outros, por meio de treinamento, procedimentos e instalações adequadas.',
-    obrigacoesEmpregador:[
-      'Classificar os trabalhadores conforme as atividades: Classe I (Operador) e Classe II (Supervisor)',
-      'Treinar os trabalhadores conforme sua classificação',
-      'Garantir instalações elétricas adequadas para áreas classificadas',
-      'Proibir o uso de fogo aberto nas proximidades de inflamáveis',
-      'Manter equipamentos de combate a incêndio nos locais de armazenamento'
-    ],
-    obrigacoesTrabalhador:['Seguir os procedimentos de segurança estabelecidos', 'Usar os EPIs obrigatórios', 'Não fumar ou usar fogo aberto nas áreas de inflamáveis'],
-    pontosPrincipais:[
-      'Trabalhadores Classe I (operadores): treinamento mínimo de 20h',
-      'Trabalhadores Classe II (supervisores): treinamento mínimo de 40h',
-      'Reciclagem obrigatória a cada 3 anos',
-      'Áreas classificadas: locais onde há possibilidade de atmosfera explosiva',
-      'Instalações elétricas em áreas classificadas devem atender ABNT NBR IEC 60079'
-    ],
-    penalidades:'Multa por não realização do treinamento. Embargo em caso de condições de risco. Responsabilidade criminal em caso de incêndio ou explosão.',
-    changelog:[{data:'2012', tipo:'update', titulo:'Portaria MTE nº 308/2012', desc:'Reestruturação completa da NR-20 com classificação de trabalhadores e requisitos de treinamento.'}]
-  },
-  {
-    num:'NR-21', nome:'Trabalho a Céu Aberto',
-    desc:'Regulamenta as condições de trabalho em atividades realizadas a céu aberto, garantindo proteção contra intempéries.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 915/2019',
-    temas:['Trabalho Externo','Intempéries','Proteção Solar','Agropecuária'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a proteção dos trabalhadores em atividades realizadas a céu aberto (agricultura, construção, mineração) contra riscos de insolação, chuva e outras condições climáticas adversas.',
-    obrigacoesEmpregador:[
-      'Fornecer abrigos para proteção contra intempéries',
-      'Fornecer proteção contra raios solares (chapéu, protetor solar, roupas adequadas)',
-      'Garantir água potável próxima aos locais de trabalho',
-      'Suspender atividades em condições climáticas extremas'
-    ],
-    obrigacoesTrabalhador:['Usar os EPIs fornecidos para proteção solar e contra intempéries'],
-    pontosPrincipais:[
-      'Trabalhadores devem ter acesso a abrigo próximo ao local de trabalho',
-      'Protetor solar fator mínimo 30 deve ser fornecido gratuitamente',
-      'Em dias de chuva intensa, raios ou outros fenômenos, atividades devem ser interrompidas'
-    ],
-    penalidades:'Multa administrativa por descumprimento.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 915/2019', desc:'Atualização de referências e inclusão de proteção contra radiação UV.'}]
-  },
-  {
-    num:'NR-22', nome:'Segurança e Saúde Ocupacional na Mineração',
-    desc:'Estabelece os requisitos mínimos para proteção da segurança e saúde dos trabalhadores que atuam nas atividades de mineração.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 916/2019',
-    temas:['Mineração','Mina','Lavra','Explosivos','Ventilação Subterrânea'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a segurança e saúde dos trabalhadores em atividades de mineração, tanto em superfície quanto subterrânea, estabelecendo requisitos específicos para os riscos do setor.',
-    obrigacoesEmpregador:[
-      'Elaborar e implementar o Gerenciamento de Riscos na Mineração',
-      'Manter equipes de salvamento e resgate treinadas',
-      'Garantir ventilação adequada nas minas subterrâneas',
-      'Instalar sistema de comunicação e localização de trabalhadores nas minas',
-      'Treinar os trabalhadores para situações de emergência'
-    ],
-    obrigacoesTrabalhador:['Usar os EPIs obrigatórios', 'Seguir os procedimentos de segurança', 'Comunicar situações de risco'],
-    pontosPrincipais:[
-      'Minas subterrâneas devem ter pelo menos 2 saídas independentes',
-      'Sistema de ventilação deve garantir teor de oxigênio ≥ 19,5%',
-      'Trabalhadores devem ter treinamento específico antes de entrar nas minas',
-      'Brigada de emergência obrigatória para minas com mais de 50 trabalhadores'
-    ],
-    penalidades:'Embargo e interdição imediata em caso de risco grave. Multa elevada.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 916/2019', desc:'Atualização dos requisitos de gerenciamento de riscos na mineração.'}]
-  },
-  {
-    num:'NR-23', nome:'Proteção Contra Incêndios',
-    desc:'Estabelece as medidas de proteção contra incêndios que devem ter os locais de trabalho.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2011', portaria:'Portaria MTb nº 3.214/1978',
-    temas:['Incêndio','Extintores','Saídas de Emergência','Brigada de Incêndio','AVCB'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir que os locais de trabalho disponham de medidas adequadas de prevenção e combate a incêndios, incluindo equipamentos, saídas de emergência e treinamento dos trabalhadores.',
-    obrigacoesEmpregador:[
-      'Instalar extintores de incêndio adequados ao tipo de risco',
-      'Manter saídas de emergência desobstruídas e sinalizadas',
-      'Constituir Brigada de Incêndio (empresas com mais de 50 trabalhadores)',
-      'Treinar os trabalhadores sobre uso de extintores e evacuação',
-      'Obter AVCB (Auto de Vistoria do Corpo de Bombeiros) quando exigido',
-      'Realizar inspeção anual nos extintores'
-    ],
-    obrigacoesTrabalhador:[
-      'Conhecer as saídas de emergência do local de trabalho',
-      'Não bloquear saídas de emergência e equipamentos de combate a incêndio',
-      'Participar dos treinamentos e simulados de evacuação'
-    ],
-    pontosPrincipais:[
-      'Extintores devem ser inspecionados anualmente e recarregados conforme necessário',
-      'Cada extintor cobre uma área de até 150 m² (varia conforme o tipo)',
-      'Saídas de emergência com largura mínima de 1,20 m, sem obstáculos',
-      'Brigada de Incêndio deve ser treinada conforme ABNT NBR 14276',
-      'Simulado de evacuação deve ser realizado anualmente',
-      'Sinalização de emergência conforme ABNT NBR 13434'
-    ],
-    penalidades:'Multa e interdição do local em caso de risco grave. Responsabilidade civil e criminal em caso de incêndio com vítimas.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Atualização de referências', desc:'Atualização das normas ABNT referenciadas na NR-23.'}]
-  },
-  {
-    num:'NR-24', nome:'Condições Sanitárias e de Conforto nos Locais de Trabalho',
-    desc:'Regulamenta as condições sanitárias mínimas de banheiros, vestiários, bebedouros, refeitórios e alojamentos.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 915/2019',
-    temas:['Sanitários','Refeitório','Vestiário','Bebedouro','Alojamento','Conforto'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir condições mínimas de higiene e conforto nos locais de trabalho, por meio de instalações sanitárias adequadas, vestiários, refeitórios, bebedouros e alojamentos.',
-    obrigacoesEmpregador:[
-      'Manter instalações sanitárias limpas e em bom estado de conservação',
-      'Fornecer papel higiênico, sabonete e toalhas nos banheiros',
-      'Manter separação por sexo nas instalações sanitárias',
-      'Manter vestiários com armários individuais',
-      'Fornecer local adequado para refeições (refeitório) quando não há restaurante próximo',
-      'Fornecer bebedouros com água potável filtrada e fresca'
-    ],
-    obrigacoesTrabalhador:['Utilizar e conservar as instalações sanitárias adequadamente', 'Manter os vestiários limpos e organizados'],
-    pontosPrincipais:[
-      'Proporção: 1 vaso sanitário e 1 lavatório para cada 20 trabalhadores (masculino e feminino separados)',
-      '1 mictório para cada 20 trabalhadores homens',
-      '1 chuveiro para cada 10 trabalhadores (quando há exposição a calor ou substâncias insalubres)',
-      'Refeitório obrigatório quando não há restaurantes no entorno em raio adequado',
-      'Mesas e bancos no refeitório conforme número de trabalhadores',
-      '1 bebedouro para cada 50 trabalhadores'
-    ],
-    penalidades:'Multa administrativa por descumprimento das especificações.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 915/2019', desc:'Atualização dos requisitos de instalações sanitárias e conforto.'}]
-  },
-  {
-    num:'NR-25', nome:'Resíduos Industriais',
-    desc:'Regulamenta o destino dos resíduos industriais, proibindo o lançamento em locais não autorizados.',
-    status:'vigente', area:'Química', publicacao:'1978', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 915/2019',
-    temas:['Resíduos','Descarte','PGRSS','Meio Ambiente','Saúde'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir o descarte adequado dos resíduos industriais, protegendo a saúde dos trabalhadores e o meio ambiente de contaminações por efluentes e resíduos industriais perigosos.',
-    obrigacoesEmpregador:[
-      'Dar destinação adequada a todos os resíduos industriais',
-      'Não lançar efluentes em locais não autorizados pelos órgãos ambientais',
-      'Tratar os resíduos antes do descarte, quando necessário',
-      'Sinalizar e identificar os resíduos conforme sua periculosidade'
-    ],
-    obrigacoesTrabalhador:['Seguir os procedimentos de segregação e descarte de resíduos', 'Usar os EPIs na manipulação de resíduos perigosos'],
-    pontosPrincipais:[
-      'Resíduos sólidos perigosos (Classe I): descarte conforme ABNT NBR 10004',
-      'Efluentes líquidos: tratamento e descarte conforme CONAMA 430/2011',
-      'Resíduos de saúde (PGRSS): conforme RDC ANVISA 222/2018',
-      'O descarte inadequado também está sujeito à legislação ambiental (Lei nº 9.605/1998)'
-    ],
-    penalidades:'Multa administrativa do MTE e dos órgãos ambientais (IBAMA, órgãos estaduais). Crime ambiental em caso de descarte irregular de resíduos perigosos.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 915/2019', desc:'Atualização de referências à legislação ambiental vigente.'}]
-  },
-  {
-    num:'NR-26', nome:'Sinalização de Segurança',
-    desc:'Estabelece os requisitos de sinalização de segurança nos locais de trabalho: cores, formas, símbolos e sinalizações.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2015', portaria:'Portaria MTb nº 229/2011',
-    temas:['Sinalização','Cores de Segurança','Placas','EPC','Identificação'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Padronizar a sinalização de segurança nos locais de trabalho, facilitando a comunicação visual dos riscos, obrigações, proibições e informações de emergência para os trabalhadores.',
-    obrigacoesEmpregador:[
-      'Instalar sinalização de segurança em todos os locais com risco',
-      'Identificar as tubulações conforme as cores da NR-26',
-      'Manter a sinalização limpa, visível e em bom estado de conservação',
-      'Atualizar a sinalização quando ocorrerem mudanças no layout'
-    ],
-    obrigacoesTrabalhador:['Respeitar e cumprir a sinalização de segurança', 'Comunicar ao empregador danos na sinalização'],
-    pontosPrincipais:[
-      'Vermelho: proteção contra incêndios, parada de emergência',
-      'Laranja: partes móveis de máquinas, riscos de corte/esmagamento',
-      'Amarelo: atenção e risco de acidentes (escorregões, quedas)',
-      'Verde: segurança, primeiros socorros, saídas de emergência',
-      'Azul: obrigação (uso de EPI)',
-      'Roxo/Púrpura: radiações ionizantes',
-      'Branco: limpeza, higiene, ordem'
-    ],
-    penalidades:'Multa administrativa por ausência ou inadequação da sinalização.',
-    changelog:[{data:'2015', tipo:'update', titulo:'Portaria MTb nº 229/2011', desc:'Atualização das cores e formas de sinalização conforme normas ISO.'}]
-  },
-  {
-    num:'NR-28', nome:'Fiscalização e Penalidades',
-    desc:'Estabelece os procedimentos de fiscalização do cumprimento das NRs e as penalidades aplicáveis ao seu descumprimento.',
-    status:'vigente', area:'Saúde', publicacao:'1978', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 916/2019',
-    temas:['Fiscalização','Auditoria Fiscal','Multas','Penalidades','AFT'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Regulamentar os procedimentos de fiscalização do MTE para verificação do cumprimento das NRs e estabelecer as penalidades aplicáveis em caso de infrações.',
-    obrigacoesEmpregador:[
-      'Permitir o acesso dos Auditores Fiscais do Trabalho às instalações',
-      'Fornecer todas as informações solicitadas pelo AFT',
-      'Cumprir as notificações e autos de infração emitidos',
-      'Apresentar recursos dentro dos prazos legais'
-    ],
-    obrigacoesTrabalhador:['Colaborar com as fiscalizações dos AFT', 'Relatar condições de trabalho irregulares ao AFT quando solicitado'],
-    pontosPrincipais:[
-      'O Auditor Fiscal do Trabalho tem poderes para acessar qualquer área da empresa',
-      'Multas por infração às NRs: de R$ 668,19 a R$ 6.681,82 por infração',
-      'Reincidência pode dobrar o valor da multa',
-      'Embargo e interdição são medidas administrativas independentes das multas',
-      'O empregador tem prazo de 30 dias para interpor recurso dos autos de infração'
-    ],
-    penalidades:'As penalidades são o próprio objeto desta NR.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 916/2019', desc:'Atualização dos valores de multa e procedimentos de notificação.'}]
-  },
-  {
-    num:'NR-29', nome:'Segurança e Saúde no Trabalho Portuário',
-    desc:'Regulamenta a proteção obrigatória da saúde e segurança dos trabalhadores portuários na operação de portos organizados e instalações portuárias.',
-    status:'vigente', area:'Saúde', publicacao:'1994', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 915/2019',
-    temas:['Porto','Trabalhador Portuário','OGMO','Estiva','Capatazia'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a segurança e saúde dos trabalhadores portuários, considerando os riscos específicos das operações em portos: queda de cargas, contato com produtos perigosos, operações em embarcações.',
-    obrigacoesEmpregador:[
-      'Elaborar Plano de Emergência para as instalações portuárias',
-      'Garantir EPIs específicos para operações portuárias',
-      'Manter equipe de resgate treinada no porto',
-      'Controlar a entrada de substâncias perigosas no porto'
-    ],
-    obrigacoesTrabalhador:['Usar os EPIs obrigatórios', 'Participar dos treinamentos de segurança portuária'],
-    pontosPrincipais:[
-      'Trabalhadores portuários avulsos são registrados pelo OGMO',
-      'Operações noturnas e em condições adversas têm requisitos adicionais',
-      'Trabalhadores devem ser qualificados para as funções específicas'
-    ],
-    penalidades:'Multa administrativa e interdição das operações portuárias em caso de risco grave.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 915/2019', desc:'Atualização de referências técnicas.'}]
-  },
-  {
-    num:'NR-30', nome:'Segurança e Saúde no Trabalho Aquaviário',
-    desc:'Regulamenta a proteção da saúde e segurança dos trabalhadores em atividades aquaviárias.',
-    status:'vigente', area:'Saúde', publicacao:'2002', ultimaAtualizacao:'2019', portaria:'Portaria MTE nº 1.186/2010',
-    temas:['Trabalho Aquaviário','Embarcações','Pescadores','Plataformas'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a segurança e saúde dos trabalhadores que atuam em embarcações, plataformas e instalações aquaviárias.',
-    obrigacoesEmpregador:[
-      'Fornecer coletes salva-vidas e equipamentos de segurança aquática',
-      'Treinar os trabalhadores para situações de emergência aquática',
-      'Manter botes e equipamentos de resgate em boas condições',
-      'Garantir comunicação constante com embarcações em operação'
-    ],
-    obrigacoesTrabalhador:['Usar coletes salva-vidas obrigatoriamente', 'Conhecer os procedimentos de evacuação da embarcação'],
-    pontosPrincipais:[
-      'Aplica-se a embarcações de pesca, turismo, transporte e plataformas',
-      'Inclui Anexo específico para plataformas de petróleo (Anexo I)',
-      'Jornada de trabalho e descanso em embarcações têm regras específicas'
-    ],
-    penalidades:'Multa e interdição das operações em caso de descumprimento.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Atualização', desc:'Atualização de referências técnicas e requisitos de treinamento.'}]
-  },
-  {
-    num:'NR-31', nome:'Segurança e Saúde no Trabalho na Agricultura, Pecuária, Silvicultura, Exploração Florestal e Aquicultura',
-    desc:'Estabelece preceitos a serem observados na organização e no ambiente de trabalho, de forma a tornar compatível o planejamento e o desenvolvimento das atividades agrícolas com a segurança e saúde e o meio ambiente do trabalho.',
-    status:'vigente', area:'Saúde', publicacao:'2005', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 915/2019',
-    temas:['Agronegócio','Agricultura','Pecuária','Agrotóxicos','Trabalho Rural'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a segurança e saúde dos trabalhadores rurais, considerando os riscos específicos do campo: agrotóxicos, máquinas agrícolas, trabalho em condições climáticas adversas e outros.',
-    obrigacoesEmpregador:[
-      'Elaborar o PGR para atividades rurais (adaptado à NR-31)',
-      'Fornecer água potável e instalações sanitárias nos locais de trabalho rural',
-      'Treinar os trabalhadores sobre uso seguro de agrotóxicos',
-      'Fornecer EPIs adequados para cada atividade rural',
-      'Respeitar as restrições de entrada nas áreas tratadas com agrotóxicos'
-    ],
-    obrigacoesTrabalhador:['Usar os EPIs obrigatórios, especialmente na aplicação de agrotóxicos', 'Respeitar os períodos de reentrada nas áreas tratadas'],
-    pontosPrincipais:[
-      'Trabalhadores que aplicam agrotóxicos devem ter treinamento específico',
-      'Período de reentrada nas áreas tratadas deve ser respeitado (conforme bula do produto)',
-      'Máquinas agrícolas devem ter proteções e ROPS (estrutura de proteção contra capotamento)',
-      'Trabalhadores rurais têm direito às mesmas proteções que trabalhadores urbanos'
-    ],
-    penalidades:'Multa administrativa por descumprimento.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 915/2019', desc:'Atualização dos requisitos de proteção com agrotóxicos.'}]
-  },
-  {
-    num:'NR-32', nome:'Segurança e Saúde no Trabalho em Serviços de Saúde',
-    desc:'Estabelece as diretrizes básicas para a implementação de medidas de proteção à segurança e à saúde dos trabalhadores dos serviços de saúde.',
-    status:'vigente', area:'Saúde', publicacao:'2005', ultimaAtualizacao:'2020', portaria:'Portaria SEPRT nº 2.309/2020',
-    temas:['Saúde','Hospital','Agentes Biológicos','Perfurocortantes','COREN'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Proteger os trabalhadores de serviços de saúde dos riscos específicos do setor, especialmente os agentes biológicos, químicos (quimioterápicos), radiações ionizantes e ergonômicos.',
-    obrigacoesEmpregador:[
-      'Implementar programa de imunização dos trabalhadores expostos a agentes biológicos',
-      'Fornecer EPIs adequados para cada procedimento',
-      'Estabelecer procedimentos para o manejo seguro de resíduos de saúde',
-      'Garantir descarte adequado de materiais perfurocortantes',
-      'Treinar os trabalhadores para situações de exposição acidental'
-    ],
-    obrigacoesTrabalhador:[
-      'Usar os EPIs obrigatórios em todos os procedimentos',
-      'Seguir as precauções padrão e específicas',
-      'Vacinar-se conforme o calendário do serviço de saúde',
-      'Comunicar acidentes com perfurocortantes imediatamente'
-    ],
-    pontosPrincipais:[
-      'Vacinas obrigatórias: hepatite B, tétano, febre amarela (conforme risco), gripe',
-      'Descarte de perfurocortantes em coletores rígidos tipo Descarpack',
-      'Quimioterápicos antineoplásicos: manuseio somente por farmacêutico/enfermeiro treinado',
-      'Radiações ionizantes: requisitos específicos do Anexo I da NR-32',
-      'Ergonomia: atenção ao mobilização de pacientes (risco de lombalgia)',
-      'Notificação de acidentes com material biológico no SINAN'
-    ],
-    penalidades:'Multa e interdição. Responsabilidade por infecções ocupacionais adquiridas por falta de medidas de proteção.',
-    changelog:[
-      {data:'2020', tipo:'update', titulo:'Portaria SEPRT nº 2.309/2020', desc:'Atualização dos requisitos para proteção contra COVID-19 e outros agentes biológicos emergentes.'},
-      {data:'2011', tipo:'update', titulo:'Portaria MTE nº 1.748/2011', desc:'Obrigatoriedade do Plano de Prevenção de Riscos de Acidentes com Materiais Perfurocortantes.'}
-    ]
-  },
-  {
-    num:'NR-33', nome:'Segurança e Saúde nos Trabalhos em Espaços Confinados',
-    desc:'Estabelece os requisitos mínimos para identificação de espaços confinados e o reconhecimento, avaliação, monitoramento e controle dos riscos existentes.',
-    status:'vigente', area:'Saúde', publicacao:'2006', ultimaAtualizacao:'2012', portaria:'Portaria MTE nº 1.409/2012',
-    temas:['Espaços Confinados','PET','Vigia','Supervisor de Entrada','Atmosfera Confinada'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a segurança dos trabalhadores em espaços confinados, que são ambientes não projetados para ocupação contínua, com acesso restrito e atmosfera que pode ser imediatamente perigosa à vida.',
-    obrigacoesEmpregador:[
-      'Identificar e cadastrar todos os espaços confinados da empresa',
-      'Sinalizar os espaços confinados com avisos de proibição de entrada não autorizada',
-      'Treinar e designar Supervisor de Entrada, Vigia e Trabalhadores Autorizados',
-      'Fornecer equipamentos de monitoramento de atmosfera e resgate',
-      'Emitir PET (Permissão de Entrada e Trabalho) antes de cada entrada',
-      'Estabelecer procedimento de emergência e resgate'
-    ],
-    obrigacoesTrabalhador:[
-      'Entrar em espaço confinado somente com PET emitida e válida',
-      'Usar todos os EPIs obrigatórios',
-      'Manter comunicação constante com o Vigia',
-      'Sair imediatamente se o alarme do monitor atmosférico disparar'
-    ],
-    pontosPrincipais:[
-      'Espaço confinado: espaço não projetado para ocupação contínua + acesso restrito + atmosfera potencialmente perigosa',
-      'PET deve ser emitida para CADA entrada, mesmo que seja o mesmo dia',
-      'Vigia deve permanecer FORA do espaço confinado durante toda a operação',
-      'Monitor de atmosfera deve medir: O2, CO, H2S e gases combustíveis',
-      'O2 aceitável: entre 19,5% e 23,5%',
-      'Equipamento de resgate deve estar pronto ANTES da entrada',
-      'Espaços confinados devem ser ventilados mecanicamente antes da entrada'
-    ],
-    penalidades:'Interdição imediata do espaço confinado. Multa elevada. Em caso de acidente, responsabilidade criminal do empregador e do Supervisor de Entrada.',
-    changelog:[
-      {data:'2012', tipo:'update', titulo:'Portaria MTE nº 1.409/2012', desc:'Reestruturação completa da NR-33 com novos requisitos de treinamento e equipamentos.'},
-      {data:'2006', tipo:'update', titulo:'Criação', desc:'NR-33 criada em 2006 para regulamentar os trabalhos em espaços confinados.'}
-    ]
-  },
-  {
-    num:'NR-34', nome:'Condições e Meio Ambiente de Trabalho na Indústria da Construção, Reparação e Desmanche de Embarcações',
-    desc:'Estabelece os requisitos mínimos de segurança e saúde para os trabalhadores da indústria naval.',
-    status:'vigente', area:'Construção', publicacao:'2011', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 916/2019',
-    temas:['Naval','Estaleiro','Espaços Confinados Navais','Pintura Naval'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a segurança e saúde dos trabalhadores em estaleiros e instalações de construção, reparação e desmanche de embarcações, considerando os riscos específicos do setor naval.',
-    obrigacoesEmpregador:[
-      'Elaborar PPRA Naval (adaptado às especificidades da indústria naval)',
-      'Garantir proteções contra quedas em trabalhos em embarcações',
-      'Controlar exposição a solventes e tintas nas operações de pintura',
-      'Implementar procedimentos especiais para espaços confinados navais'
-    ],
-    obrigacoesTrabalhador:['Usar os EPIs obrigatórios', 'Seguir os procedimentos de trabalho em espaços confinados navais'],
-    pontosPrincipais:[
-      'Espaços confinados navais têm características especiais (atmosfera e acesso)',
-      'Trabalhos com solventes em ambiente fechado exigem ventilação mecânica forçada',
-      'Calderaria e soldagem em embarcações: requisitos específicos de proteção contra fumos'
-    ],
-    penalidades:'Multa e interdição das operações em caso de risco grave.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 916/2019', desc:'Atualização de referências técnicas e requisitos de treinamento.'}]
-  },
-  {
-    num:'NR-35', nome:'Trabalho em Altura',
-    desc:'Estabelece os requisitos mínimos e as medidas de proteção para o trabalho em altura, envolvendo o planejamento, a organização e a execução.',
-    status:'vigente', area:'Construção', publicacao:'2012', ultimaAtualizacao:'2016', portaria:'Portaria MTb nº 1.113/2021',
-    temas:['Trabalho em Altura','Cinto de Segurança','Talabarte','Linha de Vida','Ancoragem'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Proteger os trabalhadores que realizam atividades em altura (≥ 2m), uma das principais causas de acidentes graves e fatais no Brasil, estabelecendo requisitos de treinamento, equipamentos e procedimentos.',
-    obrigacoesEmpregador:[
-      'Garantir que somente trabalhadores treinados realizem trabalhos em altura',
-      'Fornecer e garantir o uso de cinto de segurança tipo paraquedista e talabarte',
-      'Instalar sistemas de ancoragem adequados',
-      'Implementar sistema de permissão de trabalho (PT) para trabalho em altura',
-      'Realizar avaliação médica dos trabalhadores (conforme NR-7)',
-      'Elaborar procedimentos de salvamento para trabalhadores suspensos'
-    ],
-    obrigacoesTrabalhador:[
-      'Usar obrigatoriamente o cinto de segurança tipo paraquedista e talabarte',
-      'Inspecionar os EPIs antes de cada uso',
-      'Verificar os pontos de ancoragem antes de se conectar',
-      'Recusar trabalho em condições inseguras ou sem os EPIs adequados'
-    ],
-    pontosPrincipais:[
-      'Trabalho em altura: toda atividade ≥ 2,0 m do nível inferior',
-      'Treinamento inicial: mínimo 8h teóricas + 8h práticas (total 16h)',
-      'Reciclagem obrigatória a cada 2 anos ou em caso de acidente',
-      'Cinto de segurança tipo paraquedista é obrigatório (não é permitido apenas o cinto abdominal)',
-      'Talabarte duplo recomendado para trabalhos com movimentação',
-      'Linha de vida deve ter laudo técnico de cálculo estrutural',
-      'Trauma de suspensão (síndrome do arnês): risco após queda e suspensão prolongada'
-    ],
-    penalidades:'Interdição da atividade em caso de risco grave. Multa por trabalhador não treinado. Responsabilidade criminal em caso de acidente fatal.',
-    changelog:[
-      {data:'2021', tipo:'update', titulo:'Portaria MTb nº 1.113/2021', desc:'Atualização dos requisitos de treinamento e novos procedimentos para trabalho com drones e coberturas frágeis.'},
-      {data:'2016', tipo:'update', titulo:'Revisão de Requisitos', desc:'Atualização dos requisitos de ancoragem e sistemas de proteção contra queda.'}
-    ]
-  },
-  {
-    num:'NR-36', nome:'Segurança e Saúde no Trabalho em Empresas de Abate e Processamento de Carnes e Derivados',
-    desc:'Estabelece os requisitos mínimos de segurança e saúde para os trabalhadores em empresas de abate e processamento de carnes.',
-    status:'vigente', area:'Saúde', publicacao:'2013', ultimaAtualizacao:'2017', portaria:'Portaria MTE nº 555/2013',
-    temas:['Frigorífico','Abate','Frio','Ergonomia','Pausas','LER/DORT'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Proteger os trabalhadores em frigoríficos dos riscos específicos do setor: frio extremo, movimentos repetitivos, trabalho com facas e instrumentos cortantes, exposição a substâncias químicas e biológicas.',
-    obrigacoesEmpregador:[
-      'Garantir pausas obrigatórias de 20 min a cada 1h40min (mínimo)',
-      'Fornecer EPIs adequados para trabalho em frio: luvas, aventais, botas térmicas',
-      'Implementar programa de ginástica laboral',
-      'Realizar rodízio de funções para reduzir movimentos repetitivos',
-      'Monitorar a temperatura dos ambientes de trabalho em frio'
-    ],
-    obrigacoesTrabalhador:['Usar os EPIs obrigatórios para proteção ao frio e contra cortes', 'Participar dos programas de ginástica laboral'],
-    pontosPrincipais:[
-      'Temperatura mínima de operação em câmaras frias: variável por câmara',
-      'Trabalhadores em câmaras frias devem ter exame de saúde específico',
-      'Instrumentos cortantes (facas) devem ter luvas de proteção anticorte',
-      'Programa de exercícios preparatórios (ginástica laboral) obrigatório',
-      'LER/DORT é doença frequente no setor — monitoramento obrigatório'
-    ],
-    penalidades:'Multa e notificação para implementar medidas ergonômicas.',
-    changelog:[{data:'2017', tipo:'update', titulo:'Portaria MTE — Revisão', desc:'Atualização dos requisitos de pausas e programas de saúde.'}]
-  },
-  {
-    num:'NR-37', nome:'Segurança e Saúde em Plataformas de Petróleo',
-    desc:'Estabelece os requisitos mínimos de segurança e saúde para os trabalhadores em plataformas de petróleo.',
-    status:'vigente', area:'Química', publicacao:'2013', ultimaAtualizacao:'2019', portaria:'Portaria SEPRT nº 915/2019',
-    temas:['Petróleo','Plataforma Offshore','FPSO','SSO','Helideck'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Garantir a segurança e saúde dos trabalhadores em plataformas marítimas de petróleo e gás, considerando os riscos específicos do ambiente offshore.',
-    obrigacoesEmpregador:[
-      'Elaborar e implementar o Sistema de Gestão de Segurança e Saúde (SGSS) offshore',
-      'Garantir treinamento de sobrevivência no mar (HUET) para todos os trabalhadores',
-      'Manter botes salva-vidas e coletes em condições de uso',
-      'Implementar plano de abandono de plataforma',
-      'Controlar as condições de salubridade dos alojamentos offshore'
-    ],
-    obrigacoesTrabalhador:['Participar de todos os treinamentos de segurança offshore', 'Usar os EPIs obrigatórios', 'Conhecer os pontos de mustering (reunião de emergência)'],
-    pontosPrincipais:[
-      'HUET (Helicopter Underwater Escape Training): treinamento obrigatório',
-      'Alojamentos offshore: padrões mínimos de área, conforto e higiene',
-      'Período de embarque (regime de turno): regulamentação específica de jornada',
-      'Plataformas FPSO têm requisitos específicos de tanques de carga',
-      'Inspeções regulares pelo MTE e pela ANP'
-    ],
-    penalidades:'Multa e interdição das operações. Em caso de acidente grave, investigação conjunta MTE/ANP/Marinha.',
-    changelog:[{data:'2019', tipo:'update', titulo:'Portaria SEPRT nº 915/2019', desc:'Atualização dos requisitos de treinamento e gestão de SST offshore.'}]
-  },
-  {
-    num:'NR-38', nome:'Segurança e Saúde no Trabalho nas Atividades de Limpeza Urbana e Manejo de Resíduos Sólidos',
-    desc:'Estabelece os requisitos mínimos de segurança e saúde para os trabalhadores em atividades de limpeza urbana e manejo de resíduos sólidos.',
-    status:'vigente', area:'Saúde', publicacao:'2023', ultimaAtualizacao:'2023', portaria:'Portaria MTE nº 2.080/2023',
-    temas:['Limpeza Urbana','Coleta de Lixo','Garis','Resíduos Sólidos','Catadores'],
-    link:'https://www.gov.br/trabalho-e-emprego',
-    objetivo:'Proteger os trabalhadores de limpeza urbana e coleta de resíduos dos riscos específicos: atropelamento, cortes por materiais descartados, exposição a agentes biológicos e ergonômicos.',
-    obrigacoesEmpregador:[
-      'Fornecer EPIs específicos: luvas de borracha reforçada, colete refletivo, botas de segurança',
-      'Garantir veículos de coleta com sistema de compactação seguro',
-      'Implementar programa de vacinação (hepatite B, tétano)',
-      'Fornecer sanitários e instalações para higiene nos roteiros de coleta',
-      'Estabelecer rotas seguras e sinalização adequada durante coleta'
-    ],
-    obrigacoesTrabalhador:['Usar os EPIs obrigatórios em todos os momentos da coleta', 'Seguir os procedimentos de segurança nos veículos de coleta'],
-    pontosPrincipais:[
-      'NR mais recente do conjunto, publicada em 2023',
-      'Aplica-se a empresas públicas e privadas de limpeza urbana',
-      'Inclui catadores de materiais recicláveis organizados em cooperativas',
-      'Veículos de coleta devem ter sistema de câmeras e alerta sonoro de ré',
-      'Trabalhadores devem ter pausa de no mínimo 15 min a cada 2 horas de trabalho contínuo'
-    ],
-    penalidades:'Multa administrativa por descumprimento dos requisitos de EPI e proteção dos trabalhadores.',
-    changelog:[{data:'2023', tipo:'update', titulo:'Portaria MTE nº 2.080/2023', desc:'Criação da NR-38 para regulamentar o setor de limpeza urbana, até então sem NR específica.'}]
-  }
-];
+  const nrs = [
+    {
+      numero: "NR-1",
+      titulo: "Disposições Gerais e Gerenciamento de Riscos",
+      resumo: "Estabelece as disposições gerais sobre segurança e saúde no trabalho e o Programa de Gerenciamento de Riscos (PGR).",
+      detalhe: "Define os direitos e obrigações de empregados e empregadores quanto à SST, além de exigir o inventário de riscos e o Plano de Ação como parte do PGR.",
+      categoria: "segurança",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-1-nr-1"
+    },
+    {
+      numero: "NR-4",
+      titulo: "Serviços Especializados em Segurança e Medicina do Trabalho (SESMT)",
+      resumo: "Exige que as empresas mantenham equipes especializadas em saúde e segurança conforme o grau de risco e número de empregados.",
+      detalhe: "O SESMT é composto por médico do trabalho, engenheiro de segurança, técnico de segurança, enfermeiro e auxiliar de enfermagem do trabalho, conforme dimensionamento específico.",
+      categoria: "saúde",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-4-nr-4"
+    },
+    {
+      numero: "NR-5",
+      titulo: "Comissão Interna de Prevenção de Acidentes (CIPA)",
+      resumo: "Regulamenta a constituição e funcionamento da CIPA nas empresas.",
+      detalhe: "A CIPA tem como objetivo a prevenção de acidentes e doenças decorrentes do trabalho, por meio de ações que promovam a saúde e a segurança dos trabalhadores.",
+      categoria: "segurança",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-5-nr-5"
+    },
+    {
+      numero: "NR-6",
+      titulo: "Equipamentos de Proteção Individual (EPI)",
+      resumo: "Define as obrigações relacionadas ao fornecimento, uso e conservação de EPIs.",
+      detalhe: "O empregador deve fornecer EPI adequado ao risco, em perfeito estado de conservação e funcionamento, de forma gratuita ao trabalhador.",
+      categoria: "equipamento",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-6-nr-6"
+    },
+    {
+      numero: "NR-7",
+      titulo: "Programa de Controle Médico de Saúde Ocupacional (PCMSO)",
+      resumo: "Estabelece a obrigatoriedade do PCMSO para promoção e preservação da saúde dos trabalhadores.",
+      detalhe: "O PCMSO inclui exames médicos admissional, periódico, de retorno ao trabalho, de mudança de função e demissional, monitorando a saúde dos empregados.",
+      categoria: "saúde",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-7-nr-7"
+    },
+    {
+      numero: "NR-9",
+      titulo: "Avaliação e Controle das Exposições Ocupacionais a Agentes Físicos, Químicos e Biológicos",
+      resumo: "Determina a necessidade de identificar, avaliar e controlar riscos ambientais nos locais de trabalho.",
+      detalhe: "Os resultados das avaliações devem compor o inventário de riscos do PGR, com plano de ação para controle das exposições acima dos limites toleráveis.",
+      categoria: "saúde",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-9-nr-9"
+    },
+    {
+      numero: "NR-10",
+      titulo: "Segurança em Instalações e Serviços em Eletricidade",
+      resumo: "Estabelece requisitos mínimos para garantir a segurança dos trabalhadores que interagem com instalações elétricas.",
+      detalhe: "Abrange medidas de controle do risco elétrico, habilitação e qualificação dos profissionais, uso de EPIs e EPCs, e procedimentos de trabalho seguro.",
+      categoria: "segurança",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-10-nr-10"
+    },
+    {
+      numero: "NR-12",
+      titulo: "Segurança no Trabalho em Máquinas e Equipamentos",
+      resumo: "Define medidas de proteção para garantir a saúde e integridade física dos trabalhadores em máquinas e equipamentos.",
+      detalhe: "Exige proteções físicas, dispositivos de segurança, sinalização, capacitação dos operadores e elaboração de documentação técnica específica.",
+      categoria: "equipamento",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-12-nr-12"
+    },
+    {
+      numero: "NR-17",
+      titulo: "Ergonomia",
+      resumo: "Visa estabelecer parâmetros para adaptação das condições de trabalho às características psicofisiológicas dos trabalhadores.",
+      detalhe: "Abrange mobiliário, equipamentos, condições ambientais, organização do trabalho e treinamento, buscando conforto, segurança e eficiência.",
+      categoria: "ergonomia",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-17-nr-17"
+    },
+    {
+      numero: "NR-18",
+      titulo: "Segurança e Saúde no Trabalho na Indústria da Construção",
+      resumo: "Estabelece diretrizes de ordem administrativa, de planejamento e de organização para a construção civil.",
+      detalhe: "Inclui PCMAT, medidas de proteção coletiva e individual, andaimes, escavações, movimentação e transporte de materiais, instalações elétricas e muito mais.",
+      categoria: "segurança",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-18-nr-18"
+    },
+    {
+      numero: "NR-20",
+      titulo: "Segurança e Saúde no Trabalho com Inflamáveis e Combustíveis",
+      resumo: "Regulamenta as atividades que envolvem manuseio, armazenamento e comercialização de inflamáveis e combustíveis.",
+      detalhe: "Define classificações, requisitos técnicos, capacitação dos trabalhadores e medidas de controle de risco de incêndio e explosão.",
+      categoria: "segurança",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-20-nr-20"
+    },
+    {
+      numero: "NR-23",
+      titulo: "Proteção Contra Incêndios",
+      resumo: "Estabelece as medidas de proteção contra incêndios que devem ser adotadas nos locais de trabalho.",
+      detalhe: "Determina saídas de emergência, portas corta-fogo, sistemas de alarme, treinamento de brigada e acesso de bombeiros aos estabelecimentos.",
+      categoria: "segurança",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-23-nr-23"
+    },
+    {
+      numero: "NR-35",
+      titulo: "Trabalho em Altura",
+      resumo: "Estabelece os requisitos mínimos e as medidas de proteção para o trabalho em altura.",
+      detalhe: "Todo trabalho realizado acima de 2 metros do nível inferior requer planejamento, autorização, capacitação, equipamentos adequados e supervisão.",
+      categoria: "treinamento",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-35-nr-35"
+    },
+    {
+      numero: "NR-36",
+      titulo: "Segurança e Saúde no Trabalho em Empresas de Abate e Processamento de Carnes",
+      resumo: "Regulamenta as condições de trabalho nas indústrias de abate e processamento de carnes e derivados.",
+      detalhe: "Aborda ergonomia, pausas, ritmo de trabalho, temperatura dos ambientes, organização do trabalho e medidas de prevenção de doenças ocupacionais.",
+      categoria: "saúde",
+      link: "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/norma-regulamentadora-no-36-nr-36"
+    }
+  ];
 
-// ============================================================
-// SISTEMA DE VERIFICAÇÃO DE ATUALIZAÇÕES (a cada 30 dias)
-// ============================================================
-var ATUALIZACOES_SIMULADAS = [
-  { nr:'NR-1', data:'2024-03', descricao:'Revisão dos prazos do PGR para 2024 — Portaria MTE nº 595/2024' },
-  { nr:'NR-5', data:'2024-01', descricao:'Novas diretrizes para prevenção de assédio na CIPA — Portaria MTE nº 1.357/2023 em vigor' },
-  { nr:'NR-17', data:'2024-02', descricao:'Novos parâmetros ergonômicos para trabalho remoto — Instrução Normativa 2024' },
-  { nr:'NR-35', data:'2024-03', descricao:'Atualização dos requisitos de ancoragem para coberturas metálicas' }
-];
+  function renderCards() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const filter = document.getElementById('filterSelect').value.toLowerCase();
+    const grid = document.getElementById('nrGrid');
+    grid.innerHTML = '';
 
-function verificarAtualizacoes(forçar) {
-  var btn = document.getElementById('btnVerificar');
-  btn.classList.add('girando');
-  btn.disabled = true;
+    const filtered = nrs.filter(nr => {
+      const matchSearch =
+        nr.numero.toLowerCase().includes(search) ||
+        nr.titulo.toLowerCase().includes(search) ||
+        nr.resumo.toLowerCase().includes(search);
+      const matchFilter = filter === '' || nr.categoria === filter;
+      return matchSearch && matchFilter;
+    });
 
-  var ultima = localStorage.getItem('safenr_nr_ultima_verif');
-  var hoje = new Date();
-
-  // Verificar se passou 30 dias
-  if (!forçar && ultima) {
-    var diff = (hoje - new Date(ultima)) / (1000 * 60 * 60 * 24);
-    if (diff < 30) {
-      atualizarUltimaVerif(new Date(ultima));
-      btn.classList.remove('girando');
-      btn.disabled = false;
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="no-results">😕 Nenhuma norma encontrada para essa busca.</div>';
       return;
     }
-  }
 
-  // Simular verificação com delay (em produção, faria fetch para API do gov.br)
-  setTimeout(function() {
-    localStorage.setItem('safenr_nr_ultima_verif', hoje.toISOString());
-    atualizarUltimaVerif(hoje);
-
-    // Verificar se há atualizações novas desde última verificação
-    var ultimaData = ultima ? new Date(ultima) : new Date('2024-01-01');
-    var novas = ATUALIZACOES_SIMULADAS.filter(function(a) {
-      return new Date(a.data + '-01') > ultimaData || forçar;
+    filtered.forEach(nr => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="nr-number">${nr.numero}</div>
+        <h2>${nr.titulo}</h2>
+        <p>${nr.resumo}</p>
+        <span class="badge">${nr.categoria}</span>
+      `;
+      card.onclick = () => openModal(nr);
+      grid.appendChild(card);
     });
-
-    if (novas.length > 0 || forçar) {
-      mostrarBannerAtualizacoes(novas.length > 0 ? novas : ATUALIZACOES_SIMULADAS);
-    }
-
-    btn.classList.remove('girando');
-    btn.disabled = false;
-    renderizar();
-  }, 1800);
-}
-
-function mostrarBannerAtualizacoes(novas) {
-  var banner = document.getElementById('bannerUpdate');
-  var lista = document.getElementById('bannerLista');
-  var titulo = document.getElementById('bannerTitulo');
-  var desc = document.getElementById('bannerDesc');
-
-  titulo.textContent = '🔔 ' + novas.length + ' atualização(ões) identificada(s) nas NRs!';
-  desc.textContent = 'As seguintes normas podem ter sofrido alterações recentes. Verifique no Portal do MTE:';
-  lista.innerHTML = '';
-  novas.forEach(function(a) {
-    var li = document.createElement('li');
-    li.textContent = a.nr + ' — ' + a.descricao;
-    lista.appendChild(li);
-  });
-
-  banner.classList.add('show');
-
-  // Marcar os cards afetados
-  novas.forEach(function(a) {
-    NRS.forEach(function(nr) {
-      if (nr.num === a.nr) nr._temUpdate = true;
-    });
-  });
-}
-
-function fecharBanner() {
-  document.getElementById('bannerUpdate').classList.remove('show');
-}
-
-function atualizarUltimaVerif(data) {
-  var el = document.getElementById('ultimaVerif');
-  el.textContent = 'Última verificação: ' + data.toLocaleDateString('pt-BR') + ' às ' + data.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
-}
-
-// Verificar automaticamente ao carregar (sem forçar)
-function verificarAutoInicio() {
-  var ultima = localStorage.getItem('safenr_nr_ultima_verif');
-  if (ultima) {
-    var diff = (new Date() - new Date(ultima)) / (1000 * 60 * 60 * 24);
-    atualizarUltimaVerif(new Date(ultima));
-    if (diff >= 30) {
-      verificarAtualizacoes(false);
-    }
-  } else {
-    // Primeira vez
-    verificarAtualizacoes(false);
-  }
-}
-
-// ============================================================
-// RENDERIZAÇÃO
-// ============================================================
-function renderizar() {
-  var busca = document.getElementById('campoBusca').value.toLowerCase();
-  var filtroStatus = document.getElementById('filtroStatus').value;
-  var filtroArea = document.getElementById('filtroArea').value;
-  var grid = document.getElementById('nrsGrid');
-
-  var filtrados = NRS.filter(function(n) {
-    var okBusca = !busca || n.num.toLowerCase().includes(busca) || n.nome.toLowerCase().includes(busca) || n.desc.toLowerCase().includes(busca) || n.temas.join(' ').toLowerCase().includes(busca);
-    var okStatus = !filtroStatus || n.status === filtroStatus;
-    var okArea = !filtroArea || n.area === filtroArea;
-    return okBusca && okStatus && okArea;
-  });
-
-  // Atualizar stats
-  document.getElementById('statTotal').textContent = NRS.length;
-  document.getElementById('statVigentes').textContent = NRS.filter(function(n){return n.status==='vigente';}).length;
-  document.getElementById('statRevisao').textContent = NRS.filter(function(n){return n.status==='revisao';}).length;
-  document.getElementById('statRevogadas').textContent = NRS.filter(function(n){return n.status==='revogada';}).length;
-
-  grid.innerHTML = '';
-  if (filtrados.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><div>📚</div><p>Nenhuma NR encontrada.</p></div>';
-    return;
   }
 
-  filtrados.forEach(function(n) {
-    var div = document.createElement('div');
-    div.className = 'nr-card' + (n._temUpdate ? ' tem-update' : '');
-    div.innerHTML =
-      (n._temUpdate ? '<span class="badge-update">Atualização</span>' : '') +
-      '<div class="nr-numero">' + n.num + '</div>' +
-      '<div class="nr-nome">' + n.nome + '</div>' +
-      '<div class="nr-desc">' + n.desc + '</div>' +
-      '<div class="nr-footer">' +
-        '<span class="nr-status ' + n.status + '">' + n.status.charAt(0).toUpperCase() + n.status.slice(1) + '</span>' +
-        '<button class="btn-ver-nr" onclick="verNr(\'' + n.num + '\')">Ver conteúdo →</button>' +
-      '</div>';
-    grid.appendChild(div);
-  });
-}
+  function openModal(nr) {
+    document.getElementById('modalTitle').textContent = nr.titulo;
+    document.getElementById('modalLabel').textContent = nr.numero + ' — ' + nr.categoria.toUpperCase();
+    document.getElementById('modalDesc').textContent = nr.resumo;
+    document.getElementById('modalDetail').textContent = nr.detalhe;
+    document.getElementById('modalLink').href = nr.link;
+    document.getElementById('modalOverlay').classList.add('active');
+  }
 
-// ============================================================
-// MODAL DETALHE
-// ============================================================
-function verNr(num) {
-  var n = NRS.find(function(x){return x.num===num;});
-  if (!n) return;
+  function closeModal(e) {
+    if (e.target === document.getElementById('modalOverlay')) {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+  }
 
-  var empLi = n.obrigacoesEmpregador.map(function(o){return '<li>'+o+'</li>';}).join('');
-  var trabLi = n.obrigacoesTrabalhador.map(function(o){return '<li>'+o+'</li>';}).join('');
-  var ptLi = n.pontosPrincipais.map(function(o){return '<li>'+o+'</li>';}).join('');
-  var tags = n.temas.map(function(t){return '<span class="tag">'+t+'</span>';}).join('');
-  var changelogHTML = n.changelog.map(function(c){
-    return '<div class="changelog-item '+c.tipo+'"><div class="changelog-data">'+c.data+'</div><div class="changelog-titulo">'+c.titulo+'</div><div class="changelog-desc">'+c.desc+'</div></div>';
-  }).join('');
+  function closeModalBtn() {
+    document.getElementById('modalOverlay').classList.remove('active');
+  }
 
-  document.getElementById('modalNrConteudo').innerHTML =
-    '<div class="modal-header">' +
-      '<div class="modal-nr-header">' +
-        '<div class="modal-nr-num">' + n.num + '</div>' +
-        '<div>' +
-          '<div class="modal-nr-nome">' + n.nome + '</div>' +
-          '<div class="modal-nr-sub">' +
-            '<span class="nr-status ' + n.status + '">' + n.status + '</span>' +
-            '<span>· MTE · Publicação: ' + n.publicacao + '</span>' +
-            '<span>· Última atualização: ' + n.ultimaAtualizacao + '</span>' +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-    '</div>' +
-    '<div class="modal-body">' +
-      '<div class="info-grid">' +
-        '<div class="info-item"><label>Portaria Vigente</label><span>' + n.portaria + '</span></div>' +
-        '<div class="info-item"><label>Área de Aplicação</label><span>' + n.area + '</span></div>' +
-      '</div>' +
-      '<br>' +
-      '<div class="modal-tabs">' +
-        '<button class="modal-tab active" onclick="trocarTab(this,\'aba-objetivo\')">🎯 Objetivo</button>' +
-        '<button class="modal-tab" onclick="trocarTab(this,\'aba-obrig\')">📋 Obrigações</button>' +
-        '<button class="modal-tab" onclick="trocarTab(this,\'aba-pontos\')">⭐ Pontos-chave</button>' +
-        '<button class="modal-tab" onclick="trocarTab(this,\'aba-hist\')">🕐 Histórico</button>' +
-      '</div>' +
-      '<div id="aba-objetivo" class="tab-pane active">' +
-        '<div class="secao"><h4>📌 Objetivo da Norma</h4><p>' + n.objetivo + '</p></div>' +
-        '<div class="secao"><h4>🏷️ Temas Abordados</h4><div class="tag-group">' + tags + '</div></div>' +
-        '<div class="penalidade-box"><h5>⚖️ Penalidades por Descumprimento</h5><p>' + n.penalidades + '</p></div>' +
-      '</div>' +
-      '<div id="aba-obrig" class="tab-pane">' +
-        '<div class="secao"><h4>🏢 Obrigações do Empregador</h4><ul>' + empLi + '</ul></div>' +
-        '<div class="secao"><h4>👷 Obrigações do Trabalhador</h4><ul>' + trabLi + '</ul></div>' +
-      '</div>' +
-      '<div id="aba-pontos" class="tab-pane">' +
-        '<div class="secao"><h4>⭐ Principais Pontos da Norma</h4><ul>' + ptLi + '</ul></div>' +
-      '</div>' +
-      '<div id="aba-hist" class="tab-pane">' +
-        '<div class="secao"><h4>🕐 Histórico de Alterações</h4>' + changelogHTML + '</div>' +
-      '</div>' +
-    '</div>' +
-    '<div class="modal-footer">' +
-      '<button class="btn-fechar" onclick="fecharNr()">Fechar</button>' +
-      '<a class="btn-link" href="' + n.link + '" target="_blank" rel="noopener">🔗 Ver no Portal MTE</a>' +
-    '</div>';
-
-  document.getElementById('modalNr').classList.add('open');
-}
-
-function trocarTab(btn, id) {
-  document.querySelectorAll('.modal-tab').forEach(function(t){t.classList.remove('active');});
-  document.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active');});
-  btn.classList.add('active');
-  document.getElementById(id).classList.add('active');
-}
-
-function fecharNr() { document.getElementById('modalNr').classList.remove('open'); }
-document.getElementById('modalNr').addEventListener('click', function(e){if(e.target===this)fecharNr();});
-
-// INIT
-renderizar();
-verificarAutoInicio();
+  // Inicializa
+  renderCards();
 </script>
+
 </body>
 </html>
