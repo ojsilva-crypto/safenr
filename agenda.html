@@ -1,299 +1,901 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SafeNR — Agenda</title>
+  <title>Agenda - Calendário de Pendências</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#fff;display:flex;min-height:100vh}
-    .main{margin-left:240px;flex:1;padding:32px}
-    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
-    .topbar h2{font-size:1.4rem;font-weight:700}
-    .topbar span{color:rgba(255,255,255,.4);font-size:.85rem}
-    .btn-novo{background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;padding:12px 24px;cursor:pointer;transition:all .2s}
-    .btn-novo:hover{opacity:.85;transform:translateY(-1px)}
-    .resumo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
-    .resumo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;text-align:center}
-    .rc-valor{font-size:1.8rem;font-weight:900;margin-bottom:4px}
-    .rc-label{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-    .filtros{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
-    .filtro-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
-    .filtro-btn:hover,.filtro-btn.active{background:rgba(0,212,255,.12);border-color:#00d4ff;color:#00d4ff}
-    .busca-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 18px;color:#fff;font-size:.85rem;outline:none;width:220px;margin-left:auto}
-    .busca-input::placeholder{color:rgba(255,255,255,.3)}
-    .busca-input:focus{border-color:#00d4ff}
-    .agenda-lista{display:flex;flex-direction:column;gap:10px}
-    .agenda-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:18px 22px;display:flex;align-items:center;gap:16px;transition:all .2s;border-left:4px solid transparent}
-    .agenda-item:hover{background:rgba(255,255,255,.05)}
-    .agenda-item.hoje{border-left-color:#00d4ff;background:rgba(0,212,255,.04)}
-    .agenda-item.atrasado{border-left-color:#f87171;background:rgba(248,113,113,.04)}
-    .agenda-item.futuro{border-left-color:#4ade80}
-    .agenda-item.concluido{opacity:.5}
-    .ag-data{text-align:center;min-width:52px;flex-shrink:0}
-    .ag-data .dia{font-size:1.6rem;font-weight:900;line-height:1}
-    .ag-data .mes{font-size:.7rem;text-transform:uppercase;color:rgba(255,255,255,.4);letter-spacing:.5px}
-    .ag-corpo{flex:1}
-    .ag-titulo{font-size:.9rem;font-weight:700;margin-bottom:4px}
-    .ag-meta{display:flex;gap:12px;font-size:.75rem;color:rgba(255,255,255,.4);flex-wrap:wrap}
-    .badge{padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700}
-    .badge.pendente{background:rgba(251,191,36,.15);color:#fbbf24}
-    .badge.concluido{background:rgba(74,222,128,.15);color:#4ade80}
-    .badge.cancelado{background:rgba(255,255,255,.08);color:rgba(255,255,255,.4)}
-    .badge.treinamento{background:rgba(129,140,248,.15);color:#818cf8}
-    .badge.inspecao{background:rgba(0,212,255,.15);color:#00d4ff}
-    .badge.ocorrencia{background:rgba(248,113,113,.15);color:#f87171}
-    .badge.plano{background:rgba(52,211,153,.15);color:#34d399}
-    .badge.geral{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
-    .ag-acoes{display:flex;gap:6px;flex-shrink:0}
-    .btn-acao{background:none;border:1px solid rgba(255,255,255,.1);border-radius:8px;cursor:pointer;padding:6px 10px;font-size:.8rem;color:rgba(255,255,255,.5);transition:all .2s}
-    .btn-acao:hover{background:rgba(255,255,255,.08);color:#fff}
-    .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3)}
-    .empty-state div{font-size:3rem;margin-bottom:12px}
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center;padding:20px}
-    .modal-overlay.open{display:flex}
-    .modal{background:#0f1923;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto}
-    .modal h3{font-size:1.2rem;font-weight:700;margin-bottom:24px}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-    .form-row.full{grid-template-columns:1fr}
-    .form-group{display:flex;flex-direction:column;gap:6px}
-    .form-group label{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.55)}
-    .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;color:#fff;font-size:.9rem;outline:none;transition:border .2s;font-family:inherit}
-    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#00d4ff}
-    .form-group select option{background:#1a2535}
-    .form-group textarea{resize:vertical;min-height:70px}
-    .auto-field{background:rgba(0,212,255,.06)!important;border-color:rgba(0,212,255,.2)!important;color:rgba(255,255,255,.6)!important;cursor:not-allowed!important}
-    .auto-tag{font-size:.68rem;color:#00d4ff;background:rgba(0,212,255,.1);border-radius:20px;padding:2px 8px;margin-left:6px;font-weight:600}
-    .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
-    .btn-cancelar{padding:12px 24px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);cursor:pointer}
-    .btn-salvar{padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}
-    .detalhe-row{display:flex;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
-    .detalhe-row:last-child{border-bottom:none}
-    .detalhe-label{font-size:.78rem;color:rgba(255,255,255,.4);min-width:140px;font-weight:600}
-    .detalhe-valor{font-size:.88rem;color:#fff;flex:1}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      min-height: 100vh;
+      color: #fff;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #c9d6ff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #a0aec0;
+      margin-bottom: 30px;
+      font-size: 0.9rem;
+    }
+
+    /* ===== NAVEGAÇÃO DO MÊS ===== */
+    .nav-mes {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .nav-mes button {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+    }
+
+    .nav-mes button:hover {
+      background: rgba(99,102,241,0.5);
+      border-color: #6366f1;
+    }
+
+    #titulo-mes {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #c9d6ff;
+      min-width: 220px;
+      text-align: center;
+    }
+
+    /* ===== CALENDÁRIO ===== */
+    .calendario-container {
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      max-width: 1000px;
+      margin: 0 auto 30px auto;
+    }
+
+    .dias-semana {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .dias-semana div {
+      text-align: center;
+      font-weight: bold;
+      color: #6366f1;
+      font-size: 0.85rem;
+      padding: 8px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .grade-calendario {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .dia-celula {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      min-height: 100px;
+      padding: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dia-celula:hover {
+      background: rgba(99,102,241,0.15);
+      border-color: #6366f1;
+      transform: translateY(-2px);
+    }
+
+    .dia-celula.outro-mes {
+      opacity: 0.3;
+    }
+
+    .dia-celula.hoje {
+      background: rgba(99,102,241,0.25);
+      border: 2px solid #6366f1;
+      box-shadow: 0 0 15px rgba(99,102,241,0.3);
+    }
+
+    .dia-celula.tem-pendencia {
+      border-color: #f59e0b;
+      box-shadow: 0 0 8px rgba(245,158,11,0.3);
+    }
+
+    .numero-dia {
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      margin-bottom: 5px;
+    }
+
+    .hoje .numero-dia {
+      color: #6366f1;
+      font-size: 1.1rem;
+    }
+
+    .badge-pendencias {
+      display: inline-block;
+      background: #f59e0b;
+      color: #000;
+      font-size: 0.65rem;
+      font-weight: bold;
+      border-radius: 20px;
+      padding: 1px 6px;
+      margin-bottom: 4px;
+      width: fit-content;
+    }
+
+    .pendencia-mini {
+      font-size: 0.65rem;
+      color: #fbbf24;
+      background: rgba(245,158,11,0.15);
+      border-left: 2px solid #f59e0b;
+      padding: 2px 4px;
+      border-radius: 3px;
+      margin-bottom: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .pendencia-mini.concluida {
+      color: #6ee7b7;
+      background: rgba(16,185,129,0.1);
+      border-left-color: #10b981;
+      text-decoration: line-through;
+    }
+
+    .pendencia-mini.urgente {
+      color: #fca5a5;
+      background: rgba(239,68,68,0.15);
+      border-left-color: #ef4444;
+    }
+
+    .mais-pendencias {
+      font-size: 0.6rem;
+      color: #94a3b8;
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    .btn-add-dia {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      background: rgba(99,102,241,0.4);
+      border: none;
+      color: #fff;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .dia-celula:hover .btn-add-dia {
+      opacity: 1;
+    }
+
+    /* ===== PAINEL LATERAL ===== */
+    .layout {
+      display: flex;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .calendario-wrapper {
+      flex: 1;
+    }
+
+    .painel-lateral {
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ===== FORMULÁRIO DE PENDÊNCIA ===== */
+    .form-pendencia {
+      background: rgba(255,255,255,0.05);
+      border-radius: 14px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .form-pendencia h3 {
+      color: #c9d6ff;
+      margin-bottom: 16px;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      color: #94a3b8;
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: border-color 0.3s;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #6366f1;
+      background: rgba(99,102,241,0.1);
+    }
+
+    .form-group select option {
+      background: #1e1b4b;
+    }
+
+    .btn-salvar {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+
+    .btn-salvar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99,102,241,0.4);
+    }
+
+    /* ===== LISTA DE PENDÊNCIAS DO DIA ===== */
+    .lista-dia {
+      background: rgba(255,255,255,0.05);
+      border-radius: 14px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .lista-dia h3 {
+      color: #c9d6ff;
+      margin-bottom: 14px;
+      font-size: 1rem;
+    }
+
+    .item-pendencia {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-left: 3px solid #6366f1;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: all 0.3s;
+    }
+
+    .item-pendencia.urgente { border-left-color: #ef4444; }
+    .item-pendencia.normal  { border-left-color: #6366f1; }
+    .item-pendencia.baixa   { border-left-color: #10b981; }
+    .item-pendencia.concluida {
+      opacity: 0.5;
+      text-decoration: line-through;
+    }
+
+    .item-pendencia input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: #6366f1;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .item-info { flex: 1; }
+
+    .item-titulo {
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .item-desc {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .item-meta {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .tag-urgente { background: rgba(239,68,68,0.2); color: #fca5a5; }
+    .tag-normal  { background: rgba(99,102,241,0.2); color: #a5b4fc; }
+    .tag-baixa   { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+    .tag-origem  { background: rgba(255,255,255,0.1); color: #cbd5e1; }
+
+    .btn-excluir {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px;
+      border-radius: 4px;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-excluir:hover { background: rgba(239,68,68,0.2); }
+
+    .empty-msg {
+      text-align: center;
+      color: #4a5568;
+      font-size: 0.85rem;
+      padding: 20px 0;
+    }
+
+    /* ===== RESUMO GERAL ===== */
+    .resumo {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 1000px;
+      margin: 0 auto 20px auto;
+    }
+
+    .card-resumo {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .card-resumo .numero {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #6366f1;
+    }
+
+    .card-resumo .numero.urgente { color: #ef4444; }
+    .card-resumo .numero.concluida { color: #10b981; }
+
+    .card-resumo .label {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.ativo {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: linear-gradient(135deg, #1e1b4b, #1a1a2e);
+      border-radius: 16px;
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      border: 1px solid rgba(99,102,241,0.3);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.ativo .modal {
+      transform: scale(1);
+    }
+
+    .modal h3 {
+      color: #c9d6ff;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-cancelar {
+      flex: 1;
+      padding: 12px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .btn-cancelar:hover { background: rgba(255,255,255,0.15); }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+    ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.5); border-radius: 3px; }
+
+    /* ===== RESPONSIVO ===== */
+    @media (max-width: 768px) {
+      .layout { flex-direction: column; }
+      .painel-lateral { width: 100%; }
+      .resumo { grid-template-columns: repeat(3, 1fr); }
+      .dia-celula { min-height: 70px; }
+    }
   </style>
 </head>
 <body>
-<div class="main">
-  <div class="topbar">
-    <div><h2>📅 Agenda SST</h2><span id="totalRegistros">0 eventos</span></div>
-    <button class="btn-novo" onclick="abrirModal()">+ Novo Evento</button>
+
+<h1>📅 Calendário de Pendências</h1>
+<p class="subtitle">Visualize e gerencie todas as suas pendências em um só lugar</p>
+
+<!-- RESUMO -->
+<div class="resumo">
+  <div class="card-resumo">
+    <div class="numero" id="total-pendencias">0</div>
+    <div class="label">Total</div>
   </div>
-  <div class="resumo-grid">
-    <div class="resumo-card">
-      <div class="rc-valor" id="cnt-hoje" style="color:#00d4ff">0</div>
-      <div class="rc-label">Hoje</div>
-    </div>
-    <div class="resumo-card">
-      <div class="rc-valor" id="cnt-semana" style="color:#818cf8">0</div>
-      <div class="rc-label">Esta Semana</div>
-    </div>
-    <div class="resumo-card">
-      <div class="rc-valor" id="cnt-atrasado" style="color:#f87171">0</div>
-      <div class="rc-label">Atrasados</div>
-    </div>
-    <div class="resumo-card">
-      <div class="rc-valor" id="cnt-concluido" style="color:#4ade80">0</div>
-      <div class="rc-label">Concluidos</div>
-    </div>
+  <div class="card-resumo">
+    <div class="numero urgente" id="total-urgentes">0</div>
+    <div class="label">Urgentes</div>
   </div>
-  <div class="filtros">
-    <button class="filtro-btn active" id="fb-todos"   onclick="filtrar('todos',this)">Todos</button>
-    <button class="filtro-btn" id="fb-hoje"    onclick="filtrar('hoje',this)">📅 Hoje</button>
-    <button class="filtro-btn" id="fb-semana"  onclick="filtrar('semana',this)">📆 Esta Semana</button>
-    <button class="filtro-btn" id="fb-atrasado" onclick="filtrar('atrasado',this)">⚠️ Atrasados</button>
-    <button class="filtro-btn" id="fb-pendente" onclick="filtrar('pendente',this)">🕐 Pendentes</button>
-    <button class="filtro-btn" id="fb-concluido" onclick="filtrar('concluido',this)">✅ Concluidos</button>
-    <input class="busca-input" type="text" placeholder="🔎 Buscar evento..." oninput="renderizar(getLista())"/>
-  </div>
-  <div class="agenda-lista" id="agendaLista"></div>
-  <div class="empty-state" id="emptyState" style="display:none">
-    <div>📅</div><p>Nenhum evento encontrado.<br>Clique em <strong>+ Novo Evento</strong>.</p>
+  <div class="card-resumo">
+    <div class="numero concluida" id="total-concluidas">0</div>
+    <div class="label">Concluídas</div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modalForm">
-  <div class="modal">
-    <h3 id="modalTitulo">📅 Novo Evento</h3>
-    <div class="form-row full">
-      <div class="form-group">
-        <label>Titulo do Evento *</label>
-        <input type="text" id="f_titulo" placeholder="Ex: Treinamento NR-35"/>
-      </div>
+<div class="layout">
+  <div class="calendario-wrapper">
+    <!-- NAVEGAÇÃO -->
+    <div class="nav-mes">
+      <button onclick="mudarMes(-1)">&#8249;</button>
+      <div id="titulo-mes"></div>
+      <button onclick="mudarMes(1)">&#8250;</button>
     </div>
-    <div class="form-row">
+
+    <!-- CALENDÁRIO -->
+    <div class="calendario-container">
+      <div class="dias-semana">
+        <div>Dom</div><div>Seg</div><div>Ter</div>
+        <div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+      </div>
+      <div class="grade-calendario" id="grade-calendario"></div>
+    </div>
+  </div>
+
+  <!-- PAINEL LATERAL -->
+  <div class="painel-lateral">
+
+    <!-- FORMULÁRIO -->
+    <div class="form-pendencia">
+      <h3>✏️ <span id="form-titulo-dia">Nova Pendência</span></h3>
+
+      <div class="form-group">
+        <label>Título *</label>
+        <input type="text" id="inp-titulo" placeholder="Ex: Reunião com cliente..." />
+      </div>
+
+      <div class="form-group">
+        <label>Descrição</label>
+        <textarea id="inp-desc" rows="2" placeholder="Detalhes da pendência..."></textarea>
+      </div>
+
       <div class="form-group">
         <label>Data *</label>
-        <input type="date" id="f_data"/>
+        <input type="date" id="inp-data" />
       </div>
+
       <div class="form-group">
-        <label>Hora</label>
-        <input type="time" id="f_hora"/>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Tipo</label>
-        <select id="f_tipo">
-          <option value="geral">Geral</option>
-          <option value="treinamento">Treinamento</option>
-          <option value="inspecao">Inspecao</option>
-          <option value="ocorrencia">Ocorrencia</option>
-          <option value="plano">Plano de Acao</option>
+        <label>Prioridade</label>
+        <select id="inp-prioridade">
+          <option value="normal">🔵 Normal</option>
+          <option value="urgente">🔴 Urgente</option>
+          <option value="baixa">🟢 Baixa prioridade</option>
         </select>
       </div>
+
       <div class="form-group">
-        <label>Status</label>
-        <select id="f_status">
-          <option value="pendente">Pendente</option>
-          <option value="concluido">Concluido</option>
-          <option value="cancelado">Cancelado</option>
+        <label>Origem / Arquivo</label>
+        <select id="inp-origem">
+          <option value="Calendário">📅 Calendário</option>
+          <option value="Financeiro">💰 Financeiro</option>
+          <option value="Clientes">👥 Clientes</option>
+          <option value="Estoque">📦 Estoque</option>
+          <option value="RH">👤 RH</option>
+          <option value="Contratos">📋 Contratos</option>
+          <option value="Outros">📁 Outros</option>
         </select>
       </div>
+
+      <button class="btn-salvar" onclick="salvarPendencia()">➕ SALVAR PENDÊNCIA</button>
     </div>
-    <div class="form-row full">
-      <div class="form-group">
-        <label>Observacoes</label>
-        <textarea id="f_obs" placeholder="Detalhes do evento..."></textarea>
+
+    <!-- LISTA DO DIA SELECIONADO -->
+    <div class="lista-dia">
+      <h3 id="titulo-lista-dia">📋 Clique em um dia para ver</h3>
+      <div id="lista-pendencias-dia">
+        <p class="empty-msg">Selecione um dia no calendário</p>
       </div>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Registrado por <span class="auto-tag">AUTO</span></label>
-        <input type="text" id="f_regPor" class="auto-field" readonly/>
-      </div>
-      <div class="form-group">
-        <label>Registrado em <span class="auto-tag">AUTO</span></label>
-        <input type="text" id="f_regEm" class="auto-field" readonly/>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
-      <button class="btn-salvar" onclick="salvar()">💾 Salvar</button>
-    </div>
+
   </div>
 </div>
 
-<div class="modal-overlay" id="modalVer">
+<!-- MODAL DE CONFIRMAÇÃO -->
+<div class="modal-overlay" id="modal-overlay">
   <div class="modal">
-    <h3>📅 Detalhes do Evento</h3>
-    <div id="modalVerConteudo"></div>
-    <div class="modal-footer">
-      <button class="btn-cancelar" onclick="fecharVer()">Fechar</button>
+    <h3 id="modal-titulo">Excluir Pendência?</h3>
+    <p id="modal-msg" style="color:#94a3b8; font-size:0.9rem;"></p>
+    <div class="modal-btns">
+      <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-salvar" style="flex:1;" id="modal-confirmar">Confirmar</button>
     </div>
   </div>
 </div>
 
-<script src="./sidebar.js"></script>
 <script>
-var userData2=localStorage.getItem('safenr_user');
-var user2=userData2?JSON.parse(userData2):{};
-var registros=JSON.parse(localStorage.getItem('safenr_agenda')||'[]');
-var editandoId=null,filtroAtivo='todos';
-function salvarStorage(){localStorage.setItem('safenr_agenda',JSON.stringify(registros));}
-function fmt(d){if(!d)return '--';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
-function fmtDT(iso){if(!iso)return '--';return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
-function getDiff(d){if(!d)return null;var h=new Date();h.setHours(0,0,0,0);return Math.round((new Date(d+'T00:00:00')-h)/86400000);}
-function getClasse(r){
-  if(r.status==='concluido')return 'concluido';
-  var d=getDiff(r.data);
-  if(d===null)return '';
-  if(d<0)return 'atrasado';
-  if(d===0)return 'hoje';
-  return 'futuro';
-}
-function getLista(){
-  var busca=document.querySelector('.busca-input').value.toLowerCase();
-  var hoje=new Date();hoje.setHours(0,0,0,0);
-  return registros.filter(function(r){
-    var d=r.data?new Date(r.data+'T00:00:00'):null;
-    var diff=d?Math.round((d-hoje)/86400000):null;
-    if(filtroAtivo==='hoje'&&diff!==0)return false;
-    if(filtroAtivo==='semana'&&(diff===null||diff<0||diff>7))return false;
-    if(filtroAtivo==='atrasado'&&(diff===null||diff>=0||r.status==='concluido'))return false;
-    if(filtroAtivo==='pendente'&&r.status!=='pendente')return false;
-    if(filtroAtivo==='concluido'&&r.status!=='concluido')return false;
-    if(busca&&!(r.titulo||'').toLowerCase().includes(busca)&&!(r.obs||'').toLowerCase().includes(busca))return false;
-    return true;
-  }).sort(function(a,b){return (a.data||'').localeCompare(b.data||'');});
-}
-function atualizarContadores(){
-  var hoje=new Date();hoje.setHours(0,0,0,0);
-  document.getElementById('cnt-hoje').textContent=registros.filter(function(r){return getDiff(r.data)===0&&r.status!=='concluido';}).length;
-  document.getElementById('cnt-semana').textContent=registros.filter(function(r){var d=getDiff(r.data);return d!==null&&d>=0&&d<=7&&r.status!=='concluido';}).length;
-  document.getElementById('cnt-atrasado').textContent=registros.filter(function(r){var d=getDiff(r.data);return d!==null&&d<0&&r.status!=='concluido';}).length;
-  document.getElementById('cnt-concluido').textContent=registros.filter(function(r){return r.status==='concluido';}).length;
-  document.getElementById('totalRegistros').textContent=registros.length+' evento(s)';
-}
-function filtrar(s,btn){filtroAtivo=s;document.querySelectorAll('.filtro-btn').forEach(function(b){b.classList.remove('active');});if(btn)btn.classList.add('active');renderizar(getLista());}
-function renderizar(lista){
-  var cont=document.getElementById('agendaLista');
-  var empty=document.getElementById('emptyState');
-  cont.innerHTML='';atualizarContadores();
-  if(lista.length===0){empty.style.display='block';return;}
-  empty.style.display='none';
-  lista.forEach(function(r){
-    var cls=getClasse(r);
-    var d=r.data?new Date(r.data+'T00:00:00'):null;
-    var dia=d?String(d.getDate()).padStart(2,'0'):'--';
-    var mes=d?d.toLocaleString('pt-BR',{month:'short'}):'--';
-    var diff=getDiff(r.data);
-    var prazoTxt=diff===null?'':(diff<0?'⛔ '+Math.abs(diff)+'d atrasado':diff===0?'📍 Hoje':diff<=7?'⚠️ Em '+diff+' dias':'✅ Em '+diff+' dias');
-    var div=document.createElement('div');
-    div.className='agenda-item '+cls;
-    div.innerHTML=
-      '<div class="ag-data"><div class="dia">'+dia+'</div><div class="mes">'+mes+'</div></div>'+
-      '<div class="ag-corpo">'+
-        '<div class="ag-titulo">'+(r.titulo||'--')+'</div>'+
-        '<div class="ag-meta">'+
-          '<span class="badge '+(r.tipo||'geral')+'">'+(r.tipo||'geral')+'</span>'+
-          '<span class="badge '+(r.status||'pendente')+'">'+(r.status||'pendente')+'</span>'+
-          (r.hora?'<span>🕐 '+r.hora+'</span>':'')+
-          (prazoTxt?'<span>'+prazoTxt+'</span>':'')+
-        '</div>'+
-      '</div>'+
-      '<div class="ag-acoes">'+
-        '<button class="btn-acao" onclick="ver('+r.id+')">👁️</button>'+
-        '<button class="btn-acao" onclick="abrirModal('+r.id+')">✏️</button>'+
-        (r.status!=='concluido'?'<button class="btn-acao" onclick="concluir('+r.id+')" style="color:#4ade80">✔</button>':'')+
-        '<button class="btn-acao" onclick="excluir('+r.id+')" style="color:rgba(248,113,113,.7)">🗑️</button>'+
-      '</div>';
-    cont.appendChild(div);
-  });
-}
-function abrirModal(id){
-  editandoId=id||null;
-  document.getElementById('modalTitulo').textContent=(id?'✏️ Editar':'📅 Novo')+' Evento';
-  ['f_titulo','f_obs'].forEach(function(f){document.getElementById(f).value='';});
-  document.getElementById('f_data').value='';document.getElementById('f_hora').value='';
-  document.getElementById('f_tipo').value='geral';document.getElementById('f_status').value='pendente';
-  document.getElementById('f_regPor').value=user2.nome||'Usuario';
-  document.getElementById('f_regEm').value=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  if(id){var r=registros.find(function(x){return x.id===id;});document.getElementById('f_titulo').value=r.titulo||'';document.getElementById('f_data').value=r.data||'';document.getElementById('f_hora').value=r.hora||'';document.getElementById('f_tipo').value=r.tipo||'geral';document.getElementById('f_status').value=r.status||'pendente';document.getElementById('f_obs').value=r.obs||'';document.getElementById('f_regPor').value=r.registradoPor||user2.nome;document.getElementById('f_regEm').value=fmtDT(r.registradoEm);}
-  document.getElementById('modalForm').classList.add('open');
-}
-function fecharModal(){document.getElementById('modalForm').classList.remove('open');editandoId=null;}
-function salvar(){
-  var titulo=document.getElementById('f_titulo').value.trim();
-  var data=document.getElementById('f_data').value;
-  if(!titulo||!data){alert('Preencha Titulo e Data.');return;}
-  var dados={titulo:titulo,data:data,hora:document.getElementById('f_hora').value,tipo:document.getElementById('f_tipo').value,status:document.getElementById('f_status').value,obs:document.getElementById('f_obs').value.trim()};
-  if(editandoId){var idx=registros.findIndex(function(r){return r.id===editandoId;});registros[idx]=Object.assign({},registros[idx],dados);}
-  else{var nId=registros.length>0?Math.max.apply(null,registros.map(function(r){return r.id;}))+1:1;registros.push(Object.assign({id:nId,registradoPor:user2.nome||'Usuario',registradoEm:new Date().toISOString()},dados));}
-  salvarStorage();fecharModal();renderizar(getLista());
-}
-function concluir(id){var idx=registros.findIndex(function(r){return r.id===id;});if(idx>=0){registros[idx].status='concluido';salvarStorage();renderizar(getLista());}}
-function excluir(id){if(!confirm('Excluir este evento?'))return;registros=registros.filter(function(r){return r.id!==id;});salvarStorage();renderizar(getLista());}
-function ver(id){
-  var r=registros.find(function(x){return x.id===id;});
-  function row(l,v){return '<div class="detalhe-row"><span class="detalhe-label">'+l+'</span><span class="detalhe-valor">'+v+'</span></div>';}
-  document.getElementById('modalVerConteudo').innerHTML=row('Titulo',r.titulo||'--')+row('Data',fmt(r.data)+(r.hora?' às '+r.hora:''))+row('Tipo','<span class="badge '+(r.tipo||'geral')+'">'+(r.tipo||'--')+'</span>')+row('Status','<span class="badge '+(r.status||'pendente')+'">'+(r.status||'--')+'</span>')+row('Observacoes',r.obs||'--')+row('Registrado por','<span style="color:#00d4ff">'+(r.registradoPor||'--')+'</span>')+row('Registrado em','<span style="color:#00d4ff">'+fmtDT(r.registradoEm)+'</span>');
-  document.getElementById('modalVer').classList.add('open');
-}
-function fecharVer(){document.getElementById('modalVer').classList.remove('open');}
-document.getElementById('modalForm').addEventListener('click',function(e){if(e.target===this)fecharModal();});
-document.getElementById('modalVer').addEventListener('click',function(e){if(e.target===this)fecharVer();});
-renderizar(getLista());
+  // ========== ESTADO ==========
+  let mesAtual = new Date().getMonth();
+  let anoAtual = new Date().getFullYear();
+  let diaSelecionado = null;
+  let pendenciaParaExcluir = null;
+
+  const MESES = [
+    'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+    'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
+  ];
+
+  // ========== DADOS INICIAIS (simulando outros arquivos) ==========
+  function carregarPendencias() {
+    const salvas = localStorage.getItem('pendencias_calendario');
+    if (salvas) return JSON.parse(salvas);
+
+    // Pendências de exemplo de outros "arquivos/módulos"
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    const amanha = new Date(hoje); amanha.setDate(amanha.getDate() + 2);
+    const da = `${amanha.getFullYear()}-${String(amanha.getMonth()+1).padStart(2,'0')}-${String(amanha.getDate()).padStart(2,'0')}`;
+    const prox = new Date(hoje); prox.setDate(prox.getDate() + 5);
+    const dp = `${prox.getFullYear()}-${String(prox.getMonth()+1).padStart(2,'0')}-${String(prox.getDate()).padStart(2,'0')}`;
+
+    return [
+      { id: 1, titulo: 'Pagamento fornecedor', desc: 'NF #4521 - vence hoje', data: `${ano}-${mes}-${dia}`, prioridade: 'urgente', origem: 'Financeiro', concluida: false },
+      { id: 2, titulo: 'Reunião de equipe', desc: 'Sala 3 - 14h', data: `${ano}-${mes}-${dia}`, prioridade: 'normal', origem: 'RH', concluida: false },
+      { id: 3, titulo: 'Enviar proposta cliente', desc: 'Cliente: João Silva', data: da, prioridade: 'urgente', origem: 'Clientes', concluida: false },
+      { id: 4, titulo: 'Conferir estoque mínimo', desc: 'Produto: Resina EP', data: da, prioridade: 'normal', origem: 'Estoque', concluida: false },
+      { id: 5, titulo: 'Renovar contrato anual', desc: 'Contrato #2023-A', data: dp, prioridade: 'baixa', origem: 'Contratos', concluida: false },
+    ];
+  }
+
+  let pendencias = carregarPendencias();
+
+  function salvarStorage() {
+    localStorage.setItem('pendencias_calendario', JSON.stringify(pendencias));
+  }
+
+  // ========== CALENDÁRIO ==========
+  function renderizarCalendario() {
+    const grade = document.getElementById('grade-calendario');
+    const titulo = document.getElementById('titulo-mes');
+    grade.innerHTML = '';
+    titulo.textContent = `${MESES[mesAtual]} de ${anoAtual}`;
+
+    const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
+    const totalDias = new Date(anoAtual, mesAtual + 1, 0).getDate();
+    const totalDiasAnterior = new Date(anoAtual, mesAtual, 0).getDate();
+    const hoje = new Date();
+
+    // Dias do mês anterior
+    for (let i = primeiroDia - 1; i >= 0; i--) {
+      const cel = criarCelula(totalDiasAnterior - i, true, false, null);
+      grade.appendChild(cel);
+    }
+
+    // Dias do mês atual
+    for (let d = 1; d <= totalDias; d++) {
+      const dataStr = `${anoAtual}-${String(mesAtual+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const ehHoje = (d === hoje.getDate() && mesAtual === hoje.getMonth() && anoAtual === hoje.getFullYear());
+      const pendsDia = pendencias.filter(p => p.data === dataStr);
+      const cel = criarCelula(d, false, ehHoje, dataStr, pendsDia);
+      grade.appendChild(cel);
+    }
+
+    // Completar com dias do próximo mês
+    const total = primeiroDia + totalDias;
+    const resto = total % 7 === 0 ? 0 : 7 - (total % 7);
+    for (let i = 1; i <= resto; i++) {
+      const cel = criarCelula(i, true, false, null);
+      grade.appendChild(cel);
+    }
+
+    atualizarResumo();
+  }
+
+  function criarCelula(numero, outroMes, ehHoje, dataStr, pendsDia = []) {
+    const cel = document.createElement('div');
+    cel.className = 'dia-celula';
+    if (outroMes) cel.classList.add('outro-mes');
+    if (ehHoje) cel.classList.add('hoje');
+    if (pendsDia.length > 0) cel.classList.add('tem-pendencia');
+
+    const numDiv = document.createElement('div');
+    numDiv.className = 'numero-dia';
+    numDiv.textContent = numero;
+    cel.appendChild(numDiv);
+
+    if (pendsDia.length > 0) {
+      const badge = document.createElement('div');
+      badge.className = 'badge-pendencias';
+      badge.textContent = `${pendsDia.length} pendência${pendsDia.length > 1 ? 's' : ''}`;
+      cel.appendChild(badge);
+
+      const limite = 3;
+      pendsDia.slice(0, limite).forEach(p => {
+        const mini = document.createElement('div');
+        mini.className = 'pendencia-mini' + (p.concluida ? ' concluida' : '') + (p.prioridade === 'urgente' ? ' urgente' : '');
+        mini.textContent = p.titulo;
+        mini.title = p.titulo;
+        cel.appendChild(mini);
+      });
+
+      if (pendsDia.length > limite) {
+        const mais = document.createElement('div');
+        mais.className = 'mais-pendencias';
+        mais.textContent = `+${pendsDia.length - limite} mais...`;
+        cel.appendChild(mais);
+      }
+    }
+
+    if (!outroMes && dataStr) {
+      const btnAdd = document.createElement('button');
+      btnAdd.className = 'btn-add-dia';
+      btnAdd.textContent = '+';
+      btnAdd.title = 'Adicionar pendência neste dia';
+      btnAdd.onclick = (e) => {
+        e.stopPropagation();
+        document.getElementById('inp-data').value = dataStr;
+        document.getElementById('inp-titulo').focus();
+        document.getElementById('form-titulo-dia').textContent = `Nova Pendência - ${numero}/${mesAtual+1}/${anoAtual}`;
+      };
+      cel.appendChild(btnAdd);
+
+      cel.addEventListener('click', () => {
+        diaSelecionado = dataStr;
+        mostrarPendenciasDia(dataStr, numero);
+        document.getElementById('inp-data').value = dataStr;
+        document.getElementById('form-titulo-dia').textContent = `Pendência - ${numero}/${mesAtual+1}/${anoAtual}`;
+      });
+    }
+
+    return cel;
+  }
+
+  // ========== PENDÊNCIAS DO DIA ==========
+  function mostrarPendenciasDia(dataStr, numero) {
+    const lista = document.getElementById('lista-pendencias-dia');
+    const titulo = document.getElementById('titulo-lista-dia');
+    const parts = dataStr.split('-');
+    titulo.textContent = `📋 ${parts[2]}/${parts[1]}/${parts[0]}`;
+
+    const pends = pendencias.filter(p => p.data === dataStr);
+    lista.innerHTML = '';
+
+    if (pends.length === 0) {
+      lista.innerHTML = '<p class="empty-msg">Nenhuma pendência neste dia.<br/>Use o formulário ao lado para adicionar! ✨</p>';
+      return;
+    }
+
+    pends.forEach(p => {
+      const item = document.createElement('div');
+      item.className = `item-pendencia ${p.prioridade}${p.concluida ? ' concluida' : ''}`;
+      item.innerHTML = `
+        <input type="checkbox" ${p.concluida ? 'checked' : ''} onchange="toggleConcluida(${p.id})" />
+        <div class="item-info">
+          <div class="item-titulo">${p.titulo}</div>
+          ${p.desc ? `<div class="item-desc">${p.desc}</div>` : ''}
+          <div class="item-meta">
+            <span class="tag tag-${p.prioridade}">${p.prioridade.toUpperCase()}</span>
+            <span class="tag tag-origem">📁 ${p.origem}</span>
+          </div>
+        </div>
+        <button class="btn-excluir" onclick="confirmarExcluir(${p.id}, '${p.titulo.replace(/'/g, "\\'")}')">🗑️</button>
+      `;
+      lista.appendChild(item);
+    });
+  }
+
+  // ========== TOGGLE CONCLUÍDA ==========
+  function toggleConcluida(id) {
+    const p = pendencias.find(x => x.id === id);
+    if (p) {
+      p.concluida = !p.concluida;
+      salvarStorage();
+      renderizarCalendario();
+      if (diaSelecionado) mostrarPendenciasDia(diaSelecionado);
+    }
+  }
+
+  // ========== SALVAR PENDÊNCIA ==========
+  function salvarPendencia() {
+    const titulo = document.getElementById('inp-titulo').value.trim();
+    const desc   = document.getElementById('inp-desc').value.trim();
+    const data   = document.getElementById('inp-data').value;
+    const prior  = document.getElementById('inp-prioridade').value;
+    const origem = document.getElementById('inp-origem').value;
+
+    if (!titulo) { alert('Por favor, informe o título da pendência.'); return; }
+    if (!data)   { alert('Por favor, selecione uma data.'); return; }
+
+    const nova = {
+      id: Date.now(),
+      titulo, desc, data,
+      prioridade: prior,
+      origem,
+      concluida: false
+    };
+
+    pendencias.push(nova);
+    salvarStorage();
+    renderizarCalendario();
+
+    // Limpar formulário
+    document.getElementById('inp-titulo').value = '';
+    document.getElementById('inp-desc').value = '';
+    document.getElementById('inp-prioridade').value = 'normal';
+    document.getElementById('form-titulo-dia').textContent = 'Nova Pendência';
+
+    // Atualizar lista se dia está selecionado
+    if (diaSelecionado === data) mostrarPendenciasDia(data);
+
+    // Feedback
+    const btn = document.querySelector('.btn-salvar');
+    const orig = btn.textContent;
+    btn.textContent = '✅ SALVO!';
+    btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '';
+    }, 2000);
+  }
+
+  // ========== EXCLUIR ==========
+  function confirmarExcluir(id, titulo) {
+    pendenciaParaExcluir = id;
+    document.getElementById('modal-msg').textContent = `"${titulo}"`;
+    document.getElementById('modal-overlay').classList.add('ativo');
+    document.getElementById('modal-confirmar').onclick = () => {
+      pendencias = pendencias.filter(p => p.id !== id);
+      salvarStorage();
+      renderizarCalendario();
+      if (diaSelecionado) mostrarPendenciasDia(diaSelecionado);
+      fecharModal();
+    };
+  }
+
+  function fecharModal() {
+    document.getElementById('modal-overlay').classList.remove('ativo');
+  }
+
+  // ========== RESUMO ==========
+  function atualizarResumo() {
+    document.getElementById('total-pendencias').textContent = pendencias.length;
+    document.getElementById('total-urgentes').textContent = pendencias.filter(p => p.prioridade === 'urgente' && !p.concluida).length;
+    document.getElementById('total-concluidas').textContent = pendencias.filter(p => p.concluida).length;
+  }
+
+  // ========== NAVEGAÇÃO ==========
+  function mudarMes(dir) {
+    mesAtual += dir;
+    if (mesAtual > 11) { mesAtual = 0; anoAtual++; }
+    if (mesAtual < 0)  { mesAtual = 11; anoAtual--; }
+    renderizarCalendario();
+  }
+
+  // ========== DATA PADRÃO ==========
+  function setDataHoje() {
+    const hoje = new Date();
+    const y = hoje.getFullYear();
+    const m = String(hoje.getMonth()+1).padStart(2,'0');
+    const d = String(hoje.getDate()).padStart(2,'0');
+    document.getElementById('inp-data').value = `${y}-${m}-${d}`;
+  }
+
+  // ========== INICIALIZAR ==========
+  setDataHoje();
+  renderizarCalendario();
 </script>
 </body>
 </html>
